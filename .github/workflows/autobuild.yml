@@ -32,10 +32,15 @@ jobs:
         GITHUB_SHA: ${{ github.sha }}
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
       run: |
+        msg=$(git log -n 1 "--format=%B" | head -n 1 | tr -d '\n')
+        if [ "$(echo $msg | grep "\[ci skip\]")" != "" ]
+        then
+          echo "ci skip detected, skipping Discord hook"
+          exit
+        fi
         ZIPNAME=$ZIPNAME-${GITHUB_SHA:0:8}.zip
         zip -qq -r $ZIPNAME everest.yaml Code/bin/Debug/JungleHelper.dll Ahorn Graphics Audio Dialog
-        url=$(curl -H 'Content-Type: multipart/form-data' -X POST -F "file=@$ZIPNAME" "$DISCORD_WEBHOOK" | grep -Po 'cdn.discordapp.com\/.*?\.zip' | tr -d '\n')
-        msg=$(git log -n 1 "--format=%B" | head -n 1 | tr -d '\n')
+        url=$(curl -H 'Content-Type: multipart/form-data' -X POST -F "file=@$ZIPNAME" -F "content= <@&716285608322138132> **New Jungle Helper update!**" "$DISCORD_WEBHOOK" | grep -Po 'cdn.discordapp.com\/.*?\.zip' | tr -d '\n')
         curl -H 'Content-Type: application/json' -X POST -d "$(jq -n \
           --arg zipname "$ZIPNAME" \
           --arg url "$url" \
