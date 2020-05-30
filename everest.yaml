@@ -1,6 +1,6 @@
 - Name: JungleHelper
   Version: 1.0.0
-  DLL: Code/bin/Debug/BouncyShroom.dll
+  DLL: Code/bin/Debug/JungleHelper.dll
   Dependencies:
     - Name: Everest
       Version: 1.1754.0
