@@ -14,10 +14,10 @@ namespace Celeste.Mod.JungleHelper {
         }
 
         public override void Load() {
-
+            ClimbableOneWayPlatform.Load();
         }
         public override void Unload() {
-
+            ClimbableOneWayPlatform.Unload();
         }
     }
 }
