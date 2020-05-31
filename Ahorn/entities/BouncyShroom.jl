@@ -15,6 +15,7 @@ BouncyShroom = Dict{String, Type}(
 )
 
 BouncyShroomUnion = Union{BouncyShroomUp, BouncyShroomLeft, BouncyShroomRight}
+
 for (dir, entity) in BouncyShroom
 	key = "Bouncy Shroom ($(uppercasefirst(dir))) (JungleHelper)"
 	placements[key] = Ahorn.EntityPlacement(

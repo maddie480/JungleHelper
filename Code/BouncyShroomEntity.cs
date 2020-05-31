@@ -1,6 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Celeste;
+using Microsoft.Xna.Framework;
 using Monocle;
 using System;
+using System.Collections.Generic;
 using Celeste.Mod.Entities;
 
 
@@ -10,6 +12,7 @@ namespace Celeste.Mod.JungleHelper {
         "JungleHelper/BouncyShroomUp = BounceUp",
         "JungleHelper/BouncyShroomLeft = BounceLeft",
         "JungleHelper/BouncyShroomRight = BounceRight")]
+
     public class BouncyShroom : Entity {
 
         public static Entity BounceUp(Level level, LevelData levelData, Vector2 position, EntityData entityData)
@@ -169,7 +172,7 @@ namespace Celeste.Mod.JungleHelper {
 
                 player.Speed.Y = yeetSpeedCalcY;
 
-                Audio.Play("event:/char/badeline/jump_assisted");
+                Audio.Play("event:/junglehelper/sfx/Mushroom_boost");
 
                 if (player.DashAttacking == true) {
                     dashedintoit = true;
