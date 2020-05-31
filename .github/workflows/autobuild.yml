@@ -7,14 +7,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
+    - uses: nuget/setup-nuget@v1      
+      with:
+        nuget-version: '5.x'
 
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 2.2.108
 
-    - name: Restore with .NET Core
-      run: dotnet restore
+    - name: Restore with NuGet
+      run: nuget restore *.sln
 
     - name: Build using Mono
       run: msbuild *.sln "/p:Configuration=Debug"
