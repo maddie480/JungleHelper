@@ -1,0 +1,26 @@
+<decals>
+	<decal path="Jungle0-general/PlantGrass">
+		<banner amplitude="4" sliceSize="1" speed="4" sliceSinIncrement="0.05" easeDown="false" offset="-2" />
+	</decal>
+	
+	<decal path="Jungle0-general/PlantGrassShort">
+		<banner amplitude="2" sliceSize="1" speed="2" sliceSinIncrement="0.05" easeDown="false" offset="-2" />
+	</decal>
+	
+	<decal path="Jungle0-general/PlantFiddlegrass">
+		<banner amplitude="2.5" sliceSize="1" speed="3" sliceSinIncrement="0.05" easeDown="false" offset="0" />
+	</decal>
+	
+	<decal path="Jungle0-general/VineSmall">
+		<banner amplitude="2" sliceSize="1" speed="1" sliceSinIncrement="0.05" easeDown="true" offset="0" />
+	</decal>
+	
+	<decal path="Jungle0-general/VineLarge">
+		<banner amplitude="2" sliceSize="1" speed="1" sliceSinIncrement="0.05" easeDown="true" offset="0" />
+	</decal>
+	
+	<decal path="Jungle0-general/PlantStalkSmall">
+		<banner amplitude="3" sliceSize="1" speed="3" sliceSinIncrement="0.05" easeDown="false" offset="-2" />
+	</decal>
+	
+</decals>
