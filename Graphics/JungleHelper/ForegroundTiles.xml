@@ -261,5 +261,7 @@
   </Tileset>
   
   <Tileset id="p" copy="z" path="darkgreen"  />
+  <Tileset id="q" copy="z" path="JungleTemple" sound="8" />
+  <Tileset id="r" copy="z" path="CliffsideGray" sound="8" />
   
 </Data>
