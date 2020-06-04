@@ -4,7 +4,7 @@ using ..Ahorn, Maple
 
 const placements = Ahorn.PlacementDict(
     "Platform (Moving, Jungle) (JungleHelper)" => Ahorn.EntityPlacement(
-        Maple.movingPlatform,
+        Maple.MovingPlatform,
         "rectangle",
         Dict{String, Any}(
           "texture" => "Jungle"
