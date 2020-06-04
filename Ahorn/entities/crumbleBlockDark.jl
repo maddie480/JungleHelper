@@ -4,7 +4,7 @@ using ..Ahorn, Maple
 
 const placements = Ahorn.PlacementDict(
     "Crumble Blocks (Dark) (JungleHelper)" => Ahorn.EntityPlacement(
-        Maple.crumbleBlock,
+        Maple.CrumbleBlock,
         "rectangle",
         Dict{String, Any}(
           "texture" => "dark"
