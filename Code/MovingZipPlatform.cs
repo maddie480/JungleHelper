@@ -10,8 +10,8 @@ using Microsoft.Xna.Framework;
 using Monocle;
 
 namespace Celeste.Mod.JungleHelper {
+    [CustomEntity("JungleHelper/MovingZipPlatform")]
     public class MovingZipPlatform : JumpThru {
-        // Token: 0x06002B6B RID: 11115 RVA: 0x00120C9C File Offset: 0x0011EE9C
         public MovingZipPlatform(Vector2 position, int width, Vector2 node) : base(position, width, false) {
             start = Position;
             end = node;
