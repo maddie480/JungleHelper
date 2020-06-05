@@ -85,6 +85,8 @@
     <Compile Include="ClimbableOneWayPlatform.cs" />
     <Compile Include="Module.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TheoStatue.cs" />
+    <Compile Include="TheoStatueGate.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
