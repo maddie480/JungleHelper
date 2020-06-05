@@ -84,6 +84,7 @@
     <Compile Include="BouncyShroomEntity.cs" />
     <Compile Include="ClimbableOneWayPlatform.cs" />
     <Compile Include="Module.cs" />
+    <Compile Include="MovingZipPlatform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
