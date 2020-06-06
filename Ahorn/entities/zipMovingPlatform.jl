@@ -7,7 +7,7 @@ using ..Ahorn, Maple
 const placements = Ahorn.PlacementDict()
 
 for texture in Maple.wood_platform_textures
-  placements["Platform (Zip, $(uppercasefirst(texture)), JungleHelper)"] = Ahorn.EntityPlacement(
+  placements["Platform (Zip, $(uppercasefirst(texture))) (JungleHelper)"] = Ahorn.EntityPlacement(
       MovingZipPlatform,
       "rectangle",
       Dict{String, Any}(
@@ -21,7 +21,7 @@ for texture in Maple.wood_platform_textures
     end
 )
 end
-placements["Platform (Zip, Jungle, JungleHelper)"] = Ahorn.EntityPlacement(
+placements["Platform (Zip, Jungle) (JungleHelper)"] = Ahorn.EntityPlacement(
       MovingZipPlatform,
       "rectangle",
       Dict{String, Any}(

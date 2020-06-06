@@ -57,6 +57,7 @@ namespace Celeste.Mod.JungleHelper {
                 while (!HasPlayerRider()) {
                     yield return null;
                 }
+                this.sfx.Play("event:/junglehelper/sfx/Zip_platform", null, 0f);
                 float at = 0f;
                 while (at < 1f) {
                     yield return null;
