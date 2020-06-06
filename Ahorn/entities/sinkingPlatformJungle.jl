@@ -7,8 +7,9 @@ const placements = Ahorn.PlacementDict(
         Maple.SinkingPlatform,
         "rectangle",
         Dict{String, Any}(
-          "texture" => "Jungle"
+          "texture" => "jungle"
         )
+		
     )
 )
 
