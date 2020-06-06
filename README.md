@@ -1,6 +1,6 @@
 # Jungle Helper
 
-This repository contains the helper and assets for the _Celeste: Into the Jungle_ mod. Both custom entities / triggers anf assets can be used in other maps (with credit) by having this helper as a dependenvy.
+This repository contains the helper and assets for the _Celeste: Into the Jungle_ mod. Both custom entities / triggers anf assets can be used in other maps (with credit) by having this helper as a dependency.
 
 Contains the following entities so far:
 - **Bouncy Shroom**: a mushroom Madeline can bounce on! Comes in up, up-left and up-right variants.
