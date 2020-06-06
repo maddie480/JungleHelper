@@ -5,12 +5,12 @@ using Celeste;
 using Celeste.Mod;
 using Microsoft.Xna.Framework;
 using Monocle;
-
+using Celeste.Mod.Entities;
 
 namespace FrostHelper {
+    // IT MAY BE A "TEMPLE BLOCK" OFFICIALLY, BUT IT WILL ALWAYS BE A REMOTE KEVIN IN MY HEART
+    [CustomEntity("JungleHelper/RemoteKevin")]
     public class RemoteKevin : Solid {
-        bool core;
-
         public RemoteKevin(Vector2 position, float width, float height, Axes axes, bool chillOut = false, bool core = false) : base(position, width, height, false) {
             this.core = core;
             fill = Calc.HexToColor("62222b");
@@ -155,7 +155,7 @@ namespace FrostHelper {
             if (flag3) {
                 bool flag4 = borderX < 0;
                 if (flag4) {
-                    Image image2 = new Image(GFX.Game["objects/FrostHelper/RemoteKevin/lit_left"].GetSubtexture(0, ty * 8, 8, 8, null));
+                    Image image2 = new Image(GFX.Game["objects/crushblock/lit_left"].GetSubtexture(0, ty * 8, 8, 8, null));
                     activeLeftImages.Add(image2);
                     image2.Position = vector;
                     image2.Visible = false;
@@ -163,7 +163,7 @@ namespace FrostHelper {
                 } else {
                     bool flag5 = borderX > 0;
                     if (flag5) {
-                        Image image3 = new Image(GFX.Game["objects/FrostHelper/RemoteKevin/lit_right"].GetSubtexture(0, ty * 8, 8, 8, null));
+                        Image image3 = new Image(GFX.Game["objects/crushblock/lit_right"].GetSubtexture(0, ty * 8, 8, 8, null));
                         activeRightImages.Add(image3);
                         image3.Position = vector;
                         image3.Visible = false;
@@ -172,7 +172,7 @@ namespace FrostHelper {
                 }
                 bool flag6 = borderY < 0;
                 if (flag6) {
-                    Image image4 = new Image(GFX.Game["objects/FrostHelper/RemoteKevin/lit_top"].GetSubtexture(tx * 8, 0, 8, 8, null));
+                    Image image4 = new Image(GFX.Game["objects/crushblock/lit_top"].GetSubtexture(tx * 8, 0, 8, 8, null));
                     activeTopImages.Add(image4);
                     image4.Position = vector;
                     image4.Visible = false;
@@ -180,7 +180,7 @@ namespace FrostHelper {
                 } else {
                     bool flag7 = borderY > 0;
                     if (flag7) {
-                        Image image5 = new Image(GFX.Game["objects/FrostHelper/RemoteKevin/lit_bottom"].GetSubtexture(tx * 8, 0, 8, 8, null));
+                        Image image5 = new Image(GFX.Game["objects/crushblock/lit_bottom"].GetSubtexture(tx * 8, 0, 8, 8, null));
                         activeBottomImages.Add(image5);
                         image5.Position = vector;
                         image5.Visible = false;
@@ -550,7 +550,6 @@ namespace FrostHelper {
             yield break;
         }
 
-        // Token: 0x06000D56 RID: 3414 RVA: 0x00031088 File Offset: 0x0002F288
         private bool MoveHCheck(float amount) {
             bool flag = MoveHCollideSolidsAndBounds(level, amount, true, null);
             bool result;
@@ -583,7 +582,6 @@ namespace FrostHelper {
             return result;
         }
 
-        // Token: 0x06000D57 RID: 3415 RVA: 0x000311AC File Offset: 0x0002F3AC
         private bool MoveVCheck(float amount) {
             bool flag = MoveVCollideSolidsAndBounds(level, amount, true, null);
             bool result;
@@ -616,70 +614,51 @@ namespace FrostHelper {
             return result;
         }
 
-        // Token: 0x040007E9 RID: 2025
+        public bool core;
+
         public static ParticleType P_Impact;
 
-        // Token: 0x040007EA RID: 2026
         public static ParticleType P_Crushing;
 
-        // Token: 0x040007EB RID: 2027
         public static ParticleType P_Activate;
 
-        // Token: 0x040007EC RID: 2028
-        private const float CrushSpeed = 120f; // was 240f
+        private const float CrushSpeed = 120f;
 
-        // Token: 0x040007ED RID: 2029
-        private const float CrushAccel = 250f; // was 500f
+        private const float CrushAccel = 250f;
 
-        // Token: 0x040007EE RID: 2030
-        private const float ReturnSpeed = 30f; // was 60f
+        private const float ReturnSpeed = 30f; 
 
-        // Token: 0x040007EF RID: 2031
-        private const float ReturnAccel = 80f; // was 160f
+        private const float ReturnAccel = 80f; 
 
-        // Token: 0x040007F0 RID: 2032
         private Color fill;
 
-        // Token: 0x040007F1 RID: 2033
         private Level level;
 
-        // Token: 0x040007F2 RID: 2034
         private bool canActivate;
 
-        // Token: 0x040007F3 RID: 2035
         private Vector2 crushDir;
 
-        // Token: 0x040007F4 RID: 2036
         private List<MoveState> returnStack;
 
-        // Token: 0x040007F5 RID: 2037
         private Coroutine attackCoroutine;
 
-        // Token: 0x040007F6 RID: 2038
         private bool canMoveVertically;
 
-        // Token: 0x040007F7 RID: 2039
         private bool canMoveHorizontally;
 
-        // Token: 0x040007F8 RID: 2040
+        
         private bool chillOut;
 
-        // Token: 0x040007F9 RID: 2041
         private bool giant;
 
-        // Token: 0x040007FA RID: 2042
         private Sprite face;
 
-        // Token: 0x040007FB RID: 2043
         private string nextFaceDirection;
 
-        // Token: 0x040007FC RID: 2044
         private List<Image> idleImages;
 
-        // Token: 0x040007FD RID: 2045
         private List<Image> activeTopImages;
 
-        // Token: 0x040007FE RID: 2046
         private List<Image> activeRightImages;
 
         // Token: 0x040007FF RID: 2047
@@ -696,15 +675,11 @@ namespace FrostHelper {
 
         // Token: 0x0200019C RID: 412
         public enum Axes {
-            // Token: 0x04000804 RID: 2052
             Both,
-            // Token: 0x04000805 RID: 2053
             Horizontal,
-            // Token: 0x04000806 RID: 2054
             Vertical
         }
 
-        // Token: 0x0200019D RID: 413
         private struct MoveState {
             // Token: 0x06000D5A RID: 3418 RVA: 0x00031326 File Offset: 0x0002F526
             public MoveState(Vector2 from, Vector2 direction) {
