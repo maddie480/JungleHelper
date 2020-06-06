@@ -4,21 +4,44 @@ using ..Ahorn, Maple
 
 @pardef MovingZipPlatform(x1::Integer, y1::Integer, x2::Integer=x1 + 16, y2::Integer=y1, width::Integer=32, texture::String="default") = Entity("JungleHelper/ZipMovingPlatform", x=x1, y=y1, nodes=Tuple{Int, Int}[(x2, y2)], width=width, texture=texture)
 
+const placements = Ahorn.PlacementDict()
 
-const placements = Ahorn.PlacementDict(
-    "Platform (Zip, Jungle) (JungleHelper)" => Ahorn.EntityPlacement(
-        MovingZipPlatform,
-        "rectangle",
-        Dict{String, Any}(
+for texture in Maple.wood_platform_textures
+  placements["Platform (Zip, $(uppercasefirst(texture)), JungleHelper)"] = Ahorn.EntityPlacement(
+      MovingZipPlatform,
+      "rectangle",
+      Dict{String, Any}(
+          "texture" => texture
+      ),
+      function(entity)
+        x, y = Int(entity.data["x"]), Int(entity.data["y"])
+        width = Int(get(entity.data, "width", 8))
+        entity.data["x"], entity.data["y"] = x + width, y
+        entity.data["nodes"] = [(x, y)]
+    end
+)
+end
+placements["Platform (Zip, Jungle, JungleHelper)"] = Ahorn.EntityPlacement(
+      MovingZipPlatform,
+      "rectangle",
+      Dict{String, Any}(
           "texture" => "Jungle"
-        ),
-    )
+      ),
+      function(entity)
+        x, y = Int(entity.data["x"]), Int(entity.data["y"])
+        width = Int(get(entity.data, "width", 8))
+        entity.data["x"], entity.data["y"] = x + width, y
+        entity.data["nodes"] = [(x, y)]
+    end
 )
 
 Ahorn.nodeLimits(entity::MovingZipPlatform) = 1, 1
 Ahorn.resizable(entity::MovingZipPlatform) = true, false
 Ahorn.minimumSize(entity::MovingZipPlatform) = 8, 0
 
+Ahorn.editingOptions(entity::MovingZipPlatform) = Dict{String, Any}(
+    "texture" => Maple.wood_platform_textures
+)
 function Ahorn.selection(entity::MovingZipPlatform)
 width = Int(get(entity.data, "width", 8))
 startX, startY = Int(entity.data["x"]), Int(entity.data["y"])

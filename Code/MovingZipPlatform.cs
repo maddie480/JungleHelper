@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework;
 using Monocle;
 
 namespace Celeste.Mod.JungleHelper {
-    [CustomEntity("JungleHelper/MovingZipPlatform")]
+    [CustomEntity("JungleHelper/ZipMovingPlatform")]
     public class MovingZipPlatform : JumpThru {
         public MovingZipPlatform(Vector2 position, int width, Vector2 node) : base(position, width, false) {
             start = Position;
@@ -22,7 +22,9 @@ namespace Celeste.Mod.JungleHelper {
         }
 
         public MovingZipPlatform(EntityData data, Vector2 offset) : this(data.Position + offset, data.Width, data.Nodes[0] + offset) {
+            TextureName = data.Attr("texture", "default");
         }
+
 
 
         public override void Added(Scene scene) {
@@ -31,7 +33,6 @@ namespace Celeste.Mod.JungleHelper {
             if (OverrideTexture != null) {
                 areaData.WoodPlatform = OverrideTexture;
             }
-            Console.WriteLine("peepee");
             orig_Added(scene);
             areaData.WoodPlatform = woodPlatform;
         }
@@ -77,7 +78,7 @@ namespace Celeste.Mod.JungleHelper {
                 }
                 StartShaking(0.1f);
                 yield return 0.5f;
-            } yield break;
+            }
         }
         public override void Update() {
             base.Update();
@@ -99,7 +100,7 @@ namespace Celeste.Mod.JungleHelper {
 
         public void orig_Added(Scene scene) {
             base.Added(scene);
-            MTexture mtexture = GFX.Game["objects/woodPlatform/" + AreaData.Get(scene).WoodPlatform];
+            MTexture mtexture = GFX.Game["objects/woodPlatform/" + TextureName];
             textures = new MTexture[mtexture.Width / 8];
             for (int i = 0; i < textures.Length; i++) {
                 textures[i] = mtexture.GetSubtexture(i * 8, 0, 8, 8, null);
@@ -109,6 +110,8 @@ namespace Celeste.Mod.JungleHelper {
         }
 
         private Vector2 start;
+
+        private string TextureName;
 
         private float percent;
 
