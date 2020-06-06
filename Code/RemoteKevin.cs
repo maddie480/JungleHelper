@@ -7,12 +7,13 @@ using Microsoft.Xna.Framework;
 using Monocle;
 using Celeste.Mod.Entities;
 
-namespace FrostHelper {
+namespace Celeste.Mod.JungleHelper {
     // IT MAY BE A "TEMPLE BLOCK" OFFICIALLY, BUT IT WILL ALWAYS BE A REMOTE KEVIN IN MY HEART
     [CustomEntity("JungleHelper/RemoteKevin")]
     public class RemoteKevin : Solid {
-        public RemoteKevin(Vector2 position, float width, float height, Axes axes, bool chillOut = false, bool core = false) : base(position, width, height, false) {
+        public RemoteKevin(Vector2 position, float width, float height, float distanceLeft, Axes axes, bool chillOut = false, bool core = false) : base(position, width, height, false) {
             this.core = core;
+            this.distanceLeft = distanceLeft;
             fill = Calc.HexToColor("62222b");
             idleImages = new List<Image>();
             activeTopImages = new List<Image>();
@@ -29,7 +30,7 @@ namespace FrostHelper {
             attackCoroutine = new Coroutine(true);
             attackCoroutine.RemoveOnComplete = false;
             Add(attackCoroutine);
-            List<MTexture> atlasSubtextures = GFX.Game.GetAtlasSubtextures("objects/crushblock");
+            List<MTexture> atlasSubtextures = GFX.Game.GetAtlasSubtextures("objects/crushblock/block");
             MTexture idle;
             switch (axes) {
                 default:
@@ -75,7 +76,7 @@ namespace FrostHelper {
             Add(new WaterInteraction(() => crushDir != Vector2.Zero));
         }
 
-        public RemoteKevin(EntityData data, Vector2 offset) : this(data.Position + offset, (float) data.Width, (float) data.Height, data.Enum("axes", Axes.Both), data.Bool("chillout", false), data.Bool("core", false)) {
+        public RemoteKevin(EntityData data, Vector2 offset) : this(data.Position + offset, (float) data.Width, (float) data.Height, (float) data.Float("distanceLeft", 0.0f) ,data.Enum("axes", Axes.Both), data.Bool("chillout", false), data.Bool("core", false)) {
         }
 
         public override void Added(Scene scene) {
@@ -229,68 +230,67 @@ namespace FrostHelper {
         }
 
         private void Attack(Vector2 direction) {
-            Audio.Play("event:/game/06_reflection/crushblock_activate", Center);
-            bool flag = currentMoveLoopSfx != null;
-            if (flag) {
-                currentMoveLoopSfx.Param("end", 1f);
-                SoundSource sfx = currentMoveLoopSfx;
-                Alarm.Set(this, 0.5f, delegate {
+            if (!isHit) {
+                Audio.Play("event:/game/06_reflection/crushblock_activate", Center);
+                bool flag = currentMoveLoopSfx != null;
+                if (flag) {
+                    currentMoveLoopSfx.Param("end", 1f);
+                    SoundSource sfx = currentMoveLoopSfx;
                     sfx.RemoveSelf();
-                }, Alarm.AlarmMode.Oneshot);
-            }
-            Add(currentMoveLoopSfx = new SoundSource());
-            currentMoveLoopSfx.Position = new Vector2(Width, Height) / 2f;
-            currentMoveLoopSfx.Play("event:/game/06_reflection/crushblock_move_loop", null, 0f);
-            face.Play("hit", false, false);
-            crushDir = direction;
-            canActivate = false;
-            attackCoroutine.Replace(AttackSequence());
-            ClearRemainder();
-            TurnOffImages();
-            ActivateParticles(crushDir);
-            bool flag2 = crushDir.X < 0f;
-            if (flag2) {
-                foreach (Image image in activeLeftImages) {
-                    image.Visible = true;
                 }
-                nextFaceDirection = "left";
-            } else {
-                bool flag3 = crushDir.X > 0f;
-                if (flag3) {
-                    foreach (Image image2 in activeRightImages) {
-                        image2.Visible = true;
+                Add(currentMoveLoopSfx = new SoundSource());
+                currentMoveLoopSfx.Position = new Vector2(Width, Height) / 2f;
+                currentMoveLoopSfx.Play("event:/game/06_reflection/crushblock_move_loop", null, 0f);
+                crushDir = direction;
+                canActivate = false;
+                attackCoroutine.Replace(AttackSequence());
+                face.Play("hit", false, false);
+                ClearRemainder();
+                TurnOffImages();
+                bool flag2 = crushDir.X < 0f;
+                if (flag2) {
+                    foreach (Image image in activeLeftImages) {
+                        image.Visible = true;
                     }
-                    nextFaceDirection = "right";
+                    nextFaceDirection = "left";
                 } else {
-                    bool flag4 = crushDir.Y < 0f;
-                    if (flag4) {
-                        foreach (Image image3 in activeTopImages) {
-                            image3.Visible = true;
+                    bool flag3 = crushDir.X > 0f;
+                    if (flag3) {
+                        foreach (Image image2 in activeRightImages) {
+                            image2.Visible = true;
                         }
-                        nextFaceDirection = "up";
+                        nextFaceDirection = "right";
                     } else {
-                        bool flag5 = crushDir.Y > 0f;
-                        if (flag5) {
-                            foreach (Image image4 in activeBottomImages) {
-                                image4.Visible = true;
+                        bool flag4 = crushDir.Y < 0f;
+                        if (flag4) {
+                            foreach (Image image3 in activeTopImages) {
+                                image3.Visible = true;
                             }
-                            nextFaceDirection = "down";
+                            nextFaceDirection = "up";
+                        } else {
+                            bool flag5 = crushDir.Y > 0f;
+                            if (flag5) {
+                                foreach (Image image4 in activeBottomImages) {
+                                    image4.Visible = true;
+                                }
+                                nextFaceDirection = "down";
+                            }
                         }
                     }
                 }
-            }
-            bool flag6 = true;
-            bool flag7 = returnStack.Count > 0;
-            if (flag7) {
-                MoveState moveState = returnStack[returnStack.Count - 1];
-                bool flag8 = moveState.Direction == direction || moveState.Direction == -direction;
-                if (flag8) {
-                    flag6 = false;
+                bool flag6 = true;
+                bool flag7 = returnStack.Count > 0;
+                if (flag7) {
+                    MoveState moveState = returnStack[returnStack.Count - 1];
+                    bool flag8 = moveState.Direction == direction || moveState.Direction == -direction;
+                    if (flag8) {
+                        flag6 = false;
+                    }
                 }
-            }
-            bool flag9 = flag6;
-            if (flag9) {
-                returnStack.Add(new MoveState(Position, crushDir));
+                bool flag9 = flag6;
+                if (flag9) {
+                    returnStack.Add(new MoveState(Position, crushDir));
+                }
             }
         }
 
@@ -332,9 +332,13 @@ namespace FrostHelper {
         }
 
         private IEnumerator AttackSequence() {
+            bool flagUn = false;
+            if (distanceLeft == -1) 
+            {
+                flagUn = true;
+            }
+            isHit = true;
             Input.Rumble(RumbleStrength.Strong, RumbleLength.Medium);
-            StartShaking(0.4f);
-            yield return 0.4f;
             bool flag = !chillOut;
             if (flag) {
                 canActivate = true;
@@ -342,34 +346,12 @@ namespace FrostHelper {
             StopPlayerRunIntoAnimation = false;
             bool slowing = false;
             float speed = 0f;
+            float distance = distanceLeft * 1000;
             Action som = null; // = null wasn't there
             for (; ; )
             {
-                bool flag2 = !chillOut;
-                if (flag2) {
-                    speed = Calc.Approach(speed, 120f, 250f * Engine.DeltaTime); // was speed, 240f, 500f
-                } else {
-                    bool flag3 = slowing || CollideCheck<SolidTiles>(Position + crushDir * 256f);
-                    if (flag3) {
-                        speed = Calc.Approach(speed, 12f, 250f * Engine.DeltaTime * 0.25f); // was speed, 24f, 500f
-                        bool flag4 = !slowing;
-                        if (flag4) {
-                            slowing = true;
-                            float duration = 0.5f;
-                            Action onComplete;
-                            if ((onComplete = som) == null) {
-                                onComplete = (som = delegate () {
-                                    face.Play("hurt", false, false);
-                                    currentMoveLoopSfx.Stop(true);
-                                    TurnOffImages();
-                                });
-                            }
-                            Alarm.Set(this, duration, onComplete, Alarm.AlarmMode.Oneshot);
-                        }
-                    } else {
-                        speed = Calc.Approach(speed, 120f, 250f * Engine.DeltaTime); // was speed, 240f, 500f
-                    }
-                }
+                speed = Calc.Approach(speed, CrushSpeed, CrushAccel * Engine.DeltaTime); // was speed, 240f, 500f
+                distance -= speed;
                 bool flag5 = crushDir.X != 0f;
                 bool hit;
                 if (flag5) {
@@ -378,7 +360,7 @@ namespace FrostHelper {
                     hit = MoveVCheck(speed * crushDir.Y * Engine.DeltaTime);
                 }
                 bool flag6 = hit;
-                if (flag6) {
+                if (flag6 || (distance < 0f && !flagUn)) {
                     break;
                 }
                 bool flag7 = Scene.OnInterval(0.02f);
@@ -491,6 +473,7 @@ namespace FrostHelper {
             Input.Rumble(RumbleStrength.Medium, RumbleLength.Medium);
             StartShaking(0.4f);
             StopPlayerRunIntoAnimation = true;
+            isHit = false;
             SoundSource sfx = currentMoveLoopSfx;
             currentMoveLoopSfx.Param("end", 1f);
             currentMoveLoopSfx = null;
@@ -499,55 +482,11 @@ namespace FrostHelper {
             }, Alarm.AlarmMode.Oneshot);
             crushDir = Vector2.Zero;
             TurnOffImages();
-            bool flag20 = !chillOut;
-            if (flag20) {
-                face.Play("hurt", false, false);
-                returnLoopSfx.Play("event:/game/06_reflection/crushblock_return_loop", null, 0f);
-                yield return 0.4f;
-                float speed2 = 0f;
-                float waypointSfxDelay = 0f;
-                while (returnStack.Count > 0) {
-                    yield return null;
-                    StopPlayerRunIntoAnimation = false;
-                    MoveState ret = returnStack[returnStack.Count - 1];
-                    speed2 = Calc.Approach(speed2, 60f, 160f * Engine.DeltaTime);
-                    waypointSfxDelay -= Engine.DeltaTime;
-                    bool flag21 = ret.Direction.X != 0f;
-                    if (flag21) {
-                        MoveTowardsX(ret.From.X, speed2 * Engine.DeltaTime);
-                    }
-                    bool flag22 = ret.Direction.Y != 0f;
-                    if (flag22) {
-                        MoveTowardsY(ret.From.Y, speed2 * Engine.DeltaTime);
-                    }
-                    bool atTarget = (ret.Direction.X == 0f || ExactPosition.X == ret.From.X) && (ret.Direction.Y == 0f || ExactPosition.Y == ret.From.Y);
-                    bool flag23 = atTarget;
-                    if (flag23) {
-                        speed2 = 0f;
-                        returnStack.RemoveAt(returnStack.Count - 1);
-                        StopPlayerRunIntoAnimation = true;
-                        bool flag24 = returnStack.Count <= 0;
-                        if (flag24) {
-                            face.Play("idle", false, false);
-                            returnLoopSfx.Stop(true);
-                            bool flag25 = waypointSfxDelay <= 0f;
-                            if (flag25) {
-                                Audio.Play("event:/game/06_reflection/crushblock_rest", Center);
-                            }
-                        } else {
-                            bool flag26 = waypointSfxDelay <= 0f;
-                            if (flag26) {
-                                Audio.Play("event:/game/06_reflection/crushblock_rest_waypoint", Center);
-                            }
-                        }
-                        waypointSfxDelay = 0.1f;
-                        StartShaking(0.2f);
-                        yield return 0.2f;
-                    }
-                    ret = default;
-                }
-            }
-            yield break;
+            face.Play("idle", false, false);
+            returnLoopSfx.Stop(true);
+            Audio.Play("event:/game/06_reflection/crushblock_rest", Center);
+            StartShaking(0.2f);
+            yield return 0.2f;
         }
 
         private bool MoveHCheck(float amount) {
@@ -622,13 +561,11 @@ namespace FrostHelper {
 
         public static ParticleType P_Activate;
 
-        private const float CrushSpeed = 120f;
+        private const float CrushSpeed = 630f;
 
-        private const float CrushAccel = 250f;
+        private const float CrushAccel = 630f;
 
-        private const float ReturnSpeed = 30f; 
-
-        private const float ReturnAccel = 80f; 
+        private float distanceLeft;
 
         private Color fill;
 
@@ -646,7 +583,8 @@ namespace FrostHelper {
 
         private bool canMoveHorizontally;
 
-        
+        private bool isHit = false;
+
         private bool chillOut;
 
         private bool giant;

@@ -2,12 +2,22 @@ module JungleHelperRemoteKevins
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/RemoteKevin" RemoteKevin(x::Integer, y::Integer)
+@mapdef Entity "JungleHelper/RemoteKevin" RemoteKevin(x::Integer, y::Integer, distanceLeft::Number)
 
 const placements = Ahorn.PlacementDict(
     "Temple Block (Restraintless, Jungle Helper)" => Ahorn.EntityPlacement(
         RemoteKevin,
-        "rectangle"
+        "rectangle",
+        Dict{String, Any}(
+            "distanceLeft" => -1.0
+        )
+    ),
+    "Temple Block (Restrained, Jungle Helper)" => Ahorn.EntityPlacement(
+        RemoteKevin,
+        "rectangle",
+        Dict{String, Any}(
+            "distanceLeft" => 2.0
+        )
     )
 )
 
