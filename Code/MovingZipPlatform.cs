@@ -18,10 +18,9 @@ namespace Celeste.Mod.JungleHelper {
             base.Add(sfx = new SoundSource());
             SurfaceSoundIndex = 5;
             base.Add(new LightOcclude(0.2f));
-            base.Add(new Coroutine(this.ZipUp(), true));
+            base.Add(new Coroutine(ZipUp(), true));
         }
 
-        // Token: 0x06002B6C RID: 11116 RVA: 0x00120D8A File Offset: 0x0011EF8A
         public MovingZipPlatform(EntityData data, Vector2 offset) : this(data.Position + offset, data.Width, data.Nodes[0] + offset) {
         }
 
@@ -32,6 +31,7 @@ namespace Celeste.Mod.JungleHelper {
             if (OverrideTexture != null) {
                 areaData.WoodPlatform = OverrideTexture;
             }
+            Console.WriteLine("peepee");
             orig_Added(scene);
             areaData.WoodPlatform = woodPlatform;
         }
