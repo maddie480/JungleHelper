@@ -49,6 +49,8 @@ namespace Celeste.Mod.JungleHelper {
         private float yeetSpeedYhor;
         private Sprite bouncyShroomSprite;
 
+
+
         public BouncyShroom(Vector2 position, Directions direction, int yeetx, int yeety)
             : base(position) {
             base.Depth = -1;
@@ -71,23 +73,49 @@ namespace Celeste.Mod.JungleHelper {
             yeetSpeedYver = -325f;
             yeetSpeedYhor = -290f;
 
-            bouncyShroomSprite = new Sprite(GFX.Game, "JungleHelper/BouncyShroom/");
-            bouncyShroomSprite.AddLoop("Idle", "mushroom", 0.15f, 0);
+            bouncyShroomSprite = new Sprite(GFX.Game, "objects/BouncyShroom/");
+            
+            
+            
             int[] frames = { 2, 3, 4, 5, 6, 7, 8 };
-            bouncyShroomSprite.Add("Bounce", "mushroom", 0.05f, frames);
+            
+            
 
             switch (Direction) {
                 case Directions.Up:
+                    bouncyShroomSprite.AddLoop("Idle", "mushroom", 0.15f, 0);
+                    bouncyShroomSprite.Add("Bounce", "mushroom", 0.05f, frames);
+
+                    Hitbox hitbox1 = new Hitbox(8f, 8f, -16f, -15f);
+                    Hitbox hitbox2 = new Hitbox(8f, 8f, -8f, -16f);
+                    Hitbox hitbox3 = new Hitbox(8f, 8f, 0f, -15f);
+                    base.Collider = new ColliderList(hitbox1, hitbox2, hitbox3);
                     yeetSpeedCalcY = yeety;
                     //yeetSpeedCalcY = yeetSpeedYver;
                     break;
                 case Directions.Right:
+                    bouncyShroomSprite.AddLoop("Idle", "mushroom_rd_", 0.15f, 0);
+                    bouncyShroomSprite.Add("Bounce", "mushroom_rd_", 0.05f, frames);
+
+                    Hitbox hitbox4 = new Hitbox(6f, 6f, -14f, -14f);
+                    Hitbox hitbox5 = new Hitbox(8f, 8f, -8f, -15f);
+                    Hitbox hitbox6 = new Hitbox(4f, 8f, 0f, -13f);
+                    Hitbox hitbox7 = new Hitbox(4f, 8f, 4f, -9f);
+                    base.Collider = new ColliderList(hitbox4, hitbox5, hitbox6, hitbox7);
                     //yeetSpeedCalcX = yeetSpeedX;
                     //yeetSpeedCalcY = yeetSpeedYhor;
                     yeetSpeedCalcY = yeety;
                     yeetSpeedCalcX = yeetx;
                     break;
                 case Directions.Left:
+                    Hitbox hitbox8 = new Hitbox(6f, 6f, 0f, -14f);
+                    Hitbox hitbox9 = new Hitbox(8f, 8f, -8f, -15f);
+                    Hitbox hitbox10 = new Hitbox(4f, 8f, -12f, -13f);
+                    Hitbox hitbox11 = new Hitbox(4f, 8f, -16f, -9f);
+                    base.Collider = new ColliderList(hitbox8, hitbox9, hitbox10, hitbox11);
+                    bouncyShroomSprite.AddLoop("Idle", "mushroom_ld_", 0.15f, 0);
+                    bouncyShroomSprite.Add("Bounce", "mushroom_ld_", 0.05f, frames);
+
                     //yeetSpeedCalcX = -yeetSpeedX;
                     //yeetSpeedCalcY = yeetSpeedYhor;
                     yeetSpeedCalcY = yeety;
@@ -95,10 +123,8 @@ namespace Celeste.Mod.JungleHelper {
                     break;
             }
 
-            Hitbox hitbox1 = new Hitbox(8f, 8f, -16f, -15f);
-            Hitbox hitbox2 = new Hitbox(8f, 8f, -8f, -16f);
-            Hitbox hitbox3 = new Hitbox(8f, 8f, 0f, -15f);
-            base.Collider = new ColliderList(hitbox1, hitbox2, hitbox3);
+            
+            
 
             Add(pc = new PlayerCollider(OnCollide));
             Add(new StaticMover {
