@@ -297,42 +297,6 @@ namespace Celeste.Mod.JungleHelper {
             }
         }
 
-        private void ActivateParticles(Vector2 dir) {
-            bool flag = dir == Vector2.UnitX;
-            float direction;
-            Vector2 position;
-            Vector2 positionRange;
-            int num;
-            if (flag) {
-                direction = 0f;
-                position = CenterRight - Vector2.UnitX;
-                positionRange = Vector2.UnitY * (Height - 2f) * 0.5f;
-                num = (int) (Height / 8f) * 4;
-            } else {
-                bool flag2 = dir == -Vector2.UnitX;
-                if (flag2) {
-                    direction = 3.14159274f;
-                    position = CenterLeft + Vector2.UnitX;
-                    positionRange = Vector2.UnitY * (Height - 2f) * 0.5f;
-                    num = (int) (Height / 8f) * 4;
-                } else {
-                    bool flag3 = dir == Vector2.UnitY;
-                    if (flag3) {
-                        direction = 1.57079637f;
-                        position = BottomCenter - Vector2.UnitY;
-                        positionRange = Vector2.UnitX * (Width - 2f) * 0.5f;
-                        num = (int) (Width / 8f) * 4;
-                    } else {
-                        direction = -1.57079637f;
-                        position = TopCenter + Vector2.UnitY;
-                        positionRange = Vector2.UnitX * (Width - 2f) * 0.5f;
-                        num = (int) (Width / 8f) * 4;
-                    }
-                }
-            }
-            num += 2;
-            level.Particles.Emit(CrushBlock.P_Activate, num, position, positionRange, direction);
-        }
 
         private IEnumerator AttackSequence() {
             isHit = true;
@@ -394,7 +358,6 @@ namespace Celeste.Mod.JungleHelper {
                             }
                         }
                     }
-                    level.Particles.Emit(CrushBlock.P_Crushing, at, dir);
                     at = default;
                 }
                 yield return null;
