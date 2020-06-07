@@ -342,7 +342,7 @@ namespace Celeste.Mod.JungleHelper {
             StopPlayerRunIntoAnimation = false;
             bool slowing = false;
             float speed = 0f;
-            float distance = Width * 56.7f;
+            float distance = Width * multiplier;
             Action som = null; // = null wasn't there
             for (; ; )
             {
