@@ -2,17 +2,17 @@ module JungleHelperRemoteKevins
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/RemoteKevin" RemoteKevin(x::Integer, y::Integer, distanceLeft::Number)
+@mapdef Entity "JungleHelper/RemoteKevin" RemoteKevin(x::Integer, y::Integer, distanceLeft::Number=0.0)
 
 const placements = Ahorn.PlacementDict(
-    "Temple Block (Restraintless, Jungle Helper)" => Ahorn.EntityPlacement(
+    "Slide Block (Restraintless, Jungle Helper)" => Ahorn.EntityPlacement(
         RemoteKevin,
         "rectangle",
         Dict{String, Any}(
             "distanceLeft" => -1.0
         )
     ),
-    "Temple Block (Restrained, Jungle Helper)" => Ahorn.EntityPlacement(
+    "Slide Block (Restrained, Jungle Helper)" => Ahorn.EntityPlacement(
         RemoteKevin,
         "rectangle",
         Dict{String, Any}(
@@ -38,7 +38,6 @@ Ahorn.resizable(entity:: RemoteKevin) = true, true
 
 Ahorn.selection(entity:: RemoteKevin) = Ahorn.getEntityRectangle(entity)
 
-# Todo - Use randomness to decide on Kevin border
 function Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity:: RemoteKevin, room::Maple.Room)
     axes = lowercase(get(entity.data, "axes", "both"))
     chillout = get(entity.data, "chillout", false)

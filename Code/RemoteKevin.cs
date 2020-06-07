@@ -8,7 +8,7 @@ using Monocle;
 using Celeste.Mod.Entities;
 
 namespace Celeste.Mod.JungleHelper {
-    // IT MAY BE A "TEMPLE BLOCK" OFFICIALLY, BUT IT WILL ALWAYS BE A REMOTE KEVIN IN MY HEART
+    // IT MAY BE A "SLIDE BLOCK" OFFICIALLY, BUT IT WILL ALWAYS BE A REMOTE KEVIN IN MY HEART
     [CustomEntity("JungleHelper/RemoteKevin")]
     public class RemoteKevin : Solid {
         public RemoteKevin(Vector2 position, float width, float height, float distanceLeft, Axes axes, bool chillOut = false, bool core = false) : base(position, width, height, false) {
@@ -240,7 +240,7 @@ namespace Celeste.Mod.JungleHelper {
                 }
                 Add(currentMoveLoopSfx = new SoundSource());
                 currentMoveLoopSfx.Position = new Vector2(Width, Height) / 2f;
-                currentMoveLoopSfx.Play("event:/game/06_reflection/crushblock_move_loop", null, 0f);
+                currentMoveLoopSfx.Play("event:/junglehelper/sfx/Slide_block", null, 0f);
                 crushDir = direction;
                 canActivate = false;
                 attackCoroutine.Replace(AttackSequence());
@@ -361,6 +361,9 @@ namespace Celeste.Mod.JungleHelper {
                 }
                 bool flag6 = hit;
                 if (flag6 || (distance < 0f && !flagUn)) {
+                    if (flag6) {
+                        Audio.Play("event:/game/06_reflection/crushblock_impact", Center);
+                    }
                     break;
                 }
                 bool flag7 = Scene.OnInterval(0.02f);
@@ -468,7 +471,6 @@ namespace Celeste.Mod.JungleHelper {
                     }
                 }
             }
-            Audio.Play("event:/game/06_reflection/crushblock_impact", Center);
             level.DirectionalShake(crushDir, 0.3f);
             Input.Rumble(RumbleStrength.Medium, RumbleLength.Medium);
             StartShaking(0.4f);
