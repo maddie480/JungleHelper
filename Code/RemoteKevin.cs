@@ -14,7 +14,8 @@ namespace Celeste.Mod.JungleHelper {
         public RemoteKevin(Vector2 position, float width, float height, bool restrained, Axes axes, bool chillOut = false, bool core = false) : base(position, width, height, false) {
             this.core = core;
             this.restrained = restrained;
-            fill = Calc.HexToColor("62222b");
+            texture = (restrained ? "objects/slideBlock/green" : "objects/slideBlock/red");
+            fill = Calc.HexToColor("8A9C60");
             idleImages = new List<Image>();
             activeTopImages = new List<Image>();
             activeRightImages = new List<Image>();
@@ -30,7 +31,7 @@ namespace Celeste.Mod.JungleHelper {
             attackCoroutine = new Coroutine(true);
             attackCoroutine.RemoveOnComplete = false;
             Add(attackCoroutine);
-            List<MTexture> atlasSubtextures = GFX.Game.GetAtlasSubtextures("objects/crushblock/block");
+            List<MTexture> atlasSubtextures = GFX.Game.GetAtlasSubtextures(texture + "/block");
             MTexture idle;
             switch (axes) {
                 default:
@@ -48,7 +49,7 @@ namespace Celeste.Mod.JungleHelper {
                     canMoveVertically = true;
                     break;
             }
-            Add(face = GFX.SpriteBank.Create(giant ? "giant_crushblock_face" : "crushblock_face"));
+            Add(face = JungleHelperModule.SpriteBank.Create("slideblock_face"));
             face.Position = new Vector2(Width, Height) / 2f;
             face.Play("idle", false, false);
             face.OnLastFrame = delegate (string f) {
@@ -158,7 +159,7 @@ namespace Celeste.Mod.JungleHelper {
             if (flag3) {
                 bool flag4 = borderX < 0;
                 if (flag4) {
-                    Image image2 = new Image(GFX.Game["objects/crushblock/lit_left"].GetSubtexture(0, ty * 8, 8, 8, null));
+                    Image image2 = new Image(GFX.Game[texture + "/lit_left"].GetSubtexture(0, ty * 8, 8, 8, null));
                     activeLeftImages.Add(image2);
                     image2.Position = vector;
                     image2.Visible = false;
@@ -166,7 +167,7 @@ namespace Celeste.Mod.JungleHelper {
                 } else {
                     bool flag5 = borderX > 0;
                     if (flag5) {
-                        Image image3 = new Image(GFX.Game["objects/crushblock/lit_right"].GetSubtexture(0, ty * 8, 8, 8, null));
+                        Image image3 = new Image(GFX.Game[texture + "/lit_right"].GetSubtexture(0, ty * 8, 8, 8, null));
                         activeRightImages.Add(image3);
                         image3.Position = vector;
                         image3.Visible = false;
@@ -175,7 +176,7 @@ namespace Celeste.Mod.JungleHelper {
                 }
                 bool flag6 = borderY < 0;
                 if (flag6) {
-                    Image image4 = new Image(GFX.Game["objects/crushblock/lit_top"].GetSubtexture(tx * 8, 0, 8, 8, null));
+                    Image image4 = new Image(GFX.Game[texture + "/lit_top"].GetSubtexture(tx * 8, 0, 8, 8, null));
                     activeTopImages.Add(image4);
                     image4.Position = vector;
                     image4.Visible = false;
@@ -183,7 +184,7 @@ namespace Celeste.Mod.JungleHelper {
                 } else {
                     bool flag7 = borderY > 0;
                     if (flag7) {
-                        Image image5 = new Image(GFX.Game["objects/crushblock/lit_bottom"].GetSubtexture(tx * 8, 0, 8, 8, null));
+                        Image image5 = new Image(GFX.Game[texture + "/lit_bottom"].GetSubtexture(tx * 8, 0, 8, 8, null));
                         activeBottomImages.Add(image5);
                         image5.Position = vector;
                         image5.Visible = false;
@@ -571,6 +572,9 @@ namespace Celeste.Mod.JungleHelper {
         private const float CrushAccel = 512f;
 
         private bool restrained;
+
+        private string texture;
+
         private Color fill;
 
         private Level level;
