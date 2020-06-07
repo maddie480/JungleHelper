@@ -1,8 +1,6 @@
-﻿using Celeste;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Monocle;
 using System;
-using System.Collections.Generic;
 using Celeste.Mod.Entities;
 
 
@@ -12,7 +10,6 @@ namespace Celeste.Mod.JungleHelper {
         "JungleHelper/BouncyShroomUp = BounceUp",
         "JungleHelper/BouncyShroomLeft = BounceLeft",
         "JungleHelper/BouncyShroomRight = BounceRight")]
-
     public class BouncyShroom : Entity {
 
         public static Entity BounceUp(Level level, LevelData levelData, Vector2 position, EntityData entityData)
@@ -30,109 +27,75 @@ namespace Celeste.Mod.JungleHelper {
 
         public Directions Direction;
 
-        private PlayerCollider pc;
-
         private Vector2 imageOffset;
 
-        private bool dashedintoit;
-        private bool intoit;
+        private bool dashedIntoIt;
+        private bool collidedWithIt;
 
-        private ParticleType particleType = new ParticleType(Player.P_DashA);
-        private float particleAngle;
         private Vector2 particlePosAdjust;
-        private Vector2 particlePosAdjustTwo;
 
         private float yeetSpeedCalcX;
         private float yeetSpeedCalcY;
-        private float yeetSpeedX;
-        private float yeetSpeedYver;
-        private float yeetSpeedYhor;
         private Sprite bouncyShroomSprite;
-
-
 
         public BouncyShroom(Vector2 position, Directions direction, int yeetx, int yeety)
             : base(position) {
-            base.Depth = -1;
-            this.Direction = direction;
+
+            Depth = -1;
+            Direction = direction;
 
             // making the bounce particles
-            particleType.Color = Color.LightBlue;
-            particleType.Color2 = Color.LightBlue;
-            particleType.FadeMode = ParticleType.FadeModes.Late;
-            particleType.SpeedMin = 20f;
-            particleType.SpeedMax = 25f;
-            particleType.LifeMin = 0.5f;
-            particleType.LifeMax = 0.7f;
-            particleAngle = (float) (11 * Math.PI / 8);
             particlePosAdjust = new Vector2(0, 1);
-            particlePosAdjustTwo = -Vector2.UnitX;
-
-            // yeet parameters
-            yeetSpeedX = 200f;
-            yeetSpeedYver = -325f;
-            yeetSpeedYhor = -290f;
 
             bouncyShroomSprite = new Sprite(GFX.Game, "objects/BouncyShroom/");
-            
-            
-            
+
             int[] frames = { 2, 3, 4, 5, 6, 7, 8 };
-            
-            
 
             switch (Direction) {
                 case Directions.Up:
                     bouncyShroomSprite.AddLoop("Idle", "mushroom", 0.15f, 0);
                     bouncyShroomSprite.Add("Bounce", "mushroom", 0.05f, frames);
 
-                    Hitbox hitbox1 = new Hitbox(8f, 8f, -16f, -15f);
-                    Hitbox hitbox2 = new Hitbox(8f, 8f, -8f, -16f);
-                    Hitbox hitbox3 = new Hitbox(8f, 8f, 0f, -15f);
-                    base.Collider = new ColliderList(hitbox1, hitbox2, hitbox3);
+                    Collider = new ColliderList(
+                        new Hitbox(8f, 8f, -16f, -15f),
+                        new Hitbox(8f, 8f, -8f, -16f),
+                        new Hitbox(8f, 8f, 0f, -15f));
 
                     yeetSpeedCalcY = yeety;
-                    //yeetSpeedCalcY = yeetSpeedYver;
                     break;
                 case Directions.Right:
                     bouncyShroomSprite.AddLoop("Idle", "mushroom_rd_", 0.15f, 0);
                     bouncyShroomSprite.Add("Bounce", "mushroom_rd_", 0.05f, frames);
 
-                    Hitbox hitbox4 = new Hitbox(6f, 6f, -14f, -14f);
-                    Hitbox hitbox5 = new Hitbox(8f, 8f, -8f, -15f);
-                    Hitbox hitbox6 = new Hitbox(4f, 8f, 0f, -13f);
-                    Hitbox hitbox7 = new Hitbox(4f, 8f, 4f, -9f);
-                    base.Collider = new ColliderList(hitbox4, hitbox5, hitbox6, hitbox7);
-                    //yeetSpeedCalcX = yeetSpeedX;
-                    //yeetSpeedCalcY = yeetSpeedYhor;
+                    Collider = new ColliderList(
+                        new Hitbox(6f, 6f, -14f, -14f),
+                        new Hitbox(8f, 8f, -8f, -15f),
+                        new Hitbox(4f, 8f, 0f, -13f),
+                        new Hitbox(4f, 8f, 4f, -9f));
+
                     yeetSpeedCalcY = yeety;
                     yeetSpeedCalcX = yeetx;
                     break;
                 case Directions.Left:
-                    Hitbox hitbox8 = new Hitbox(6f, 6f, 0f, -14f);
-                    Hitbox hitbox9 = new Hitbox(8f, 8f, -8f, -15f);
-                    Hitbox hitbox10 = new Hitbox(4f, 8f, -12f, -13f);
-                    Hitbox hitbox11 = new Hitbox(4f, 8f, -16f, -9f);
-                    base.Collider = new ColliderList(hitbox8, hitbox9, hitbox10, hitbox11);
+                    Collider = new ColliderList(
+                        new Hitbox(6f, 6f, 0f, -14f),
+                        new Hitbox(8f, 8f, -8f, -15f),
+                        new Hitbox(4f, 8f, -12f, -13f),
+                        new Hitbox(4f, 8f, -16f, -9f));
+
                     bouncyShroomSprite.AddLoop("Idle", "mushroom_ld_", 0.15f, 0);
                     bouncyShroomSprite.Add("Bounce", "mushroom_ld_", 0.05f, frames);
 
-                    //yeetSpeedCalcX = -yeetSpeedX;
-                    //yeetSpeedCalcY = yeetSpeedYhor;
                     yeetSpeedCalcY = yeety;
                     yeetSpeedCalcX = -yeetx;
                     break;
             }
 
-            
-            
-
-            Add(pc = new PlayerCollider(OnCollide));
+            Add(new PlayerCollider(OnCollide));
             Add(new StaticMover {
                 OnShake = OnShake,
                 SolidChecker = IsRiding,
-                JumpThruChecker = IsRiding,
-
+                JumpThruChecker = IsRiding
             });
         }
 
@@ -142,18 +105,7 @@ namespace Celeste.Mod.JungleHelper {
 
         public override void Added(Scene scene) {
             base.Added(scene);
-            AreaData areaData = AreaData.Get(scene);
 
-            /*
-            string str = Direction.ToString().ToLower();
-
-            List<MTexture> atlasSubtextures = GFX.Game.GetAtlasSubtextures("JungleHelper/mushroomTemplate_" + str);
-
-            Image image = new Image(Calc.Random.Choose(atlasSubtextures));
-
-            image.JustifyOrigin(0.5f, 1f);
-            image.Position = -4 * Vector2.UnitX + 8 * Vector2.UnitY;
-            */
             bouncyShroomSprite.Position = -20 * Vector2.UnitX - 20 * Vector2.UnitY;
 
             Add(bouncyShroomSprite);
@@ -173,9 +125,8 @@ namespace Celeste.Mod.JungleHelper {
         }
 
         public void SetOrigins(Vector2 origin) {
-            foreach (Component component in base.Components) {
-                Image image = component as Image;
-                if (image != null) {
+            foreach (Component component in Components) {
+                if (component is Image image) {
                     Vector2 vector = origin - Position;
                     image.Origin = image.Origin + vector - image.Position;
                     image.Position = vector;
@@ -184,7 +135,7 @@ namespace Celeste.Mod.JungleHelper {
         }
 
         private void OnCollide(Player player) {
-            if (player.Speed.Y >= 0f && player.Bottom <= base.Bottom) {
+            if (player.Speed.Y >= 0f && player.Bottom <= Bottom) {
 
                 if (Direction == Directions.Right) {
                     if (player.Speed.X < yeetSpeedCalcX) {
@@ -202,78 +153,36 @@ namespace Celeste.Mod.JungleHelper {
                 Audio.Play("event:/junglehelper/sfx/Mushroom_boost");
 
                 if (player.DashAttacking == true) {
-                    dashedintoit = true;
+                    dashedIntoIt = true;
                     SceneAs<Level>().Displacement.AddBurst(player.Position + particlePosAdjust, 0.4f, 8f, 64f, 0.5f, Ease.QuadOut, Ease.QuadOut);
                 }
 
-                //Remove(image);
                 bouncyShroomSprite.Play("Bounce");
             }
 
-            intoit = true;
-
+            collidedWithIt = true;
         }
 
         public override void Update() {
             base.Update();
 
-            if (intoit == true) {
+            if (collidedWithIt == true) {
                 if (!CollideCheck<Player>()) {
-
-                    if (dashedintoit == true) {
+                    if (dashedIntoIt == true) {
                         SceneAs<Level>().Tracker.GetEntity<Player>().StateMachine.State = 0;
-                        dashedintoit = false;
+                        dashedIntoIt = false;
                     }
                     if (!SceneAs<Level>().Tracker.GetEntity<Player>().Inventory.NoRefills) {
                         SceneAs<Level>().Tracker.GetEntity<Player>().RefillDash();
                     }
                     SceneAs<Level>().Tracker.GetEntity<Player>().RefillStamina();
-                    intoit = false;
+                    collidedWithIt = false;
                 }
-
             }
-
-        }
-
-        private void OnCertifiedHit(Vector2 hitposition) {
-            if (SceneAs<Level>().Tracker.GetEntity<Player>().DashAttacking == true) {
-                OnCertifiedDash(hitposition);
-            }
-            Audio.Play("event:/char/badeline/jump_assisted");
-            Emit4Particles(hitposition);
-        }
-
-        private void OnCertifiedDash(Vector2 hitposition) {
-            dashedintoit = true;
-            SceneAs<Level>().Displacement.AddBurst(hitposition + particlePosAdjust, 0.4f, 8f, 64f, 0.5f, Ease.QuadOut, Ease.QuadOut);
-        }
-
-        private void Emit4Particles(Vector2 hitposition) {
-            SceneAs<Level>().ParticlesFG.Emit(particleType, hitposition + particlePosAdjust + particlePosAdjustTwo, particleAngle); //angle in radians
-            SceneAs<Level>().ParticlesFG.Emit(particleType, hitposition + particlePosAdjust - particlePosAdjustTwo, particleAngle + (float) (2 * Math.PI / 8));
-            SceneAs<Level>().ParticlesFG.Emit(particleType, hitposition + particlePosAdjust + particlePosAdjustTwo, particleAngle);
-            SceneAs<Level>().ParticlesFG.Emit(particleType, hitposition + particlePosAdjust - particlePosAdjustTwo, particleAngle + (float) (2 * Math.PI / 8));
-        }
-
-        private void yeet(Player player) {
-
         }
 
         private bool IsRiding(Solid solid) {
             return CollideCheckOutside(solid, Position + Vector2.UnitY);
-            /*
-            switch (Direction)
-            {
-                default:
-                    return false;
-                case Directions.Up:
-                    return CollideCheckOutside(solid, Position + Vector2.UnitY);
-                case Directions.Left:
-                    return CollideCheckOutside(solid, Position + Vector2.UnitX);
-                case Directions.Right:
-                    return CollideCheckOutside(solid, Position - Vector2.UnitX);
-            }
-            */
         }
 
         private bool IsRiding(JumpThru jumpThru) {
