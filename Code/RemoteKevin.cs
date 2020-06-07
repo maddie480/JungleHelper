@@ -11,10 +11,9 @@ namespace Celeste.Mod.JungleHelper {
     // IT MAY BE A "SLIDE BLOCK" OFFICIALLY, BUT IT WILL ALWAYS BE A REMOTE KEVIN IN MY HEART
     [CustomEntity("JungleHelper/RemoteKevin")]
     public class RemoteKevin : Solid {
-        public RemoteKevin(Vector2 position, float width, float height, bool restrained, float multiplier, Axes axes, bool chillOut = false, bool core = false) : base(position, width, height, false) {
+        public RemoteKevin(Vector2 position, float width, float height, bool restrained, Axes axes, bool chillOut = false, bool core = false) : base(position, width, height, false) {
             this.core = core;
             this.restrained = restrained;
-            this.multiplier = multiplier;
             fill = Calc.HexToColor("62222b");
             idleImages = new List<Image>();
             activeTopImages = new List<Image>();
@@ -77,7 +76,7 @@ namespace Celeste.Mod.JungleHelper {
             Add(new WaterInteraction(() => crushDir != Vector2.Zero));
         }
 
-        public RemoteKevin(EntityData data, Vector2 offset) : this(data.Position + offset, (float) data.Width, (float) data.Height, data.Bool("restrained", false) , (float) data.Float("multiplier", 57.5f),data.Enum("axes", Axes.Both), data.Bool("chillout", false), data.Bool("core", false)) {
+        public RemoteKevin(EntityData data, Vector2 offset) : this(data.Position + offset, (float) data.Width, (float) data.Height, data.Bool("restrained", false), data.Enum("axes", Axes.Both), data.Bool("chillout", false), data.Bool("core", false)) {
         }
 
         public override void Added(Scene scene) {
@@ -128,9 +127,11 @@ namespace Celeste.Mod.JungleHelper {
                 return Scene.CollideCheck<Water>(new Rectangle((int) (Center.X - 4f), (int) Center.Y, 8, 4));
             }
         }
-        public void OnDash(Vector2 direction) 
-        {
-            Attack(direction);
+        public void OnDash(Vector2 direction) {
+            // if one of the directions is zero and the other isn't, this is a straight (non diagonal) dash, so we should trigger the Kevin.
+            if ((direction.X == 0) != (direction.Y == 0)) {
+                Attack(direction);
+            }
         }
         private void AddImage(MTexture idle, int x, int y, int tx, int ty, int borderX = 0, int borderY = 0) {
             MTexture subtexture = idle.GetSubtexture(tx * 8, ty * 8, 8, 8, null);
@@ -342,21 +343,27 @@ namespace Celeste.Mod.JungleHelper {
             StopPlayerRunIntoAnimation = false;
             bool slowing = false;
             float speed = 0f;
-            float distance = Width * multiplier;
+            float distance = (crushDir.X != 0 ? Width : Height);
             Action som = null; // = null wasn't there
             for (; ; )
             {
                 speed = Calc.Approach(speed, CrushSpeed, CrushAccel * Engine.DeltaTime); // was speed, 240f, 500f
-                distance -= speed;
                 bool flag5 = crushDir.X != 0f;
                 bool hit;
+
+                float moveAmount = speed * Engine.DeltaTime;
+                if (restrained) {
+                    moveAmount = Math.Min(moveAmount, distance);
+                    distance -= moveAmount;
+                }
+
                 if (flag5) {
-                    hit = MoveHCheck(speed * crushDir.X * Engine.DeltaTime);
+                    hit = MoveHCheck(moveAmount * crushDir.X);
                 } else {
-                    hit = MoveVCheck(speed * crushDir.Y * Engine.DeltaTime);
+                    hit = MoveVCheck(moveAmount * crushDir.Y);
                 }
                 bool flag6 = hit;
-                if (flag6 || (distance < speed && restrained)) {
+                if (flag6 || (restrained && distance <= 0f)) {
                     if (flag6) {
                         Audio.Play("event:/game/06_reflection/crushblock_impact", Center);
                     }
@@ -564,7 +571,6 @@ namespace Celeste.Mod.JungleHelper {
         private const float CrushAccel = 512f;
 
         private bool restrained;
-        private float multiplier;
         private Color fill;
 
         private Level level;
