@@ -90,6 +90,7 @@ namespace Celeste.Mod.JungleHelper {
                     Hitbox hitbox2 = new Hitbox(8f, 8f, -8f, -16f);
                     Hitbox hitbox3 = new Hitbox(8f, 8f, 0f, -15f);
                     base.Collider = new ColliderList(hitbox1, hitbox2, hitbox3);
+
                     yeetSpeedCalcY = yeety;
                     //yeetSpeedCalcY = yeetSpeedYver;
                     break;
