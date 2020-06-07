@@ -11,9 +11,10 @@ namespace Celeste.Mod.JungleHelper {
     // IT MAY BE A "SLIDE BLOCK" OFFICIALLY, BUT IT WILL ALWAYS BE A REMOTE KEVIN IN MY HEART
     [CustomEntity("JungleHelper/RemoteKevin")]
     public class RemoteKevin : Solid {
-        public RemoteKevin(Vector2 position, float width, float height, float distanceLeft, Axes axes, bool chillOut = false, bool core = false) : base(position, width, height, false) {
+        public RemoteKevin(Vector2 position, float width, float height, bool restrained, float multiplier, Axes axes, bool chillOut = false, bool core = false) : base(position, width, height, false) {
             this.core = core;
-            this.distanceLeft = distanceLeft;
+            this.restrained = restrained;
+            this.multiplier = multiplier;
             fill = Calc.HexToColor("62222b");
             idleImages = new List<Image>();
             activeTopImages = new List<Image>();
@@ -76,7 +77,7 @@ namespace Celeste.Mod.JungleHelper {
             Add(new WaterInteraction(() => crushDir != Vector2.Zero));
         }
 
-        public RemoteKevin(EntityData data, Vector2 offset) : this(data.Position + offset, (float) data.Width, (float) data.Height, (float) data.Float("distanceLeft", 0.0f) ,data.Enum("axes", Axes.Both), data.Bool("chillout", false), data.Bool("core", false)) {
+        public RemoteKevin(EntityData data, Vector2 offset) : this(data.Position + offset, (float) data.Width, (float) data.Height, data.Bool("restrained", false) , (float) data.Float("multiplier", 57.5f),data.Enum("axes", Axes.Both), data.Bool("chillout", false), data.Bool("core", false)) {
         }
 
         public override void Added(Scene scene) {
@@ -231,7 +232,7 @@ namespace Celeste.Mod.JungleHelper {
 
         private void Attack(Vector2 direction) {
             if (!isHit) {
-                Audio.Play("event:/game/06_reflection/crushblock_activate", Center);
+                Audio.Play("event:/game/05_mirror_temple/swapblock_move", Center);
                 bool flag = currentMoveLoopSfx != null;
                 if (flag) {
                     currentMoveLoopSfx.Param("end", 1f);
@@ -332,11 +333,6 @@ namespace Celeste.Mod.JungleHelper {
         }
 
         private IEnumerator AttackSequence() {
-            bool flagUn = false;
-            if (distanceLeft == -1) 
-            {
-                flagUn = true;
-            }
             isHit = true;
             Input.Rumble(RumbleStrength.Strong, RumbleLength.Medium);
             bool flag = !chillOut;
@@ -346,7 +342,7 @@ namespace Celeste.Mod.JungleHelper {
             StopPlayerRunIntoAnimation = false;
             bool slowing = false;
             float speed = 0f;
-            float distance = distanceLeft * 1000;
+            float distance = Width * 56.7f;
             Action som = null; // = null wasn't there
             for (; ; )
             {
@@ -360,7 +356,7 @@ namespace Celeste.Mod.JungleHelper {
                     hit = MoveVCheck(speed * crushDir.Y * Engine.DeltaTime);
                 }
                 bool flag6 = hit;
-                if (flag6 || (distance < 0f && !flagUn)) {
+                if (flag6 || (distance < speed && restrained)) {
                     if (flag6) {
                         Audio.Play("event:/game/06_reflection/crushblock_impact", Center);
                     }
@@ -563,12 +559,12 @@ namespace Celeste.Mod.JungleHelper {
 
         public static ParticleType P_Activate;
 
-        private const float CrushSpeed = 630f;
+        private const float CrushSpeed = 512f;
 
-        private const float CrushAccel = 630f;
+        private const float CrushAccel = 512f;
 
-        private float distanceLeft;
-
+        private bool restrained;
+        private float multiplier;
         private Color fill;
 
         private Level level;
