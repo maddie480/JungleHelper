@@ -358,6 +358,8 @@ namespace Celeste.Mod.JungleHelper {
                             }
                         }
                     }
+                    ParticleType particlesCrushing = (restrained ? P_Green : P_Red);
+                    level.Particles.Emit(particlesCrushing, at, dir);
                     at = default;
                 }
                 yield return null;
@@ -521,12 +523,9 @@ namespace Celeste.Mod.JungleHelper {
             }
             return result;
         }
-
         public bool core;
 
         public static ParticleType P_Impact;
-
-        public static ParticleType P_Crushing;
 
         public static ParticleType P_Activate;
 
@@ -545,6 +544,9 @@ namespace Celeste.Mod.JungleHelper {
         private bool canActivate;
 
         private Vector2 crushDir;
+
+        public ParticleType P_Red = JungleHelperModule.P_Red;
+        public ParticleType P_Green = JungleHelperModule.P_Green;
 
         private List<MoveState> returnStack;
 
