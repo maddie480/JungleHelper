@@ -8,10 +8,7 @@ using ..Ahorn, Maple
 const placements = Ahorn.PlacementDict(
     "Jump Through (Invisible) (JungleHelper)" => Ahorn.EntityPlacement(
         InvisibleJumpthruPlatform,
-        "rectangle",
-        Dict{String, Any}(
-          "texture" => "Invisible"
-        )
+        "rectangle"
     )
 )
 
@@ -35,9 +32,6 @@ function Ahorn.selection(entity::InvisibleJumpthruPlatform)
 end
 
 function Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::InvisibleJumpthruPlatform, room::Maple.Room)
-    texture = get(entity.data, "texture", "wood")
-    texture = texture == "default" ? "wood" : texture
-
     # Values need to be system specific integer
     x = Int(get(entity.data, "x", 0))
     y = Int(get(entity.data, "y", 0))
@@ -62,7 +56,7 @@ function Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::InvisibleJumpthruPl
         end
 
         quad = quads[2 - connected, qx]
-        Ahorn.drawImage(ctx, "objects/jumpthru/$(texture)", 8 * i, 0, quad[1], quad[2], quad[3], quad[4])
+        Ahorn.drawImage(ctx, "objects/jumpthru/Invisible", 8 * i, 0, quad...)
     end
 end
 
