@@ -1,9 +1,4 @@
-﻿using Celeste;
-using Microsoft.Xna.Framework;
-using Monocle;
-using System;
-using System.Collections.Generic;
-using Celeste.Mod.Entities;
+﻿using Microsoft.Xna.Framework;
 using Monocle;
 
 namespace Celeste.Mod.JungleHelper {
@@ -13,9 +8,19 @@ namespace Celeste.Mod.JungleHelper {
         public JungleHelperModule() {
             Instance = this;
         }
+
+        public override void Load() {
+            ClimbableOneWayPlatform.Load();
+        }
+
+        public override void Unload() {
+            ClimbableOneWayPlatform.Unload();
+        }
+
         public override void LoadContent(bool firstLoad) {
             SpriteBank = new SpriteBank(GFX.Game, "Graphics/JungleHelper/CustomSprites.xml");
-            P_Red = new ParticleType {
+
+            RemoteKevin.P_Red = new ParticleType {
                 Source = GFX.Game["particles/rect"],
                 Color = Calc.HexToColor("FF762B"),
                 Color2 = Calc.HexToColor("DB552A"),
@@ -32,7 +37,8 @@ namespace Celeste.Mod.JungleHelper {
                 SpeedMultiplier = 0.4f,
                 Acceleration = new Vector2(0f, 10f)
             };
-            P_Green = new ParticleType {
+
+            RemoteKevin.P_Green = new ParticleType {
                 Source = GFX.Game["particles/rect"],
                 Color = Calc.HexToColor("2C9C19"),
                 Color2 = Calc.HexToColor("2BE839"),
@@ -50,16 +56,7 @@ namespace Celeste.Mod.JungleHelper {
                 Acceleration = new Vector2(0f, 10f)
             };
         }
-        public override void Load() {
-            ClimbableOneWayPlatform.Load();
-        }
-        public override void Unload() {
-            ClimbableOneWayPlatform.Unload();
-        }
+
         public static SpriteBank SpriteBank;
-
-        public static ParticleType P_Red;
-
-        public static ParticleType P_Green;
     }
 }
