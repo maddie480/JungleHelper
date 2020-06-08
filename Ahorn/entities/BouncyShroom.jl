@@ -35,9 +35,9 @@ function Ahorn.selection(entity::BouncyShroomUnion)
     return Ahorn.Rectangle(x - 16, y - 16, 24, 24)
 end
 
-spriteup = "JungleHelper/mushroomTemplate_up00.png"
-spriteleft = "JungleHelper/mushroomTemplate_left00.png"
-spriteright = "JungleHelper/mushroomTemplate_right00.png"
+spriteup = "objects/BouncyShroom/mushroom00.png"
+spriteleft = "objects/BouncyShroom/mushroom_ld_00.png"
+spriteright = "objects/BouncyShroom/mushroom_rd_00.png"
 
 Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::BouncyShroomUp, room::Maple.Room) = Ahorn.drawSprite(ctx, spriteup, -4, -4)
 Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::BouncyShroomLeft, room::Maple.Room) = Ahorn.drawSprite(ctx, spriteleft, -4, -4)

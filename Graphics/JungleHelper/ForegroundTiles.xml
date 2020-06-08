@@ -260,8 +260,8 @@
     <set mask="center" tiles="5,12"/>
   </Tileset>
   
-  <Tileset id="p" copy="z" path="darkgreen"  />
+  <Tileset id="p" copy="z" path="Darkgreen"  />
   <Tileset id="q" copy="z" path="JungleTemple" sound="8" />
   <Tileset id="r" copy="z" path="CliffsideGray" sound="8" />
-  
+  <Tileset id="s" copy="z" path="blanksetJungle" sound="33" />
 </Data>
