@@ -8,3 +8,5 @@ Contains the following entities so far:
 - **Theo Statue and Theo Statue Gate**: like a Theo crystal, but twice as tall and ungrabbable. It also does not prevent you from going to the next screen. The Theo statue gate opens when the Theo statue is nearby.
 - **Zip Moving Platform**: a Resort-like moving platform that behaves like a zip mover.
 - **Spiny Plant**: a vertical plant that kills you.
+- **Slide Block**: a Kevin block that moves in the direction of your dash. Can either stop after moving by its own width/height, or continue until it hits a wall.
+- **Invisible Jumpthru**: a jumpthru that is invisible in-game, but visible in Ahorn.
