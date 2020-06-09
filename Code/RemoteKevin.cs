@@ -230,6 +230,7 @@ namespace Celeste.Mod.JungleHelper {
             StopPlayerRunIntoAnimation = false;
             float speed = 0f;
             float distance = (crushDir.X != 0 ? Width : Height);
+            Vector2 startPoint = Position;
             while (true) {
                 speed = Calc.Approach(speed, CrushSpeed, CrushAccel * Engine.DeltaTime); // was speed, 240f, 500f
 
@@ -247,7 +248,9 @@ namespace Celeste.Mod.JungleHelper {
                 }
                 if (hit || (restrained && distance <= 0f)) {
                     if (hit) {
-                        Audio.Play("event:/game/06_reflection/crushblock_impact", Center);
+                        if (Position != startPoint) {
+                            Audio.Play("event:/game/06_reflection/crushblock_impact", Center);
+                        }
                         level.DirectionalShake(crushDir, 0.3f);
                     }
                     break;
@@ -324,7 +327,11 @@ namespace Celeste.Mod.JungleHelper {
             isHit = false;
 
             SoundSource sfx = currentMoveLoopSfx;
-            currentMoveLoopSfx.Param("end", 1f);
+            if (Position == startPoint) {
+                currentMoveLoopSfx.Param("end_2", 1f);
+            } else {
+                currentMoveLoopSfx.Param("end", 1f);
+            }
             currentMoveLoopSfx = null;
             Alarm.Set(this, 0.5f, delegate {
                 sfx.RemoveSelf();

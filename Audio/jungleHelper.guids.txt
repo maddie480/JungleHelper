@@ -493,7 +493,9 @@
 {634bdd66-3f53-4679-8ced-fadfc60d412f} event:/game/general/wall_break_wood
 {cfc3668f-7d79-4a8b-adc5-04e7e8c195b6} event:/junglehelper/sfx/Mushroom_boost
 {a587be0b-7d97-4a2e-b776-925ecbb6cee0} event:/junglehelper/sfx/Slide_block
-{ffdf113c-7102-4574-b6b5-2eec0b0ffdfe} event:/junglehelper/sfx/Zip_platform
+{cecdc7da-8dd8-4c2b-995c-701d19bc14e4} event:/junglehelper/sfx/SpiderBoss_Appear
+{1a059f27-5954-4c93-9827-b6fa0af25051} event:/junglehelper/sfx/SpiderBoss_Snap
+{2fac677a-8da6-4f7a-a223-0ab60b39ee2a} event:/junglehelper/sfx/Zip_platform
 {cde6e164-e252-43df-a84c-674db1dfb09e} event:/JungleMusicByTg90/tg90_cjc_c1
 {9abe2967-eb39-4f96-9d05-aa30a3407765} event:/JungleMusicByTg90/tg90_cjc_c2_p1
 {4d8d8d80-f94a-4ff4-b1d7-25e3674dbf0c} event:/JungleMusicByTg90/tg90_cjc_template
