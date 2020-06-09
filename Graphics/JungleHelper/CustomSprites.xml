@@ -1,13 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Sprites>
-  <slideblock_face path="objects/slideBlock/green/" start="idle">
-      <Center/>
-      <Loop id="idle" path="idle_face" delay="0.08"/>
-      <Anim id="hurt" path="hurt" frames="3-12" delay="0.08" goto="idle"/>
-      <Anim id="hit" path="hit" delay="0.08"/>
-      <Loop id="left" path="hit_left" delay="0.08"/>
-      <Loop id="right" path="hit_right" delay="0.08"/>
-      <Loop id="up" path="hit_up" delay="0.08"/>
-      <Loop id="down" path="hit_down" delay="0.08"/>
-  </slideblock_face>
+	<slideblock_face path="objects/slideBlock/green/" start="idle">
+		<Center/>
+		<Loop id="idle" path="idle_face" delay="0.08"/>
+		<Anim id="hurt" path="hurt" frames="3-12" delay="0.08" goto="idle"/>
+		<Anim id="hit" path="hit" delay="0.08"/>
+		<Loop id="left" path="hit_left" delay="0.08"/>
+		<Loop id="right" path="hit_right" delay="0.08"/>
+		<Loop id="up" path="hit_up" delay="0.08"/>
+		<Loop id="down" path="hit_down" delay="0.08"/>
+	</slideblock_face>
+
+	<spiderboss_web path="JungleHelper/SpiderBoss/" start="idle">
+		<Center/>
+		<Loop id="idle" path="WebStrand" frames="0"/>
+		<Anim id="break" path="WebStrand" frames="0-7" delay="0.08" goto="invisible"/>
+		<Loop id="invisible" path="WebStrand" frames="7"/>
+	</spiderboss_web>
 </Sprites>
