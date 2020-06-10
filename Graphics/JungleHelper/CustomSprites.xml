@@ -17,4 +17,11 @@
 		<Anim id="break" path="WebStrand" frames="0-7" delay="0.08" goto="invisible"/>
 		<Loop id="invisible" path="WebStrand" frames="7"/>
 	</spiderboss_web>
+
+	<rolling_rock path="JungleHelper/RollingRock/" start="idle">
+		<Center/>
+		<Loop id="idle" path="circle_of_doom_please_replace" frames="0"/>
+		<Loop id="rolling" path="circle_of_doom_please_replace" frames="0"/>
+		<Anim id="shatter" path="circle_of_doom_please_replace" frames="0"/>
+	</rolling_rock>
 </Sprites>
