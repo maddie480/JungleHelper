@@ -49,7 +49,7 @@ namespace Celeste.Mod.JungleHelper {
 
             // set up the web above the spider
             web = JungleHelperModule.SpriteBank.Create("spiderboss_web");
-            web.Position = new Vector2(0f, -22f);
+            web.Position = new Vector2(-1f, -22f);
             Add(web);
 
             // set up the spider sprite (static image for now, might become a Sprite later)
@@ -58,7 +58,7 @@ namespace Celeste.Mod.JungleHelper {
             Add(spider);
 
             // set up the spider hitbox
-            Collider = new Hitbox(12f, 12f, -6f, -6f);
+            Collider = new Hitbox(13f, 13f, -7f, -7f);
             Add(new PlayerCollider(onPlayer));
 
             Depth = -12500; // as deep as the Oshiro boss
