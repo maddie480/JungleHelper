@@ -27,7 +27,7 @@ end
 
 function Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::SpiderBoss, room::Maple.Room)
 	color = get(entity.data, "color", "Blue")
-	Ahorn.drawSprite(ctx, "JungleHelper/SpiderBoss/Spider$(color)", 0, 0)
+	Ahorn.drawSprite(ctx, "JungleHelper/SpiderBoss/spider$(color)0", 0, 0)
 end
 
 end

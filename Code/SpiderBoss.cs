@@ -35,6 +35,7 @@ namespace Celeste.Mod.JungleHelper {
         private SoundSource sfx;
 
         // state information
+        private Sprite spider;
         private Sprite web;
         private float stateDelay = 0f;
         private float speed = 0f;
@@ -52,10 +53,8 @@ namespace Celeste.Mod.JungleHelper {
             web.Position = new Vector2(-1f, -22f);
             Add(web);
 
-            // set up the spider sprite (static image for now, might become a Sprite later)
-            Image spider = new Image(GFX.Game["JungleHelper/SpiderBoss/Spider" + color.ToString()]);
-            spider.CenterOrigin();
-            Add(spider);
+            // set up the spider sprite
+            Add(spider = JungleHelperModule.SpriteBank.Create("spider_boss_" + color.ToString().ToLowerInvariant()));
 
             // set up the spider hitbox
             Collider = new Hitbox(13f, 13f, -7f, -7f);
@@ -123,6 +122,7 @@ namespace Celeste.Mod.JungleHelper {
             // the spider is now visible.
             Visible = true;
             Collidable = true;
+            spider.Play("idle");
             web.Play("idle");
 
             // set up the spider pop position according to camera and player position.
@@ -175,6 +175,7 @@ namespace Celeste.Mod.JungleHelper {
             falling = true;
 
             // web breaks!
+            spider.Play("start_falling");
             web.Play("break");
 
             speed = 0f;

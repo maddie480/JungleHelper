@@ -24,4 +24,25 @@
 		<Loop id="rolling" path="circle_of_doom_please_replace" frames="0"/>
 		<Anim id="shatter" path="circle_of_doom_please_replace" frames="0"/>
 	</rolling_rock>
+
+	<spider_boss_blue path="JungleHelper/SpiderBoss/" start="idle">
+		<Center/>
+		<Loop id="idle" path="spiderBlue" frames="0"/>
+		<Anim id="start_falling" path="spiderBlue" frames="0-4" delay="0.08" goto="falling"/>
+		<Loop id="falling" path="spiderBlue" frames="4"/>
+	</spider_boss_blue>
+
+	<spider_boss_purple path="JungleHelper/SpiderBoss/" start="idle">
+		<Center/>
+		<Loop id="idle" path="spiderPurple" frames="0"/>
+		<Anim id="start_falling" path="spiderPurple" frames="0-4" delay="0.08" goto="falling"/>
+		<Loop id="falling" path="spiderPurple" frames="4"/>
+	</spider_boss_purple>
+
+	<spider_boss_red path="JungleHelper/SpiderBoss/" start="idle">
+		<Center/>
+		<Loop id="idle" path="spiderRed" frames="0"/>
+		<Anim id="start_falling" path="spiderRed" frames="0-4" delay="0.08" goto="falling"/>
+		<Loop id="falling" path="spiderRed" frames="4"/>
+	</spider_boss_red>
 </Sprites>
