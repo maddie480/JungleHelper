@@ -264,4 +264,5 @@
   <Tileset id="q" copy="z" path="JungleTemple" sound="8" />
   <Tileset id="r" copy="z" path="CliffsideGray" sound="8" />
   <Tileset id="s" copy="z" path="blanksetJungle" sound="33" />
+  <Tileset id="t" copy="z" path="jungleRock" sound="8" />
 </Data>

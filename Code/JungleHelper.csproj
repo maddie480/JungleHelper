@@ -82,12 +82,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BouncyShroomEntity.cs" />
+    <Compile Include="CircleColliderWithRectangles.cs" />
     <Compile Include="ClimbableOneWayPlatform.cs" />
     <Compile Include="JungleHelperModule.cs" />
     <Compile Include="InvisibleJumpthruPlatform.cs" />
     <Compile Include="MovingZipPlatform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteKevin.cs" />
+    <Compile Include="RollingRock.cs" />
+    <Compile Include="SpiderBoss.cs" />
     <Compile Include="SpinyPlant.cs" />
     <Compile Include="TheoStatue.cs" />
     <Compile Include="TheoStatueGate.cs" />
