@@ -7,6 +7,7 @@ using Monocle;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -74,6 +75,8 @@ namespace Celeste.Mod.JungleHelper {
             IL.Celeste.Player.NormalUpdate += modPlayerNormalUpdate;
             On.Celeste.Player.ClimbJump += modPlayerClimbJump;
             On.Celeste.Player.Update += modPlayerUpdate;
+
+            On.Celeste.SurfaceIndex.GetPlatformByPriority += modSurfaceIndexGetPlatformByPriority;
         }
 
         public static void deactivateHooks() {
@@ -96,6 +99,8 @@ namespace Celeste.Mod.JungleHelper {
             IL.Celeste.Player.NormalUpdate -= modPlayerNormalUpdate;
             On.Celeste.Player.ClimbJump -= modPlayerClimbJump;
             On.Celeste.Player.Update -= modPlayerUpdate;
+
+            On.Celeste.SurfaceIndex.GetPlatformByPriority -= modSurfaceIndexGetPlatformByPriority;
         }
 
         private static bool onPlayerClimbHopBlockedCheck(On.Celeste.Player.orig_ClimbHopBlockedCheck orig, Player self) {
@@ -201,15 +206,57 @@ namespace Celeste.Mod.JungleHelper {
                 climbJumpGrabCooldown -= Engine.DeltaTime;
         }
 
+        private static Platform modSurfaceIndexGetPlatformByPriority(On.Celeste.SurfaceIndex.orig_GetPlatformByPriority orig, List<Entity> platforms) {
+            // if vanilla already has platforms to get the sound index from, use those.
+            if (platforms.Count != 0) {
+                return orig(platforms);
+            }
+
+            // check if we are climbing a climbable one-way platform.
+            Player player = Engine.Scene.Tracker.GetEntity<Player>();
+            if (player != null) {
+                ClimbableOneWayPlatform platform = player.CollideFirst<ClimbableOneWayPlatform>(player.Center + Vector2.UnitX * (float) player.Facing);
+                if (platform != null && platform.surfaceIndex != -1) {
+                    // yes we are! pass it off as a Platform so that the game can get its surface index later.
+                    return new WallSoundIndexHolder(platform.surfaceIndex);
+                }
+            }
+
+            return orig(platforms);
+        }
+
+        // this is a dummy Platform that is just here to hold a wall surface sound index, that the game will read.
+        // it isn't actually used as a platform!
+        private class WallSoundIndexHolder : Platform {
+            private int wallSoundIndex;
+
+            public WallSoundIndexHolder(int wallSoundIndex) : base(Vector2.Zero, false) {
+                this.wallSoundIndex = wallSoundIndex;
+            }
+
+            public override void MoveHExact(int move) {
+                throw new NotImplementedException();
+            }
+
+            public override void MoveVExact(int move) {
+                throw new NotImplementedException();
+            }
+
+            public override int GetWallSoundIndex(Player player, int side) {
+                return wallSoundIndex;
+            }
+        }
+
         // ======== Begin of entity code ========
 
         private int lines;
         private string overrideTexture;
         private float animationDelay;
+        private int surfaceIndex;
 
         public bool AllowLeftToRight;
 
-        public ClimbableOneWayPlatform(Vector2 position, int height, bool allowLeftToRight, string overrideTexture, float animationDelay)
+        public ClimbableOneWayPlatform(Vector2 position, int height, bool allowLeftToRight, string overrideTexture, float animationDelay, int surfaceIndex)
             : base(position) {
 
             lines = height / 8;
@@ -217,6 +264,7 @@ namespace Celeste.Mod.JungleHelper {
             Depth = -60;
             this.overrideTexture = overrideTexture;
             this.animationDelay = animationDelay;
+            this.surfaceIndex = surfaceIndex;
 
             float hitboxOffset = 0f;
             if (AllowLeftToRight)
@@ -226,7 +274,7 @@ namespace Celeste.Mod.JungleHelper {
         }
 
         public ClimbableOneWayPlatform(EntityData data, Vector2 offset)
-            : this(data.Position + offset, data.Height, !data.Bool("left"), data.Attr("texture", "default"), data.Float("animationDelay", 0f)) { }
+            : this(data.Position + offset, data.Height, !data.Bool("left"), data.Attr("texture", "default"), data.Float("animationDelay", 0f), data.Int("surfaceIndex", -1)) { }
 
         public override void Awake(Scene scene) {
             if (animationDelay > 0f) {
