@@ -9,16 +9,18 @@ namespace Celeste.Mod.JungleHelper {
         private const float SPEED = 100f;
         private const float FALLING_SPEED = 200f;
         private const float FALLING_ACCELERATION = 400f;
+        private const float ROTATION_SPEED = 2f;
 
         // state info
-        private Sprite sprite;
+        private Image image;
         private bool rolling = false;
         private bool falling = false;
         private bool shattered = false;
         private float fallingSpeed = 0f;
 
         public RollingRock(EntityData data, Vector2 offset) : base(data.Position + offset) {
-            Add(sprite = JungleHelperModule.SpriteBank.Create("rolling_rock"));
+            Add(image = new Image(GFX.Game[$"JungleHelper/RollingRock/{data.Attr("sprite")}"]));
+            image.CenterOrigin();
             Collider = new CircleColliderWithRectangles(32);
             Add(new PlayerCollider(onPlayer));
 
@@ -61,6 +63,9 @@ namespace Celeste.Mod.JungleHelper {
             if (rolling) {
                 // move right.
                 MoveH(SPEED * Engine.DeltaTime, hitSolidWhileMovingForward);
+
+                // rotate the boulder sprite.
+                image.Rotation += ROTATION_SPEED * Engine.DeltaTime;
             }
 
             if (!falling && !rolling) {
@@ -93,7 +98,6 @@ namespace Celeste.Mod.JungleHelper {
                 // if we weren't moving forward, we are now!
                 if (!rolling) {
                     rolling = true;
-                    sprite.Play("rolling");
                 }
             }
         }
@@ -111,7 +115,6 @@ namespace Celeste.Mod.JungleHelper {
         }
 
         private void shatter() {
-            sprite.Play("shatter");
             shattered = true;
             Collidable = false;
 
