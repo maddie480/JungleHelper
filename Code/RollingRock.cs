@@ -1,6 +1,7 @@
 ﻿using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
+using System;
 
 namespace Celeste.Mod.JungleHelper {
     [CustomEntity("JungleHelper/RollingRock")]
@@ -120,7 +121,13 @@ namespace Celeste.Mod.JungleHelper {
 
             Audio.Play("event:/game/general/wall_break_stone", Center);
 
-            // for now...
+            for (int i = -3; i < 4; i++) {
+                int chunkWidth = (int) Math.Abs(Math.Cos(Math.Asin((double) i / 4)) * 4);
+                for (int j = -chunkWidth; j < chunkWidth; j++) {
+                    Scene.Add(Engine.Pooler.Create<Debris>().Init(Position + new Vector2(4 + i * 8, 4 + j * 8), '6' /* stone */, true).BlastFrom(CenterRight));
+                }
+            }
+
             RemoveSelf();
         }
     }
