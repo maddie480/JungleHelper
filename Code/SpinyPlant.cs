@@ -28,9 +28,30 @@ namespace Celeste.Mod.JungleHelper {
             MTexture bottom = GFX.Game[$"JungleHelper/SpinyPlant/Spiny{color}Bottom"];
 
             if (lines == 2) {
+                Collider bak = Collider;
+                Collider = new Hitbox(8f, 1f, 8, -1);
+                bool topOpen = !CollideCheck<Solid>();
+                Collider = new Hitbox(8f, 1f, 8, lines * 8);
+                bool bottomOpen = !CollideCheck<Solid>();
+                Collider = bak;
+
+                string section;
+                if (topOpen) {
+                    if (bottomOpen) {
+                        section = "Solo";
+                    } else {
+                        section = "Top";
+                    }
+                } else {
+                    if (bottomOpen) {
+                        section = "Bottom";
+                    } else {
+                        section = "Mid";
+                    }
+                }
                 // special case (height 16 / 2 "lines"): use the "solo" sprite
-                Image image = new Image(GFX.Game[$"JungleHelper/SpinyPlant/Spiny{color}Solo"]);
-                image.X = 4;
+                Image image = new Image(GFX.Game[$"JungleHelper/SpinyPlant/Spiny{color}{section}"]);
+                image.X = section == "Solo" ? 4 : 0;
                 Add(image);
             } else {
                 for (int i = 0; i < lines; i += 2) {
@@ -41,7 +62,7 @@ namespace Celeste.Mod.JungleHelper {
                     MTexture texture = middle;
                     if (i == 0) {
                         Collider bak = Collider;
-                        Collider = new Hitbox(12f, 1f, 0, -1);
+                        Collider = new Hitbox(8f, 1f, 8, -1);
                         bool solidAbove = CollideCheck<Solid>();
                         Collider = bak;
 
@@ -53,7 +74,7 @@ namespace Celeste.Mod.JungleHelper {
                         }
                     } else if (i == lines - 2) {
                         Collider bak = Collider;
-                        Collider = new Hitbox(12f, 1f, 0, lines * 8);
+                        Collider = new Hitbox(8f, 1f, 8, lines * 8);
                         bool solidBelow = CollideCheck<Solid>();
                         Collider = bak;
 
