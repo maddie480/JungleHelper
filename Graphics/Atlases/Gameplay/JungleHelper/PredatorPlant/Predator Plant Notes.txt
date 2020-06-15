@@ -16,4 +16,10 @@ Attack Sequence (repeats this sequence if in range)
 Knockout sequence (If the player jumps on the plants head, same effect on maddy as jumping on a snowball)
 	BiteyBonk00: 1 (passing frame)
 	BiteyBonk01: ~10-25 (?? not sure on knockout time)
-	BiteyBonk00: 1 (passing frame)
+	BiteyBonk02: 1 (getting back up for these 3 frames)
+	BiteyBonk00: 1 
+	BiteyBonk03: 1
+
+Blue Predator Plant is under "PredatorPlant\Blue\BiteyB..."
+
+Yellow Predator Plant is under "PredatorPlant\Yellow\BiteyC..."
