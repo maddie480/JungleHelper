@@ -1,7 +1,9 @@
 ﻿using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
+using MonoMod.Utils;
 using System;
+using System.Diagnostics;
 
 namespace Celeste.Mod.JungleHelper {
     [CustomEntity("JungleHelper/RollingRock")]
@@ -14,6 +16,7 @@ namespace Celeste.Mod.JungleHelper {
 
         // state info
         private Image image;
+        private MTexture debrisTexture = null;
         private bool rolling = false;
         private bool falling = false;
         private bool shattered = false;
@@ -21,6 +24,9 @@ namespace Celeste.Mod.JungleHelper {
 
         public RollingRock(EntityData data, Vector2 offset) : base(data.Position + offset) {
             Add(image = new Image(GFX.Game[$"JungleHelper/RollingRock/{data.Attr("sprite")}"]));
+            if (GFX.Game.Has($"JungleHelper/RollingRock/debris_{data.Attr("sprite")}")) {
+                debrisTexture = GFX.Game[$"JungleHelper/RollingRock/debris_{data.Attr("sprite")}"];
+            }
             image.CenterOrigin();
             Collider = new CircleColliderWithRectangles(32);
             Add(new PlayerCollider(onPlayer));
@@ -124,7 +130,11 @@ namespace Celeste.Mod.JungleHelper {
             for (int i = -3; i < 4; i++) {
                 int chunkWidth = (int) Math.Abs(Math.Cos(Math.Asin((double) i / 4)) * 4);
                 for (int j = -chunkWidth; j < chunkWidth; j++) {
-                    Scene.Add(Engine.Pooler.Create<Debris>().Init(Position + new Vector2(4 + i * 8, 4 + j * 8), '6' /* stone */, true).BlastFrom(CenterRight));
+                    Debris debris = Engine.Pooler.Create<Debris>().Init(Position + new Vector2(4 + i * 8, 4 + j * 8), '6' /* stone */, true);
+                    if (debrisTexture != null) {
+                        new DynData<Debris>(debris).Get<Image>("image").Texture = debrisTexture;
+                    }
+                    Scene.Add(debris.BlastFrom(CenterRight));
                 }
             }
 
