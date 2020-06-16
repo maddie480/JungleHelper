@@ -14,11 +14,15 @@ Attack Sequence (repeats this sequence if in range)
 	BiteyAtt07: 1 (goes to idle after this, if player not in range)
 
 Knockout sequence (If the player jumps on the plants head, same effect on maddy as jumping on a snowball)
-	BiteyBonk00: 1 (passing frame)
-	BiteyBonk01: ~10-25 (?? not sure on knockout time)
-	BiteyBonk02: 1 (getting back up for these 3 frames)
-	BiteyBonk00: 1 
-	BiteyBonk03: 1
+	BiteyBonk00: 1 (Knocked down, 3 frames)
+	BiteyBonk01: 1 
+	BiteyBonk02: 1 
+	BiteyBonk03: ~10-25 (on the ground)
+	BiteyBonk04: 1 (getting back up, 5 frames)
+	BiteyBonk05: 1 
+	BiteyBonk06: 1
+	BiteyBonk07: 1
+	BiteyBonk08: 1
 
 Blue Predator Plant is under "PredatorPlant\Blue\BiteyB..."
 
