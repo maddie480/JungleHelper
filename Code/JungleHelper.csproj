@@ -87,6 +87,7 @@
     <Compile Include="JungleHelperModule.cs" />
     <Compile Include="InvisibleJumpthruPlatform.cs" />
     <Compile Include="MovingZipPlatform.cs" />
+    <Compile Include="PredatoryPlant.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemoteKevin.cs" />
     <Compile Include="RollingRock.cs" />

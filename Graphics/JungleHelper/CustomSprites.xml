@@ -38,4 +38,25 @@
 		<Anim id="start_falling" path="spiderRed" frames="0-4" delay="0.08" goto="falling"/>
 		<Loop id="falling" path="spiderRed" frames="4"/>
 	</spider_boss_red>
+	
+	<predator_plant_pink path="JungleHelper/PredatorPlant/" start="idle">
+		<Center/>
+		<Loop id="idle" path="Bitey" frames="0*7,1*2" delay="0.1"/>
+		<Anim id="attack" path="BiteyAtt" frames="0*5,1,2*5,3-7" delay="0.1"/>
+		<Anim id="knockout" path="BiteyBonk" frames="0-2,3*20,4-8" delay="0.1"/>
+	</predator_plant_pink>
+	
+	<predator_plant_blue path="JungleHelper/PredatorPlant/Blue/" start="idle">
+		<Center/>
+		<Loop id="idle" path="BiteyB" frames="0*7,1*2" delay="0.1"/>
+		<Anim id="attack" path="BiteyBAtt" frames="0*5,1,2*5,3-7" delay="0.1"/>
+		<Anim id="knockout" path="BiteyBBonk" frames="0-2,3*20,4-8" delay="0.1"/>
+	</predator_plant_blue>
+	
+	<predator_plant_yellow path="JungleHelper/PredatorPlant/Yellow/" start="idle">
+		<Center/>
+		<Loop id="idle" path="BiteyC" frames="0*7,1*2" delay="0.1"/>
+		<Anim id="attack" path="BiteyCAtt" frames="0*5,1,2*5,3-7" delay="0.1"/>
+		<Anim id="knockout" path="BiteyCBonk" frames="0-2,3*20,4-8" delay="0.1"/>
+	</predator_plant_yellow>
 </Sprites>
