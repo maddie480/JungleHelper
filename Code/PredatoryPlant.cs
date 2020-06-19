@@ -14,6 +14,8 @@ namespace Celeste.Mod.JungleHelper {
 
         private readonly bool facingRight;
 
+        private bool isIdle => sprite.CurrentAnimationID == "idle" || sprite.CurrentAnimationID == "idleAlt";
+
         private Sprite sprite;
         private PlayerCollider bounceCollider;
 
@@ -37,9 +39,9 @@ namespace Celeste.Mod.JungleHelper {
             base.Update();
 
             // if the plant is currently idle, check if the player is close enough to trigger it.
-            if (sprite.CurrentAnimationID == "idle") {
+            if (isIdle) {
                 Player player = Scene.Tracker.GetEntity<Player>();
-                if (player != null && (Center - player.Center).LengthSquared() < TRIGGER_RADIUS_SQUARED && 
+                if (player != null && (Center - player.Center).LengthSquared() < TRIGGER_RADIUS_SQUARED &&
                     ((!facingRight && player.Left < Right) || (facingRight && player.Right > Left))) {
 
                     sprite.Play("attack");
@@ -48,14 +50,16 @@ namespace Celeste.Mod.JungleHelper {
         }
 
         private void checkRange() {
-            // the attack or knockout animation is finished. pick if the plant should be attacking or idle now.
-            Player player = Scene.Tracker.GetEntity<Player>();
-            if (player != null && (Center - player.Center).LengthSquared() < TRIGGER_RADIUS_SQUARED &&
-                ((!facingRight && player.Left < Right) || (facingRight && player.Right > Left))) {
+            if (!isIdle) {
+                // the attack or knockout animation is finished. pick if the plant should be attacking or idle now.
+                Player player = Scene.Tracker.GetEntity<Player>();
+                if (player != null && (Center - player.Center).LengthSquared() < TRIGGER_RADIUS_SQUARED &&
+                    ((!facingRight && player.Left < Right) || (facingRight && player.Right > Left))) {
 
-                sprite.Play("attack");
-            } else {
-                sprite.Play("idle");
+                    sprite.Play("attack");
+                } else {
+                    sprite.Play("idle");
+                }
             }
         }
 
@@ -71,7 +75,7 @@ namespace Celeste.Mod.JungleHelper {
             if (sprite.CurrentAnimationID == "knockout") {
                 // when knocked out, the plant has no hitbox.
                 Collider = null;
-            } else if (sprite.CurrentAnimationID == "idle") {
+            } else if (isIdle) {
                 // when idle, the hitbox does not move.
                 Collider = new Hitbox(8, 7, 3, -13);
                 killPlayer = false;
@@ -116,7 +120,7 @@ namespace Celeste.Mod.JungleHelper {
             } else {
                 if (facingRight) {
                     // reflect the hitbox horizontally.
-                    Collider.Left = - Collider.Right;
+                    Collider.Left = -Collider.Right;
                 }
 
                 // update the bounce collider position to place it on top of the kill collider.
