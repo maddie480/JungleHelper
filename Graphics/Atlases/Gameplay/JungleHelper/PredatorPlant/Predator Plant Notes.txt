@@ -3,6 +3,20 @@ Idle animation (in frames)
 	Bitey00: ~7 
 	Bitey01: 2
 
+Idle animation variation (triggered randomly if possible) (Added by Spoopy) 
+	Biteyidle00: 1 (all images are for 1 frame)
+	...
+	Biteyidle08: 1 (loop frames 8 and 9)
+	Biteyidle09: 1
+	Biteyidle08: 1
+	Biteyidle09: 1
+	Biteyidle08: 1
+	Biteyidle09: 1 (end loop)
+	Biteyidle10: 1
+	Biteyidle11: 1
+	Biteyidle12: 1
+
+
 Attack Sequence (repeats this sequence if in range)
 	BiteyAtt00: ~5 (attack prep)
 	BiteyAtt01: 1 (attack)
