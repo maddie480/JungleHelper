@@ -240,12 +240,14 @@ namespace Celeste.Mod.JungleHelper {
                     distance -= moveAmount;
                 }
 
+                // move and break dash blocks if the Kevin moved from its start position.
                 bool hit;
                 if (crushDir.X != 0f) {
-                    hit = moveHCheck(moveAmount * crushDir.X);
+                    hit = moveHCheck(moveAmount * crushDir.X, Position != startPoint);
                 } else {
-                    hit = MoveVCheck(moveAmount * crushDir.Y);
+                    hit = MoveVCheck(moveAmount * crushDir.Y, Position != startPoint);
                 }
+
                 if (hit || (restrained && distance <= 0f)) {
                     if (hit) {
                         if (Position != startPoint) {
@@ -278,9 +280,12 @@ namespace Celeste.Mod.JungleHelper {
                 yield return null;
             }
 
-            FallingBlock fallingBlock = CollideFirst<FallingBlock>(Position + crushDir);
-            if (fallingBlock != null) {
-                fallingBlock.Triggered = true;
+            if (Position != startPoint) {
+                // trigger falling blocks.
+                FallingBlock fallingBlock = CollideFirst<FallingBlock>(Position + crushDir);
+                if (fallingBlock != null) {
+                    fallingBlock.Triggered = true;
+                }
             }
 
             if (crushDir == -Vector2.UnitX) {
@@ -345,8 +350,8 @@ namespace Celeste.Mod.JungleHelper {
             yield return 0.2f;
         }
 
-        private bool moveHCheck(float amount) {
-            if (MoveHCollideSolidsAndBounds(level, amount, true, null)) {
+        private bool moveHCheck(float amount, bool breakDashBlocks) {
+            if (MoveHCollideSolidsAndBounds(level, amount, breakDashBlocks, null)) {
                 if (amount < 0f && Left <= level.Bounds.Left) {
                     return true;
                 } else if (amount > 0f && Right >= level.Bounds.Right) {
@@ -368,8 +373,8 @@ namespace Celeste.Mod.JungleHelper {
             return false;
         }
 
-        private bool MoveVCheck(float amount) {
-            if (MoveVCollideSolidsAndBounds(level, amount, true, null)) {
+        private bool MoveVCheck(float amount, bool breakDashBlocks) {
+            if (MoveVCollideSolidsAndBounds(level, amount, breakDashBlocks, null)) {
                 if (amount < 0f && Top <= level.Bounds.Top) {
                     return true;
                 } else if (amount > 0f && Bottom >= (level.Bounds.Bottom + 32)) {
