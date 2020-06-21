@@ -249,6 +249,21 @@ namespace Celeste.Mod.JungleHelper {
                 }
 
                 if (hit || (restrained && distance <= 0f)) {
+                    if (!hit) {
+                        Vector2 initialPos = Position;
+
+                        // this is a restrained block. pretend we are moving 1 more pixel because we want to break dash blocks that are just ahead
+                        // and make the wall hit sound...
+                        if (crushDir.X != 0f) {
+                            hit = moveHCheck(crushDir.X, Position != startPoint);
+                        } else {
+                            hit = MoveVCheck(crushDir.Y, Position != startPoint);
+                        }
+
+                        // ... but don't actually move.
+                        Position = initialPos;
+                    }
+
                     if (hit) {
                         if (Position != startPoint) {
                             Audio.Play("event:/game/06_reflection/crushblock_impact", Center);
