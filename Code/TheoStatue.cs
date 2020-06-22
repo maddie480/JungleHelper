@@ -27,6 +27,9 @@ namespace Celeste.Mod.JungleHelper {
 
             // ... that cannot be held
             holdData = new DynData<Holdable>(Hold);
+
+            // also fix issues related to transitioning.
+            Tag = 0;
         }
 
         public override void Update() {
