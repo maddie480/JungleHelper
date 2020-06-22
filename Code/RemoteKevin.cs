@@ -261,7 +261,7 @@ namespace Celeste.Mod.JungleHelper {
                         }
 
                         // ... but don't actually move.
-                        Position = initialPos;
+                        MoveTo(initialPos);
                     }
 
                     if (hit) {
