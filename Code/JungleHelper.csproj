@@ -96,6 +96,7 @@
     <Compile Include="SpinyPlant.cs" />
     <Compile Include="TheoStatue.cs" />
     <Compile Include="TheoStatueGate.cs" />
+    <Compile Include="UnrandomizedCrumblePlatform.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

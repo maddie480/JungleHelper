@@ -4,7 +4,6 @@ using Monocle;
 using MonoMod.Utils;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace Celeste.Mod.JungleHelper {
     [CustomEntity("JungleHelper/NodedCrumblePlatform")]

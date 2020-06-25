@@ -12,11 +12,13 @@ namespace Celeste.Mod.JungleHelper {
         public override void Load() {
             ClimbableOneWayPlatform.Load();
             TheoStatueGate.Load();
+            UnrandomizedCrumblePlatform.Load();
         }
 
         public override void Unload() {
             ClimbableOneWayPlatform.Unload();
             TheoStatueGate.Unload();
+            UnrandomizedCrumblePlatform.Unload();
         }
 
         public override void LoadContent(bool firstLoad) {
