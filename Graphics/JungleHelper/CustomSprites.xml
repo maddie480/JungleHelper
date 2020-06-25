@@ -41,7 +41,7 @@
 	
 	<predator_plant_pink path="JungleHelper/PredatorPlant/" start="idle">
 		<Center/>
-		<Anim id="idle" path="Bitey" frames="0*7,1*2" delay="0.1" goto="idle:4,idleAlt:1"/>
+		<Anim id="idle" path="Bitey" frames="0*7,1*2" delay="0.1" goto="idle:19,idleAlt:1"/>
 		<Anim id="idleAlt" path="Biteyidle" frames="0-9,8,9,8-12" delay="0.1" goto="idle"/>
 		<Anim id="attack" path="BiteyAtt" frames="0*5,1,2*5,3-7" delay="0.1"/>
 		<Anim id="knockout" path="BiteyBonk" frames="0-2,3*20,4-8" delay="0.1"/>
@@ -49,7 +49,7 @@
 	
 	<predator_plant_blue path="JungleHelper/PredatorPlant/Blue/" start="idle">
 		<Center/>
-		<Anim id="idle" path="BiteyB" frames="0*7,1*2" delay="0.1" goto="idle:4,idleAlt:1"/>
+		<Anim id="idle" path="BiteyB" frames="0*7,1*2" delay="0.1" goto="idle:19,idleAlt:1"/>
 		<Anim id="idleAlt" path="BiteyBidle" frames="0-9,8,9,8-12" delay="0.1" goto="idle"/>
 		<Anim id="attack" path="BiteyBAtt" frames="0*5,1,2*5,3-7" delay="0.1"/>
 		<Anim id="knockout" path="BiteyBBonk" frames="0-2,3*20,4-8" delay="0.1"/>
@@ -57,7 +57,7 @@
 	
 	<predator_plant_yellow path="JungleHelper/PredatorPlant/Yellow/" start="idle">
 		<Center/>
-		<Anim id="idle" path="BiteyC" frames="0*7,1*2" delay="0.1" goto="idle:4,idleAlt:1"/>
+		<Anim id="idle" path="BiteyC" frames="0*7,1*2" delay="0.1" goto="idle:19,idleAlt:1"/>
 		<Anim id="idleAlt" path="BiteyCidle" frames="0-9,8,9,8-12" delay="0.1" goto="idle"/>
 		<Anim id="attack" path="BiteyCAtt" frames="0*5,1,2*5,3-7" delay="0.1"/>
 		<Anim id="knockout" path="BiteyCBonk" frames="0-2,3*20,4-8" delay="0.1"/>

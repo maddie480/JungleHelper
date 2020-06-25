@@ -35,6 +35,13 @@ namespace Celeste.Mod.JungleHelper {
             updateBounceCollider();
         }
 
+        public override void Added(Scene scene) {
+            base.Added(scene);
+
+            // spawn a block field in the plant's range.
+            scene.Add(new BlockField(Position - new Vector2(16, 16), 32, 24));
+        }
+
         public override void Update() {
             base.Update();
 
@@ -127,6 +134,12 @@ namespace Celeste.Mod.JungleHelper {
                 bounceCollider.Collider = new Hitbox(Collider.Width, 2f, Collider.Left, Collider.Top);
                 Collider.Height -= 2f;
                 Collider.Top += 2f;
+
+                // if the plant is attacking, make the bounce hitbox wider.
+                if (sprite.CurrentAnimationID == "attack") {
+                    bounceCollider.Collider.Width += 4f;
+                    bounceCollider.Collider.Left -= 2f;
+                }
             }
         }
 
