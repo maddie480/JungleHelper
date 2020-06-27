@@ -86,6 +86,7 @@
     <Compile Include="ClimbableOneWayPlatform.cs" />
     <Compile Include="JungleHelperModule.cs" />
     <Compile Include="InvisibleJumpthruPlatform.cs" />
+    <Compile Include="MossyWall.cs" />
     <Compile Include="MovingZipPlatform.cs" />
     <Compile Include="NodedCrumblePlatform.cs" />
     <Compile Include="PredatoryPlant.cs" />
