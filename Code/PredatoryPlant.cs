@@ -138,7 +138,7 @@ namespace Celeste.Mod.JungleHelper {
                 // if the plant is attacking, make the bounce hitbox wider.
                 if (sprite.CurrentAnimationID == "attack") {
                     bounceCollider.Collider.Width += 5f;
-                    bounceCollider.Collider.Left -= 3f;
+                    bounceCollider.Collider.Left -= (facingRight ? 3f : 2f);
                 }
             }
         }
