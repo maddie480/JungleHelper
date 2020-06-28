@@ -12,12 +12,12 @@ namespace Celeste.Mod.JungleHelper {
             float height = data.Height;
             bool left = data.Bool("left");
 
-            Depth = 1999;
+            Depth = -20000; // FG tiles have depth -10000
 
             if (left) {
-                Collider = new Hitbox(2f, height);
+                Collider = new Hitbox(2f, height, 8f);
             } else {
-                Collider = new Hitbox(2f, height, 6f);
+                Collider = new Hitbox(2f, height, -2f);
             }
 
             Add(new StaticMover());
@@ -26,7 +26,7 @@ namespace Celeste.Mod.JungleHelper {
             for (int i = 0; i < Height; i += 8) {
                 string id = (i == 0) ? "mossTop" : (i + 16 <= Height ? "mossMid" : "mossBottom");
                 Image sprite = new Image(GFX.Game["JungleHelper/Moss/" + id]);
-                sprite.Position = new Vector2(0f, i);
+                sprite.Position = new Vector2(left ? 4f : -4f, i);
                 sprite.FlipX = !left;
                 Add(sprite);
             }
