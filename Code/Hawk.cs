@@ -6,8 +6,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Celeste.Mod.Entities;
-namespace Celeste.Mod.JungleHelper {
+using FMOD;
 
+namespace Celeste.Mod.JungleHelper {
     [CustomEntity("JungleHelper/Hawk")]
     public class Hawk : Entity {
 
@@ -30,7 +31,7 @@ namespace Celeste.Mod.JungleHelper {
         private Sprite sprite;
 
         private States state;
-
+        private float origY;
         private Vector2 flingSpeed;
 
         private Vector2 flingTargetSpeed;
@@ -43,11 +44,18 @@ namespace Celeste.Mod.JungleHelper {
 
         private SoundSource moveSfx;
         public bool LightningRemoved;
-
-        public Hawk() {
-            Add(sprite = GFX.SpriteBank.Create("bird"));
+        private SineWave sine;
+        private float hawkSpeed;
+        float playerSpeed;
+        float playerlessSpeed;
+        
+        public Hawk(EntityData data, Vector2 levelOffset):base(data.Position+levelOffset) {
+            entityData = data;
+            Position = data.Position;
+            playerSpeed = data.Float("mainSpeed");
+            playerlessSpeed = data.Float("slowerSpeed");
+            Add(sprite = JungleHelperModule.SpriteBank.Create("hawk"));
             sprite.Play("hover");
-            sprite.Scale.X = -1f;
             sprite.Position = spriteOffset;
             sprite.OnFrameChange = delegate {
                 BirdNPC.FlapSfxCheck(sprite);
@@ -62,11 +70,6 @@ namespace Celeste.Mod.JungleHelper {
             });
         }
 
-        public Hawk(EntityData data, Vector2 levelOffset):base(data.Position+levelOffset){
-            entityData = data;
-            Position = data.Position;
-        }
-
         public override void Awake(Scene scene) {
             base.Awake(scene);
             Player entity = scene.Tracker.GetEntity<Player>();
@@ -76,7 +79,6 @@ namespace Celeste.Mod.JungleHelper {
         }
         public override void Added(Scene scene) {
             base.Added(scene);
-            Console.WriteLine("HEWP I'M AT "+Position);
         }
         private void Skip() {
             state = States.Move;
@@ -84,15 +86,18 @@ namespace Celeste.Mod.JungleHelper {
         }
 
         private void OnPlayer(Player player) {
-            if (state == States.Wait) {
+            if ((CollideFirst<Solid>(Position) == null) && (state == States.Wait || state == States.Move)) {
+                origY = Y;
                 flingSpeed = player.Speed * 0.4f;
                 flingSpeed.Y = 120f;
                 flingTargetSpeed = Vector2.Zero;
                 flingAccel = 1000f;
                 player.Speed = Vector2.Zero;
                 state = States.Fling;
+                if (hawkSpeed == 0f) {
+                    sprite.Play("throw");
+                }
                 Add(new Coroutine(DoFlingRoutine(player)));
-                Audio.Play("event:/new_content/game/10_farewell/bird_throw", base.Center);
             }
         }
 
@@ -103,6 +108,7 @@ namespace Celeste.Mod.JungleHelper {
             }
             switch (state) {
                 case States.Move:
+                    X += playerlessSpeed * Engine.DeltaTime;
                     break;
                 case States.Wait: {
                         Player entity = base.Scene.Tracker.GetEntity<Player>();
@@ -128,52 +134,69 @@ namespace Celeste.Mod.JungleHelper {
                     }
                     break;
             }
+            if (X >= (SceneAs<Level>().Bounds.Right + 5)) {
+                RemoveSelf();
+
+                Player player = SceneAs<Level>().Tracker.GetEntity<Player>();
+                if (player != null){
+                    if (player.StateMachine.State == 11) {
+                        player.StateMachine.State = 0;
+                        player.ForceCameraUpdate = false;
+                        player.DummyAutoAnimate = true;
+                    }
+                }
+            }
         }
 
         private IEnumerator DoFlingRoutine(Player player) {
-            Level level = Scene as Level;
-            Vector2 camera = level.Camera.Position;
-            Vector2 zoom = player.Position - camera;
-            zoom.X = Calc.Clamp(zoom.X, 145f, 215f);
-            zoom.Y = Calc.Clamp(zoom.Y, 85f, 95f);
-            Add(new Coroutine(level.ZoomTo(zoom, 1.1f, 0.2f)));
-            Engine.TimeRate = 0.8f;
-            Input.Rumble(RumbleStrength.Light, RumbleLength.Medium);
-            while (flingSpeed != Vector2.Zero) {
-                yield return null;
-            }
-            sprite.Play("throw");
+            sprite.Play("fly");
+            Level level = SceneAs<Level>();
+            hawkSpeed = 0;
             sprite.Scale.X = 1f;
-            flingSpeed = new Vector2(-140f, 140f);
-            flingTargetSpeed = Vector2.Zero;
-            flingAccel = 1400f;
-            yield return 0.1f;
-            Celeste.Freeze(0.05f);
-            flingTargetSpeed = FlingSpeed;
-            flingAccel = 6000f;
-            yield return 0.1f;
-            Input.Rumble(RumbleStrength.Strong, RumbleLength.Medium);
-            Engine.TimeRate = 1f;
-            level.Shake();
-            Add(new Coroutine(level.ZoomBack(0.1f)));
-            player.FinishFlingBird();
-            flingTargetSpeed = Vector2.Zero;
-            flingAccel = 4000f;
-            yield return 0.3f;
+            while (state == States.Fling) {
+                yield return null;
+                Y = Calc.Approach(Y, origY, 20f * Engine.DeltaTime);
+                if (hawkSpeed <= playerSpeed) {
+                    hawkSpeed = Calc.Approach(hawkSpeed, playerSpeed, playerSpeed/10);
+                }
+                X += hawkSpeed * Engine.DeltaTime;
+                player.StateMachine.State = 11;
+                player.ForceCameraUpdate = true;
+                player.DummyAutoAnimate = false;
+                player.Sprite.Play("fallSlow_carry");
+                player.X = X;
+                player.Y = Y + 16;
+                if (Input.Jump.Pressed) {
+                    player.StateMachine.State = 0;
+                    break;
+                }
+                if (player.CollideFirst<Solid>(player.Position + new Vector2(hawkSpeed * Engine.DeltaTime, 0)) != null) 
+                {
+                    player.StateMachine.State = 0;
+                    break;
+                }
+                if (Input.Dash.Pressed && player.CanDash) {
+                    player.StateMachine.State = 2;
+                    break;
+                }
+            }
+            player.ForceCameraUpdate = false;
+            player.DummyAutoAnimate = true;
             Add(new Coroutine(MoveRoutine()));
         }
 
         private IEnumerator MoveRoutine() {
-            state = States.Move;
             sprite.Play("fly");
-            sprite.Scale.X = 1f;
-            moveSfx.Play("event:/new_content/game/10_farewell/bird_relocate");
+            //sprite.Scale.X = 1f;
             sprite.Rotation = 0f;
             sprite.Scale = Vector2.One;
-            sprite.Play("hover");
-            sprite.Scale.X = -1f;
-            state = States.Wait;
-            yield break;
+            //sprite.Scale.X = -1f;
+            X += 80f * Engine.DeltaTime;
+            yield return 0.1f;
+            state = States.Move;
+            if (state == States.Fling) {
+                yield break;
+            }
         }
 
         private IEnumerator LeaveRoutine() {
