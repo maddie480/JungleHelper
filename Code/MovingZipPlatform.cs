@@ -52,6 +52,7 @@ namespace Celeste.Mod.JungleHelper {
         public override void OnStaticMoverTrigger(StaticMover sm) {
             sinkTimer = 0.4f;
         }
+
         private IEnumerator ZipUp() {
             while (true) {
                 while (!HasPlayerRider()) {
@@ -91,6 +92,32 @@ namespace Celeste.Mod.JungleHelper {
                     addY = Calc.Approach(addY, 3f, 50f * Engine.DeltaTime);
                 } else {
                     addY = Calc.Approach(addY, 0f, 20f * Engine.DeltaTime);
+                }
+            }
+        }
+
+        public override void MoveHExact(int move) {
+            base.MoveHExact(move);
+
+            // be sure to apply momentum to entities riding this platform.
+            if (Collidable) {
+                foreach (Actor entity in Scene.Tracker.GetEntities<Actor>()) {
+                    if (entity.IsRiding(this)) {
+                        entity.LiftSpeed = LiftSpeed;
+                    }
+                }
+            }
+        }
+
+        public override void MoveVExact(int move) {
+            base.MoveVExact(move);
+
+            // be sure to apply momentum to entities riding this platform.
+            if (Collidable) {
+                foreach (Actor entity in Scene.Tracker.GetEntities<Actor>()) {
+                    if (entity.IsRiding(this)) {
+                        entity.LiftSpeed = LiftSpeed;
+                    }
                 }
             }
         }
