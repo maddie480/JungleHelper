@@ -197,7 +197,8 @@ namespace Celeste.Mod.JungleHelper {
                         // and we are checking the collision on the left side of the player for example.
                         bool collideOnLeftSideOfPlayer = (self.Position.X > checkAtPosition.X);
                         ClimbableOneWayPlatform oneway = self.CollideFirstOutside<ClimbableOneWayPlatform>(checkAtPosition);
-                        return (oneway != null && self is Player player && (oneway.AllowLeftToRight == collideOnLeftSideOfPlayer))
+                        return (oneway != null && self is Player player && (oneway.AllowLeftToRight == collideOnLeftSideOfPlayer)
+                            && oneway.Top <= checkAtPosition.Y && oneway.Bottom >= checkAtPosition.Y)
                             || (maxHelpingHandIsHere && EntityIsCollidingWithSidewaysJumpthrus(self, checkAtPosition, isClimb));
                     });
                 }
