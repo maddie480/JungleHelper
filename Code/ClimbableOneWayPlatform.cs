@@ -129,8 +129,9 @@ namespace Celeste.Mod.JungleHelper {
                     didCollide = true;
                 } else {
                     // check if colliding with a climbable one-way platform while pressing Grab
-                    ClimbableOneWayPlatform climbablePlatform = self.CollideFirstOutside<ClimbableOneWayPlatform>(self.Position + Vector2.UnitX * moveDirection);
-                    if (Input.Grab.Check && climbablePlatform != null && climbablePlatform.climbJumpGrabCooldown <= 0f && climbablePlatform.AllowLeftToRight != movingLeftToRight) {
+                    ClimbableOneWayPlatform climbablePlatform = collideFirstOutside(self, self.Position + Vector2.UnitX * moveDirection, !movingLeftToRight);
+                    if (Input.Grab.Check && self is Player player && player.Stamina >= 20f && climbablePlatform != null && climbablePlatform.climbJumpGrabCooldown <= 0f) {
+
                         // there is a sideways jump-thru and we are moving in the opposite direction => collision
                         didCollide = true;
                     } else if (maxHelpingHandIsHere) {
@@ -196,8 +197,8 @@ namespace Celeste.Mod.JungleHelper {
                         // we are in this case if the jumpthru is left to right (the "solid" side of it is the right one) 
                         // and we are checking the collision on the left side of the player for example.
                         bool collideOnLeftSideOfPlayer = (self.Position.X > checkAtPosition.X);
-                        ClimbableOneWayPlatform oneway = self.CollideFirstOutside<ClimbableOneWayPlatform>(checkAtPosition);
-                        return (oneway != null && self is Player player && (oneway.AllowLeftToRight == collideOnLeftSideOfPlayer)
+                        ClimbableOneWayPlatform oneway = collideFirstOutside(self, checkAtPosition, collideOnLeftSideOfPlayer);
+                        return (oneway != null && self is Player player
                             && oneway.Bottom >= self.Top + checkAtPosition.Y - self.Position.Y + 3)
                             || (maxHelpingHandIsHere && EntityIsCollidingWithSidewaysJumpthrus(self, checkAtPosition, isClimb));
                     });
@@ -252,7 +253,7 @@ namespace Celeste.Mod.JungleHelper {
 
                 // inject ourselves to jump over the "Speed.Y < 0f" check, and put this back
                 cursor.EmitDelegate<Func<Player, bool>>(self => {
-                    ClimbableOneWayPlatform platform = self.CollideFirst<ClimbableOneWayPlatform>(self.Position + new Vector2((int) self.Facing * 2, 0));
+                    ClimbableOneWayPlatform platform = collideFirstOutside(self, self.Position + new Vector2((int) self.Facing * 2, 0), self.Facing == Facings.Left);
                     return platform != null && platform.climbJumpGrabCooldown <= 0f;
                 });
                 cursor.Emit(OpCodes.Brtrue, afterCheck);
@@ -263,7 +264,7 @@ namespace Celeste.Mod.JungleHelper {
         private static void modPlayerClimbJump(On.Celeste.Player.orig_ClimbJump orig, Player self) {
             orig(self);
 
-            ClimbableOneWayPlatform platform = self.CollideFirst<ClimbableOneWayPlatform>(self.Position + new Vector2((int) self.Facing * 2, 0));
+            ClimbableOneWayPlatform platform = collideFirstOutside(self, self.Position + new Vector2((int) self.Facing * 2, 0), self.Facing == Facings.Left);
             if (platform != null) {
                 // trigger the cooldown
                 platform.climbJumpGrabCooldown = 0.35f;
@@ -309,6 +310,15 @@ namespace Celeste.Mod.JungleHelper {
             public override int GetWallSoundIndex(Player player, int side) {
                 return wallSoundIndex;
             }
+        }
+
+        private static ClimbableOneWayPlatform collideFirstOutside(Entity e, Vector2 at, bool leftToRight) {
+            foreach (ClimbableOneWayPlatform item in e.Scene.Tracker.GetEntities<ClimbableOneWayPlatform>()) {
+                if (item.AllowLeftToRight == leftToRight && !Collide.Check(e, item) && Collide.Check(e, item, at)) {
+                    return item;
+                }
+            }
+            return null;
         }
 
         // ======== Begin of entity code ========
