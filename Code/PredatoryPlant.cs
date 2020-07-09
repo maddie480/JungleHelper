@@ -29,6 +29,10 @@ namespace Celeste.Mod.JungleHelper {
 
             Add(new PlayerCollider(onCollideWithPlayer));
             Add(bounceCollider = new PlayerCollider(onJumpOnPlant));
+            Add(new StaticMover() {
+                SolidChecker = s => s.CollideRect(new Rectangle((int) (Position.X + (facingRight ? -16 : 0)), (int) Position.Y + 8, 16, 1)),
+                JumpThruChecker = jt => jt.CollideRect(new Rectangle((int) (Position.X + (facingRight ? -16 : 0)), (int) Position.Y + 8, 16, 1))
+            });
 
             Collider = new Hitbox(8, 9, 3, -13);
             updateBounceCollider();
