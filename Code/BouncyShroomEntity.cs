@@ -62,6 +62,11 @@ namespace Celeste.Mod.JungleHelper {
                         new Hitbox(8f, 8f, 0f, -15f));
 
                     yeetSpeedCalcY = yeety;
+
+                    Add(new StaticMover() {
+                        OnShake = OnShake,
+                        SolidChecker = s => s.CollideRect(new Rectangle((int) Position.X - 10, (int) Position.Y + 8, 12, 1))
+                    });
                     break;
                 case Directions.Right:
                     bouncyShroomSprite.AddLoop("Idle", "mushroom_rd_", 0.15f, 0);
@@ -75,6 +80,11 @@ namespace Celeste.Mod.JungleHelper {
 
                     yeetSpeedCalcY = yeety;
                     yeetSpeedCalcX = yeetx;
+
+                    Add(new StaticMover() {
+                        OnShake = OnShake,
+                        SolidChecker = s => s.CollideRect(new Rectangle((int) Position.X - 16, (int) Position.Y + 8, 16, 1))                        
+                    });
                     break;
                 case Directions.Left:
                     Collider = new ColliderList(
@@ -88,15 +98,14 @@ namespace Celeste.Mod.JungleHelper {
 
                     yeetSpeedCalcY = yeety;
                     yeetSpeedCalcX = -yeetx;
+                    Add(new StaticMover() {
+                        OnShake = OnShake,
+                        SolidChecker = s => s.CollideRect(new Rectangle((int) Position.X - 8, (int) Position.Y + 8, 16, 1))
+                    });
                     break;
             }
 
             Add(new PlayerCollider(OnCollide));
-            Add(new StaticMover {
-                OnShake = OnShake,
-                SolidChecker = IsRiding,
-                JumpThruChecker = IsRiding
-            });
         }
 
         public BouncyShroom(EntityData data, Vector2 offset, Directions dir)
@@ -179,17 +188,6 @@ namespace Celeste.Mod.JungleHelper {
                     collidedWithIt = false;
                 }
             }
-        }
-
-        private bool IsRiding(Solid solid) {
-            return CollideCheckOutside(solid, Position + Vector2.UnitY);
-        }
-
-        private bool IsRiding(JumpThru jumpThru) {
-            if (Direction != 0) {
-                return false;
-            }
-            return CollideCheck(jumpThru, Position + Vector2.UnitY);
         }
     }
 }
