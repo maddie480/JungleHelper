@@ -135,4 +135,5 @@
   <Tileset id="d" copy="z" path="bgCore"/>
   <Tileset id="e" copy="z" path="bgLostLevels"/>
   <Tileset id="f" copy="z" path="bgBrown"/>
+  <Tileset id="g" copy="7" path="bgMosaic"/>
 </Data>

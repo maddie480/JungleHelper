@@ -1,0 +1,43 @@
+Predator Plant
+Idle animation (in frames)
+	Bitey00: ~7 
+	Bitey01: 2
+
+Idle animation variation (triggered randomly if possible) (Added by Spoopy) 
+	Biteyidle00: 1 (all images are for 1 frame)
+	...
+	Biteyidle08: 1 (loop frames 8 and 9)
+	Biteyidle09: 1
+	Biteyidle08: 1
+	Biteyidle09: 1
+	Biteyidle08: 1
+	Biteyidle09: 1 (end loop)
+	Biteyidle10: 1
+	Biteyidle11: 1
+	Biteyidle12: 1
+
+
+Attack Sequence (repeats this sequence if in range)
+	BiteyAtt00: ~5 (attack prep)
+	BiteyAtt01: 1 (attack)
+	BiteyAtt02: ~5 (chomp and wait)
+	BiteyAtt03: 1 (return sequence, next 5 frames)
+	BiteyAtt04: 1
+	BiteyAtt05: 1
+	BiteyAtt06: 1
+	BiteyAtt07: 1 (goes to idle after this, if player not in range)
+
+Knockout sequence (If the player jumps on the plants head, same effect on maddy as jumping on a snowball)
+	BiteyBonk00: 1 (Knocked down, 3 frames)
+	BiteyBonk01: 1 
+	BiteyBonk02: 1 
+	BiteyBonk03: ~10-25 (on the ground)
+	BiteyBonk04: 1 (getting back up, 5 frames)
+	BiteyBonk05: 1 
+	BiteyBonk06: 1
+	BiteyBonk07: 1
+	BiteyBonk08: 1
+
+Blue Predator Plant is under "PredatorPlant\Blue\BiteyB..."
+
+Yellow Predator Plant is under "PredatorPlant\Yellow\BiteyC..."

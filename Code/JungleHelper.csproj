@@ -82,9 +82,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BouncyShroomEntity.cs" />
+    <Compile Include="CircleColliderWithRectangles.cs" />
     <Compile Include="ClimbableOneWayPlatform.cs" />
-    <Compile Include="Module.cs" />
+    <Compile Include="JungleHelperModule.cs" />
+    <Compile Include="InvisibleJumpthruPlatform.cs" />
+    <Compile Include="MossyWall.cs" />
+    <Compile Include="MovingZipPlatform.cs" />
+    <Compile Include="NodedCrumblePlatform.cs" />
+    <Compile Include="PredatoryPlant.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RemoteKevin.cs" />
+    <Compile Include="RollingRock.cs" />
+    <Compile Include="SpiderBoss.cs" />
+    <Compile Include="SpinyPlant.cs" />
+    <Compile Include="TheoStatue.cs" />
+    <Compile Include="TheoStatueGate.cs" />
+    <Compile Include="UnrandomizedCrumblePlatform.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

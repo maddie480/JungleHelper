@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Sprites>
+	<slideblock_face path="objects/slideBlock/green/" start="idle">
+		<Center/>
+		<Loop id="idle" path="idle_face" delay="0.08"/>
+		<Anim id="hurt" path="hurt" frames="3-12" delay="0.08" goto="idle"/>
+		<Anim id="hit" path="hit" delay="0.08"/>
+		<Loop id="left" path="hit_left" delay="0.08"/>
+		<Loop id="right" path="hit_right" delay="0.08"/>
+		<Loop id="up" path="hit_up" delay="0.08"/>
+		<Loop id="down" path="hit_down" delay="0.08"/>
+	</slideblock_face>
+
+	<spiderboss_web path="JungleHelper/SpiderBoss/" start="idle">
+		<Center/>
+		<Loop id="idle" path="WebStrand" frames="0"/>
+		<Anim id="break" path="WebStrand" frames="0-7" delay="0.08" goto="invisible"/>
+		<Loop id="invisible" path="WebStrand" frames="7"/>
+	</spiderboss_web>
+
+	<spider_boss_blue path="JungleHelper/SpiderBoss/" start="idle">
+		<Center/>
+		<Loop id="idle" path="spiderBlue" frames="0"/>
+		<Anim id="start_falling" path="spiderBlue" frames="0-4" delay="0.08" goto="falling"/>
+		<Loop id="falling" path="spiderBlue" frames="4"/>
+	</spider_boss_blue>
+
+	<spider_boss_purple path="JungleHelper/SpiderBoss/" start="idle">
+		<Center/>
+		<Loop id="idle" path="spiderPurple" frames="0"/>
+		<Anim id="start_falling" path="spiderPurple" frames="0-4" delay="0.08" goto="falling"/>
+		<Loop id="falling" path="spiderPurple" frames="4"/>
+	</spider_boss_purple>
+
+	<spider_boss_red path="JungleHelper/SpiderBoss/" start="idle">
+		<Center/>
+		<Loop id="idle" path="spiderRed" frames="0"/>
+		<Anim id="start_falling" path="spiderRed" frames="0-4" delay="0.08" goto="falling"/>
+		<Loop id="falling" path="spiderRed" frames="4"/>
+	</spider_boss_red>
+	
+	<predator_plant_pink path="JungleHelper/PredatorPlant/" start="idle">
+		<Center/>
+		<Anim id="idle" path="Bitey" frames="0*7,1*2" delay="0.1" goto="idle:19,idleAlt:1"/>
+		<Anim id="idleAlt" path="Biteyidle" frames="0-9,8,9,8-12" delay="0.1" goto="idle"/>
+		<Anim id="attack" path="BiteyAtt" frames="0*5,1,2*5,3-7" delay="0.1"/>
+		<Anim id="knockout" path="BiteyBonk" frames="0-2,3*20,4-8" delay="0.1"/>
+	</predator_plant_pink>
+	
+	<predator_plant_blue path="JungleHelper/PredatorPlant/Blue/" start="idle">
+		<Center/>
+		<Anim id="idle" path="BiteyB" frames="0*7,1*2" delay="0.1" goto="idle:19,idleAlt:1"/>
+		<Anim id="idleAlt" path="BiteyBidle" frames="0-9,8,9,8-12" delay="0.1" goto="idle"/>
+		<Anim id="attack" path="BiteyBAtt" frames="0*5,1,2*5,3-7" delay="0.1"/>
+		<Anim id="knockout" path="BiteyBBonk" frames="0-2,3*20,4-8" delay="0.1"/>
+	</predator_plant_blue>
+	
+	<predator_plant_yellow path="JungleHelper/PredatorPlant/Yellow/" start="idle">
+		<Center/>
+		<Anim id="idle" path="BiteyC" frames="0*7,1*2" delay="0.1" goto="idle:19,idleAlt:1"/>
+		<Anim id="idleAlt" path="BiteyCidle" frames="0-9,8,9,8-12" delay="0.1" goto="idle"/>
+		<Anim id="attack" path="BiteyCAtt" frames="0*5,1,2*5,3-7" delay="0.1"/>
+		<Anim id="knockout" path="BiteyCBonk" frames="0-2,3*20,4-8" delay="0.1"/>
+	</predator_plant_yellow>
+</Sprites>

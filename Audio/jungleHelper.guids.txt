@@ -491,6 +491,14 @@
 {7c01de41-a31a-43c3-9c0f-9ae85ad94c68} event:/game/general/wall_break_ice
 {92f75010-4e90-428e-834c-1315ddbd9460} event:/game/general/wall_break_stone
 {634bdd66-3f53-4679-8ced-fadfc60d412f} event:/game/general/wall_break_wood
+{cfc3668f-7d79-4a8b-adc5-04e7e8c195b6} event:/junglehelper/sfx/Mushroom_boost
+{a587be0b-7d97-4a2e-b776-925ecbb6cee0} event:/junglehelper/sfx/Slide_block
+{cecdc7da-8dd8-4c2b-995c-701d19bc14e4} event:/junglehelper/sfx/SpiderBoss_Appear
+{1a059f27-5954-4c93-9827-b6fa0af25051} event:/junglehelper/sfx/SpiderBoss_Snap
+{2fac677a-8da6-4f7a-a223-0ab60b39ee2a} event:/junglehelper/sfx/Zip_platform
+{cde6e164-e252-43df-a84c-674db1dfb09e} event:/JungleMusicByTg90/tg90_cjc_c1
+{9abe2967-eb39-4f96-9d05-aa30a3407765} event:/JungleMusicByTg90/tg90_cjc_c2_p1
+{4d8d8d80-f94a-4ff4-b1d7-25e3674dbf0c} event:/JungleMusicByTg90/tg90_cjc_template
 {8e19bca6-3d66-4405-9dfa-1e4bf030eab4} event:/LunaticHelper/BerryGate_Fill
 {f96588da-d6ad-40a5-b53a-2cbb2c726ca2} event:/LunaticHelper/GoldenGate_Fill
 {d688294f-4061-44b2-8522-b2ed6af615ba} event:/LunaticHelper/GoldenGate_Open
@@ -819,7 +827,6 @@
 {ca8ffe65-72eb-4fb3-9c3d-27fef47bc3d1} event:/ui/world_map/whoosh/700ms_forward
 {2dca99b6-dcf5-40e6-8cd1-c72f97d364cd} event:/ui/world_map/whoosh/900ms_back
 {21a98c43-8e79-4b8a-8963-a269735f3989} event:/ui/world_map/whoosh/900ms_forward
-{cfc3668f-7d79-4a8b-adc5-04e7e8c195b6} event:/junglehelper/sfx/Mushroom_boost
 {ea595d6d-cb07-4897-81cb-4830bf5823cb} event:/!!!_README_FIRST
 {825394c9-1703-4fb2-ad30-10d4239be598} event:/SC2020_heartShard_get
 {c776d4dd-f080-445a-84ab-f144f1c02e6c} event:/SC2020_heartShard_pulse
@@ -830,8 +837,6 @@
 {51ff2e6b-42ec-4df0-9716-dc6adcd1c2ce} event:/SC2020_silverTimedBerry_death
 {4885ae25-1a01-47eb-9880-b9c0e3cbf1d2} event:/SC2020_timedBerry_death
 {b9b1d909-1ecb-4b85-bd96-0b0c81ee3157} event:/SC2020_timedBerry_get
-{cde6e164-e252-43df-a84c-674db1dfb09e} event:/tg90_cjc_c1
-{4d8d8d80-f94a-4ff4-b1d7-25e3674dbf0c} event:/tg90_cjc_template
 {c7aad72f-9796-42d3-980b-d093fd765716} bus:/
 {aac396d1-a63f-418a-810a-5d5a59fb2c43} bus:/gameplay_sfx
 {2677ced7-94e4-44e2-9f5a-74aaeda5ab63} bus:/gameplay_sfx/ambience
@@ -1015,13 +1020,13 @@
 {f3f590e6-d7a7-4f7e-a845-cb15c6333218} bank:/Ambience magic
 {a327f717-e8b5-4fb0-b4dd-84bd8a585fe0} bank:/dlc_music
 {e85b3c9e-428d-41b7-82c0-37814f3cbf15} bank:/dlc_sfx
+{1ccf9705-de08-4d50-a9f8-a0a4d7db24bc} bank:/JungleCollabMusic_tg90
+{3c2e14c7-d43e-4fd1-9cf2-23d35a1c9e3b} bank:/jungleHelper
 {2e1efa7d-6536-48b0-bc4b-5b9e1817ecea} bank:/LobbyCassete
 {6df8ad0e-a089-4f93-9fdf-13e158bd903c} bank:/LunaticHelper_tg90
 {7916fdbf-1253-451d-a369-6dfd34341e4e} bank:/music
 {e0fed2a5-965a-4c2f-93dc-bef8d92874ba} bank:/SC2020_global_collectibles
 {98263171-3ea2-482b-abb7-9af01e4c002a} bank:/sfx
-{1ccf9705-de08-4d50-a9f8-a0a4d7db24bc} bank:/JungleCollabMusic_tg90
 {f0efde81-92ec-4f1a-8b48-815f4d8a3255} bank:/ui
 {6e44066e-2513-4dd3-9544-2e7e3d1570e0} bank:/Unassigned
 {f42d1384-f9ea-4ba4-9e08-a4d067c55b3b} bank:/Master Bank
-{3c2e14c7-d43e-4fd1-9cf2-23d35a1c9e3b} bank:/jungleHelper

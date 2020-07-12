@@ -23,7 +23,7 @@ jobs:
       run: msbuild *.sln "/p:Configuration=Debug"
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v2
       with:
         name: main
         path: Code/bin/Debug/JungleHelper.dll
@@ -34,19 +34,37 @@ jobs:
         ZIPNAME: JungleHelper
         GITHUB_SHA: ${{ github.sha }}
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        RATE_LIMITING_API: ${{ secrets.RATE_LIMITING_API }}
       run: |
+        # Does the commit message contain [ci skip]?
         msg=$(git log -n 1 "--format=%B" | head -n 1 | tr -d '\n')
         if [ "$(echo $msg | grep "\[ci skip\]")" != "" ]
         then
-          echo "ci skip detected, skipping Discord hook"
-          exit
+            echo "ci skip detected, skipping Discord hook"
+            exit
         fi
-        ZIPNAME=$ZIPNAME-${GITHUB_SHA:0:8}.zip
-        zip -qq -r $ZIPNAME everest.yaml Code/bin/Debug/JungleHelper.dll Ahorn Graphics Audio Dialog
-        url=$(curl -H 'Content-Type: multipart/form-data' -X POST -F "file=@$ZIPNAME" -F "content= <@&716285608322138132> **New Jungle Helper update!**" "$DISCORD_WEBHOOK" | grep -Po 'cdn.discordapp.com\/.*?\.zip' | tr -d '\n')
-        curl -H 'Content-Type: application/json' -X POST -d "$(jq -n \
-          --arg zipname "$ZIPNAME" \
-          --arg url "$url" \
-          --arg msg "$msg" \
-          '{embeds: [{title: "Install \($zipname)", url: "https://0x0ade.ga/twoclick/?\($url)", description: $msg}]}' \
-        )" "$DISCORD_WEBHOOK"
+        
+        # Is the commit being build still the latest commit on the branch?
+        GITHUB_BRANCH=$(echo $GITHUB_REF | sed s,refs/heads/,,)
+        if (curl https://api.github.com/repos/max4805/JungleHelper/git/ref/heads/$GITHUB_BRANCH | grep $GITHUB_SHA)
+        then
+            # Was the latest ping issued less than 10 minutes ago?
+            if (curl --fail $RATE_LIMITING_API)
+            then
+                PING=" <@&716285608322138132>"
+            fi
+            
+            # Zip out the file, and send it to Discord.
+            ZIPNAME=$ZIPNAME-${GITHUB_SHA:0:8}.zip
+            zip -qq -r $ZIPNAME everest.yaml Code/bin/Debug/JungleHelper.dll Ahorn Graphics Audio Dialog DecalRegistry.xml
+            url=$(curl -H 'Content-Type: multipart/form-data' -X POST -F "file=@$ZIPNAME" -F "content=$PING **New Jungle Helper update!**" "$DISCORD_WEBHOOK" | grep -Po 'cdn.discordapp.com\/.*?\.zip' | tr -d '\n')
+            curl -H 'Content-Type: application/json' -X POST -d "$(jq -n \
+                --arg zipname "$ZIPNAME" \
+                --arg url "$url" \
+                --arg msg "$msg" \
+                --arg change_embed "[Click here to see changes in this commit](https://github.com/max4805/JungleHelper/commit/$GITHUB_SHA)" \
+                '{embeds: [{title: "Install \($zipname)", url: "https://0x0ade.ga/twoclick/?\($url)", description: $msg, fields: [{name: "Changes", value: $change_embed}]}]}' \
+            )" "$DISCORD_WEBHOOK"
+        else
+            echo "current commit $GITHUB_SHA is not the latest commit on branch $GITHUB_BRANCH, skipping"
+        fi
