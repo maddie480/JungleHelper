@@ -402,6 +402,11 @@ namespace Celeste.Mod.JungleHelper {
                     Add(image);
                 }
             }
+
+            ClimbableOneWayPlatform other = CollideFirst<ClimbableOneWayPlatform>();
+            if (other != null) {
+                climbJumpGrabCooldown = other.climbJumpGrabCooldown;
+            }
         }
 
         public override void Update() {
