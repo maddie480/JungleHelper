@@ -62,4 +62,12 @@
 		<Anim id="attack" path="BiteyCAtt" frames="0*5,1,2*5,3-7" delay="0.1"/>
 		<Anim id="knockout" path="BiteyCBonk" frames="0-2,3*20,4-8" delay="0.1"/>
 	</predator_plant_yellow>
+	
+	<cobweb path="JungleHelper/Cobweb/" start="idle">
+		<Center/>
+		<Loop id="idle" path="idle" frames="0*4,1*3,2*3,1*3" delay="0.1" />
+		<Anim id="catch" path="catch" frames="0-4" delay="0.1" goto="catchIdle" />
+		<Loop id="catchIdle" path="catch" frames="4" delay="0.1" />
+		<Anim id="break" path="break" frames="0-4" delay="0.1" />
+	</cobweb>
 </Sprites>
