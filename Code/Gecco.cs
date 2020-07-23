@@ -79,17 +79,6 @@ namespace Celeste.Mod.JungleHelper {
                 moving = false;
             }
         }
-        //public override void Added(Scene scene) {
-        //    base.Added(scene);
-        //}
-
-        //public override void Awake(Scene scene) {
-        //    base.Awake(scene);
-        //}
-
-        //public override bool IsRiding(Solid solid) {
-        //    return base.Scene.CollideCheck(new Rectangle((int) base.X, (int) base.Y - 4, 8, 2), solid);
-        //}
 
         public override void Update() {
             base.Update();
@@ -153,10 +142,6 @@ namespace Celeste.Mod.JungleHelper {
                     if (!moving || CollideFirst<Solid>(Position + new Vector2(0, 20f * Engine.DeltaTime)) != null) {
                         break;
                     }
-                    if (CheckWall()) {
-                        Add(new Coroutine(FallRoutine()));
-                        yield break;
-                    }
                 }
                 yield return 0.5f;
                 while (Position != StartPosition) {
@@ -167,19 +152,6 @@ namespace Celeste.Mod.JungleHelper {
                     }
                 }
             }
-            yield break;
-        }
-        private IEnumerator FallRoutine() {
-            yield return 0.5f;
-            float speed = 0f;
-            while (true) {
-                speed = Calc.Approach(speed, 30f, 8f * Engine.DeltaTime);
-                Y += 30f * Engine.DeltaTime;
-                if (CheckWall())
-                    break;
-            }
-            StartPosition = Position + new Vector2 (0, -4f);
-            Add(new Coroutine(Movement()));
             yield break;
         }
         private IEnumerator ClimbingTutorial() {
