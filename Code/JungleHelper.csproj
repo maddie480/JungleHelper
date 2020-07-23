@@ -84,6 +84,7 @@
     <Compile Include="BouncyShroomEntity.cs" />
     <Compile Include="CircleColliderWithRectangles.cs" />
     <Compile Include="ClimbableOneWayPlatform.cs" />
+    <Compile Include="Gecco.cs" />
     <Compile Include="Hawk.cs" />
     <Compile Include="JungleHelperModule.cs" />
     <Compile Include="InvisibleJumpthruPlatform.cs" />
