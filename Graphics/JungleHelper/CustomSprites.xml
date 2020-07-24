@@ -50,5 +50,20 @@
     	<Loop id="hover" path="hold" delay="0.05" frames="0-5,5-0" />
     	<Loop id="fly" path="fly" delay="0.05" frames="0-3,3-0"/>
     	<Anim id="throw" path="throw" delay="0.08" frames="0-3" goto="fly"/>
-  </hawk>
+   </hawk>
+   <gecko_normal path="objects/gecko/normal/" start="idle">
+		<Origin x="12" y="6"/>
+		<Loop id="idle" path="idle" delay="0.2" frames="0-3"/>
+		<Loop id="walk" path="walk" delay="0.2" frames="0-29"/>
+		<Loop id="slide" path="walk" frames="0"/>
+		<Anim id="hit" path="walk" frames="0" goto="idle"/>
+   </gecko_normal>
+   
+   <gecko_hostile path="objects/gecko/hostile/" start="idle">
+		<Origin x="12" y="6"/>
+		<Loop id="idle" path="idle" delay="0.2" frames="0-3"/>
+		<Loop id="walk" path="walk" delay="0.2" frames="0-29"/>
+		<Loop id="slide" path="walk" frames="0"/>
+		<Anim id="hit" path="hit" frames="0"/>
+   </gecko_hostile>
 </Sprites>

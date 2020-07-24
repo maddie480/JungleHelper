@@ -47,16 +47,22 @@ namespace Celeste.Mod.JungleHelper {
         private PlayerCollider pc;
 
         public bool moving = true;
+        public float delay = 0.5f;
         public bool left = false;
 
-        public Gecco(Vector2 position, bool hostile, bool showTutorial,bool left ,float range): base(position) {
-            Add(Sprite = GFX.SpriteBank.Create("bird"));
-            Sprite.UseRawDeltaTime = true;
-            Collider = new Hitbox(12f, 20f, -6f, -16f);
+        public Gecco(Vector2 position, bool hostile, bool showTutorial,bool left ,float range, float delay): base(position) {
+
             this.hostile = hostile;
+            this.delay = delay;
+            if (hostile) {
+                Add(Sprite = JungleHelperModule.SpriteBank.Create("gecko_hostile"));
+            } else {
+                Add(Sprite = JungleHelperModule.SpriteBank.Create("gecko_normal"));
+            }
+            Sprite.Rotation = -1.5f;
+            Sprite.UseRawDeltaTime = true;
             this.left = left;
             this.range = range;
-            Add(pc = new PlayerCollider(OnCollide));
             if (showTutorial){
                 Add(Light = new VertexLight(new Vector2(0f, -8f), Color.White, 1f, 8, 32));
                 Add(tutorialRoutine = new Coroutine(ClimbingTutorial()));
@@ -65,18 +71,25 @@ namespace Celeste.Mod.JungleHelper {
             Add(walkRoutine = new Coroutine(Movement()));
             moving = true;
             if (left) {
-                Sprite.Scale.X = -1f;
+                Sprite.Scale.Y = -1f;
+                Collider = new Hitbox(6f, 18f, -7f, -12f);
+                Sprite.X = 1;
+            } else {
+                Collider = new Hitbox(6f, 18f, 1f, 12f);
+                Sprite.X = -1;
             }
+            Add(pc = new PlayerCollider(OnCollide));
         }
 
         public Gecco(EntityData data, Vector2 offset)
-            : this(data.Position + offset, data.Bool("hostile", false), data.Bool("showTutorial", false), data.Bool("left", false), data.Float("range", 20)) {
+            : this(data.Position + offset, data.Bool("hostile", false), data.Bool("showTutorial", false), data.Bool("left", false), data.Float("range", 20), data.Float("delay",0.5f)) {
         }
 
         public void OnCollide(Player player) {
             if (hostile) {
-                player.Die(new Vector2(0f, -1f));
                 moving = false;
+                Sprite.Play("hit");
+                player.Die(new Vector2(0f, -1f));
             }
         }
 
@@ -112,19 +125,15 @@ namespace Celeste.Mod.JungleHelper {
                 return CollideFirst<Solid>(Position + new Vector2(-5f, 0)) == null;
             }
         }
-        public void CreateSlideP() {
-            Vector2 center = base.Center;
-            if (!left) {
-                center += new Vector2(5f, 4f);
-            } else {
-                center += new Vector2(-5f, 4f);
-            }
-            Dust.Burst(center, -(float) Math.PI / 2f, 1, ParticleTypes.Dust);
-        }
         private IEnumerator Movement() {
             yield return 0.5f;
             Player p = Scene.Tracker.GetEntity<Player>();
             while (p != null){
+                if (moving){
+                    Sprite.Play("walk");
+                    Sprite.Scale.X = -1;
+                    Collider.CenterY = 0;
+                }
                 while (Position != StartPosition + new Vector2(0, -range)) {
                     yield return null;
                     Y = Calc.Approach(Y, StartPosition.Y - range, 15f * Engine.DeltaTime);
@@ -132,18 +141,27 @@ namespace Celeste.Mod.JungleHelper {
                         break;
                     }
                 }
-                yield return 0.5f;
+                if (moving) Sprite.Play("idle");
+                yield return delay;
+                if (moving) {
+                    Sprite.Play("walk");
+                    Sprite.Scale.X = 1;
+                    Collider.CenterY = 4;
+                }
                 while (Position != StartPosition + new Vector2(0, 2*range)) {
                     yield return null;
-                    if (Engine.FrameCounter % 2 == 0) {
-                        CreateSlideP();
-                    }
                     Y = Calc.Approach(Y, StartPosition.Y + 2 * range, 20f * Engine.DeltaTime);
                     if (!moving || CollideFirst<Solid>(Position + new Vector2(0, 20f * Engine.DeltaTime)) != null) {
                         break;
                     }
                 }
-                yield return 0.5f;
+                if (moving) Sprite.Play("idle");
+                yield return delay;
+                if (moving) {
+                    Sprite.Play("walk");
+                    Sprite.Scale.X = -1;
+                    Collider.CenterY = 0;
+                }
                 while (Position != StartPosition) {
                     yield return null;
                     Y = Calc.Approach(Y, StartPosition.Y, 15f * Engine.DeltaTime);
@@ -155,17 +173,20 @@ namespace Celeste.Mod.JungleHelper {
             yield break;
         }
         private IEnumerator ClimbingTutorial() {
-            yield return 0.25f;
+            yield return delay / 2;
             Player p = Scene.Tracker.GetEntity<Player>();
-            while (Math.Abs(p.X - X) > 60f) {
+            while (Y > StartPosition.Y - range) {
                 yield return null;
             }
             BirdTutorialGui tut = new BirdTutorialGui(this, new Vector2(0f, -16f), Dialog.Clean("tutorial_climb"), Dialog.Clean("tutorial_hold"), Input.Grab);
             yield return ShowTutorial(tut);
+            moving = false;
+            Sprite.Play("idle");
             do {
                 yield return null;
             }
-            while (p.Scene != null && p.StateMachine.State != 1);
+            while (p.Scene != null && p.StateMachine.State != 1 && (Math.Abs(p.X-X) != 0));
+            moving = true;
             yield return HideTutorial();
         }
 
