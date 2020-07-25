@@ -38,19 +38,25 @@ namespace Celeste.Mod.JungleHelper {
         public override void Update() {
             base.Update();
 
-            if (stuckPlayer != null && stuckPlayer.CanDash) {
-                // player dashes out! make them visible again and throw them in the Dash state.
-                stuckPlayer.StateMachine.State = stuckPlayer.StartDash();
-                stuckPlayer.ForceCameraUpdate = false;
-                stuckPlayer.Visible = true;
-                stuckPlayer.DummyGravity = true;
+            if (stuckPlayer != null) {
+                // make sure the player is still stuck in the middle of the cobweb.
+                stuckPlayer.Center = Position;
+                stuckPlayer.Speed = Vector2.Zero;
 
-                // player is not in the bubble anymore.
-                stuckPlayer = null;
+                if (stuckPlayer.CanDash) {
+                    // player dashes out! make them visible again and throw them in the Dash state.
+                    stuckPlayer.StateMachine.State = stuckPlayer.StartDash();
+                    stuckPlayer.ForceCameraUpdate = false;
+                    stuckPlayer.Visible = true;
+                    stuckPlayer.DummyGravity = true;
 
-                // and the cobweb vanishes.
-                sprite.Play("break");
-                sprite.OnFinish = _ => RemoveSelf();
+                    // player is not in the bubble anymore.
+                    stuckPlayer = null;
+
+                    // and the cobweb vanishes.
+                    sprite.Play("break");
+                    sprite.OnFinish = _ => RemoveSelf();
+                }
             }
         }
     }
