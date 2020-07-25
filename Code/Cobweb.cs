@@ -45,6 +45,9 @@ namespace Celeste.Mod.JungleHelper {
                 stuckPlayer.Visible = true;
                 stuckPlayer.DummyGravity = true;
 
+                // player is not in the bubble anymore.
+                stuckPlayer = null;
+
                 // and the cobweb vanishes.
                 sprite.Play("break");
                 sprite.OnFinish = _ => RemoveSelf();
