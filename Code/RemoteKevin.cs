@@ -8,6 +8,7 @@ using Celeste.Mod.Entities;
 namespace Celeste.Mod.JungleHelper {
     // IT MAY BE A "SLIDE BLOCK" OFFICIALLY, BUT IT WILL ALWAYS BE A REMOTE KEVIN IN MY HEART
     [CustomEntity("JungleHelper/RemoteKevin")]
+
     public class RemoteKevin : Solid {
         public RemoteKevin(Vector2 position, float width, float height, bool restrained) : base(position, width, height, false) {
             this.restrained = restrained;
