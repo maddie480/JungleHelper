@@ -3,7 +3,7 @@ module JungleHelperClimbableOneWayPlatform
 using ..Ahorn, Maple
 
 @mapdef Entity "JungleHelper/ClimbableOneWayPlatform" ClimbableOneWayPlatform(x::Integer, y::Integer, height::Integer=Maple.defaultBlockHeight, 
-    left::Bool=true, texture::String="wood", animationDelay::Number=0.0)
+    left::Bool=true, texture::String="wood", animationDelay::Number=0.0, surfaceIndex::Int=-1)
 
 textures = ["wood", "dream", "temple", "templeB", "cliffside", "reflection", "core", "moon"]
 const placements = Ahorn.PlacementDict(
@@ -31,7 +31,8 @@ quads = Tuple{Integer, Integer, Integer, Integer}[
 ]
 
 Ahorn.editingOptions(entity::ClimbableOneWayPlatform) = Dict{String, Any}(
-    "texture" => textures
+    "texture" => textures,
+    "surfaceIndex" => Maple.tileset_sound_ids
 )
 
 Ahorn.minimumSize(entity::ClimbableOneWayPlatform) = 0, 8

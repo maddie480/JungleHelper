@@ -47,23 +47,45 @@ function Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::SpinyPlant, room::M
     stopY = startY + div(height, 8) - 1
 
     len = stopY - startY
-    for i in 0:2:len
-        if i == len
-            i = len - 1
-        end
     
-        section = "Mid"
-        if i == 0
-            if get(room.fgTiles.data, (startY - 1, startX), false) == '0'
+    if len == 1
+        topOpen = get(room.fgTiles.data, (startY - 1, startX + 1), false) == '0'
+        bottomOpen = get(room.fgTiles.data, (stopY + 1, startX + 1), false) == '0'
+        
+        if topOpen
+            if bottomOpen
+                section = "Solo"
+            else
                 section = "Top"
             end
-        elseif i == len - 1
-            if get(room.fgTiles.data, (stopY + 1, startX), false) == '0'
+        else
+            if bottomOpen
                 section = "Bottom"
+            else
+                section = "Mid"
             end
         end
+                
+        Ahorn.drawImage(ctx, "JungleHelper/SpinyPlant/Spiny$(color)$(section)", section == "Solo" ? 4 : 0, 0)
+    else
+        for i in 0:2:len
+            if i == len
+                i = len - 1
+            end
+        
+            section = "Mid"
+            if i == 0
+                if get(room.fgTiles.data, (startY - 1, startX + 1), false) == '0'
+                    section = "Top"
+                end
+            elseif i == len - 1
+                if get(room.fgTiles.data, (stopY + 1, startX + 1), false) == '0'
+                    section = "Bottom"
+                end
+            end
 
-        Ahorn.drawImage(ctx, "JungleHelper/SpinyPlant/Spiny$(color)$(section)", 0, 8 * i)
+            Ahorn.drawImage(ctx, "JungleHelper/SpinyPlant/Spiny$(color)$(section)", 0, 8 * i)
+        end
     end
 end
 
