@@ -13,14 +13,14 @@ using System.Reflection;
 
 namespace Celeste.Mod.JungleHelper {
     [CustomEntity("JungleHelper/Gecko")]
-    [Tracked(false)]
+    [Tracked(true)]
     public class Gecco : Entity {
 
         public Sprite Sprite;
 
         public Vector2 StartPosition;
         
-        public string BirdId;
+        public string geckoId;
 
         private bool onlyOnce;
 
@@ -98,9 +98,9 @@ namespace Celeste.Mod.JungleHelper {
         public string controls;
         public bool left = false;
 
-        public Gecco(Vector2 position, string birdId,bool onlyOnce,string info, string controls,bool hostile, bool showTutorial,bool left ,float range, float delay): base(position) {
+        public Gecco(Vector2 position, string geckoId,bool onlyOnce,string info, string controls,bool hostile, bool showTutorial,bool left ,float range, float delay): base(position) {
 
-            BirdId = birdId;
+            geckoId = geckoId;
             this.onlyOnce = onlyOnce;
             this.info = info;
             this.controls = controls;
@@ -133,10 +133,10 @@ namespace Celeste.Mod.JungleHelper {
         }
 
         public Gecco(EntityData data, Vector2 offset)
-            : this(data.Position + offset,data.Attr("birdId"),data.Bool("onlyOnce"),data.Attr("info"), data.Attr("controls"), data.Bool("hostile", false), data.Bool("showTutorial", false), data.Bool("left", false), data.Float("range", 20), data.Float("delay",0.5f)) {
+            : this(data.Position + offset,data.Attr("geckoId"),data.Bool("onlyOnce"),data.Attr("info"), data.Attr("controls"), data.Bool("hostile", false), data.Bool("showTutorial", false), data.Bool("left", false), data.Float("range", 20), data.Float("delay",0.5f)) {
            
             if (data.Bool("showTutorial")){
-                BirdId = data.Attr("birdId");
+                geckoId = data.Attr("geckoId");
                 onlyOnce = data.Bool("onlyOnce");
                 string text = data.Attr("info");
                 object info = (!GFX.Gui.Has(text)) ? ((object) Dialog.Clean(text)) : ((object) GFX.Gui[text]);
@@ -288,10 +288,10 @@ namespace Celeste.Mod.JungleHelper {
             }
         }
 
-        public static Gecco FindById(Level level, string birdId) {
-            return (from bird in level.Tracker.GetEntities<Gecco>().OfType<Gecco>()
-                    where bird.BirdId == birdId
-                    select bird).FirstOrDefault();
+        public static Gecco FindById(Level level, string geckoId) {
+            return (from gex in level.Tracker.GetEntities<Gecco>().OfType<Gecco>()
+                    where gex.geckoId == geckoId
+                    select gex).FirstOrDefault();
         }
 
 

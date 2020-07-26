@@ -18,19 +18,19 @@ namespace Celeste.Mod.JungleHelper {
     public class GeccoTutorialTrigger : Trigger {
 
         public Gecco gecco;
-        public string BirdId;
+        public string geckoId;
 
         public bool ShowTutorial;
 
         public GeccoTutorialTrigger(EntityData data, Vector2 offset)
             : base(data, offset) {
-            BirdId = data.Attr("birdId");
+            geckoId = data.Attr("geckoId");
             ShowTutorial = data.Bool("showTutorial");
         }
 
         public override void OnEnter(Player player) {
             base.OnEnter(player);
-            gecco = Gecco.FindById(player.SceneAs<Level>(), BirdId);
+            gecco = Gecco.FindById(player.SceneAs<Level>(),geckoId);
             if (gecco != null) {
                 if (ShowTutorial) {
                     gecco.TriggerShowTutorial();

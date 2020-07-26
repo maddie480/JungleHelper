@@ -2,7 +2,7 @@ module JungleHelperGecko
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/Gecko" Gecco(x::Integer, y::Integer,birdId::String="", onlyOnce::Bool=false, info::String="TUTORIAL_CLIMB", controls::String="Climb", hostile::Bool=false,left::Bool=false, showTutorial::Bool=false, range::Number=20.0, delay::Number=0.5)
+@mapdef Entity "JungleHelper/Gecko" Gecco(x::Integer, y::Integer,geckoId::String="", onlyOnce::Bool=false, info::String="TUTORIAL_CLIMB", controls::String="Climb", hostile::Bool=false,left::Bool=false, showTutorial::Bool=false, range::Number=20.0, delay::Number=0.5)
 const placements = Ahorn.PlacementDict(
     "Gecko (Jungle Helper)" => Ahorn.EntityPlacement(
         Gecco,
