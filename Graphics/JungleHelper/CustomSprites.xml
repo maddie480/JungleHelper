@@ -38,7 +38,29 @@
 		<Anim id="start_falling" path="spiderRed" frames="0-4" delay="0.08" goto="falling"/>
 		<Loop id="falling" path="spiderRed" frames="4"/>
 	</spider_boss_red>
-	
+	<hawk path="objects/hawk/" start="hover">
+    	<Origin x="16" y="24"/>
+    	<Loop id="hover" path="hold" delay="0.05" frames="0-5,5-0" />
+    	<Loop id="fly" path="fly" delay="0.05" frames="0-3,3-0"/>
+    	<Anim id="throw" path="throw" delay="0.08" frames="0-3" goto="fly"/>
+   </hawk>
+  
+   <gecko_normal path="objects/gecko/normal/" start="idle">
+		<Origin x="12" y="6"/>
+		<Loop id="idle" path="idle" delay="0.2" frames="0-3"/>
+		<Loop id="walk" path="walk" delay="0.2" frames="0-29"/>
+		<Loop id="slide" path="walk" frames="0"/>
+		<Anim id="hit" path="walk" frames="0" goto="idle"/>
+   </gecko_normal>
+   
+   <gecko_hostile path="objects/gecko/hostile/" start="idle">
+		<Origin x="12" y="6"/>
+		<Loop id="idle" path="idle" delay="0.2" frames="0-3"/>
+		<Loop id="walk" path="walk" delay="0.2" frames="0-29"/>
+		<Loop id="slide" path="walk" frames="0"/>
+		<Anim id="hit" path="hit" frames="0"/>
+   </gecko_hostile>
+  
 	<predator_plant_pink path="JungleHelper/PredatorPlant/" start="idle">
 		<Center/>
 		<Anim id="idle" path="Bitey" frames="0*7,1*2" delay="0.1" goto="idle:19,idleAlt:1"/>

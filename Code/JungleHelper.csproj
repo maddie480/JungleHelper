@@ -85,6 +85,9 @@
     <Compile Include="SlopedColliderWithRectangles.cs" />
     <Compile Include="CircleColliderWithRectangles.cs" />
     <Compile Include="ClimbableOneWayPlatform.cs" />
+    <Compile Include="Gecco.cs" />
+    <Compile Include="GeckoTutorial.cs" />
+    <Compile Include="Hawk.cs" />
     <Compile Include="Cobweb.cs" />
     <Compile Include="JungleHelperModule.cs" />
     <Compile Include="InvisibleJumpthruPlatform.cs" />
