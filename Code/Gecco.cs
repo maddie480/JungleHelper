@@ -214,13 +214,6 @@ namespace Celeste.Mod.JungleHelper {
                 gui = null;
             }
         }
-        public bool CheckWall() {
-            if (!left) {
-                return CollideFirst<Solid>(Position + new Vector2(5f, 0)) == null;
-            } else {
-                return CollideFirst<Solid>(Position + new Vector2(-5f, 0)) == null;
-            }
-        }
         private IEnumerator Movement() {
             yield return 0.5f;
             Player p = Scene.Tracker.GetEntity<Player>();
@@ -233,7 +226,7 @@ namespace Celeste.Mod.JungleHelper {
                 while (Position != StartPosition + new Vector2(0, -range)) {
                     yield return null;
                     Y = Calc.Approach(Y, StartPosition.Y - range, 15f * Engine.DeltaTime);
-                    if (!moving || CheckWall() || CollideFirst<Solid>(Position + new Vector2(0, -15f * Engine.DeltaTime)) != null) {
+                    if (!moving || CollideFirst<Solid>(Position + new Vector2(0, -15f * Engine.DeltaTime)) != null) {
                         break;
                     }
                 }
@@ -263,7 +256,7 @@ namespace Celeste.Mod.JungleHelper {
                 while (Position != StartPosition) {
                     yield return null;
                     Y = Calc.Approach(Y, StartPosition.Y, 15f * Engine.DeltaTime);
-                    if (!moving || CheckWall() || CollideFirst<Solid>(Position + new Vector2(0, -15f * Engine.DeltaTime)) != null) {
+                    if (!moving || CollideFirst<Solid>(Position + new Vector2(0, -15f * Engine.DeltaTime)) != null) {
                         break;
                     }
                 }
