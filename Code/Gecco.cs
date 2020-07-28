@@ -199,6 +199,8 @@ namespace Celeste.Mod.JungleHelper {
             Scene.Add(gui);
             moving = false;
             while (gui.Scale < 1f) {
+                Sprite.Play("idle");
+                Sprite.Scale.X = -1;
                 yield return null;
             }
         }
