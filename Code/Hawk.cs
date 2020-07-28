@@ -48,7 +48,8 @@ namespace Celeste.Mod.JungleHelper {
         private float hawkSpeed;
         float playerSpeed;
         float playerlessSpeed;
-        
+        private PlayerCollider collid;
+
         public Hawk(EntityData data, Vector2 levelOffset):base(data.Position+levelOffset) {
             entityData = data;
             Position = data.Position;
@@ -61,7 +62,7 @@ namespace Celeste.Mod.JungleHelper {
                 BirdNPC.FlapSfxCheck(sprite);
             };
             base.Collider = new Circle(16f);
-            Add(new PlayerCollider(OnPlayer));
+            Add(collid = new PlayerCollider(OnPlayer));
             Add(moveSfx = new SoundSource());
             Add(new TransitionListener {
                 OnOut = delegate (float t) {
@@ -100,9 +101,20 @@ namespace Celeste.Mod.JungleHelper {
                 Add(new Coroutine(DoFlingRoutine(player)));
             }
         }
-
+        public IEnumerator HitboxDelay() {
+            collid.Active = false;
+            Collider = null;
+            yield return 0.4f;
+            collid.Active = true;
+            Collider = new Circle(16f);
+            yield break;
+        }
         public override void Update() {
             base.Update();
+            if (CollideFirst<Solid>(Position + new Vector2(hawkSpeed * Engine.DeltaTime, 0)) != null) {
+                collid.Active = false;
+            }else collid.Active = true;
+            
             if (state != 0) {
                 sprite.Position = Calc.Approach(sprite.Position, spriteOffset, 32f * Engine.DeltaTime);
             }
@@ -182,6 +194,7 @@ namespace Celeste.Mod.JungleHelper {
             }
             player.ForceCameraUpdate = false;
             player.DummyAutoAnimate = true;
+            Add(new Coroutine(HitboxDelay()));
             Add(new Coroutine(MoveRoutine()));
         }
 
