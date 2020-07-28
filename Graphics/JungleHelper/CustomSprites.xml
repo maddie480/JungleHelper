@@ -47,7 +47,8 @@
   
    <gecko_normal path="objects/gecko/normal/" start="idle">
 		<Origin x="12" y="6"/>
-		<Loop id="idle" path="idle" delay="0.2" frames="0-3"/>
+		<Loop id="idle" path="idle" delay="0.2" frames="0-1"/>
+		<Anim id="dance" path="idle" frames="2-3" goto="idle"/>
 		<Loop id="walk" path="walk" delay="0.2" frames="0-29"/>
 		<Loop id="slide" path="walk" frames="0"/>
 		<Anim id="hit" path="walk" frames="0" goto="idle"/>
@@ -55,7 +56,8 @@
    
    <gecko_hostile path="objects/gecko/hostile/" start="idle">
 		<Origin x="12" y="6"/>
-		<Loop id="idle" path="idle" delay="0.2" frames="0-3"/>
+		<Loop id="idle" path="idle" delay="0.2" frames="0-1"/>
+		<Anim id="dance" path="idle" frames="2-3" goto="idle"/>
 		<Loop id="walk" path="walk" delay="0.2" frames="0-29"/>
 		<Loop id="slide" path="walk" frames="0"/>
 		<Anim id="hit" path="hit" frames="0"/>

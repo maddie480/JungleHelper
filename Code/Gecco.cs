@@ -199,10 +199,18 @@ namespace Celeste.Mod.JungleHelper {
             Scene.Add(gui);
             moving = false;
             while (gui.Scale < 1f) {
-                Sprite.Play("idle");
+                Idle();
                 Sprite.Scale.X = -1;
                 yield return null;
             }
+        }
+        public void Idle() {
+            Random random = new Random();
+            random.Range(0, 100);
+            Console.WriteLine(random.NextFloat());
+            if (random.NextFloat()>0.03&& random.NextFloat()<0.04)
+                Sprite.Play("dance");
+            else Sprite.Play("idle");
         }
 
         public IEnumerator HideTutorial() {
@@ -233,7 +241,7 @@ namespace Celeste.Mod.JungleHelper {
                     }
                 }
                 if (moving)
-                    Sprite.Play("idle");
+                    Idle();
                 yield return delay;
                 if (moving) {
                     Sprite.Play("walk");
@@ -248,7 +256,7 @@ namespace Celeste.Mod.JungleHelper {
                     }
                 }
                 if (moving)
-                    Sprite.Play("idle");
+                    Idle();
                 yield return delay;
                 if (moving) {
                     Sprite.Play("walk");
