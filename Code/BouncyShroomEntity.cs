@@ -167,9 +167,10 @@ namespace Celeste.Mod.JungleHelper {
                 }
 
                 bouncyShroomSprite.Play("Bounce");
+                collidedWithIt = true;
             }
 
-            collidedWithIt = true;
+            
         }
 
         public override void Update() {
