@@ -10,6 +10,8 @@ namespace Celeste.Mod.JungleHelper {
             Blue, Purple, Red
         };
 
+        private float cameraRelativeY;
+
         // configuration constants: timings in seconds
         private const float SLIDE_DURATION = 1f;
         private const float DELAY_BEFORE_FALL = 2f;
@@ -127,7 +129,7 @@ namespace Celeste.Mod.JungleHelper {
 
             // set up the spider pop position according to camera and player position.
             Position.X = Scene.Tracker.GetEntity<Player>()?.X ?? SceneAs<Level>().Camera.Left + 115f;
-            Position.Y = SceneAs<Level>().Camera.Top - 8f;
+            cameraRelativeY = - 8f;
 
             // duration of the state: the slide in duration.
             stateDelay = SLIDE_DURATION;
@@ -139,8 +141,7 @@ namespace Celeste.Mod.JungleHelper {
         private int poppingInUpdate() {
             // ease the spider in.
             float progress = Calc.ClampedMap(stateDelay, SLIDE_DURATION, 0);
-            float cameraTop = SceneAs<Level>().Camera.Top;
-            Position.Y = MathHelper.Lerp(cameraTop - 8f, cameraTop + SLIDE_DISTANCE, Ease.SineOut(progress));
+            cameraRelativeY = MathHelper.Lerp(- 8f, SLIDE_DISTANCE, Ease.SineOut(progress));
 
             // also track the player at the same time if relevant.
             trackingUpdate();
@@ -187,11 +188,11 @@ namespace Celeste.Mod.JungleHelper {
         private int fallingUpdate() {
             // spider falls down
             speed = Calc.Approach(speed, FALLING_SPEED, FALLING_ACCELERATION * Engine.DeltaTime);
-            Position.Y += speed * Engine.DeltaTime;
+            cameraRelativeY += speed * Engine.DeltaTime;
 
             // web has to look static.
-            float initialSpiderPosition = SceneAs<Level>().Camera.Top + SLIDE_DISTANCE;
-            web.Position.Y = initialSpiderPosition - Position.Y - 22f;
+            float initialSpiderPosition = SLIDE_DISTANCE;
+            web.Position.Y = initialSpiderPosition - cameraRelativeY - 22f;
 
             // if spider is off-screen, switch to the Waiting state.
             if (Position.Y > SceneAs<Level>().Camera.Bottom + 10f) {
@@ -211,6 +212,7 @@ namespace Celeste.Mod.JungleHelper {
         public override void Update() {
             stateDelay -= Engine.DeltaTime;
             base.Update();
+            Position.Y = SceneAs<Level>().Camera.Top + cameraRelativeY;
         }
     }
 }
