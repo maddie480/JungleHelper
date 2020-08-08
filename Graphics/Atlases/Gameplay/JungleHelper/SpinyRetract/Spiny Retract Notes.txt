@@ -1,0 +1,50 @@
+Spiny Retract
+
+Light Detection:
+Each spiny will have a top half and bottom half for detecting whether light is entering or leaving.
+
+
+4 Animations for each entity:
+
+A - Retract Top to Bot
+Triggered by: Lantern Light "enters" Top Half of the Spiny "first"
+image00(full spiny) 
+image01
+image02
+image03
+image04
+image05
+image06(no spiny)
+
+
+B - Retract Bot to Top
+Triggered by:Lantern Light "enters" Bottom Half of the Spiny "first"
+image00(full spiny) 
+image11
+image10
+image09
+image08
+image07
+image06(no spiny)
+
+
+C - Extend Bot to Top
+Triggered by: Lantern Light "exits" Top Half of the Spiny "last"
+image06(no spiny) 
+image05
+image04
+image03
+image02
+image01
+image00(full spiny)
+
+
+D - Extend Top to Bot
+Triggered by:Lantern Light "exits" Bottom Half of the Spiny "last"
+image06(no spiny) 
+image07
+image08
+image09
+image10
+image11
+image00(full spiny)
