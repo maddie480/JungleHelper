@@ -2,7 +2,7 @@ module JungleHelperRemoteKevins
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/RemoteKevin" RemoteKevin(x::Integer, y::Integer, restrained::Bool=false)
+@mapdef Entity "JungleHelper/RemoteKevin" RemoteKevin(x::Integer, y::Integer, restrained::Bool=false, axes::String="both")
 
 const placements = Ahorn.PlacementDict(
     "Slide Block (Restraintless, Jungle Helper)" => Ahorn.EntityPlacement(
@@ -21,6 +21,17 @@ const placements = Ahorn.PlacementDict(
     )
 )
 
+const frameImage = Dict{String, String}(
+    "none" => "block00",
+    "horizontal" => "block01",
+    "vertical" => "block02",
+    "both" => "block03"
+)
+
+Ahorn.editingOptions(entity::RemoteKevin) = Dict{String, Any}(
+    "axes" => Maple.kevin_axes
+)
+
 kevinColor = (138, 156, 96) ./ 255
 Ahorn.minimumSize(entity::RemoteKevin) = 24, 24
 Ahorn.resizable(entity::RemoteKevin) = true, true
@@ -28,9 +39,17 @@ Ahorn.resizable(entity::RemoteKevin) = true, true
 Ahorn.selection(entity::RemoteKevin) = Ahorn.getEntityRectangle(entity)
 
 function Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::RemoteKevin, room::Maple.Room)
-    restrainedTex = (get(entity.data, "restrained", false) ? "objects/slideBlock/green" : "objects/slideBlock/red")
-    frame = string(restrainedTex, "/block03")
-    faceSprite = Ahorn.getSprite("objects/slideBlock/green/idle_face")
+    restrainedTex = (get(entity.data, "restrained", false) ? "JungleHelper/SlideBlockGreen" : "JungleHelper/SlideBlockRed")
+    frame = string(restrainedTex, "/", frameImage[lowercase(get(entity.data, "axes", "both"))])
+
+    width = Int(get(entity.data, "width", 32))
+    height = Int(get(entity.data, "height", 32))
+	
+    if height >= 48 && width >= 48
+        faceSprite = Ahorn.getSprite(restrainedTex * "/big_active_up00")
+    else
+        faceSprite = Ahorn.getSprite(restrainedTex * "/small_active_up00")
+    end
 
     x, y = Ahorn.position(entity)
 

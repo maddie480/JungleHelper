@@ -6,6 +6,7 @@ const placements = Ahorn.PlacementDict(
     "Gecko (Jungle Helper)" => Ahorn.EntityPlacement(
         Gecco,
         "rectangle",
+        Dict{String, Any}(),
         function(entity)
             x, y = Int(entity.data["x"]), Int(entity.data["y"])
             entity.data["x"], entity.data["y"] = x + width, y+25

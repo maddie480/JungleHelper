@@ -8,12 +8,14 @@ using Celeste.Mod.Entities;
 namespace Celeste.Mod.JungleHelper {
     // IT MAY BE A "SLIDE BLOCK" OFFICIALLY, BUT IT WILL ALWAYS BE A REMOTE KEVIN IN MY HEART
     [CustomEntity("JungleHelper/RemoteKevin")]
-
+    [Tracked]
     public class RemoteKevin : Solid {
-        public RemoteKevin(Vector2 position, float width, float height, bool restrained) : base(position, width, height, false) {
+        public RemoteKevin(Vector2 position, float width, float height, bool restrained, CrushBlock.Axes axes) : base(position, width, height, false) {
             this.restrained = restrained;
-            texture = (restrained ? "objects/slideBlock/green" : "objects/slideBlock/red");
+            texture = (restrained ? "JungleHelper/SlideBlockGreen" : "JungleHelper/SlideBlockRed");
             fill = Calc.HexToColor("8A9C60");
+
+            bool giant = Width >= 48f && Height >= 48f;
 
             idleImages = new List<Image>();
             activeTopImages = new List<Image>();
@@ -29,17 +31,28 @@ namespace Celeste.Mod.JungleHelper {
             attackCoroutine.RemoveOnComplete = false;
             Add(attackCoroutine);
 
-            List<MTexture> atlasSubtextures = GFX.Game.GetAtlasSubtextures(texture + "/block");
-            MTexture idle = atlasSubtextures[3];
+            canMoveHorizontally = (axes == CrushBlock.Axes.Both || axes == CrushBlock.Axes.Horizontal);
+            canMoveVertically = (axes == CrushBlock.Axes.Both || axes == CrushBlock.Axes.Vertical);
+            int index = 0;
+            if (canMoveHorizontally) {
+                index++;
+            }
+            if (canMoveVertically) {
+                index += 2;
+            }
 
-            Add(face = JungleHelperModule.SpriteBank.Create("slideblock_face"));
+            List<MTexture> atlasSubtextures = GFX.Game.GetAtlasSubtextures(texture + "/block");
+            MTexture idle = atlasSubtextures[index];
+
+            string colorPrefix = restrained ? "green_" : "red_";
+            Add(face = JungleHelperModule.SpriteBank.Create(giant ? colorPrefix + "slideblock_center_big" : colorPrefix + "slideblock_center_small"));
             face.Position = new Vector2(Width, Height) / 2f;
-            face.Play("idle", false, false);
-            face.OnLastFrame = animation => {
-                if (animation == "hit") {
-                    face.Play(nextFaceDirection, false, false);
-                }
-            };
+            face.Play("active_up", false, false);
+
+            Add(activeOverlay = new Image(GFX.Game["JungleHelper/SlideBlock" + (restrained ? "Green" : "Red") + "/" + (giant ? "big_active_overlay" : "small_active_overlay")]));
+            activeOverlay.Position = face.Position;
+            activeOverlay.CenterOrigin();
+            activeOverlay.Visible = false;
 
             int right = (int) (Width / 8f) - 1;
             int bottom = (int) (Height / 8f) - 1;
@@ -60,7 +73,7 @@ namespace Celeste.Mod.JungleHelper {
             Add(new WaterInteraction(() => crushDir != Vector2.Zero));
         }
 
-        public RemoteKevin(EntityData data, Vector2 offset) : this(data.Position + offset, data.Width, data.Height, data.Bool("restrained", false)) { }
+        public RemoteKevin(EntityData data, Vector2 offset) : this(data.Position + offset, data.Width, data.Height, data.Bool("restrained", false), data.Enum("axes", CrushBlock.Axes.Both)) { }
 
         public override void Added(Scene scene) {
             base.Added(scene);
@@ -88,6 +101,12 @@ namespace Celeste.Mod.JungleHelper {
             if (currentMoveLoopSfx != null) {
                 currentMoveLoopSfx.Param("submerged", (Submerged ? 1 : 0));
             }
+
+            // if we are using the "active" overlay over the "inactive" animation, switch to the "active" animation instead!
+            if (activeOverlay.Visible && face.CurrentAnimationID.StartsWith("inactive_")) {
+                face.Play(face.CurrentAnimationID.Replace("inactive_", "active_"));
+                activeOverlay.Visible = false;
+            }
         }
 
         public override void Render() {
@@ -106,7 +125,9 @@ namespace Celeste.Mod.JungleHelper {
 
         public void OnDash(Vector2 direction) {
             // if one of the directions is zero and the other isn't, this is a straight (non diagonal) dash, so we should trigger the Kevin.
-            if ((direction.X == 0) != (direction.Y == 0)) {
+            if (!isHit && refilled && (direction.X == 0) != (direction.Y == 0) && (direction.X == 0 || canMoveHorizontally) && (direction.Y == 0 || canMoveVertically)) {
+                refilled = false;
+
                 attack(direction);
             }
         }
@@ -181,47 +202,43 @@ namespace Celeste.Mod.JungleHelper {
         }
 
         private void attack(Vector2 direction) {
-            if (!isHit) {
-                Audio.Play("event:/game/05_mirror_temple/swapblock_move", Center);
-                if (currentMoveLoopSfx != null) {
-                    currentMoveLoopSfx.Param("end", 1f);
-                    SoundSource sfx = currentMoveLoopSfx;
-                    sfx.RemoveSelf();
+            Audio.Play("event:/game/05_mirror_temple/swapblock_move", Center);
+            if (currentMoveLoopSfx != null) {
+                currentMoveLoopSfx.Param("end", 1f);
+                SoundSource sfx = currentMoveLoopSfx;
+                sfx.RemoveSelf();
+            }
+            Add(currentMoveLoopSfx = new SoundSource());
+            currentMoveLoopSfx.Position = new Vector2(Width, Height) / 2f;
+            currentMoveLoopSfx.Play("event:/junglehelper/sfx/Slide_block", null, 0f);
+
+            crushDir = direction;
+
+            attackCoroutine.Replace(attackSequence());
+
+            ClearRemainder();
+            turnOffImages();
+
+            if (crushDir.X < 0f) {
+                foreach (Image image in activeLeftImages) {
+                    image.Visible = true;
                 }
-                Add(currentMoveLoopSfx = new SoundSource());
-                currentMoveLoopSfx.Position = new Vector2(Width, Height) / 2f;
-                currentMoveLoopSfx.Play("event:/junglehelper/sfx/Slide_block", null, 0f);
-
-                crushDir = direction;
-
-                attackCoroutine.Replace(attackSequence());
-
-                face.Play("hit", false, false);
-
-                ClearRemainder();
-                turnOffImages();
-
-                if (crushDir.X < 0f) {
-                    foreach (Image image in activeLeftImages) {
-                        image.Visible = true;
-                    }
-                    nextFaceDirection = "left";
-                } else if (crushDir.X > 0f) {
-                    foreach (Image image2 in activeRightImages) {
-                        image2.Visible = true;
-                    }
-                    nextFaceDirection = "right";
-                } else if (crushDir.Y < 0f) {
-                    foreach (Image image3 in activeTopImages) {
-                        image3.Visible = true;
-                    }
-                    nextFaceDirection = "up";
-                } else if (crushDir.Y > 0f) {
-                    foreach (Image image4 in activeBottomImages) {
-                        image4.Visible = true;
-                    }
-                    nextFaceDirection = "down";
+                face.Play("hit_left");
+            } else if (crushDir.X > 0f) {
+                foreach (Image image2 in activeRightImages) {
+                    image2.Visible = true;
                 }
+                face.Play("hit_right");
+            } else if (crushDir.Y < 0f) {
+                foreach (Image image3 in activeTopImages) {
+                    image3.Visible = true;
+                }
+                face.Play("hit_up");
+            } else if (crushDir.Y > 0f) {
+                foreach (Image image4 in activeBottomImages) {
+                    image4.Visible = true;
+                }
+                face.Play("hit_down");
             }
         }
 
@@ -246,7 +263,7 @@ namespace Celeste.Mod.JungleHelper {
                 if (crushDir.X != 0f) {
                     hit = moveHCheck(moveAmount * crushDir.X, Position != startPoint);
                 } else {
-                    hit = MoveVCheck(moveAmount * crushDir.Y, Position != startPoint);
+                    hit = moveVCheck(moveAmount * crushDir.Y, Position != startPoint);
                 }
 
                 if (hit || (restrained && distance <= 0f)) {
@@ -258,7 +275,7 @@ namespace Celeste.Mod.JungleHelper {
                         if (crushDir.X != 0f) {
                             hit = moveHCheck(crushDir.X, Position != startPoint);
                         } else {
-                            hit = MoveVCheck(crushDir.Y, Position != startPoint);
+                            hit = moveVCheck(crushDir.Y, Position != startPoint);
                         }
 
                         // ... but don't actually move.
@@ -360,7 +377,7 @@ namespace Celeste.Mod.JungleHelper {
 
             crushDir = Vector2.Zero;
             turnOffImages();
-            face.Play("idle", false, false);
+            face.Play(face.CurrentAnimationID.Replace("hit_", "stop_"), false, false);
             Audio.Play("event:/game/06_reflection/crushblock_rest", Center);
             StartShaking(0.2f);
             yield return 0.2f;
@@ -389,7 +406,7 @@ namespace Celeste.Mod.JungleHelper {
             return false;
         }
 
-        private bool MoveVCheck(float amount, bool breakDashBlocks) {
+        private bool moveVCheck(float amount, bool breakDashBlocks) {
             if (MoveVCollideSolidsAndBounds(level, amount, breakDashBlocks, null)) {
                 if (amount < 0f && Top <= level.Bounds.Top) {
                     return true;
@@ -408,6 +425,16 @@ namespace Celeste.Mod.JungleHelper {
                     }
                     return true;
                 }
+            }
+            return false;
+        }
+
+        // returns true if the Kevin was refilled, false if it didn't need refilling
+        public bool Refill() {
+            if (!refilled) {
+                refilled = true;
+                activeOverlay.Visible = true;
+                return true;
             }
             return false;
         }
@@ -431,8 +458,12 @@ namespace Celeste.Mod.JungleHelper {
         private bool isHit = false;
 
         private Sprite face;
+        private Image activeOverlay;
 
-        private string nextFaceDirection;
+        private bool refilled = true;
+
+        private bool canMoveHorizontally;
+        private bool canMoveVertically;
 
         private List<Image> idleImages;
         private List<Image> activeTopImages;

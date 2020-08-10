@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BouncyShroomEntity.cs" />
+    <Compile Include="RemoteKevinRefill.cs" />
     <Compile Include="SlopedColliderWithRectangles.cs" />
     <Compile Include="CircleColliderWithRectangles.cs" />
     <Compile Include="ClimbableOneWayPlatform.cs" />
