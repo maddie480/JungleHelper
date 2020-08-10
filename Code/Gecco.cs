@@ -84,7 +84,7 @@ namespace Celeste.Mod.JungleHelper {
 
         private Level level;
 
-        private Vector2[] nodes;
+        private Vector2 node;
 
         private StaticMover staticMover;
         public float range;
@@ -98,9 +98,9 @@ namespace Celeste.Mod.JungleHelper {
         public string controls;
         public bool left = false;
 
-        public Gecco(Vector2 position, string geckoId,bool onlyOnce,string info, string controls,bool hostile, bool showTutorial,bool left ,float range, float delay): base(position) {
+        public Gecco(Vector2 position, string geckoId,bool onlyOnce,string info, string controls,bool hostile, bool showTutorial,bool left, Vector2 node, float delay): base(position) {
 
-            geckoId = geckoId;
+            this.geckoId = geckoId;
             this.onlyOnce = onlyOnce;
             this.info = info;
             this.controls = controls;
@@ -114,7 +114,6 @@ namespace Celeste.Mod.JungleHelper {
             Sprite.Rotation = -1.5f;
             Sprite.UseRawDeltaTime = true;
             this.left = left;
-            this.range = range;
             if (showTutorial){
                 Add(Light = new VertexLight(new Vector2(0f, -8f), Color.White, 1f, 8, 32));
             }
@@ -133,8 +132,7 @@ namespace Celeste.Mod.JungleHelper {
         }
 
         public Gecco(EntityData data, Vector2 offset)
-            : this(data.Position + offset,data.Attr("geckoId"),data.Bool("onlyOnce"),data.Attr("info"), data.Attr("controls"), data.Bool("hostile", false), data.Bool("showTutorial", false), data.Bool("left", false), data.Float("range", 20), data.Float("delay",0.5f)) {
-           
+            : this(data.Position + offset,data.Attr("geckoId"),data.Bool("onlyOnce"),data.Attr("info"), data.Attr("controls"), data.Bool("hostile", false), data.Bool("showTutorial", false), data.Bool("left", false), data.Nodes[0]+offset, data.Float("delay",0.5f)) {
             if (data.Bool("showTutorial")){
                 geckoId = data.Attr("geckoId");
                 onlyOnce = data.Bool("onlyOnce");
@@ -230,12 +228,12 @@ namespace Celeste.Mod.JungleHelper {
             while (p != null) {
                 if (moving) {
                     Sprite.Play("walk");
-                    Sprite.Scale.X = -1;
+                    Sprite.Scale.X = 1;
                     Collider.CenterY = 0;
                 }
-                while (Position != StartPosition + new Vector2(0, -range)) {
+                while (Position != node) {
                     yield return null;
-                    Y = Calc.Approach(Y, StartPosition.Y - range, 15f * Engine.DeltaTime);
+                    Position = Vector2.Lerp(Position, node, 20f * Engine.DeltaTime);
                     if (!moving || CollideFirst<Solid>(Position + new Vector2(0, -15f * Engine.DeltaTime)) != null) {
                         break;
                     }
@@ -245,28 +243,13 @@ namespace Celeste.Mod.JungleHelper {
                 yield return delay;
                 if (moving) {
                     Sprite.Play("walk");
-                    Sprite.Scale.X = 1;
-                    Collider.CenterY = 4;
-                }
-                while (Position != StartPosition + new Vector2(0, 2 * range)) {
-                    yield return null;
-                    Y = Calc.Approach(Y, StartPosition.Y + 2 * range, 20f * Engine.DeltaTime);
-                    if (!moving || CollideFirst<Solid>(Position + new Vector2(0, 20f * Engine.DeltaTime)) != null) {
-                        break;
-                    }
-                }
-                if (moving)
-                    Idle();
-                yield return delay;
-                if (moving) {
-                    Sprite.Play("walk");
                     Sprite.Scale.X = -1;
-                    Collider.CenterY = 0;
+                    Collider.CenterY = 4;
                 }
                 while (Position != StartPosition) {
                     yield return null;
-                    Y = Calc.Approach(Y, StartPosition.Y, 15f * Engine.DeltaTime);
-                    if (!moving || CollideFirst<Solid>(Position + new Vector2(0, -15f * Engine.DeltaTime)) != null) {
+                    Position = Vector2.Lerp(Position, StartPosition, 20f * Engine.DeltaTime);
+                    if (!moving || CollideFirst<Solid>(Position + new Vector2(0, 20f * Engine.DeltaTime)) != null) {
                         break;
                     }
                 }

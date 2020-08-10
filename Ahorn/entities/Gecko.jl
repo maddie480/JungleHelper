@@ -1,12 +1,16 @@
 module JungleHelperGecko
 
 using ..Ahorn, Maple
-
-@mapdef Entity "JungleHelper/Gecko" Gecco(x::Integer, y::Integer,geckoId::String="", onlyOnce::Bool=false, info::String="TUTORIAL_CLIMB", controls::String="Grab", hostile::Bool=false,left::Bool=false, showTutorial::Bool=false, range::Number=20.0, delay::Number=0.5)
+@pardef Gecco(x1::Integer, y1::Integer, x2::Integer=x1, y2::Integer=y1+ 16,geckoId::String="", onlyOnce::Bool=false, info::String="TUTORIAL_CLIMB", controls::String="Grab", hostile::Bool=false,left::Bool=false, showTutorial::Bool=false, delay::Number=0.5) = Entity("JungleHelper/Gecko", x=x1, y=y1, nodes=Tuple{Int, Int}[(x2, y2)], geckoId=geckoId, onlyOnce=onlyOnce, info=info, controls=controls, hostile=hostile,left=left, showTutorial=showTutorial)
 const placements = Ahorn.PlacementDict(
     "Gecko (Jungle Helper)" => Ahorn.EntityPlacement(
         Gecco,
-        "rectangle"
+        "rectangle",
+        function(entity)
+            x, y = Int(entity.data["x"]), Int(entity.data["y"])
+            entity.data["x"], entity.data["y"] = x + width, y+25
+            entity.data["nodes"] = [(x, y)]
+        end
 
     ),
     "Gecko (Jungle Helper) (Left)" => Ahorn.EntityPlacement(
@@ -14,10 +18,17 @@ const placements = Ahorn.PlacementDict(
         "rectangle",
         Dict{String, Any}(
             "left" => true,
-        )
+        ),
+        function(entity)
+            x, y = Int(entity.data["x"]), Int(entity.data["y"])
+            entity.data["x"], entity.data["y"] = x, y+25
+            entity.data["nodes"] = [(x, y)]
+        end
 
     )
 )
+
+Ahorn.nodeLimits(entity::Gecco) = 1, 1
 sprite = "objects/gecko/hostile/idle00"
 function Ahorn.selection(entity::Gecco)
     

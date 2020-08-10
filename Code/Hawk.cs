@@ -52,7 +52,7 @@ namespace Celeste.Mod.JungleHelper {
 
         public Hawk(EntityData data, Vector2 levelOffset):base(data.Position+levelOffset) {
             entityData = data;
-            Position = data.Position;
+            Position = data.Position+levelOffset;
             playerSpeed = data.Float("mainSpeed");
             playerlessSpeed = data.Float("slowerSpeed");
             Add(sprite = JungleHelperModule.SpriteBank.Create("hawk"));
@@ -64,15 +64,16 @@ namespace Celeste.Mod.JungleHelper {
             base.Collider = new Circle(16f);
             Add(collid = new PlayerCollider(OnPlayer));
             Add(moveSfx = new SoundSource());
-            Add(new TransitionListener {
-                OnOut = delegate (float t) {
-                    sprite.Color = Color.White * (1f - Calc.Map(t, 0f, 0.4f));
-                }
-            });
+            //Add(new TransitionListener {
+            //    OnOut = delegate (float t) {
+            //        sprite.Color = Color.White * (1f - Calc.Map(t, 0f, 0.4f));
+            //    }
+            //});
         }
 
         public override void Awake(Scene scene) {
             base.Awake(scene);
+            Console.WriteLine(Position);
             Player entity = scene.Tracker.GetEntity<Player>();
             if (entity != null && entity.X > base.X) {
                 RemoveSelf();
