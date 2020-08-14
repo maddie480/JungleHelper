@@ -65,7 +65,8 @@ namespace Celeste.Mod.JungleHelper {
 
                     Add(new StaticMover() {
                         OnShake = OnShake,
-                        SolidChecker = s => s.CollideRect(new Rectangle((int) Position.X - 10, (int) Position.Y + 8, 12, 1))
+                        SolidChecker = s => s.CollideRect(new Rectangle((int) Position.X - 10, (int) Position.Y + 8, 12, 1)),
+                        JumpThruChecker = jt => jt.CollideRect(new Rectangle((int) (Position.X - 10), (int) Position.Y + 8, 12, 1))
                     });
                     break;
                 case Directions.Right:
@@ -83,7 +84,8 @@ namespace Celeste.Mod.JungleHelper {
 
                     Add(new StaticMover() {
                         OnShake = OnShake,
-                        SolidChecker = s => s.CollideRect(new Rectangle((int) Position.X - 16, (int) Position.Y + 8, 16, 1))                        
+                        SolidChecker = s => s.CollideRect(new Rectangle((int) Position.X - 16, (int) Position.Y + 8, 16, 1)),
+                        JumpThruChecker = jt => jt.CollideRect(new Rectangle((int) (Position.X - 16), (int) Position.Y + 8, 16, 1))
                     });
                     break;
                 case Directions.Left:
@@ -100,7 +102,8 @@ namespace Celeste.Mod.JungleHelper {
                     yeetSpeedCalcX = -yeetx;
                     Add(new StaticMover() {
                         OnShake = OnShake,
-                        SolidChecker = s => s.CollideRect(new Rectangle((int) Position.X - 8, (int) Position.Y + 8, 16, 1))
+                        SolidChecker = s => s.CollideRect(new Rectangle((int) Position.X - 8, (int) Position.Y + 8, 16, 1)),
+                        JumpThruChecker = jt => jt.CollideRect(new Rectangle((int) (Position.X - 8), (int) Position.Y + 8, 16, 1))
                     });
                     break;
             }
