@@ -71,14 +71,6 @@ namespace Celeste.Mod.JungleHelper {
             //});
         }
 
-        public override void Awake(Scene scene) {
-            base.Awake(scene);
-            Console.WriteLine(Position);
-            Player entity = scene.Tracker.GetEntity<Player>();
-            if (entity != null && entity.X > base.X) {
-                RemoveSelf();
-            }
-        }
         public override void Added(Scene scene) {
             base.Added(scene);
         }
