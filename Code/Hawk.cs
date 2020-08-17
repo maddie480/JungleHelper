@@ -22,8 +22,6 @@ namespace Celeste.Mod.JungleHelper {
 
         public static ParticleType P_Feather;
 
-        public const float SkipDist = 100f;
-
         public static readonly Vector2 FlingSpeed = new Vector2(380f, -100f);
 
         private Vector2 spriteOffset = new Vector2(0f, 8f);
@@ -74,10 +72,7 @@ namespace Celeste.Mod.JungleHelper {
         public override void Added(Scene scene) {
             base.Added(scene);
         }
-        private void Skip() {
-            state = States.Move;
-            Add(new Coroutine(MoveRoutine()));
-        }
+
 
         private void OnPlayer(Player player) {
             if ((CollideFirst<Solid>(Position) == null) && (state == States.Wait || state == States.Move)) {
@@ -117,9 +112,7 @@ namespace Celeste.Mod.JungleHelper {
                     break;
                 case States.Wait: {
                         Player entity = base.Scene.Tracker.GetEntity<Player>();
-                        if (entity != null && entity.X - base.X >= 100f) {
-                            Skip();
-                        } else if (entity != null) {
+                        if (entity != null) {
                             float scaleFactor = Calc.ClampedMap((entity.Center - Position).Length(), 16f, 64f, 12f, 0f);
                             Vector2 value = (entity.Center - Position).SafeNormalize();
                         }
@@ -146,6 +139,8 @@ namespace Celeste.Mod.JungleHelper {
                 if (player != null){
                     if (player.StateMachine.State == 11) {
                         player.StateMachine.State = 0;
+                        player.DummyGravity = true;
+                        player.DummyFriction = true;
                         player.ForceCameraUpdate = false;
                         player.DummyAutoAnimate = true;
                     }
@@ -160,33 +155,52 @@ namespace Celeste.Mod.JungleHelper {
             sprite.Scale.X = 1f;
             while (state == States.Fling) {
                 yield return null;
+                if (player == null)
+                    yield break;
                 Y = Calc.Approach(Y, origY, 20f * Engine.DeltaTime);
                 if (hawkSpeed <= playerSpeed) {
                     hawkSpeed = Calc.Approach(hawkSpeed, playerSpeed, playerSpeed/10);
                 }
                 X += hawkSpeed * Engine.DeltaTime;
                 player.StateMachine.State = 11;
+                player.DummyMoving = false;
+                player.DummyMaxspeed = false;
+                player.DummyGravity = false;
+                player.DummyFriction = false;
                 player.ForceCameraUpdate = true;
                 player.DummyAutoAnimate = false;
                 player.Sprite.Play("fallSlow_carry");
                 player.X = X;
                 player.Y = Y + 16;
                 if (Input.Jump.Pressed) {
+                    if (player == null)
+                        yield break;
                     player.StateMachine.State = 0;
+                    player.FinishFlingBird();
                     break;
                 }
                 if (player.CollideFirst<Solid>(player.Position + new Vector2(hawkSpeed * Engine.DeltaTime, 0)) != null) 
                 {
+                    if (player == null)
+                        yield break;
                     player.StateMachine.State = 0;
                     break;
                 }
                 if (Input.Dash.Pressed && player.CanDash) {
+                    if (player == null)
+                        yield break;
                     player.StateMachine.State = 2;
+                    player.Dashes -= 1;
                     break;
                 }
+                
             }
+            if (player == null)
+                yield break;
             player.ForceCameraUpdate = false;
             player.DummyAutoAnimate = true;
+            player.DummyMaxspeed = true;
+            player.DummyMoving = true;
             Add(new Coroutine(HitboxDelay()));
             Add(new Coroutine(MoveRoutine()));
         }
