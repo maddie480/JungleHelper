@@ -83,21 +83,6 @@ namespace Celeste.Mod.JungleHelper {
         public override void Update() {
             base.Update();
 
-            if (crushDir == Vector2.Zero) {
-                face.Position = new Vector2(Width, Height) / 2f;
-                if (CollideCheck<Player>(Position + new Vector2(-1f, 0f))) {
-                    face.X -= 1f;
-                } else {
-                    if (CollideCheck<Player>(Position + new Vector2(1f, 0f))) {
-                        face.X += 1f;
-                    } else {
-                        if (CollideCheck<Player>(Position + new Vector2(0f, -1f))) {
-                            face.Y -= 1f;
-                        }
-                    }
-                }
-            }
-
             if (currentMoveLoopSfx != null) {
                 currentMoveLoopSfx.Param("submerged", (Submerged ? 1 : 0));
             }
