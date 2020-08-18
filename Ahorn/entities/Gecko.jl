@@ -9,10 +9,9 @@ const placements = Ahorn.PlacementDict(
         Dict{String, Any}(),
         function(entity)
             x, y = Int(entity.data["x"]), Int(entity.data["y"])
-            entity.data["x"], entity.data["y"] = x + width, y+25
+            entity.data["x"], entity.data["y"] = x, y + 24
             entity.data["nodes"] = [(x, y)]
         end
-
     ),
     "Gecko (Jungle Helper) (Left)" => Ahorn.EntityPlacement(
         Gecco,
@@ -22,7 +21,7 @@ const placements = Ahorn.PlacementDict(
         ),
         function(entity)
             x, y = Int(entity.data["x"]), Int(entity.data["y"])
-            entity.data["x"], entity.data["y"] = x, y+25
+            entity.data["x"], entity.data["y"] = x, y + 24
             entity.data["nodes"] = [(x, y)]
         end
 
@@ -30,34 +29,48 @@ const placements = Ahorn.PlacementDict(
 )
 
 Ahorn.nodeLimits(entity::Gecco) = 1, 1
-sprite = "objects/gecko/hostile/idle00"
+
 function Ahorn.selection(entity::Gecco)
-    
     sprite = (get(entity.data, "hostile", false) ? "objects/gecko/hostile/idle00" : "objects/gecko/normal/idle00")
-    scaleX = (get(entity.data, "left", false) ? 1 : -1)
     x, y = Ahorn.position(entity)
-    x -= 8
+    nx, ny = Int.(entity.nodes[1])
+    
     if get(entity.data, "left", false)
-        res = Ahorn.Rectangle(x,y,12,24)
+        res = Ahorn.Rectangle[Ahorn.Rectangle(x - 8, y - 16, 12, 24), Ahorn.Rectangle(nx - 8, ny - 16, 12, 24)]
     else
-        res = Ahorn.Rectangle(x+4,y,12,24)
+        res = Ahorn.Rectangle[Ahorn.Rectangle(x - 4, y - 16, 12, 24), Ahorn.Rectangle(nx - 4, ny - 16, 12, 24)]
     end
     return res
 end
 
 function Ahorn.renderSelectedAbs(ctx::Ahorn.Cairo.CairoContext, entity::Gecco)
+    sprite = (get(entity.data, "hostile", false) ? "objects/gecko/hostile/idle00" : "objects/gecko/normal/idle00")
+    scaleX = (get(entity.data, "left", false) ? 1 : -1)
     px, py = Ahorn.position(entity)
+    nx, ny = Int.(entity.nodes[1])
+
+    if get(entity.data, "left", false)
+        Ahorn.drawSprite(ctx, sprite, nx + 26, ny - 8, sx = scaleX, rot = pi * 0.5)
+    else
+        Ahorn.drawSprite(ctx, sprite, nx - 26, ny - 8, sx = scaleX, rot = pi * 0.5)
+    end
+    
+    if get(entity.data, "left", false)
+        Ahorn.drawArrow(ctx, px - 1, py + 4, nx - 1, ny - 4, Ahorn.colors.selection_selected_fc, headLength=6)
+    else
+        Ahorn.drawArrow(ctx, px + 3, py + 4, nx + 3, ny - 4, Ahorn.colors.selection_selected_fc, headLength=6)
+    end
 end
 
 function Ahorn.renderAbs(ctx::Ahorn.Cairo.CairoContext, entity::Gecco, room::Maple.Room)
     sprite = (get(entity.data, "hostile", false) ? "objects/gecko/hostile/idle00" : "objects/gecko/normal/idle00")
     scaleX = (get(entity.data, "left", false) ? 1 : -1)
     x, y = Ahorn.position(entity)
-    x -= 8
+	
     if get(entity.data, "left", false)
-        Ahorn.drawSprite(ctx, sprite, x+34, y+8, sx=scaleX, rot = pi *0.5)
+        Ahorn.drawSprite(ctx, sprite, x + 26, y - 8, sx = scaleX, rot = pi * 0.5)
     else
-        Ahorn.drawSprite(ctx, sprite, x-18, y+8, sx=scaleX, rot = pi *0.5)
+        Ahorn.drawSprite(ctx, sprite, x - 26, y - 8, sx = scaleX, rot = pi * 0.5)
     end
 end
 
