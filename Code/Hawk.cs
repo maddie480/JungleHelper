@@ -7,6 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Celeste.Mod.Entities;
 using FMOD;
+using MonoMod.Utils;
 
 namespace Celeste.Mod.JungleHelper {
     [CustomEntity("JungleHelper/Hawk")]
@@ -176,7 +177,8 @@ namespace Celeste.Mod.JungleHelper {
                     if (player == null)
                         yield break;
                     player.StateMachine.State = 0;
-                    player.FinishFlingBird();
+                    playerLaunch(player);
+                    player.Speed += new Vector2(hawkSpeed * 0.7f, 0);
                     break;
                 }
                 if (player.CollideFirst<Solid>(player.Position + new Vector2(hawkSpeed * Engine.DeltaTime, 0)) != null) 
@@ -203,6 +205,17 @@ namespace Celeste.Mod.JungleHelper {
             player.DummyMoving = true;
             Add(new Coroutine(HitboxDelay()));
             Add(new Coroutine(MoveRoutine()));
+        }
+
+        private void playerLaunch(Player player) {
+            DynData<Player> dyndee = new DynData<Player>(player); 
+            player.StateMachine.State = 0;
+            //player.AutoJump = true;
+            dyndee.Set<int>("forceMoveX", 1);
+            dyndee.Set<float>("forceMoveXTimer", 0.2f);
+            //dyndee.Set<float>("varJumpTimer", 0.2f);
+            //dyndee.Set<float>("varJumpSpeed", player.Speed.Y);
+            dyndee.Set<bool>("launched", true);
         }
 
         private IEnumerator MoveRoutine() {
