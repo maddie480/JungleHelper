@@ -1,0 +1,22 @@
+Mountain:
+    Idle:
+        Position: [ 3.139, 0.830, 6.886 ]
+        Target: [ 1.843, 1.388, 5.469 ]
+    Select:
+        Position: [ 2.912, 1.000, 6.417 ]
+        Target: [ 1.607, 1.443, 5.119 ]
+    Zoom:
+        Position: [ 2.478, 1.124, 5.717 ]
+        Target: [ 1.126, 1.564, 4.311 ]
+    Cursor: [ 1.436, 1.230, 5.042 ]
+    State: 0
+CompleteScreen:
+    Atlas: "Endscreens/ITJ"
+    Start: [ 0.0, 0.0 ]
+    Center: [ 0.0, 0.0 ]
+    Offset: [ 0.0, 0.0 ]
+    Layers:
+      - Type: "layer"
+        Images: [ "Ch3End" ]
+        Position: [ 0.0, 0.0 ]
+        Scroll: [ 0.0 ]
