@@ -82,12 +82,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BouncyShroomEntity.cs" />
+    <Compile Include="GeckoTutorialTrigger.cs" />
     <Compile Include="RemoteKevinRefill.cs" />
     <Compile Include="SlopedColliderWithRectangles.cs" />
     <Compile Include="CircleColliderWithRectangles.cs" />
     <Compile Include="ClimbableOneWayPlatform.cs" />
-    <Compile Include="Gecco.cs" />
-    <Compile Include="GeckoTutorial.cs" />
+    <Compile Include="Gecko.cs" />
     <Compile Include="Hawk.cs" />
     <Compile Include="Cobweb.cs" />
     <Compile Include="JungleHelperModule.cs" />

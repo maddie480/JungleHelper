@@ -1,10 +1,12 @@
 module JungleHelperGecko
 
 using ..Ahorn, Maple
-@pardef Gecco(x1::Integer, y1::Integer, x2::Integer=x1, y2::Integer=y1+ 16,geckoId::String="", onlyOnce::Bool=false, info::String="TUTORIAL_CLIMB", controls::String="Grab", hostile::Bool=false,left::Bool=false, showTutorial::Bool=false, delay::Number=0.5) = Entity("JungleHelper/Gecko", x=x1, y=y1, nodes=Tuple{Int, Int}[(x2, y2)], geckoId=geckoId, onlyOnce=onlyOnce, info=info, controls=controls, hostile=hostile,left=left, showTutorial=showTutorial)
+@pardef Gecko(x1::Integer, y1::Integer, x2::Integer=x1, y2::Integer=y1+ 16, hostile::Bool=false, left::Bool=false, delay::Number=0.5, geckoId::String="geckoId", info::String="", controls::String="") =
+    Entity("JungleHelper/Gecko", x=x1, y=y1, nodes=Tuple{Int, Int}[(x2, y2)], hostile=hostile, left=left, delay=delay, geckoId=geckoId, info=info, controls=controls)
+    
 const placements = Ahorn.PlacementDict(
     "Gecko (Jungle Helper)" => Ahorn.EntityPlacement(
-        Gecco,
+        Gecko,
         "rectangle",
         Dict{String, Any}(),
         function(entity)
@@ -13,8 +15,8 @@ const placements = Ahorn.PlacementDict(
             entity.data["nodes"] = [(x, y)]
         end
     ),
-    "Gecko (Jungle Helper) (Left)" => Ahorn.EntityPlacement(
-        Gecco,
+    "Gecko (Left) (Jungle Helper)" => Ahorn.EntityPlacement(
+        Gecko,
         "rectangle",
         Dict{String, Any}(
             "left" => true,
@@ -28,9 +30,13 @@ const placements = Ahorn.PlacementDict(
     )
 )
 
-Ahorn.nodeLimits(entity::Gecco) = 1, 1
+Ahorn.nodeLimits(entity::Gecko) = 1, 1
 
-function Ahorn.selection(entity::Gecco)
+Ahorn.editingOptions(entity::Gecko) = return Dict{String, Any}(
+    "info" => Maple.everest_bird_tutorial_tutorials
+)
+
+function Ahorn.selection(entity::Gecko)
     sprite = (get(entity.data, "hostile", false) ? "objects/gecko/hostile/idle00" : "objects/gecko/normal/idle00")
     x, y = Ahorn.position(entity)
     nx, ny = Int.(entity.nodes[1])
@@ -43,7 +49,7 @@ function Ahorn.selection(entity::Gecco)
     return res
 end
 
-function Ahorn.renderSelectedAbs(ctx::Ahorn.Cairo.CairoContext, entity::Gecco)
+function Ahorn.renderSelectedAbs(ctx::Ahorn.Cairo.CairoContext, entity::Gecko)
     sprite = (get(entity.data, "hostile", false) ? "objects/gecko/hostile/idle00" : "objects/gecko/normal/idle00")
     scaleX = (get(entity.data, "left", false) ? 1 : -1)
     px, py = Ahorn.position(entity)
@@ -62,11 +68,11 @@ function Ahorn.renderSelectedAbs(ctx::Ahorn.Cairo.CairoContext, entity::Gecco)
     end
 end
 
-function Ahorn.renderAbs(ctx::Ahorn.Cairo.CairoContext, entity::Gecco, room::Maple.Room)
+function Ahorn.renderAbs(ctx::Ahorn.Cairo.CairoContext, entity::Gecko, room::Maple.Room)
     sprite = (get(entity.data, "hostile", false) ? "objects/gecko/hostile/idle00" : "objects/gecko/normal/idle00")
     scaleX = (get(entity.data, "left", false) ? 1 : -1)
     x, y = Ahorn.position(entity)
-	
+    
     if get(entity.data, "left", false)
         Ahorn.drawSprite(ctx, sprite, x + 26, y - 8, sx = scaleX, rot = pi * 0.5)
     else
