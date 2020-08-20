@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Celeste.Mod.Entities;
 using FMOD;
 using MonoMod.Utils;
+using System.Linq;
 
 namespace Celeste.Mod.JungleHelper {
     [CustomEntity("JungleHelper/Hawk")]
@@ -187,7 +188,14 @@ namespace Celeste.Mod.JungleHelper {
                         break;
                     }
                 } catch (System.NullReferenceException) {
-                    yield break;
+                    foreach (PlayerDeadBody corpse in SceneAs<Level>().Entities.OfType<PlayerDeadBody>()) {
+                        DynData<PlayerDeadBody> karen = new DynData<PlayerDeadBody>(corpse);
+                        Console.WriteLine(karen.Get<Player>("player").StateMachine.State);
+                        karen.Get<Player>("player").DummyAutoAnimate = true;
+                        karen.Get<Player>("player").Sprite.Play("deadside");
+                        karen.Get<Player>("player").StateMachine.State = 0;
+                    }
+                        yield break;
                 }
                 if (player == null)
                     yield break;
