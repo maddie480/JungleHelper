@@ -27,6 +27,11 @@ jobs:
       with:
         name: main
         path: Code/bin/Debug/JungleHelper.dll
+        
+    - name: git fetch
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ github.ref }}
 
     - name: Publish release
       if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/gh-actions'
@@ -45,8 +50,7 @@ jobs:
         fi
         
         # Is the commit being build still the latest commit on the branch?
-        GITHUB_BRANCH=$(echo $GITHUB_REF | sed s,refs/heads/,,)
-        if (curl https://api.github.com/repos/max4805/JungleHelper/git/ref/heads/$GITHUB_BRANCH | grep $GITHUB_SHA)
+        if (git rev-parse HEAD | grep $GITHUB_SHA)
         then
             # Was the latest ping issued less than 10 minutes ago?
             if (curl --fail $RATE_LIMITING_API)
@@ -66,5 +70,5 @@ jobs:
                 '{embeds: [{title: "Install \($zipname)", url: "https://0x0ade.ga/twoclick/?\($url)", description: $msg, fields: [{name: "Changes", value: $change_embed}]}]}' \
             )" "$DISCORD_WEBHOOK"
         else
-            echo "current commit $GITHUB_SHA is not the latest commit on branch $GITHUB_BRANCH, skipping"
+            echo "current commit $GITHUB_SHA is not the latest commit on branch, skipping"
         fi
