@@ -32,6 +32,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         ref: ${{ github.ref }}
+        path: latest-repo
 
     - name: Publish release
       if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/gh-actions'
@@ -50,7 +51,7 @@ jobs:
         fi
         
         # Is the commit being build still the latest commit on the branch?
-        if (git rev-parse HEAD | grep $GITHUB_SHA)
+        if ((cd latest-repo && git rev-parse HEAD) | grep $GITHUB_SHA)
         then
             # Was the latest ping issued less than 10 minutes ago?
             if (curl --fail $RATE_LIMITING_API)
