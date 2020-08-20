@@ -181,13 +181,16 @@ namespace Celeste.Mod.JungleHelper {
                     player.Speed += new Vector2(hawkSpeed * 0.7f, 0);
                     break;
                 }
-                if (player.CollideFirst<Solid>(player.Position + new Vector2(hawkSpeed * Engine.DeltaTime, 0)) != null) 
-                {
-                    if (player == null)
-                        yield break;
-                    player.StateMachine.State = 0;
-                    break;
+                try {
+                    if (player.CollideFirst<Solid>(player.Position + new Vector2(hawkSpeed * Engine.DeltaTime, 0)) != null) {
+                        player.StateMachine.State = 0;
+                        break;
+                    }
+                } catch (System.NullReferenceException) {
+                    yield break;
                 }
+                if (player == null)
+                    yield break;
                 if (Input.Dash.Pressed && player.CanDash) {
                     if (player == null)
                         yield break;
