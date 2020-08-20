@@ -11,3 +11,5 @@ Contains the following entities so far:
 - **Slide Block**: a Kevin block that moves in the direction of your dash. Can either stop after moving by its own width/height, or continue until it hits a wall.
 - **Invisible Jumpthru**: a jumpthru that is invisible in-game, but visible in Ahorn.
 - **Spider Boss**: a spider that falls down from the ceiling and kills the player if it hits them. Comes in blue, purple and red variants, with varying speeds.
+
+_This list is highly outdated._
