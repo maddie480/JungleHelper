@@ -1,144 +1,103 @@
 ﻿
-using Celeste;
 using Microsoft.Xna.Framework;
 using Monocle;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Celeste.Mod.Entities;
-using FMOD;
 using MonoMod.Utils;
-using System.Linq;
+using Celeste.Mod.JungleHelper.Components;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/Hawk")]
     public class Hawk : Entity {
-
         private enum States {
             Wait,
             Fling,
-            Move,
-            WaitForLightningClear,
-            Leaving
+            Move
         }
 
-        public static ParticleType P_Feather;
-
-        public static readonly Vector2 FlingSpeed = new Vector2(380f, -100f);
-
-        private Vector2 spriteOffset = new Vector2(0f, 8f);
+        private static readonly Vector2 spriteOffset = new Vector2(0f, 8f);
 
         private Sprite sprite;
 
-        private States state;
-        private float origY;
+        private States state = States.Wait;
+        private float initialY;
         private Vector2 flingSpeed;
-
-        private Vector2 flingTargetSpeed;
 
         private float flingAccel;
 
-        private Color trailColor = Calc.HexToColor("639bff");
-
-        private EntityData entityData;
-
-        private SoundSource moveSfx;
-        public bool LightningRemoved;
-        private SineWave sine;
         private float hawkSpeed;
-        float playerSpeed;
-        float playerlessSpeed;
-        private PlayerCollider collid;
+        private readonly float speedWithPlayer;
+        private readonly float speedWithoutPlayer;
+        private PlayerCollider playerCollider;
 
-        public Hawk(EntityData data, Vector2 levelOffset):base(data.Position+levelOffset) {
-            entityData = data;
-            Position = data.Position+levelOffset;
-            playerSpeed = data.Float("mainSpeed");
-            playerlessSpeed = data.Float("slowerSpeed");
+        public Hawk(EntityData data, Vector2 levelOffset) : base(data.Position + levelOffset) {
+            Position = data.Position + levelOffset;
+            speedWithPlayer = data.Float("mainSpeed");
+            speedWithoutPlayer = data.Float("slowerSpeed");
             Add(sprite = JungleHelperModule.SpriteBank.Create("hawk"));
             sprite.Play("hover");
             sprite.Position = spriteOffset;
             sprite.OnFrameChange = delegate {
                 BirdNPC.FlapSfxCheck(sprite);
             };
-            base.Collider = new Circle(16f);
-            Add(collid = new PlayerCollider(OnPlayer));
-            Add(moveSfx = new SoundSource());
-            //Add(new TransitionListener {
-            //    OnOut = delegate (float t) {
-            //        sprite.Color = Color.White * (1f - Calc.Map(t, 0f, 0.4f));
-            //    }
-            //});
+            Collider = new CircleColliderWithRectangles(16);
+            Add(playerCollider = new PlayerCollider(OnPlayer));
         }
-
-        public override void Added(Scene scene) {
-            base.Added(scene);
-        }
-
 
         private void OnPlayer(Player player) {
             if ((CollideFirst<Solid>(Position) == null) && (state == States.Wait || state == States.Move)) {
-                origY = Y;
+                initialY = Y;
                 flingSpeed = player.Speed * 0.4f;
                 flingSpeed.Y = 120f;
-                flingTargetSpeed = Vector2.Zero;
                 flingAccel = 1000f;
                 player.Speed = Vector2.Zero;
                 state = States.Fling;
                 if (hawkSpeed == 0f) {
                     sprite.Play("throw");
                 }
-                Add(new Coroutine(DoFlingRoutine(player)));
+                Add(new Coroutine(doFlingRoutine(player)));
             }
         }
-        public IEnumerator HitboxDelay() {
-            collid.Active = false;
-            Collider = null;
+
+        private IEnumerator hitboxDelay() {
+            Collidable = false;
             yield return 0.4f;
-            collid.Active = true;
-            Collider = new Circle(16f);
-            yield break;
+            Collidable = true;
         }
+
         public override void Update() {
             base.Update();
-            if (CollideFirst<Solid>(Position + new Vector2(hawkSpeed * Engine.DeltaTime, 0)) != null) {
-                collid.Active = false;
-            }else collid.Active = true;
-            
-            if (state != 0) {
+
+            if (state != States.Wait) {
                 sprite.Position = Calc.Approach(sprite.Position, spriteOffset, 32f * Engine.DeltaTime);
             }
+
             switch (state) {
                 case States.Move:
-                    X += playerlessSpeed * Engine.DeltaTime;
+                    // move without player
+                    X += speedWithoutPlayer * Engine.DeltaTime;
                     break;
-                case States.Wait: {
-                        Player entity = base.Scene.Tracker.GetEntity<Player>();
-                        if (entity != null) {
-                            float scaleFactor = Calc.ClampedMap((entity.Center - Position).Length(), 16f, 64f, 12f, 0f);
-                            Vector2 value = (entity.Center - Position).SafeNormalize();
-                        }
-                        break;
-                    }
+                case States.Wait:
+                    // wait for the player
+                    break;
                 case States.Fling:
+                    // carry the player: apply the momentum from the player and drag it progressively to 0
                     if (flingAccel > 0f) {
-                        flingSpeed = Calc.Approach(flingSpeed, flingTargetSpeed, flingAccel * Engine.DeltaTime);
+                        flingSpeed = Calc.Approach(flingSpeed, Vector2.Zero, flingAccel * Engine.DeltaTime);
                     }
                     Position += flingSpeed * Engine.DeltaTime;
                     break;
-                case States.WaitForLightningClear:
-                    if (base.Scene.Entities.FindFirst<Lightning>() == null || base.X > (float) (base.Scene as Level).Bounds.Right) {
-                        sprite.Scale.X = 1f;
-                        state = States.Leaving;
-                        Add(new Coroutine(LeaveRoutine()));
-                    }
-                    break;
             }
+
+            // don't catch the player if the hawk is inside a solid.
+            playerCollider.Active = !CollideCheck<Solid>();
+
             if (X >= (SceneAs<Level>().Bounds.Right + 5)) {
+                // bird is off-screen! drop the player.
                 RemoveSelf();
 
                 Player player = SceneAs<Level>().Tracker.GetEntity<Player>();
-                if (player != null){
+                if (player != null) {
                     if (player.StateMachine.State == 11) {
                         player.StateMachine.State = 0;
                         player.DummyGravity = true;
@@ -150,20 +109,29 @@ namespace Celeste.Mod.JungleHelper.Entities {
             }
         }
 
-        private IEnumerator DoFlingRoutine(Player player) {
+        private IEnumerator doFlingRoutine(Player player) {
             sprite.Play("fly");
-            Level level = SceneAs<Level>();
+
             hawkSpeed = 0;
             sprite.Scale.X = 1f;
+
             while (state == States.Fling) {
                 yield return null;
-                if (player == null)
-                    yield break;
-                Y = Calc.Approach(Y, origY, 20f * Engine.DeltaTime);
-                if (hawkSpeed <= playerSpeed) {
-                    hawkSpeed = Calc.Approach(hawkSpeed, playerSpeed, playerSpeed/10);
+
+                // stop the fling when player dies.
+                if (player.Dead)
+                    break;
+
+                // drag hawk towards its initial Y position.
+                Y = Calc.Approach(Y, initialY, 20f * Engine.DeltaTime);
+
+                // make speed approach the target speed.
+                if (hawkSpeed != speedWithPlayer) {
+                    hawkSpeed = Calc.Approach(hawkSpeed, speedWithPlayer, speedWithPlayer / 10);
                 }
                 X += hawkSpeed * Engine.DeltaTime;
+
+                // make sure the player is in a dummy state.
                 player.StateMachine.State = 11;
                 player.DummyMoving = false;
                 player.DummyMaxspeed = false;
@@ -171,106 +139,65 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 player.DummyFriction = false;
                 player.ForceCameraUpdate = true;
                 player.DummyAutoAnimate = false;
+                player.Facing = Facings.Right;
                 player.Sprite.Play("fallSlow_carry");
-                player.X = X;
-                player.Y = Y + 16;
+
+                if (player.CollideCheck<Solid>(new Vector2(X, Y + 16))) {
+                    // player is going to be in a wall! drop them.
+                    player.StateMachine.State = 0;
+                    break;
+                }
+
+                // move the player.
+                player.MoveToX(X);
+                player.MoveToY(Y + 16);
+
                 if (Input.Jump.Pressed) {
-                    if (player == null)
-                        yield break;
+                    // player escapes!
                     player.StateMachine.State = 0;
                     playerLaunch(player);
                     player.Speed += new Vector2(hawkSpeed * 0.7f, 0);
                     break;
                 }
-                try {
-                    if (player.CollideFirst<Solid>(player.Position + new Vector2(hawkSpeed * Engine.DeltaTime, 0)) != null) {
-                        player.StateMachine.State = 0;
-                        break;
-                    }
-                } catch (System.NullReferenceException) {
-                    foreach (PlayerDeadBody corpse in SceneAs<Level>().Entities.OfType<PlayerDeadBody>()) {
-                        DynData<PlayerDeadBody> karen = new DynData<PlayerDeadBody>(corpse);
-                        Console.WriteLine(karen.Get<Player>("player").StateMachine.State);
-                        karen.Get<Player>("player").DummyAutoAnimate = true;
-                        karen.Get<Player>("player").Sprite.Play("deadside");
-                        karen.Get<Player>("player").StateMachine.State = 0;
-                    }
-                        yield break;
-                }
-                if (player == null)
-                    yield break;
+
                 if (Input.Dash.Pressed && player.CanDash) {
-                    if (player == null)
-                        yield break;
+                    // player dashes out of hawk, let them do that.
                     player.StateMachine.State = 2;
                     player.Dashes -= 1;
                     break;
                 }
-                
             }
-            if (player == null)
-                yield break;
-            player.ForceCameraUpdate = false;
-            player.DummyAutoAnimate = true;
-            player.DummyMaxspeed = true;
-            player.DummyMoving = true;
-            Add(new Coroutine(HitboxDelay()));
-            Add(new Coroutine(MoveRoutine()));
+
+            if (!player.Dead) {
+                // reset dummy settings to default.
+                player.DummyMoving = false;
+                player.DummyMaxspeed = true;
+                player.DummyGravity = true;
+                player.DummyFriction = true;
+                player.ForceCameraUpdate = false;
+                player.DummyAutoAnimate = true;
+            }
+
+            // get back to the "moving" state.
+            Add(new Coroutine(hitboxDelay()));
+            Add(new Coroutine(moveRoutine()));
         }
 
         private void playerLaunch(Player player) {
-            DynData<Player> dyndee = new DynData<Player>(player); 
+            DynData<Player> playerData = new DynData<Player>(player);
             player.StateMachine.State = 0;
-            //player.AutoJump = true;
-            dyndee.Set<int>("forceMoveX", 1);
-            dyndee.Set<float>("forceMoveXTimer", 0.2f);
-            //dyndee.Set<float>("varJumpTimer", 0.2f);
-            //dyndee.Set<float>("varJumpSpeed", player.Speed.Y);
-            dyndee.Set<bool>("launched", true);
+            playerData.Set("forceMoveX", 1);
+            playerData.Set("forceMoveXTimer", 0.2f);
+            playerData.Set("launched", true);
         }
 
-        private IEnumerator MoveRoutine() {
+        private IEnumerator moveRoutine() {
             sprite.Play("fly");
-            //sprite.Scale.X = 1f;
             sprite.Rotation = 0f;
             sprite.Scale = Vector2.One;
-            //sprite.Scale.X = -1f;
             X += 80f * Engine.DeltaTime;
             yield return 0.1f;
             state = States.Move;
-            if (state == States.Fling) {
-                yield break;
-            }
-        }
-
-        private IEnumerator LeaveRoutine() {
-            sprite.Scale.X = 1f;
-            sprite.Play("fly");
-            Vector2 to = new Vector2((Scene as Level).Bounds.Right + 32, Y);
-            yield return MoveOnCurve(Position, (Position + to) * 0.5f - Vector2.UnitY * 12f, to);
-            RemoveSelf();
-        }
-
-        private IEnumerator MoveOnCurve(Vector2 from, Vector2 anchor, Vector2 to) {
-            SimpleCurve curve = new SimpleCurve(from, to, anchor);
-            float duration = curve.GetLengthParametric(32) / 500f;
-            Vector2 was = from;
-            for (float t = 0.016f; t <= 1f; t += Engine.DeltaTime / duration) {
-                Position = curve.GetPoint(t).Floor();
-                sprite.Rotation = Calc.Angle(curve.GetPoint(Math.Max(0f, t - 0.05f)), curve.GetPoint(Math.Min(1f, t + 0.05f)));
-                sprite.Scale.X = 1.25f;
-                sprite.Scale.Y = 0.7f;
-                yield return null;
-            }
-            Position = to;
-        }
-
-        public override void Render() {
-            base.Render();
-        }
-
-        private void DrawLine(Vector2 a, Vector2 anchor, Vector2 b) {
-            new SimpleCurve(a, b, anchor).Render(Color.Red, 32);
         }
     }
 }

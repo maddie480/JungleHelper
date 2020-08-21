@@ -72,3 +72,9 @@ placements.entities.JungleHelper/ZipMovingPlatform.tooltips.texture=What texture
 
 # Invisible Jumpthru
 placements.entities.JungleHelper/InvisibleJumpthruPlatform.tooltips.surfaceIndex=Footstep sound when walking on the platform.
+
+# Hawk
+placements.entities.JungleHelper/Hawk.names.mainSpeed=Speed with Player
+placements.entities.JungleHelper/Hawk.names.slowerSpeed=Speed without Player
+placements.entities.JungleHelper/Hawk.tooltips.mainSpeed=The hawk's horizontal speed when carrying the player.
+placements.entities.JungleHelper/Hawk.tooltips.slowerSpeed=The hawk's horizontal speed when moving around without the player.
