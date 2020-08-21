@@ -5,14 +5,14 @@ using ..Ahorn, Maple
 @mapdef Entity "JungleHelper/RemoteKevin" RemoteKevin(x::Integer, y::Integer, restrained::Bool=false, axes::String="both")
 
 const placements = Ahorn.PlacementDict(
-    "Slide Block (Restraintless, Jungle Helper)" => Ahorn.EntityPlacement(
+    "Slide Block (Restraintless) (Jungle Helper)" => Ahorn.EntityPlacement(
         RemoteKevin,
         "rectangle",
         Dict{String, Any}(
             "restrained" => false
         )
     ),
-    "Slide Block (Restrained, Jungle Helper)" => Ahorn.EntityPlacement(
+    "Slide Block (Restrained) (Jungle Helper)" => Ahorn.EntityPlacement(
         RemoteKevin,
         "rectangle",
         Dict{String, Any}(

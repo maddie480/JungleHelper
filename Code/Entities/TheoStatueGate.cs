@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using MonoMod.Utils;
 using System;
 
-namespace Celeste.Mod.JungleHelper {
+namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/TheoStatueGate")]
     class TheoStatueGate : TempleGate {
         public static void Load() {

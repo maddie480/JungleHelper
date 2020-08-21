@@ -1,8 +1,9 @@
 ﻿using Celeste.Mod.Entities;
+using Celeste.Mod.JungleHelper.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
 
-namespace Celeste.Mod.JungleHelper {
+namespace Celeste.Mod.JungleHelper.Triggers {
     [CustomEntity("JungleHelper/GeckoTutorialTrigger")]
     [Tracked]
     class GeckoTutorialTrigger : Trigger {

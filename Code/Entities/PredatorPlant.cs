@@ -1,10 +1,11 @@
 ﻿using Celeste.Mod.Entities;
+using Celeste.Mod.JungleHelper.Components;
 using Microsoft.Xna.Framework;
 using Monocle;
 
-namespace Celeste.Mod.JungleHelper {
+namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/PredatorPlant")]
-    class PredatoryPlant : Entity {
+    class PredatorPlant : Entity {
         private enum Color {
             Pink, Blue, Yellow
         };
@@ -20,7 +21,7 @@ namespace Celeste.Mod.JungleHelper {
         private SlopedColliderWithRectangles triggerCollider;
         private BlockField blockfield;
 
-        public PredatoryPlant(EntityData data, Vector2 offset) : base(data.Position + offset) {
+        public PredatorPlant(EntityData data, Vector2 offset) : base(data.Position + offset) {
             facingRight = data.Bool("facingRight");
 
             Add(sprite = JungleHelperModule.SpriteBank.Create($"predator_plant_{data.Enum("color", Color.Pink).ToString().ToLowerInvariant()}"));

@@ -1,4 +1,5 @@
 ﻿using Celeste.Mod.Entities;
+using Celeste.Mod.JungleHelper.Triggers;
 using Microsoft.Xna.Framework;
 using Monocle;
 using MonoMod.Utils;
@@ -7,7 +8,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Celeste.Mod.JungleHelper {
+namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/Gecko")]
     [Tracked]
     public class Gecko : Entity {

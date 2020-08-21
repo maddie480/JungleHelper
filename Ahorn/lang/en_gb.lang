@@ -1,0 +1,74 @@
+# Noded Crumble Platform
+placements.entities.JungleHelper/NodedCrumblePlatform.tooltips.texture=What texture to use for the crumble block.
+
+# Theo Statue
+placements.entities.JungleHelper/TheoStatue.tooltips.directory=The directory containing the Theo statue sprites.
+
+# Theo Statue Gate
+placements.entities.JungleHelper/TheoStatueGate.tooltips.sprite=Determines the visual appearance of the gate.
+
+# Climbable One-Way Platform
+placements.entities.JungleHelper/ClimbableOneWayPlatform.tooltips.left=Whether the solid side of the platform is the left side.
+placements.entities.JungleHelper/ClimbableOneWayPlatform.tooltips.texture=Changes the appearance of the platform. Should be in the same format as vanilla for static jumpthrus, and a 8x8 image for animated ones.
+placements.entities.JungleHelper/ClimbableOneWayPlatform.tooltips.animationDelay=The delay in seconds between 2 frames of animation. Leave to 0 for no animation.
+placements.entities.JungleHelper/ClimbableOneWayPlatform.tooltips.surfaceIndex=Defines which climbing sounds the platform will use.
+
+# Gecko Tutorial Trigger
+placements.triggers.JungleHelper/GeckoTutorialTrigger.tooltips.geckoId=Which gecko the trigger should affect.
+placements.triggers.JungleHelper/GeckoTutorialTrigger.tooltips.showTutorial=If ticked, the targeted gecko will show its speech bubble. If unchecked, the gecko will hide its speech bubble.
+
+# Remote Kevin Refill
+placements.entities.JungleHelper/RemoteKevinRefill.tooltips.usedBySlideBlock=Whether this refill should refill the slide blocks hitting it.
+placements.entities.JungleHelper/RemoteKevinRefill.tooltips.usedByPlayer=Whether this refill should refill all slide blocks in the room when the player hits it.
+placements.entities.JungleHelper/RemoteKevinRefill.tooltips.oneUse=Whether the refill should respawn after being used.
+
+# Remote Kevin
+placements.entities.JungleHelper/RemoteKevin.tooltips.axes=placements.entities.crushBlock.tooltips.axes=Determines in which directions the slide block can move.
+placements.entities.JungleHelper/RemoteKevin.tooltips.restrained=If checked, the slide block will stop after moving a distance matching its width/height.\nIf unchecked, the slide block will move until it hits a wall or the screen boundaries.
+
+# Unrandomized Crumble Platform
+placements.entities.JungleHelper/UnrandomizedCrumblePlatform.tooltips.texture=What texture to use for the crumble block.
+
+# Mossy Wall
+placements.entities.JungleHelper/MossyWall.tooltips.left=Whether the entity attaches to the left wall or not.
+
+# Predator Plant
+placements.entities.JungleHelper/PredatorPlant.tooltips.color=Defines the color of the plant.
+placements.entities.JungleHelper/PredatorPlant.tooltips.facingRight=Whether this plant should face right or left.
+
+# Bouncy Shroom
+placements.entities.JungleHelper/BouncyShroomRight.names.yeetx=Bounce Speed X
+placements.entities.JungleHelper/BouncyShroomRight.names.yeety=Bounce Speed Y
+placements.entities.JungleHelper/BouncyShroomRight.tooltips.yeetx=Determines how much horizontal speed the player will get from the mushroom (for left and right mushrooms only).
+placements.entities.JungleHelper/BouncyShroomRight.tooltips.yeety=Determines how much vertical speed the player will get from the mushroom.
+placements.entities.JungleHelper/BouncyShroomLeft.names.yeetx=Bounce Speed X
+placements.entities.JungleHelper/BouncyShroomLeft.names.yeety=Bounce Speed Y
+placements.entities.JungleHelper/BouncyShroomLeft.tooltips.yeetx=Determines how much horizontal speed the player will get from the mushroom (for left and right mushrooms only).
+placements.entities.JungleHelper/BouncyShroomLeft.tooltips.yeety=Determines how much vertical speed the player will get from the mushroom.
+placements.entities.JungleHelper/BouncyShroomUp.names.yeetx=Bounce Speed X
+placements.entities.JungleHelper/BouncyShroomUp.names.yeety=Bounce Speed Y
+placements.entities.JungleHelper/BouncyShroomUp.tooltips.yeetx=Determines how much horizontal speed the player will get from the mushroom (for left and right mushrooms only).
+placements.entities.JungleHelper/BouncyShroomUp.tooltips.yeety=Determines how much vertical speed the player will get from the mushroom.
+
+# Gecko
+placements.entities.JungleHelper/Gecko.tooltips.left=Determines if the wall the gecko hangs to is on the left of it.
+placements.entities.JungleHelper/Gecko.tooltips.geckoId=The unique id of the gecko when used in combination with Gecko Tutorial triggers. Useful for extra control over multiple geckos in one room.
+placements.entities.JungleHelper/Gecko.tooltips.controls=The controls to display in the bubble, separated by commas. Leave empty if the gecko has no tutorial to display. Each part can be:\n- a path to a texture in the Gui atlas (for example "tinyarrow")\n- a direction: Down, DownRight, Right, UpRight, Up, UpLeft, Left, DownLeft\n- a button: Jump, Dash, Grab, Talk, ESC, Pause, MenuLeft, MenuRight, MenuUp, MenuDown, MenuConfirm, MenuCancel, MenuJournal, QuickRestart\n- a dialog ID, if you prefix it with "dialog:" (for example, "dialog:TUTORIAL_DREAMJUMP")\n- plain text
+placements.entities.JungleHelper/Gecko.tooltips.info=The speech bubble title. Can either be a dialog ID or a path to a texture in the GUI atlas. Leave empty if the gecko has no tutorial to display.
+placements.entities.JungleHelper/Gecko.tooltips.delay=The time (in seconds) the gecko will pause when turning around.
+placements.entities.JungleHelper/Gecko.tooltips.hostile=Whether the gecko should kill the player when they touch it.
+
+# Spiny Plant
+placements.entities.JungleHelper/SpinyPlant.tooltips.color=Defines the color of the plant.
+
+# Spider Boss
+placements.entities.JungleHelper/SpiderBoss.tooltips.color=Defines the color and the difficulty of the spider boss:\n- Blue: speed capped at 50 px/s, respawns after 1 second\n- Purple: speed capped at 100 px/s, respawns immediately\n- Red: no speed cap, a new one respawns as soon as the previous one starts falling
+
+# Rolling Rock
+placements.entities.JungleHelper/RollingRock.tooltips.sprite=Determines the appearance of the rock.
+
+# Zip Moving Platforms
+placements.entities.JungleHelper/ZipMovingPlatform.tooltips.texture=What texture to use for the platform.
+
+# Invisible Jumpthru
+placements.entities.JungleHelper/InvisibleJumpthruPlatform.tooltips.surfaceIndex=Footstep sound when walking on the platform.

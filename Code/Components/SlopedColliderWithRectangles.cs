@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Monocle;
 
-namespace Celeste.Mod.JungleHelper {
+namespace Celeste.Mod.JungleHelper.Components {
     /// <summary>
     /// Slope collider, with horizontal top and bottom sides.
     /// <i>Those are not the "slopes in Celeste" you are looking for.</i>

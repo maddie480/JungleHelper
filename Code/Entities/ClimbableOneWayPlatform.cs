@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Celeste.Mod.JungleHelper {
+namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/ClimbableOneWayPlatform")]
     [Tracked]
     class ClimbableOneWayPlatform : Entity {

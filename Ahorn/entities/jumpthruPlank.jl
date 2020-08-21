@@ -3,7 +3,7 @@ module JungleHelperPlankJumpthru
 using ..Ahorn, Maple
 
 const placements = Ahorn.PlacementDict(
-    "Jump Through (Plank) (JungleHelper)" => Ahorn.EntityPlacement(
+    "Jump Through (Plank) (Jungle Helper)" => Ahorn.EntityPlacement(
         Maple.JumpThru,
         "rectangle",
         Dict{String, Any}(

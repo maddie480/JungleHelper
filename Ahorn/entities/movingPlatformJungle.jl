@@ -3,7 +3,7 @@ module JungleHelperJungleMovingPlatform
 using ..Ahorn, Maple
 
 const placements = Ahorn.PlacementDict(
-    "Platform (Moving, Jungle) (JungleHelper)" => Ahorn.EntityPlacement(
+    "Platform (Moving, Jungle) (Jungle Helper)" => Ahorn.EntityPlacement(
         Maple.MovingPlatform,
         "rectangle",
         Dict{String, Any}(

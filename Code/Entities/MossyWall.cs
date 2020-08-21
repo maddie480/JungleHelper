@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Monocle;
 
-namespace Celeste.Mod.JungleHelper {
+namespace Celeste.Mod.JungleHelper.Entities {
     // This is WallBooster, except with only the code from the Ice Wall mode, and with the
     // animated sprite replaced with static images.
     // So... yes, there is not much left to see here.

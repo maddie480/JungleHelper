@@ -1,10 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Monocle;
-using System;
 using Celeste.Mod.Entities;
 
 
-namespace Celeste.Mod.JungleHelper {
+namespace Celeste.Mod.JungleHelper.Entities {
     [Tracked(false)]
     [CustomEntity(
         "JungleHelper/BouncyShroomUp = BounceUp",

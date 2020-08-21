@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Monocle;
 using System;
 
-namespace Celeste.Mod.JungleHelper {
+namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/Cobweb")]
     class Cobweb : Entity {
         private Sprite sprite;

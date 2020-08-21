@@ -3,12 +3,9 @@ using Microsoft.Xna.Framework;
 using Monocle;
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Celeste.Mod.JungleHelper {
+namespace Celeste.Mod.JungleHelper.Entities {
+    // mostly a refill copypaste, also looks like a refill for now, waiting for the sprites.
     [CustomEntity("JungleHelper/RemoteKevinRefill")]
     class RemoteKevinRefill : Entity {
 

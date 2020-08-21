@@ -1,11 +1,11 @@
 ﻿using Celeste.Mod.Entities;
+using Celeste.Mod.JungleHelper.Components;
 using Microsoft.Xna.Framework;
 using Monocle;
 using MonoMod.Utils;
 using System;
-using System.Diagnostics;
 
-namespace Celeste.Mod.JungleHelper {
+namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/RollingRock")]
     class RollingRock : Actor {
         // configuration constants

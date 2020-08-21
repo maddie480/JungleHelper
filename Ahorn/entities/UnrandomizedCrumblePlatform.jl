@@ -6,7 +6,7 @@ using ..Ahorn, Maple
 
 # Drop all crumble block textures that need "unrandomized respawns" here.
 const placements = Ahorn.PlacementDict(
-    "Crumble Blocks (Mosaic) (JungleHelper)" => Ahorn.EntityPlacement(
+    "Crumble Blocks (Mosaic) (Jungle Helper)" => Ahorn.EntityPlacement(
         UnrandomizedCrumblePlatform,
         "rectangle",
         Dict{String, Any}(

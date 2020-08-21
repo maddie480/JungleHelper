@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Monocle;
 using MonoMod.Utils;
 
-namespace Celeste.Mod.JungleHelper {
+namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/TheoStatue")]
     [Tracked]
     class TheoStatue : TheoCrystal {

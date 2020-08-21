@@ -3,7 +3,7 @@ module JungleHelperWoodSwitchStone
 using ..Ahorn, Maple
 
 const placements = Ahorn.PlacementDict(
-    "Switch Gate (Stone) (JungleHelper)" => Ahorn.EntityPlacement(
+    "Switch Gate (Stone) (Jungle Helper)" => Ahorn.EntityPlacement(
         Maple.SwitchGate,
         "rectangle",
         Dict{String, Any}(

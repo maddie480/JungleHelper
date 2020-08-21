@@ -5,7 +5,7 @@ using MonoMod.Utils;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Celeste.Mod.JungleHelper {
+namespace Celeste.Mod.JungleHelper.Entities {
     /// <summary>
     /// A Crumble Platform, except the bits aren't randomly shuffled around when it respawns.
     /// </summary>

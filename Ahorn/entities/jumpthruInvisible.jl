@@ -6,7 +6,7 @@ using ..Ahorn, Maple
 @mapdef Entity "JungleHelper/InvisibleJumpthruPlatform" InvisibleJumpthruPlatform(x::Integer, y::Integer, width::Integer=8, surfaceIndex::Int=-1)
 
 const placements = Ahorn.PlacementDict(
-    "Jump Through (Invisible) (JungleHelper)" => Ahorn.EntityPlacement(
+    "Jump Through (Invisible) (Jungle Helper)" => Ahorn.EntityPlacement(
         InvisibleJumpthruPlatform,
         "rectangle"
     )

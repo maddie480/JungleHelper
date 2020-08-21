@@ -3,7 +3,7 @@ module JungleHelperThinCrumbleBlock
 using ..Ahorn, Maple
 
 const placements = Ahorn.PlacementDict(
-    "Crumble Blocks (Thin) (JungleHelper)" => Ahorn.EntityPlacement(
+    "Crumble Blocks (Thin) (Jungle Helper)" => Ahorn.EntityPlacement(
         Maple.CrumbleBlock,
         "rectangle",
         Dict{String, Any}(

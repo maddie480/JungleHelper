@@ -10,7 +10,7 @@ using FMOD;
 using MonoMod.Utils;
 using System.Linq;
 
-namespace Celeste.Mod.JungleHelper {
+namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/Hawk")]
     public class Hawk : Entity {
 

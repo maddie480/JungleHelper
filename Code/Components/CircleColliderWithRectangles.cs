@@ -2,7 +2,7 @@
 using Monocle;
 using System;
 
-namespace Celeste.Mod.JungleHelper {
+namespace Celeste.Mod.JungleHelper.Components {
     /// <summary>
     /// Circle collider, except using multiple rectangles instead, allowing them to collide with tiles for example.
     /// </summary>

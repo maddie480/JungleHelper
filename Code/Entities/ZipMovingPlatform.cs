@@ -3,10 +3,10 @@ using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
 
-namespace Celeste.Mod.JungleHelper {
+namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/ZipMovingPlatform")]
-    public class MovingZipPlatform : JumpThru {
-        public MovingZipPlatform(Vector2 position, int width, Vector2 node) : base(position, width, false) {
+    public class ZipMovingPlatform : JumpThru {
+        public ZipMovingPlatform(Vector2 position, int width, Vector2 node) : base(position, width, false) {
             start = Position;
             end = node;
             Add(sfx = new SoundSource());
@@ -15,7 +15,7 @@ namespace Celeste.Mod.JungleHelper {
             Add(new Coroutine(ZipUp(), true));
         }
 
-        public MovingZipPlatform(EntityData data, Vector2 offset) : this(data.Position + offset, data.Width, data.Nodes[0] + offset) {
+        public ZipMovingPlatform(EntityData data, Vector2 offset) : this(data.Position + offset, data.Width, data.Nodes[0] + offset) {
             TextureName = data.Attr("texture", "default");
         }
 
