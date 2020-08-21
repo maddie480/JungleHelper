@@ -98,7 +98,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
                 Player player = SceneAs<Level>().Tracker.GetEntity<Player>();
                 if (player != null) {
-                    if (player.StateMachine.State == 11) {
+                    if (state == States.Fling && player.StateMachine.State == 11) {
                         player.StateMachine.State = 0;
                         player.DummyGravity = true;
                         player.DummyFriction = true;
