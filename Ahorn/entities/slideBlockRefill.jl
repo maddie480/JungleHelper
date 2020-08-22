@@ -26,11 +26,11 @@ const placements = Ahorn.PlacementDict(
 function Ahorn.selection(entity::RemoteKevinRefill)
     x, y = Ahorn.position(entity)
 
-    return Ahorn.getSpriteRectangle("objects/refill/idle00", x, y)
+    return Ahorn.getSpriteRectangle("JungleHelper/SlideBlockRefill/idle00", x, y)
 end
 
 function Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::RemoteKevinRefill, room::Maple.Room)
-    Ahorn.drawSprite(ctx, "objects/refill/idle00", 0, 0)
+    Ahorn.drawSprite(ctx, "JungleHelper/SlideBlockRefill/idle00", 0, 0)
 end
 
 end

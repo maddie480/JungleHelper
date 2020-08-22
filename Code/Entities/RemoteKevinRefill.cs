@@ -39,14 +39,14 @@ namespace Celeste.Mod.JungleHelper.Entities {
             this.oneUse = oneUse;
             this.usedBySlideBlock = usedBySlideBlock;
 
-            Add(outline = new Image(GFX.Game["objects/refill/outline"]));
+            Add(outline = new Image(GFX.Game["JungleHelper/SlideBlockRefill/outline"]));
             outline.CenterOrigin();
             outline.Visible = false;
-            Add(sprite = new Sprite(GFX.Game, "objects/refill/idle"));
+            Add(sprite = new Sprite(GFX.Game, "JungleHelper/SlideBlockRefill/idle"));
             sprite.AddLoop("idle", "", 0.1f);
             sprite.Play("idle");
             sprite.CenterOrigin();
-            Add(flash = new Sprite(GFX.Game, "objects/refill/flash"));
+            Add(flash = new Sprite(GFX.Game, "JungleHelper/SlideBlockRefill/flash"));
             flash.Add("flash", "", 0.05f);
             flash.OnFinish = delegate {
                 flash.Visible = false;
