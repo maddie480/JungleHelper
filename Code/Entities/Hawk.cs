@@ -142,15 +142,16 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 player.Facing = Facings.Right;
                 player.Sprite.Play("fallSlow_carry");
 
-                if (player.CollideCheck<Solid>(new Vector2(X, Y + 16))) {
-                    // player is going to be in a wall! drop them.
+                // move the player.
+                bool hitSomething = false;
+                player.MoveToX(X, collision => hitSomething = true);
+                player.MoveToY(Y + 16, collision => hitSomething = true);
+
+                if (hitSomething) {
+                    // player hit something while getting moved! drop them.
                     player.StateMachine.State = 0;
                     break;
                 }
-
-                // move the player.
-                player.MoveToX(X);
-                player.MoveToY(Y + 16);
 
                 if (Input.Jump.Pressed) {
                     // player escapes!
