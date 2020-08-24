@@ -1,6 +1,7 @@
 ﻿using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
+using System;
 using System.Collections.Generic;
 
 namespace Celeste.Mod.JungleHelper.Entities {
@@ -30,6 +31,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         // configuration constants: accelerations in px/s ... /s
         private const float FALLING_ACCELERATION = 400f;
+        private readonly float[] TRACK_PLAYER_ACCELERATION = {
+            400f, 800f, float.MaxValue
+        };
 
         // settings
         private readonly SpiderColor color;
@@ -129,7 +133,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             // set up the spider pop position according to camera and player position.
             Position.X = Scene.Tracker.GetEntity<Player>()?.X ?? SceneAs<Level>().Camera.Left + 115f;
-            cameraRelativeY = - 8f;
+            cameraRelativeY = -8f;
 
             // duration of the state: the slide in duration.
             stateDelay = SLIDE_DURATION;
@@ -141,7 +145,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private int poppingInUpdate() {
             // ease the spider in.
             float progress = Calc.ClampedMap(stateDelay, SLIDE_DURATION, 0);
-            cameraRelativeY = MathHelper.Lerp(- 8f, SLIDE_DISTANCE, Ease.SineOut(progress));
+            cameraRelativeY = MathHelper.Lerp(-8f, SLIDE_DISTANCE, Ease.SineOut(progress));
 
             // also track the player at the same time if relevant.
             trackingUpdate();
@@ -156,13 +160,19 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private void trackingBegin() {
             // duration of the state: the delay before the spider falls.
             stateDelay = DELAY_BEFORE_FALL;
+            speed = 0f;
         }
 
         private int trackingUpdate() {
             // track the X position of the player, if the option is enabled.
             Player player = Scene.Tracker.GetEntity<Player>();
             if (player != null) {
-                Position.X = Calc.Approach(Position.X, player.X, TRACK_PLAYER_SPEED[(int) color] * Engine.DeltaTime);
+                if (TRACK_PLAYER_ACCELERATION[(int) color] == float.MaxValue) {
+                    Position.X = player.X;
+                } else {
+                    speed = Calc.Approach(speed, Math.Sign(player.X - Position.X) * TRACK_PLAYER_SPEED[(int) color], TRACK_PLAYER_ACCELERATION[(int) color] * Engine.DeltaTime);
+                    Position.X = approachKeepingMoveDirection(Position.X, player.X, speed * Engine.DeltaTime);
+                }
             }
 
             // if delay is over, switch to the Falling state.
@@ -170,6 +180,14 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 return 3;
             }
             return 2;
+        }
+
+        // slight variation on Calc.Approach, but the move always happens in the direction specified by maxMove.
+        private static float approachKeepingMoveDirection(float val, float target, float maxMove) {
+            if (val != target) {
+                return (val > target) ? Math.Max(val + maxMove, target) : Math.Min(val + maxMove, target);
+            }
+            return target;
         }
 
         private void fallingBegin() {
