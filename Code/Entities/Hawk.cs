@@ -5,6 +5,8 @@ using System.Collections;
 using Celeste.Mod.Entities;
 using MonoMod.Utils;
 using Celeste.Mod.JungleHelper.Components;
+using Monocle;
+using System;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/Hawk")]
@@ -14,7 +16,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
             Fling,
             Move
         }
-
         private static readonly Vector2 spriteOffset = new Vector2(0f, 8f);
 
         private Sprite sprite;
@@ -29,8 +30,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private readonly float speedWithPlayer;
         private readonly float speedWithoutPlayer;
         private PlayerCollider playerCollider;
+        private TransitionListener playerTransition;
 
         public Hawk(EntityData data, Vector2 levelOffset) : base(data.Position + levelOffset) {
+            Tag |= Tags.TransitionUpdate;
             Position = data.Position + levelOffset;
             speedWithPlayer = data.Float("mainSpeed");
             speedWithoutPlayer = data.Float("slowerSpeed");
@@ -42,6 +45,28 @@ namespace Celeste.Mod.JungleHelper.Entities {
             };
             Collider = new CircleColliderWithRectangles(16);
             Add(playerCollider = new PlayerCollider(OnPlayer));
+            Add(playerTransition = new TransitionListener {
+                 OnOutBegin = delegate{
+                    //if we're transitioning out of a room while still attached to the hawk...
+                    if (state == States.Fling) {
+                        // do the usual throw!
+
+                        Player player = SceneAs<Level>().Tracker.GetEntity<Player>();
+                        Console.WriteLine(player.Speed);
+                        if (player != null) {
+                            player.StateMachine.State = 0;
+                            player.DummyGravity = true;
+                            player.DummyFriction = true;
+                            player.ForceCameraUpdate = false;
+                            player.DummyAutoAnimate = true;
+                            playerLaunch(player);
+                            player.Speed = new Vector2(hawkSpeed * 0.7f, 0);
+                            
+                        }
+                        RemoveSelf();
+                    };
+                 }
+            });
         }
 
         private void OnPlayer(Player player) {
@@ -157,7 +182,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     // player escapes!
                     player.StateMachine.State = 0;
                     playerLaunch(player);
-                    player.Speed += new Vector2(hawkSpeed * 0.7f, 0);
+                    player.Speed = new Vector2(hawkSpeed * 0.7f, 0);
                     break;
                 }
 
