@@ -47,6 +47,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
             Add(playerCollider = new PlayerCollider(OnPlayer));
             Add(playerTransition = new TransitionListener {
                  OnOutBegin = delegate{
+                     // make hawk invisible during this
+                     Visible = false;
                     //if we're transitioning out of a room while still attached to the hawk...
                     if (state == States.Fling) {
                         // do the usual throw!
@@ -63,8 +65,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
                             player.Speed = new Vector2(hawkSpeed * 0.7f, 0);
                             
                         }
-                        RemoveSelf();
                     };
+                    RemoveSelf();
                  }
             });
         }
