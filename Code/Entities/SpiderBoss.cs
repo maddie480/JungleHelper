@@ -35,17 +35,24 @@ namespace Celeste.Mod.JungleHelper.Entities {
             400f, 800f, float.MaxValue
         };
 
+        // light colors
+        private readonly Color[] LIGHT_COLORS = {
+            Calc.HexToColor("b3cffc"), Calc.HexToColor("eab3fc"), Calc.HexToColor("ffb6a6")
+        };
+
         // settings
         private readonly SpiderColor color;
 
         private SoundSource sfx;
+        private VertexLight light;
 
         // state information
         private Sprite spider;
         private Sprite web;
-        private float stateDelay = 0f;
+        private float stateDelay = 0.5f;
         private float speed = 0f;
         private bool falling = false;
+        private bool justRespawned = true;
 
         // paired spider info (only used for red spiders)
         private SpiderBoss pairedSpider = null;
@@ -77,6 +84,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             Add(stateMachine);
 
             Add(sfx = new SoundSource());
+            Add(light = new VertexLight(LIGHT_COLORS[(int) color], 1f, 24, 48));
         }
 
         public override void Added(Scene scene) {
@@ -113,21 +121,38 @@ namespace Celeste.Mod.JungleHelper.Entities {
             // spider is invisible while it's waiting.
             Visible = false;
             Collidable = false;
+            light.Visible = false;
         }
 
         private int waitingUpdate() {
             // if delay is over, player already moved and paired spider is falling if any, switch to the Popping In state.
-            if (stateDelay <= 0f && !(Scene.Tracker.GetEntity<Player>()?.JustRespawned ?? true) && (pairedSpider == null || ignorePairedSpider || pairedSpider.falling)) {
+            if (stateDelay <= 0f && !didPlayerJustRespawn() && (pairedSpider == null || ignorePairedSpider || pairedSpider.falling)) {
+                justRespawned = false;
                 ignorePairedSpider = false; // from now, both spiders should be synced up.
                 return 1;
             }
             return 0;
         }
 
+        private bool didPlayerJustRespawn() {
+            if (!justRespawned) {
+                // spider already moved before.
+                return false;
+            }
+            Player player = Scene.Tracker.GetEntity<Player>();
+            if (player != null) {
+                // check if the player is moving, which is how Player.JustRespawned works.
+                return player.Speed == Vector2.Zero;
+            }
+            // no player - pretend they didn't move.
+            return true;
+        }
+
         private void poppingInBegin() {
             // the spider is now visible.
             Visible = true;
             Collidable = true;
+            light.Visible = true;
             spider.Play("idle");
             web.Play("idle");
 
