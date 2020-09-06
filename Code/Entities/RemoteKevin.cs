@@ -352,6 +352,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
             SoundSource sfx = currentMoveLoopSfx;
             if (Position == startPoint) {
                 currentMoveLoopSfx.Param("end_2", 1f);
+
+                // if slide blocks are triggered and their path is blocked, they should not use a "charge"
+                Refill();
             } else {
                 currentMoveLoopSfx.Param("end", 1f);
             }
