@@ -78,3 +78,7 @@ placements.entities.JungleHelper/Hawk.names.mainSpeed=Speed with Player
 placements.entities.JungleHelper/Hawk.names.slowerSpeed=Speed without Player
 placements.entities.JungleHelper/Hawk.tooltips.mainSpeed=The hawk's horizontal speed when carrying the player.
 placements.entities.JungleHelper/Hawk.tooltips.slowerSpeed=The hawk's horizontal speed when moving around without the player.
+
+# Attach Trigger Controller
+placements.entities.JungleHelper/AttachTriggerController.tooltips.triggerFilter=Allows to pick the type of trigger to attach, in case multiple ones intersect with the "T" node. Uses the C# class name (which *often* matches the entity name). Leave empty to match any trigger.
+placements.entities.JungleHelper/AttachTriggerController.tooltips.entityFilter=Allows to pick the type of entity to attach the trigger(s) to, in case multiple ones intersect with the "E" node. Uses the C# class name (which *often* matches the entity name). Leave empty to match any entity.

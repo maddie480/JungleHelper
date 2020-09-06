@@ -5,7 +5,6 @@ using System.Collections;
 using Celeste.Mod.Entities;
 using MonoMod.Utils;
 using Celeste.Mod.JungleHelper.Components;
-using Monocle;
 using System;
 
 namespace Celeste.Mod.JungleHelper.Entities {
