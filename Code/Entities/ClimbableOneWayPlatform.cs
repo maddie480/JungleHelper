@@ -56,7 +56,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             }
             hooksActive = true;
 
-            Logger.Log("JungleHelper/ClimbableOneWayPlatform", "=== Activating climbable one-way platform hooks");
+            Logger.Log(LogLevel.Info, "JungleHelper/ClimbableOneWayPlatform", "=== Activating climbable one-way platform hooks");
 
             // implement the basic collision between actors/platforms and sideways jumpthrus.
             using (new DetourContext { Before = { "*" } }) { // these don't always call the orig methods, better apply them first.
@@ -91,7 +91,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             }
             hooksActive = false;
 
-            Logger.Log("JungleHelper/ClimbableOneWayPlatform", "=== Deactivating one-way platform hooks");
+            Logger.Log(LogLevel.Info, "JungleHelper/ClimbableOneWayPlatform", "=== Deactivating one-way platform hooks");
 
             On.Celeste.Actor.MoveHExact -= onActorMoveHExact;
 

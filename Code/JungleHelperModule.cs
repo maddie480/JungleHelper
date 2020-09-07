@@ -11,6 +11,8 @@ namespace Celeste.Mod.JungleHelper {
         }
 
         public override void Load() {
+            Logger.SetLogLevel("JungleHelper", LogLevel.Info);
+
             ClimbableOneWayPlatform.Load();
             TheoStatueGate.Load();
             UnrandomizedCrumblePlatform.Load();
