@@ -99,7 +99,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 fallingSpeed = 0f;
 
                 // BOOM
-                Audio.Play("event:/game/06_reflection/crushblock_impact", BottomCenter);
+                Audio.Play("event:/junglehelper/sfx/BoulderBoss_impact", BottomCenter);
                 SceneAs<Level>().ParticlesFG.Emit(CrushBlock.P_Impact, BottomCenter, -1.57079637f);
 
                 // if we weren't moving forward, we are now!
@@ -125,7 +125,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             shattered = true;
             Collidable = false;
 
-            Audio.Play("event:/game/general/wall_break_stone", Center);
+            Audio.Play("event:/junglehelper/sfx/BoulderBoss_Break", Center);
 
             for (int i = -3; i < 4; i++) {
                 int chunkWidth = (int) Math.Abs(Math.Cos(Math.Asin((double) i / 4)) * 4);

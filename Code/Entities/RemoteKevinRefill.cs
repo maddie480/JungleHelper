@@ -85,7 +85,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             RemoteKevin hitSlideBlock;
             if (Collidable && usedBySlideBlock && (hitSlideBlock = CollideFirst<RemoteKevin>()) != null) {
                 if (hitSlideBlock.Refill()) {
-                    Audio.Play("event:/game/general/diamond_touch", Position);
+                    Audio.Play("event:/junglehelper/sfx/SlideRefill_touch", Position);
                     Input.Rumble(RumbleStrength.Medium, RumbleLength.Medium);
                     Collidable = false;
                     Add(new Coroutine(RefillRoutine(hitSlideBlock.Speed)));
@@ -141,7 +141,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 refilledAtLeastOne = kevin.Refill() || refilledAtLeastOne;
             }
             if (refilledAtLeastOne) {
-                Audio.Play("event:/game/general/diamond_touch", Position);
+                Audio.Play("event:/junglehelper/sfx/SlideRefill_touch", Position);
                 Input.Rumble(RumbleStrength.Medium, RumbleLength.Medium);
                 Collidable = false;
                 Add(new Coroutine(RefillRoutine(player.Speed)));

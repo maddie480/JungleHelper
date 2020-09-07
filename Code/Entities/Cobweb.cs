@@ -8,11 +8,13 @@ namespace Celeste.Mod.JungleHelper.Entities {
     class Cobweb : Entity {
         private Sprite sprite;
         private Player stuckPlayer;
+        private SoundSource sfx;
 
         public Cobweb(EntityData data, Vector2 offset) : base(data.Position + offset) {
             Collider = new Circle(10f);
             Add(sprite = JungleHelperModule.SpriteBank.Create("cobweb"));
             Add(new PlayerCollider(catchPlayer));
+            Add(sfx = new SoundSource());
         }
 
         private void catchPlayer(Player player) {
@@ -26,6 +28,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
             player.Visible = false;
             player.DummyGravity = false;
             sprite.Play("catch");
+
+            sfx.Play("event:/junglehelper/sfx/Cobweb_Entry");
 
             // stick the player in the middle of the cobweb
             player.Center = Position;
@@ -56,6 +60,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     // and the cobweb vanishes.
                     sprite.Play("break");
                     sprite.OnFinish = _ => RemoveSelf();
+
+                    sfx.Play("event:/junglehelper/sfx/Cobweb_Snap");
                 }
             }
         }
