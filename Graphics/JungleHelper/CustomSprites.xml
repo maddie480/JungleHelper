@@ -2,14 +2,18 @@
 <Sprites>
 	<green_slideblock_center_small path="JungleHelper/SlideBlockGreen/" start="active_up">
 		<Center/>
-		<Loop id="active_up" path="small_active_up"/>
-		<Loop id="active_down" path="small_active_down"/>
-		<Loop id="active_left" path="small_active_left"/>
-		<Loop id="active_right" path="small_active_right"/>
-		<Loop id="inactive_up" path="small_inactive_up"/>
-		<Loop id="inactive_down" path="small_inactive_down"/>
-		<Loop id="inactive_left" path="small_inactive_left"/>
-		<Loop id="inactive_right" path="small_inactive_right"/>
+		<Anim id="active_up" path="small_active_up" delay="0.2" frames="0,1,0,1*3" goto="active_up,active_up_alt"/>
+		<Anim id="active_down" path="small_active_down" delay="0.2" frames="0,1,0,1*3" goto="active_down,active_down_alt"/>
+		<Anim id="active_left" path="small_active_left" delay="0.2" frames="0,1,0,1*3" goto="active_left,active_left_alt"/>
+		<Anim id="active_right" path="small_active_right" delay="0.2" frames="0,1,0,1*3" goto="active_right,active_right_alt"/>
+		<Anim id="active_up_alt" path="small_active_up" delay="0.2" frames="1,0,1,0,1*3" goto="active_up,active_up_alt"/>
+		<Anim id="active_down_alt" path="small_active_down" delay="0.2" frames="1,0,1,0,1*3" goto="active_down,active_down_alt"/>
+		<Anim id="active_left_alt" path="small_active_left" delay="0.2" frames="1,0,1,0,1*3" goto="active_left,active_left_alt"/>
+		<Anim id="active_right_alt" path="small_active_right" delay="0.2" frames="1,0,1,0,1*3" goto="active_right,active_right_alt"/>
+		<Loop id="inactive_up" path="small_inactive"/>
+		<Loop id="inactive_down" path="small_inactive"/>
+		<Loop id="inactive_left" path="small_inactive"/>
+		<Loop id="inactive_right" path="small_inactive"/>
 		<Loop id="hit_up" path="small_hit_up"/>
 		<Loop id="hit_down" path="small_hit_down"/>
 		<Loop id="hit_left" path="small_hit_left"/>
@@ -22,14 +26,18 @@
 
 	<green_slideblock_center_big path="JungleHelper/SlideBlockGreen/" start="active_up">
 		<Center/>
-		<Loop id="active_up" path="big_active_up"/>
-		<Loop id="active_down" path="big_active_down"/>
-		<Loop id="active_left" path="big_active_left"/>
-		<Loop id="active_right" path="big_active_right"/>
-		<Loop id="inactive_up" path="big_inactive_up"/>
-		<Loop id="inactive_down" path="big_inactive_down"/>
-		<Loop id="inactive_left" path="big_inactive_left"/>
-		<Loop id="inactive_right" path="big_inactive_right"/>
+		<Anim id="active_up" path="big_active_up" delay="0.2" frames="0,1,0,1*3" goto="active_up,active_up_alt"/>
+		<Anim id="active_down" path="big_active_down" delay="0.2" frames="0,1,0,1*3" goto="active_down,active_down_alt"/>
+		<Anim id="active_left" path="big_active_left" delay="0.2" frames="0,1,0,1*3" goto="active_left,active_left_alt"/>
+		<Anim id="active_right" path="big_active_right" delay="0.2" frames="0,1,0,1*3" goto="active_right,active_right_alt"/>
+		<Anim id="active_up_alt" path="big_active_up" delay="0.2" frames="1,0,1,0,1*3" goto="active_up,active_up_alt"/>
+		<Anim id="active_down_alt" path="big_active_down" delay="0.2" frames="1,0,1,0,1*3" goto="active_down,active_down_alt"/>
+		<Anim id="active_left_alt" path="big_active_left" delay="0.2" frames="1,0,1,0,1*3" goto="active_left,active_left_alt"/>
+		<Anim id="active_right_alt" path="big_active_right" delay="0.2" frames="1,0,1,0,1*3" goto="active_right,active_right_alt"/>
+		<Loop id="inactive_up" path="big_inactive"/>
+		<Loop id="inactive_down" path="big_inactive"/>
+		<Loop id="inactive_left" path="big_inactive"/>
+		<Loop id="inactive_right" path="big_inactive"/>
 		<Loop id="hit_up" path="big_hit_up"/>
 		<Loop id="hit_down" path="big_hit_down"/>
 		<Loop id="hit_left" path="big_hit_left"/>
@@ -42,14 +50,18 @@
 	
 	<red_slideblock_center_small path="JungleHelper/SlideBlockRed/" start="active_up">
 		<Center/>
-		<Loop id="active_up" path="small_active_up"/>
-		<Loop id="active_down" path="small_active_down"/>
-		<Loop id="active_left" path="small_active_left"/>
-		<Loop id="active_right" path="small_active_right"/>
-		<Loop id="inactive_up" path="small_inactive_up"/>
-		<Loop id="inactive_down" path="small_inactive_down"/>
-		<Loop id="inactive_left" path="small_inactive_left"/>
-		<Loop id="inactive_right" path="small_inactive_right"/>
+		<Anim id="active_up" path="small_active_up" delay="0.2" frames="0,1,0,1*3" goto="active_up,active_up_alt"/>
+		<Anim id="active_down" path="small_active_down" delay="0.2" frames="0,1,0,1*3" goto="active_down,active_down_alt"/>
+		<Anim id="active_left" path="small_active_left" delay="0.2" frames="0,1,0,1*3" goto="active_left,active_left_alt"/>
+		<Anim id="active_right" path="small_active_right" delay="0.2" frames="0,1,0,1*3" goto="active_right,active_right_alt"/>
+		<Anim id="active_up_alt" path="small_active_up" delay="0.2" frames="1,0,1,0,1*3" goto="active_up,active_up_alt"/>
+		<Anim id="active_down_alt" path="small_active_down" delay="0.2" frames="1,0,1,0,1*3" goto="active_down,active_down_alt"/>
+		<Anim id="active_left_alt" path="small_active_left" delay="0.2" frames="1,0,1,0,1*3" goto="active_left,active_left_alt"/>
+		<Anim id="active_right_alt" path="small_active_right" delay="0.2" frames="1,0,1,0,1*3" goto="active_right,active_right_alt"/>
+		<Loop id="inactive_up" path="small_inactive"/>
+		<Loop id="inactive_down" path="small_inactive"/>
+		<Loop id="inactive_left" path="small_inactive"/>
+		<Loop id="inactive_right" path="small_inactive"/>
 		<Loop id="hit_up" path="small_hit_up"/>
 		<Loop id="hit_down" path="small_hit_down"/>
 		<Loop id="hit_left" path="small_hit_left"/>
@@ -62,14 +74,18 @@
 
 	<red_slideblock_center_big path="JungleHelper/SlideBlockRed/" start="active_up">
 		<Center/>
-		<Loop id="active_up" path="big_active_up"/>
-		<Loop id="active_down" path="big_active_down"/>
-		<Loop id="active_left" path="big_active_left"/>
-		<Loop id="active_right" path="big_active_right"/>
-		<Loop id="inactive_up" path="big_inactive_up"/>
-		<Loop id="inactive_down" path="big_inactive_down"/>
-		<Loop id="inactive_left" path="big_inactive_left"/>
-		<Loop id="inactive_right" path="big_inactive_right"/>
+		<Anim id="active_up" path="big_active_up" delay="0.2" frames="0,1,0,1*3" goto="active_up,active_up_alt"/>
+		<Anim id="active_down" path="big_active_down" delay="0.2" frames="0,1,0,1*3" goto="active_down,active_down_alt"/>
+		<Anim id="active_left" path="big_active_left" delay="0.2" frames="0,1,0,1*3" goto="active_left,active_left_alt"/>
+		<Anim id="active_right" path="big_active_right" delay="0.2" frames="0,1,0,1*3" goto="active_right,active_right_alt"/>
+		<Anim id="active_up_alt" path="big_active_up" delay="0.2" frames="1,0,1,0,1*3" goto="active_up,active_up_alt"/>
+		<Anim id="active_down_alt" path="big_active_down" delay="0.2" frames="1,0,1,0,1*3" goto="active_down,active_down_alt"/>
+		<Anim id="active_left_alt" path="big_active_left" delay="0.2" frames="1,0,1,0,1*3" goto="active_left,active_left_alt"/>
+		<Anim id="active_right_alt" path="big_active_right" delay="0.2" frames="1,0,1,0,1*3" goto="active_right,active_right_alt"/>
+		<Loop id="inactive_up" path="big_inactive"/>
+		<Loop id="inactive_down" path="big_inactive"/>
+		<Loop id="inactive_left" path="big_inactive"/>
+		<Loop id="inactive_right" path="big_inactive"/>
 		<Loop id="hit_up" path="big_hit_up"/>
 		<Loop id="hit_down" path="big_hit_down"/>
 		<Loop id="hit_left" path="big_hit_left"/>
