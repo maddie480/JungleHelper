@@ -1,0 +1,2 @@
+Moss is grayscaled currently.
+Needs to be hex colored green, by default, but when the lantern comes close, it will turn to yellow then brown for a few frames before dissapearing.
