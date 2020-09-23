@@ -1,0 +1,22 @@
+<Sprites>
+    <junglehelper_madeline_lantern path="JungleHelper/Lantern/" copy="player">
+        <Anim id="idle" path="idle/idlelantern" delay="0.1" goto="idle"/>
+        
+        <Loop id="jumpSlow" path="jump/jumplantern" delay="0.1" frames="0,1" />
+        <Loop id="jumpFast" path="jump/jumplantern" delay="0.1" frames="0,1" />
+        <Anim id="fallSlow" path="jump/jumplantern" delay="0.1" frames="2,3" />
+        <Anim id="fallFast" path="jump/jumplantern" delay="0.1" frames="2,3" />
+        
+        <Anim id="runSlow" path="run/lanternrun" delay="0.07" goto="runFast" />
+        <Loop id="runFast" path="run/lanternrun" delay="0.05" />
+        
+        <Loop id="wallslide" path="slide/slidelantern" delay="0.1" />
+		
+        <Metadata>
+            <Frames path="idle/idlelantern" hair="0,-2|0,-2|0,-2|0,-2|0,-1|0,-1|0,-1|0,-1|0,-1"/>
+            <Frames path="run/lanternrun" hair="1,-2|1,-1|1,-1|1,-1|1,-3|1,-2|1,-1|1,-1|1,-1|1,-1|1,-3|1,-2"/>
+            <Frames path="jump/jumplantern" hair="1,-3|1,-3|1,-2|0,-2"/>
+            <Frames path="slide/slidelantern" hair="0,-2|0,-2|0,-2|0,-2|-1,-2"/>
+        </Metadata>
+    </junglehelper_madeline_lantern>
+</Sprites>
