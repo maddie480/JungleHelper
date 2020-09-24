@@ -12,7 +12,7 @@
         
         <Loop id="wallslide" path="slide/slidelantern" delay="0.1" />
         
-        <Loop id="climbup" path="climb/lanternclimb" delay="0.05" frames="0-5" />
+        <Loop id="climbup" path="climb/lanternclimb" delay="0.0667" frames="0-5" />
         <Anim id="climbLookBackStart" path="climb/lanternclimb" delay="0.08" frames="6,7,8" goto="climbLookBack" />
         <Loop id="climbLookBack" path="climb/lanternclimb" frames="8" />
         
