@@ -21,6 +21,8 @@ const placements = Ahorn.PlacementDict(
     )
 )
 
+mossColor = (51, 193, 17, 1) ./ (255, 255, 255, 1)
+
 Ahorn.minimumSize(entity::MossyWall) = 0, 8
 Ahorn.resizable(entity::MossyWall) = false, true
 
@@ -43,22 +45,22 @@ function Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::MossyWall, room::Ma
 
     if left
         for i in 2:tileHeight - 1
-            Ahorn.drawImage(ctx, "JungleHelper/Moss/mossMid", 8, (i - 1) * 8)
+            Ahorn.drawImage(ctx, "JungleHelper/Moss/moss_mid1", 8, (i - 1) * 8, tint=mossColor)
         end
 
-        Ahorn.drawImage(ctx, "JungleHelper/Moss/mossTop", 8, 0)
-        Ahorn.drawImage(ctx, "JungleHelper/Moss/mossBottom", 8, (tileHeight - 1) * 8)
+        Ahorn.drawImage(ctx, "JungleHelper/Moss/moss_top", 8, 0, tint=mossColor)
+        Ahorn.drawImage(ctx, "JungleHelper/Moss/moss_bottom", 8, (tileHeight - 1) * 8, tint=mossColor)
 
     else
         Ahorn.Cairo.save(ctx)
         Ahorn.scale(ctx, -1, 1)
 
         for i in 2:tileHeight - 1
-            Ahorn.drawImage(ctx, "JungleHelper/Moss/mossMid", 0, (i - 1) * 8)
+            Ahorn.drawImage(ctx, "JungleHelper/Moss/moss_mid1", 0, (i - 1) * 8, tint=mossColor)
         end
 
-        Ahorn.drawImage(ctx, "JungleHelper/Moss/mossTop", 0, 0)
-        Ahorn.drawImage(ctx, "JungleHelper/Moss/mossBottom", 0, (tileHeight - 1) * 8)
+        Ahorn.drawImage(ctx, "JungleHelper/Moss/moss_top", 0, 0, tint=mossColor)
+        Ahorn.drawImage(ctx, "JungleHelper/Moss/moss_bottom", 0, (tileHeight - 1) * 8, tint=mossColor)
 
         Ahorn.restore(ctx)
     end

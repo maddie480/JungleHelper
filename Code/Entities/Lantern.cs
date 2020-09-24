@@ -1,10 +1,13 @@
 ﻿using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
+using MonoMod.Utils;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/Lantern")]
     class Lantern : Entity {
+        public const int ACTIVATION_RADIUS = 50;
+
         public const PlayerSpriteMode SpriteModeMadelineLantern = (PlayerSpriteMode) 444480;
 
         public static void Load() {
@@ -36,6 +39,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             if (lantern) {
                 // throw lantern Madeline sprites in the mix.
                 GFX.SpriteBank.CreateOn(self, "junglehelper_madeline_lantern");
+                new DynData<PlayerSprite>(self)["Mode"] = SpriteModeMadelineLantern;
             }
         }
 

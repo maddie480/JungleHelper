@@ -46,9 +46,9 @@ function Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::RemoteKevin, room::
     height = Int(get(entity.data, "height", 32))
 	
     if height >= 48 && width >= 48
-        faceSprite = Ahorn.getSprite(restrainedTex * "/big_active_up")
+        faceSprite = Ahorn.getSprite(restrainedTex * "/big_active_up00")
     else
-        faceSprite = Ahorn.getSprite(restrainedTex * "/small_active_up")
+        faceSprite = Ahorn.getSprite(restrainedTex * "/small_active_up00")
     end
 
     x, y = Ahorn.position(entity)
