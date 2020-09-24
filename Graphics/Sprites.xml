@@ -20,7 +20,7 @@
             <Frames path="idle/idlelantern" hair="0,-2|0,-2|0,-2|0,-2|0,-1|0,-1|0,-1|0,-1|0,-1"/>
             <Frames path="run/lanternrun" hair="1,-2|1,-1|1,-1|1,-1|1,-3|1,-2|1,-1|1,-1|1,-1|1,-1|1,-3|1,-2"/>
             <Frames path="jump/jumplantern" hair="1,-3|1,-3|1,-2|0,-2"/>
-            <Frames path="slide/slidelantern" hair="0,-2|0,-2|0,-2|0,-2|-1,-2"/>
+            <Frames path="slide/slidelantern" hair="0,-2|0,-2|0,-2|0,-2|0,-2"/>
             <Frames path="climb/lanternclimb" hair="0,-2|0,-2|0,-2|0,-2|-1,-2|-1,-2|0,-1|1,-2:1|2,-2:2"/>
         </Metadata>
     </junglehelper_madeline_lantern>
