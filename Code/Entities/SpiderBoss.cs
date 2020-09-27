@@ -118,6 +118,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             Add(sfx = new SoundSource());
             Add(light = new VertexLight(LIGHT_COLORS[(int) color], 1f, 24, 48));
+
+            // make the spider pop out of existence on the beginning of transitions because it looks better than it freezing into place.
+            Add(new TransitionListener {
+                OnOutBegin = () => Visible = false
+            });
         }
 
         public override void Added(Scene scene) {
