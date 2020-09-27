@@ -12,7 +12,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         public SpinyPlant(EntityData data, Vector2 offset) : base(data.Position + offset) {
             lines = data.Height / 8;
             color = data.Attr("color", "Blue");
-            Depth = -60;
+            Depth = -9500;
 
             Collider = new Hitbox(12f, data.Height - 8f, 6f, 4f);
             Add(new PlayerCollider(killPlayer));
