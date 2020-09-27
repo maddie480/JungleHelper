@@ -17,6 +17,7 @@ namespace Celeste.Mod.JungleHelper {
             TheoStatueGate.Load();
             UnrandomizedCrumblePlatform.Load();
             Lantern.Load();
+            SpiderBoss.Load();
         }
 
         public override void Unload() {
@@ -24,6 +25,7 @@ namespace Celeste.Mod.JungleHelper {
             TheoStatueGate.Unload();
             UnrandomizedCrumblePlatform.Unload();
             Lantern.Unload();
+            SpiderBoss.Unload();
         }
 
         public override void LoadContent(bool firstLoad) {

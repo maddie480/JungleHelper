@@ -2,11 +2,41 @@
 using Microsoft.Xna.Framework;
 using Monocle;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/SpiderBoss")]
     class SpiderBoss : Entity {
+        private static bool usingWatchtower;
+
+        public static void Load() {
+            On.Celeste.LevelLoader.ctor += onLevelStart;
+            On.Celeste.Lookout.LookRoutine += onWatchtowerUse;
+        }
+
+        public static void Unload() {
+            On.Celeste.LevelLoader.ctor -= onLevelStart;
+            On.Celeste.Lookout.LookRoutine -= onWatchtowerUse;
+        }
+
+        private static void onLevelStart(On.Celeste.LevelLoader.orig_ctor orig, LevelLoader self, Session session, Vector2? startPosition) {
+            orig(self, session, startPosition);
+            usingWatchtower = false;
+        }
+
+        private static IEnumerator onWatchtowerUse(On.Celeste.Lookout.orig_LookRoutine orig, Lookout self, Player player) {
+            usingWatchtower = true;
+
+            IEnumerator origRoutine = orig(self, player);
+            while (origRoutine.MoveNext()) {
+                yield return origRoutine.Current;
+            }
+
+            usingWatchtower = false;
+        }
+
+
         private enum SpiderColor {
             Blue, Purple, Red
         };
@@ -19,6 +49,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private readonly float[] RESPAWN_DELAY = {
             1f, 0f, 0f
         };
+        private const float RESPAWN_DELAY_AFTER_WATCHTOWER = 1f;
 
         // configuration constants: dimensions in px
         private const float SLIDE_DISTANCE = 24f;
@@ -28,6 +59,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private readonly float[] TRACK_PLAYER_SPEED = {
             50f, 100f, float.MaxValue
         };
+        private const float WATCHTOWER_RETRACT_SPEED = 100f;
 
         // configuration constants: accelerations in px/s ... /s
         private const float FALLING_ACCELERATION = 400f;
@@ -81,6 +113,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             stateMachine.SetCallbacks(1, poppingInUpdate, null, poppingInBegin);
             stateMachine.SetCallbacks(2, trackingUpdate, null, trackingBegin);
             stateMachine.SetCallbacks(3, fallingUpdate, null, fallingBegin, fallingEnd);
+            stateMachine.SetCallbacks(4, watchtowerRetractUpdate);
             Add(stateMachine);
 
             Add(sfx = new SoundSource());
@@ -125,6 +158,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private int waitingUpdate() {
+            // if player is using a watchtower, give them some delay before the spider shows up again (camera has to come back to them).
+            if (usingWatchtower) {
+                stateDelay = RESPAWN_DELAY_AFTER_WATCHTOWER;
+            }
+
             // if delay is over, player already moved and paired spider is falling if any, switch to the Popping In state.
             if (stateDelay <= 0f && !didPlayerJustRespawn() && (pairedSpider == null || ignorePairedSpider || pairedSpider.falling)) {
                 justRespawned = false;
@@ -168,6 +206,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private int poppingInUpdate() {
+            // if player is using a watchtower, give up and switch to the "Watchtower Retract" state.
+            if (usingWatchtower) {
+                return 4;
+            }
+
             // ease the spider in.
             float progress = Calc.ClampedMap(stateDelay, SLIDE_DURATION, 0);
             cameraRelativeY = MathHelper.Lerp(-8f, SLIDE_DISTANCE, Ease.SineOut(progress));
@@ -189,7 +232,12 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private int trackingUpdate() {
-            // track the X position of the player, if the option is enabled.
+            // if player is using a watchtower, give up and switch to the "Watchtower Retract" state.
+            if (usingWatchtower) {
+                return 4;
+            }
+
+            // track the X position of the player.
             Player player = Scene.Tracker.GetEntity<Player>();
             if (player != null) {
                 if (TRACK_PLAYER_ACCELERATION[(int) color] == float.MaxValue) {
@@ -252,8 +300,26 @@ namespace Celeste.Mod.JungleHelper.Entities {
             web.Position.Y = -22f;
         }
 
+        private int watchtowerRetractUpdate() {
+            // retract the spider until it is off-screen.
+            cameraRelativeY -= WATCHTOWER_RETRACT_SPEED * Engine.DeltaTime;
+
+            // if we're finished retracting, switch to the Waiting state.
+            if (cameraRelativeY <= -8f) {
+                if (pairedSpider != null) {
+                    // since the current spider was getting ready to fall, it should start falling again without waiting for the paired spider...
+                    // because said paired spider is waiting for the current spider to fall.
+                    ignorePairedSpider = true;
+                }
+
+                return 0;
+            }
+            return 4;
+        }
+
         public override void Update() {
             stateDelay -= Engine.DeltaTime;
+
             base.Update();
             Position.Y = SceneAs<Level>().Camera.Top + cameraRelativeY;
         }
