@@ -8,8 +8,6 @@ using System.Reflection;
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/Lantern")]
     class Lantern : Entity {
-        public const int ACTIVATION_RADIUS = 50;
-
         public const PlayerSpriteMode SpriteModeMadelineLantern = (PlayerSpriteMode) 444480;
 
         private static Hook hookCanDash;

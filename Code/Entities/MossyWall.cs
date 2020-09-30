@@ -8,6 +8,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
     // functionally identical to an ice wall, except it looks like moss and can be dissolved with a lantern.
     [CustomEntity("JungleHelper/MossyWall")]
     class MossyWall : Entity {
+        private const int LANTERN_ACTIVATION_RADIUS = 50;
+
         // colors used when player gets closed but moss isn't dissolved yet (from closest to furthest, 1 line per pixel).
         private static readonly Color[] DISTANCE_BASED_COLORS = {
             new Color(Calc.HexToColor("7A612D"), 25),
@@ -90,13 +92,13 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     distance = (TopCenter + mossPart.Position - maddy.Position).Length();
                 }
 
-                if (distance < Lantern.ACTIVATION_RADIUS) {
+                if (distance < LANTERN_ACTIVATION_RADIUS) {
                     // moss is dissolved, make it uncollidable.
                     mossPart.Color.A = 0;
                     Collidable = false;
-                } else if (distance - Lantern.ACTIVATION_RADIUS < DISTANCE_BASED_COLORS.Length) {
+                } else if (distance - LANTERN_ACTIVATION_RADIUS < DISTANCE_BASED_COLORS.Length) {
                     // moss has a particular fade of color.
-                    mossPart.Color = DISTANCE_BASED_COLORS[(int) Math.Floor(distance - Lantern.ACTIVATION_RADIUS)];
+                    mossPart.Color = DISTANCE_BASED_COLORS[(int) Math.Floor(distance - LANTERN_ACTIVATION_RADIUS)];
                 } else {
                     // moss is green (player is too far or not here).
                     mossPart.Color = REGULAR_COLOR;

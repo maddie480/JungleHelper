@@ -6,6 +6,8 @@ using System;
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/SpinyPlant")]
     class SpinyPlant : Entity {
+        private const int LANTERN_ACTIVATION_RADIUS = 75;
+
         private int lines;
         private string color;
 
@@ -23,10 +25,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         public override void Awake(Scene scene) {
-            MTexture top = GFX.Game[$"JungleHelper/SpinyPlant/Spiny{color}Top"];
-            MTexture middle = GFX.Game[$"JungleHelper/SpinyPlant/Spiny{color}Mid"];
-            MTexture bottom = GFX.Game[$"JungleHelper/SpinyPlant/Spiny{color}Bottom"];
-
             if (lines == 2) {
                 Collider bak = Collider;
                 Collider = new Hitbox(8f, 1f, 8, -1);
@@ -50,7 +48,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     }
                 }
                 // special case (height 16 / 2 "lines"): use the "solo" sprite
-                Image image = new Image(GFX.Game[$"JungleHelper/SpinyPlant/Spiny{color}{section}"]);
+                GraphicsComponent image = generateSpinyPlantPart(section);
                 image.X = section == "Solo" ? 4 : 0;
                 Add(image);
             } else {
@@ -59,7 +57,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                         i = lines - 2;
                     }
 
-                    MTexture texture = middle;
+                    string section = "Mid";
                     if (i == 0) {
                         Collider bak = Collider;
                         Collider = new Hitbox(8f, 1f, 8, -1);
@@ -67,7 +65,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                         Collider = bak;
 
                         if (!solidAbove) {
-                            texture = top;
+                            section = "Top";
                         } else {
                             Collider.Top -= 4f;
                             Collider.Height += 4f;
@@ -79,15 +77,62 @@ namespace Celeste.Mod.JungleHelper.Entities {
                         Collider = bak;
 
                         if (!solidBelow) {
-                            texture = bottom;
+                            section = "Bottom";
                         } else {
                             Collider.Height += 4f;
                         }
                     }
 
-                    Image image = new Image(texture);
+                    GraphicsComponent image = generateSpinyPlantPart(section);
                     image.Y = i * 8;
                     Add(image);
+                }
+            }
+        }
+
+        private GraphicsComponent generateSpinyPlantPart(string section) {
+            if (color == "Yellow") {
+                // use a sprite so that we can trigger the retract/expand animations.
+                return JungleHelperModule.SpriteBank.Create($"spiny_plant_{color.ToLowerInvariant()}_{section.ToLowerInvariant()}");
+            } else {
+                // use an image because we only have a static image anyway.
+                return new Image(GFX.Game[$"JungleHelper/SpinyPlant/Spiny{color}{section}"]);
+            }
+        }
+
+        public override void Update() {
+            base.Update();
+
+            Player maddy = Scene.Tracker.GetEntity<Player>();
+            if (maddy?.Sprite.Mode != Lantern.SpriteModeMadelineLantern) {
+                maddy = null; // Maddy has no torch = Maddy is not here.
+            }
+
+            // this is collidable by default, until we figure out that a part of the plant is close enough to the player.
+            Collidable = true;
+
+            foreach (Sprite plantPart in Components.GetAll<Sprite>()) {
+                float distance = float.MaxValue;
+                if (maddy != null) {
+                    distance = (TopCenter + plantPart.Position - maddy.Position).Length();
+                }
+
+                if (distance < LANTERN_ACTIVATION_RADIUS) {
+                    // plant is retracted!
+                    Collidable = false;
+
+                    // is this part retracted yet?
+                    if (plantPart.CurrentAnimationID.StartsWith("extend")) {
+                        // no, so go ahead and retract it.
+                        int frame = (plantPart.CurrentAnimationID == "extended" ? 0 : 6 - plantPart.CurrentAnimationFrame);
+                        plantPart.Play(Top + plantPart.Position.Y - (maddy?.Position.Y ?? 0) < 0 ? "retract_below" : "retract_above");
+                        plantPart.SetAnimationFrame(frame);
+                    }
+                } else if (plantPart.CurrentAnimationID.StartsWith("retract")) {
+                    // we are out of radius and retracting/retracted, so extend.
+                    int frame = (plantPart.CurrentAnimationID == "retracted" ? 0 : 6 - plantPart.CurrentAnimationFrame);
+                    plantPart.Play(Top + plantPart.Position.Y - (maddy?.Position.Y ?? 0) < 0 ? "extend_below" : "extend_above");
+                    plantPart.SetAnimationFrame(frame);
                 }
             }
         }
