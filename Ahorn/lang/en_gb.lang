@@ -18,8 +18,6 @@ placements.triggers.JungleHelper/GeckoTutorialTrigger.tooltips.geckoId=Which gec
 placements.triggers.JungleHelper/GeckoTutorialTrigger.tooltips.showTutorial=If ticked, the targeted gecko will show its speech bubble. If unchecked, the gecko will hide its speech bubble.
 
 # Remote Kevin Refill
-placements.entities.JungleHelper/RemoteKevinRefill.tooltips.usedBySlideBlock=Whether this refill should refill the slide blocks hitting it.
-placements.entities.JungleHelper/RemoteKevinRefill.tooltips.usedByPlayer=Whether this refill should refill all slide blocks in the room when the player hits it.
 placements.entities.JungleHelper/RemoteKevinRefill.tooltips.oneUse=Whether the refill should respawn after being used.
 
 # Remote Kevin

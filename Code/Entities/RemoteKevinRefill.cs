@@ -9,6 +9,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/RemoteKevinRefill")]
     class RemoteKevinRefill : Entity {
 
+        private static ParticleType P_SlideRefillGlow;
+        private static ParticleType P_SlideRefillRegen;
+        private static ParticleType P_SlideRefillShatter;
+
         private Sprite sprite;
         private Sprite flash;
         private Image outline;
@@ -23,21 +27,15 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private SineWave sine;
 
         private bool oneUse;
-        private bool usedBySlideBlock;
 
         private float respawnTimer;
 
-        public RemoteKevinRefill(Vector2 position, bool oneUse, bool usedByPlayer, bool usedBySlideBlock)
-            : base(position) {
-
+        public RemoteKevinRefill(Vector2 position, bool oneUse) : base(position) {
             Collider = new Hitbox(16f, 16f, -8f, -8f);
 
-            if (usedByPlayer) {
-                Add(new PlayerCollider(OnPlayer));
-            }
+            Add(new PlayerCollider(OnPlayer));
 
             this.oneUse = oneUse;
-            this.usedBySlideBlock = usedBySlideBlock;
 
             Add(outline = new Image(GFX.Game["JungleHelper/SlideBlockRefill/outline"]));
             outline.CenterOrigin();
@@ -65,11 +63,24 @@ namespace Celeste.Mod.JungleHelper.Entities {
             UpdateY();
 
             Depth = -100;
+
+            if (P_SlideRefillGlow == null) {
+                P_SlideRefillGlow = new ParticleType(Refill.P_Glow) {
+                    Color = Calc.HexToColor("C1734F"),
+                    Color2 = Calc.HexToColor("960463"),
+                };
+                P_SlideRefillRegen = new ParticleType(Refill.P_Regen) {
+                    Color = Calc.HexToColor("C1734F"),
+                    Color2 = Calc.HexToColor("960463"),
+                };
+                P_SlideRefillShatter = new ParticleType(Refill.P_Shatter) {
+                    Color = Calc.HexToColor("C1734F"),
+                    Color2 = Calc.HexToColor("960463"),
+                };
+            }
         }
 
-        public RemoteKevinRefill(EntityData data, Vector2 offset)
-            : this(data.Position + offset, data.Bool("oneUse"), data.Bool("usedByPlayer"), data.Bool("usedBySlideBlock")) {
-        }
+        public RemoteKevinRefill(EntityData data, Vector2 offset) : this(data.Position + offset, data.Bool("oneUse")) { }
 
         public override void Added(Scene scene) {
             base.Added(scene);
@@ -82,23 +93,12 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 respawnTimer -= Engine.DeltaTime;
             }
 
-            RemoteKevin hitSlideBlock;
-            if (Collidable && usedBySlideBlock && (hitSlideBlock = CollideFirst<RemoteKevin>()) != null) {
-                if (hitSlideBlock.Refill()) {
-                    Audio.Play("event:/junglehelper/sfx/SlideRefill_touch", Position);
-                    Input.Rumble(RumbleStrength.Medium, RumbleLength.Medium);
-                    Collidable = false;
-                    Add(new Coroutine(RefillRoutine(hitSlideBlock.Speed)));
-                    respawnTimer = 2.5f;
-                }
-            }
-
-            if (respawnTimer <= 0f && !Collidable && (!usedBySlideBlock || !CollideCheck<RemoteKevin>())) {
+            if (respawnTimer <= 0f && !Collidable) {
                 Respawn();
             }
 
             if (Collidable && Scene.OnInterval(0.1f)) {
-                level.ParticlesFG.Emit(Refill.P_Glow, 1, Position, Vector2.One * 5f);
+                level.ParticlesFG.Emit(P_SlideRefillGlow, 1, Position, Vector2.One * 5f);
             }
 
             UpdateY();
@@ -120,7 +120,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 Depth = -100;
                 wiggler.Start();
                 Audio.Play("event:/game/general/diamond_return", Position);
-                level.ParticlesFG.Emit(Refill.P_Regen, 16, Position, Vector2.One * 2f);
+                level.ParticlesFG.Emit(P_SlideRefillRegen, 16, Position, Vector2.One * 2f);
             }
         }
 
@@ -164,8 +164,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
             yield return 0.05f;
 
             float angle = entitySpeed.Angle();
-            level.ParticlesFG.Emit(Refill.P_Shatter, 5, Position, Vector2.One * 4f, angle - (float) Math.PI / 2f);
-            level.ParticlesFG.Emit(Refill.P_Shatter, 5, Position, Vector2.One * 4f, angle + (float) Math.PI / 2f);
+            level.ParticlesFG.Emit(P_SlideRefillShatter, 5, Position, Vector2.One * 4f, angle - (float) Math.PI / 2f);
+            level.ParticlesFG.Emit(P_SlideRefillShatter, 5, Position, Vector2.One * 4f, angle + (float) Math.PI / 2f);
             SlashFx.Burst(Position, angle);
             if (oneUse) {
                 RemoveSelf();

@@ -2,24 +2,12 @@ module JungleHelperRemoteKevinRefills
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/RemoteKevinRefill" RemoteKevinRefill(x::Integer, y::Integer, oneUse::Bool=false, usedByPlayer::Bool=true, usedBySlideBlock::Bool=true)
+@mapdef Entity "JungleHelper/RemoteKevinRefill" RemoteKevinRefill(x::Integer, y::Integer, oneUse::Bool=false)
 
 const placements = Ahorn.PlacementDict(
-    "Slide Block Refill (Used By Player) (Jungle Helper)" => Ahorn.EntityPlacement(
+    "Slide Block Refill (Jungle Helper)" => Ahorn.EntityPlacement(
         RemoteKevinRefill,
-        "rectangle",
-        Dict{String, Any}(
-            "usedByPlayer" => true,
-            "usedBySlideBlock" => false
-        )
-    ),
-    "Slide Block Refill (Used By Slide Block) (Jungle Helper)" => Ahorn.EntityPlacement(
-        RemoteKevinRefill,
-        "rectangle",
-        Dict{String, Any}(
-            "usedByPlayer" => false,
-            "usedBySlideBlock" => true
-        )
+        "rectangle"
     )
 )
 
