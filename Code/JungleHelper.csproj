@@ -85,6 +85,7 @@
     <Compile Include="Entities\BouncyShroom.cs" />
     <Compile Include="Entities\FallingKillbox.cs" />
     <Compile Include="Entities\Lantern.cs" />
+    <Compile Include="Entities\Snake.cs" />
     <Compile Include="Triggers\GeckoTutorialTrigger.cs" />
     <Compile Include="Entities\RemoteKevinRefill.cs" />
     <Compile Include="Components\SlopedColliderWithRectangles.cs" />

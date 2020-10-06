@@ -221,4 +221,13 @@
         <Anim id="extend_below" path="SpinyRetract/YellowSolo/ExtendBelow/SpinyYellowSolo" delay="0.0625" goto="extended"/>
         <Anim id="extend_above" path="SpinyRetract/YellowSolo/ExtendAbove/SpinyYellowSolo" delay="0.0625" goto="extended"/>
     </spiny_plant_yellow_solo>
+    
+    <snek path="JungleHelper/Snake/" start="idle_aggro">
+        <Loop id="idle_aggro" path="IdleAggro/snake_idle" delay="0.1"/>
+        <Loop id="idle_scared" path="IdleScared/idle_scared" delay="0.1"/>
+        <Loop id="moving_aggro" path="MovingAggro/snake" delay="0.1"/>
+        <Loop id="moving_scared" path="MovingScared/snake_scared" delay="0.1"/>
+        <Anim id="shock" path="Shock/shock" delay="0.1" goto="moving_scared"/>
+        <Anim id="idle_hiss" path="IdleAggro/hiss" delay="0.1"/>
+    </snek>
 </Sprites>
