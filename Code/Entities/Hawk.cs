@@ -20,7 +20,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private Sprite sprite;
 
         private States state = States.Wait;
-        private float initialY;
         private Vector2 flingSpeed;
 
         private float flingAccel;
@@ -28,14 +27,15 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private float hawkSpeed;
         private readonly float speedWithPlayer;
         private readonly float speedWithoutPlayer;
+        private readonly float initialY;
         private PlayerCollider playerCollider;
-        private TransitionListener playerTransition;
 
         public Hawk(EntityData data, Vector2 levelOffset) : base(data.Position + levelOffset) {
             Tag |= Tags.TransitionUpdate;
             Position = data.Position + levelOffset;
             speedWithPlayer = data.Float("mainSpeed");
             speedWithoutPlayer = data.Float("slowerSpeed");
+            initialY = Y;
             Add(sprite = JungleHelperModule.SpriteBank.Create("hawk"));
             sprite.Play("hover");
             sprite.Position = spriteOffset;
@@ -44,7 +44,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             };
             Collider = new CircleColliderWithRectangles(16);
             Add(playerCollider = new PlayerCollider(OnPlayer));
-            Add(playerTransition = new TransitionListener {
+            Add(new TransitionListener {
                  OnOutBegin = delegate{
                      // make hawk invisible during this
                      Visible = false;
@@ -72,7 +72,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private void OnPlayer(Player player) {
             if ((CollideFirst<Solid>(Position) == null) && (state == States.Wait || state == States.Move)) {
-                initialY = Y;
                 flingSpeed = player.Speed * 0.4f;
                 flingSpeed.Y = 120f;
                 flingAccel = 1000f;
@@ -102,6 +101,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 case States.Move:
                     // move without player
                     X += speedWithoutPlayer * Engine.DeltaTime;
+
+                    // drag hawk towards its initial Y position.
+                    Y = Calc.Approach(Y, initialY, 20f * Engine.DeltaTime);
                     break;
                 case States.Wait:
                     // wait for the player
