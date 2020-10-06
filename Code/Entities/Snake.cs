@@ -9,7 +9,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private const float ACTIVATION_RADIUS = 100f;
         private const float LOST_RADIUS = 200f;
 
-        private const float SPEED = 100f;
+        private const float PEAK_ATTACKING_SPEED = 200f;
+        private const float ATTACKING_ACCELERATION = 300f;
+
+        private const float RETURNING_SPEED = 100f;
 
         private readonly Vector2 startingPosition;
         private readonly Vector2 scaredPosition;
@@ -17,13 +20,15 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private StateMachine stateMachine;
         private Sprite sprite;
 
+        private float currentSpeed;
+
         public Snake(EntityData data, Vector2 offset) : base(data.Position + offset) {
             startingPosition = Position;
             scaredPosition = data.NodesOffset(offset)[0];
 
             stateMachine = new StateMachine();
             stateMachine.SetCallbacks(0, waitingForPlayerUpdate, null, waitingForPlayerBegin);
-            stateMachine.SetCallbacks(1, attackingPlayerUpdate);
+            stateMachine.SetCallbacks(1, attackingPlayerUpdate, null, attackingPlayerBegin);
             stateMachine.SetCallbacks(2, returningToStartPointUpdate, null, returningToStartPointBegin);
             stateMachine.SetCallbacks(3, runningAwayUpdate, null, runningAwayBegin);
             stateMachine.SetCallbacks(4, hiddenUpdate, null, hiddenBegin);
@@ -87,6 +92,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
             return 0;
         }
 
+        private void attackingPlayerBegin() {
+            currentSpeed = 0f;
+        }
+
         private int attackingPlayerUpdate() {
             Player player = Scene.Tracker.GetEntity<Player>();
 
@@ -95,47 +104,62 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 return 2;
             }
 
+            // accelerate!
+            currentSpeed = Calc.Approach(currentSpeed, PEAK_ATTACKING_SPEED, ATTACKING_ACCELERATION * Engine.DeltaTime);
+
             // move towards the player.
-            float startingX = ExactPosition.X;
-            float startingXApprox = Position.X;
+            float startingXExact = ExactPosition.X;
+            float startingX = Position.X;
 
-            // compute the movement we want the snake to follow.
-            float toX = Calc.Approach(ExactPosition.X, player.Position.X - 32f, SPEED * Engine.DeltaTime);
+            moveTowardsPlayer(player);
 
-            // make the hitbox 1px wide, on the front of the snake.
-            Collider.Width = 1f;
-            if (toX > ExactPosition.X) {
-                Collider.Position.X = 60;
-            }
-
-            // check if the front of the snake will be on ground, and actually move if it is the case.
-            if (OnGround(new Vector2(toX, ExactPosition.Y))) {
-                MoveToX(toX);
-            }
-
-            // restore the original hitbox.
-            Collider.Width = 58f;
-            Collider.Position.X = 3f;
-
-            if (startingX != ExactPosition.X) {
+            if (startingX != Position.X) {
                 // we moved. play the moving animation
                 if (!sprite.CurrentAnimationID.StartsWith("moving_")) {
                     sprite.Play("moving_aggro");
                 }
 
-                if (Position.X != startingXApprox) {
-                    // and flip the sprite accordingly if it moved by at least 1 pixel.
-                    sprite.FlipX = (startingX > ExactPosition.X);
-                }
-            } else {
+                // and flip the sprite accordingly if it moved by at least 1 pixel.
+                sprite.FlipX = (startingX > Position.X);
+            } else if (startingXExact == ExactPosition.X) {
                 // we didn't move. play the idle animation
                 if (!sprite.CurrentAnimationID.StartsWith("idle_")) {
                     sprite.Play("idle_aggro");
                 }
+                currentSpeed = 0;
             }
 
             // and continue attacking.
             return 1;
+        }
+
+        private void moveTowardsPlayer(Player player) {
+            // compute the movement we want the snake to follow.
+            float finalTargetPosition = Calc.Approach(ExactPosition.X, player.Position.X - 32f, currentSpeed * Engine.DeltaTime);
+
+            // make the hitbox 1px wide, on the front of the snake.
+            Collider.Width = 1f;
+            if (finalTargetPosition > ExactPosition.X) {
+                Collider.Position.X = 60;
+            }
+
+            float toX = ExactPosition.X;
+
+            while (toX != finalTargetPosition) {
+                // make a 1 pixel step at a time.
+                toX = Calc.Approach(toX, finalTargetPosition, 1f);
+
+                // check if the front of the snake will be on ground, and actually move if it is the case.
+                if (OnGround(new Vector2(toX, ExactPosition.Y))) {
+                    MoveToX(toX);
+                } else {
+                    break;
+                }
+            }
+
+            // restore the original hitbox.
+            Collider.Width = 58f;
+            Collider.Position.X = 3f;
         }
 
         private void returningToStartPointBegin() {
@@ -147,7 +171,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private int returningToStartPointUpdate() {
             // move towards the starting point.
-            float targetForThisFrame = Calc.Approach(Position.X, startingPosition.X, SPEED * Engine.DeltaTime);
+            float targetForThisFrame = Calc.Approach(Position.X, startingPosition.X, RETURNING_SPEED * Engine.DeltaTime);
             NaiveMove(new Vector2(targetForThisFrame - Position.X, 0f));
 
             if (Position.X == startingPosition.X) {
@@ -173,7 +197,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             sprite.FlipX = (scaredPosition.X < Position.X);
 
             // move towards the hiding point.
-            float targetForThisFrame = Calc.Approach(Position.X, scaredPosition.X, SPEED * Engine.DeltaTime);
+            float targetForThisFrame = Calc.Approach(Position.X, scaredPosition.X, PEAK_ATTACKING_SPEED * Engine.DeltaTime);
             NaiveMove(new Vector2(targetForThisFrame - Position.X, 0f));
 
             if (Position.X == scaredPosition.X) {
