@@ -7,8 +7,10 @@ using Monocle;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections;
+using Celeste.Mod.Entities;
 
 namespace Celeste.Mod.JungleHelper.Triggers {
+    [CustomEntity("JungleHelper/UITextTrigger")]
     class UITextTrigger:Trigger {
         private VirtualRenderTarget textTarget;
         public bool disposed;
@@ -31,20 +33,20 @@ namespace Celeste.Mod.JungleHelper.Triggers {
                 yield return null;
             }
         }
-        public override void Update() {
-            if (PlayerIsInside && !displayed) {
-                Add(new Coroutine(MakeTextAppear()));
-            } else if (!PlayerIsInside && displayed) {
-                Add(new Coroutine(MakeTextDisappear()));
-            }
-            base.Update();
+        public override void OnEnter(Player player) {
+            Add(new Coroutine(MakeTextAppear()));
+            base.OnEnter(player);
+        }
+        public override void OnLeave(Player player) {
+            Add(new Coroutine(MakeTextDisappear()));
+            base.OnLeave(player);
         }
 
         private void DrawText(Vector2 offset, Color color) {
             if (text != null) {
                 text = ActiveFont.FontSize.AutoNewline(text, 1024);
             }
-            MTexture mTexture = GFX.Gui["textside"];
+            MTexture mTexture = GFX.Gui["poemside"];
             float num = ActiveFont.Measure(text).X * 1.5f;
             Vector2 vector = new Vector2(960f, 540f) + offset;
             mTexture.DrawCentered(vector - Vector2.UnitX * (num / 2f + 64f), color);
@@ -52,6 +54,9 @@ namespace Celeste.Mod.JungleHelper.Triggers {
             mTexture.DrawCentered(vector + Vector2.UnitX * (num / 2f + 64f), color);
         }
         public UITextTrigger(EntityData data, Vector2 offset) : base(data, offset) {
+            int num = Math.Min(1920, Engine.ViewWidth);
+            int num2 = Math.Min(1080, Engine.ViewHeight);
+            textTarget = VirtualContent.CreateRenderTarget("text", num, num2);
             text = Dialog.Get(data.Attr("Dialog", "CH5_BSIDE_THEO_B"));
             base.Tag = ((int) Tags.HUD | (int) Tags.FrozenUpdate);
             Add(new BeforeRenderHook(BeforeRender));
