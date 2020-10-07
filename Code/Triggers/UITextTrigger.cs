@@ -10,36 +10,19 @@ using System.Collections;
 using Celeste.Mod.Entities;
 
 namespace Celeste.Mod.JungleHelper.Triggers {
-    [CustomEntity("JungleHelper/UITextTrigger")]
-    class UITextTrigger:Trigger {
+    public class UITextSeparatelyBcTriggersDontRender : Entity {
         private VirtualRenderTarget textTarget;
-        public bool disposed;
-        public float Alpha = 1f;
+        public bool disposed = false;
+        public float Alpha = 0f;
         public bool displayed;
-        public float TextAlpha = 1f;
         public string text;
-        private IEnumerator MakeTextAppear() {
-            displayed = true;
-            for (float t2 = 0f; t2< 1f; t2 += Engine.RawDeltaTime)
-	        {
-		        Alpha = Ease.CubeOut(t2);
-		        yield return null;
-	        }
-        }
-        private IEnumerator MakeTextDisappear() {
-            displayed = true;
-            for (float t = 0f; t < 1f; t += Engine.RawDeltaTime * 2f) {
-                Alpha = Ease.CubeIn(1f - t);
-                yield return null;
-            }
-        }
-        public override void OnEnter(Player player) {
-            Add(new Coroutine(MakeTextAppear()));
-            base.OnEnter(player);
-        }
-        public override void OnLeave(Player player) {
-            Add(new Coroutine(MakeTextDisappear()));
-            base.OnLeave(player);
+
+        public UITextSeparatelyBcTriggersDontRender(Vector2 position, string text) {
+            int num = Math.Min(1920, Engine.ViewWidth);
+            int num2 = Math.Min(1080, Engine.ViewHeight);
+            textTarget = VirtualContent.CreateRenderTarget("text", num, num2);
+            base.Tag = ((int) Tags.HUD | (int) Tags.FrozenUpdate);
+            Add(new BeforeRenderHook(BeforeRender));
         }
 
         private void DrawText(Vector2 offset, Color color) {
@@ -53,14 +36,6 @@ namespace Celeste.Mod.JungleHelper.Triggers {
             ActiveFont.Draw(text, vector, new Vector2(0.5f, 0.5f), Vector2.One * 1.5f, color);
             mTexture.DrawCentered(vector + Vector2.UnitX * (num / 2f + 64f), color);
         }
-        public UITextTrigger(EntityData data, Vector2 offset) : base(data, offset) {
-            int num = Math.Min(1920, Engine.ViewWidth);
-            int num2 = Math.Min(1080, Engine.ViewHeight);
-            textTarget = VirtualContent.CreateRenderTarget("text", num, num2);
-            text = Dialog.Get(data.Attr("Dialog", "CH5_BSIDE_THEO_B"));
-            base.Tag = ((int) Tags.HUD | (int) Tags.FrozenUpdate);
-            Add(new BeforeRenderHook(BeforeRender));
-        }
 
         public void BeforeRender() {
             if (!disposed) {
@@ -69,14 +44,14 @@ namespace Celeste.Mod.JungleHelper.Triggers {
                 Matrix transformationMatrix = Matrix.CreateScale((float) textTarget.Width / 1920f);
                 Draw.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, null, null, null, transformationMatrix);
                 if (!string.IsNullOrEmpty(text)) {
-                    DrawText(new Vector2(-2f, 0f), Color.Black * TextAlpha);
-                    DrawText(new Vector2(2f, 0f), Color.Black * TextAlpha);
-                    DrawText(new Vector2(0f, -2f), Color.Black * TextAlpha);
-                    DrawText(new Vector2(0f, 2f), Color.Black * TextAlpha);
-                    DrawText(Vector2.Zero, Color.White * TextAlpha);
+                    DrawText(new Vector2(-2f, 0f), Color.Black);
+                    DrawText(new Vector2(2f, 0f), Color.Black);
+                    DrawText(new Vector2(0f, -2f), Color.Black);
+                    DrawText(new Vector2(0f, 2f), Color.Black);
+                    DrawText(Vector2.Zero, Color.White);
                 }
                 Draw.SpriteBatch.End();
-                //MagicGlow.Render((RenderTarget2D) text, timer, -1f, Matrix.CreateScale(0.5f));
+               
             }
         }
         public void Dispose() {
@@ -92,8 +67,41 @@ namespace Celeste.Mod.JungleHelper.Triggers {
             Dispose();
         }
         public override void Render() {
-            Draw.SpriteBatch.Draw((RenderTarget2D) textTarget, Vector2.Zero, textTarget.Bounds, Color.White*Alpha, 0f, Vector2.Zero, 1920f / (float) textTarget.Width, SpriteEffects.None, 0f);
-            base.Render();
+            Draw.SpriteBatch.Draw((RenderTarget2D) textTarget, Vector2.Zero, textTarget.Bounds, Color.White * Alpha, 0f, Vector2.Zero, 1920f / (float) textTarget.Width, SpriteEffects.None, 0f);
+        }
+    }
+    [CustomEntity("JungleHelper/UITextTrigger")]
+    public class UITextTrigger : Trigger {
+        
+        public UITextSeparatelyBcTriggersDontRender UItext;
+        public UITextTrigger(EntityData data, Vector2 offset) : base(data, offset) {
+            UItext = new UITextSeparatelyBcTriggersDontRender(Vector2.Zero, Dialog.Get(data.Attr("text")));
+        }
+        public override void Awake(Scene scene) {
+            scene.Add(UItext);
+            base.Awake(scene);
+        }
+        public override void OnEnter(Player player) {
+            Add(new Coroutine(MakeTextAppear()));
+            base.OnEnter(player);
+        }
+        public override void OnLeave(Player player) {
+            UItext.Add(new Coroutine(MakeTextDisappear()));
+            base.OnLeave(player);
+        }
+        private IEnumerator MakeTextAppear() {
+            UItext.displayed = true;
+            for (float t2 = 0f; t2 < 1f; t2 += Engine.RawDeltaTime) {
+                UItext.Alpha = Ease.CubeOut(t2);
+                yield return null;
+            }
+        }
+        private IEnumerator MakeTextDisappear() {
+            UItext.displayed = false;
+            for (float t = 0f; t < 1f; t += Engine.RawDeltaTime * 2f) {
+                UItext.Alpha = Ease.CubeIn(1f - t);
+                yield return null;
+            }
         }
     }
 }
