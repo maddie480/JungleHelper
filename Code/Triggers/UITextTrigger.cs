@@ -21,6 +21,8 @@ namespace Celeste.Mod.JungleHelper.Triggers {
             int num = Math.Min(1920, Engine.ViewWidth);
             int num2 = Math.Min(1080, Engine.ViewHeight);
             textTarget = VirtualContent.CreateRenderTarget("text", num, num2);
+            this.text = text;
+            //this.text = text;
             base.Tag = ((int) Tags.HUD | (int) Tags.FrozenUpdate);
             Add(new BeforeRenderHook(BeforeRender));
         }
@@ -29,12 +31,9 @@ namespace Celeste.Mod.JungleHelper.Triggers {
             if (text != null) {
                 text = ActiveFont.FontSize.AutoNewline(text, 1024);
             }
-            MTexture mTexture = GFX.Gui["poemside"];
             float num = ActiveFont.Measure(text).X * 1.5f;
             Vector2 vector = new Vector2(960f, 540f) + offset;
-            mTexture.DrawCentered(vector - Vector2.UnitX * (num / 2f + 64f), color);
             ActiveFont.Draw(text, vector, new Vector2(0.5f, 0.5f), Vector2.One * 1.5f, color);
-            mTexture.DrawCentered(vector + Vector2.UnitX * (num / 2f + 64f), color);
         }
 
         public void BeforeRender() {
@@ -75,7 +74,9 @@ namespace Celeste.Mod.JungleHelper.Triggers {
         
         public UITextSeparatelyBcTriggersDontRender UItext;
         public UITextTrigger(EntityData data, Vector2 offset) : base(data, offset) {
-            UItext = new UITextSeparatelyBcTriggersDontRender(Vector2.Zero, Dialog.Get(data.Attr("text")));
+            
+            
+            UItext = new UITextSeparatelyBcTriggersDontRender(Vector2.Zero, Dialog.Get(data.Attr("Dialog")));
         }
         public override void Awake(Scene scene) {
             scene.Add(UItext);
