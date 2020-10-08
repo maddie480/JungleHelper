@@ -16,13 +16,14 @@ namespace Celeste.Mod.JungleHelper.Triggers {
         public float Alpha = 0f;
         public bool displayed;
         public string text;
+        public Vector2 textOffset;
 
-        public UITextSeparatelyBcTriggersDontRender(Vector2 position, string text) {
+        public UITextSeparatelyBcTriggersDontRender(Vector2 textOffset, string text) {
             int num = Math.Min(1920, Engine.ViewWidth);
             int num2 = Math.Min(1080, Engine.ViewHeight);
             textTarget = VirtualContent.CreateRenderTarget("text", num, num2);
             this.text = text;
-            //this.text = text;
+            this.textOffset = textOffset;
             base.Tag = ((int) Tags.HUD | (int) Tags.FrozenUpdate);
             Add(new BeforeRenderHook(BeforeRender));
         }
@@ -32,7 +33,7 @@ namespace Celeste.Mod.JungleHelper.Triggers {
                 text = ActiveFont.FontSize.AutoNewline(text, 1024);
             }
             float num = ActiveFont.Measure(text).X * 1.5f;
-            Vector2 vector = new Vector2(960f, 540f) + offset;
+            Vector2 vector = new Vector2(960f, 540f) + offset + textOffset;
             ActiveFont.Draw(text, vector, new Vector2(0.5f, 0.5f), Vector2.One * 1.5f, color);
         }
 
@@ -72,11 +73,12 @@ namespace Celeste.Mod.JungleHelper.Triggers {
     [CustomEntity("JungleHelper/UITextTrigger")]
     public class UITextTrigger : Trigger {
         
+
         public UITextSeparatelyBcTriggersDontRender UItext;
         public UITextTrigger(EntityData data, Vector2 offset) : base(data, offset) {
-            
-            
-            UItext = new UITextSeparatelyBcTriggersDontRender(Vector2.Zero, Dialog.Get(data.Attr("Dialog")));
+
+            Vector2 textOffset = new Vector2(data.Float("TextX"),data.Float("TextY"));
+            UItext = new UITextSeparatelyBcTriggersDontRender(textOffset, Dialog.Get(data.Attr("Dialog")));
         }
         public override void Awake(Scene scene) {
             scene.Add(UItext);
