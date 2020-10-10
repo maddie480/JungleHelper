@@ -94,13 +94,15 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
                 if (distance < LANTERN_ACTIVATION_RADIUS) {
                     // moss is dissolved, make it uncollidable.
-                    mossPart.Color.A = 0;
+                    mossPart.Visible = false;
                     Collidable = false;
                 } else if (distance - LANTERN_ACTIVATION_RADIUS < DISTANCE_BASED_COLORS.Length) {
                     // moss has a particular fade of color.
+                    mossPart.Visible = true;
                     mossPart.Color = DISTANCE_BASED_COLORS[(int) Math.Floor(distance - LANTERN_ACTIVATION_RADIUS)];
                 } else {
                     // moss is green (player is too far or not here).
+                    mossPart.Visible = true;
                     mossPart.Color = REGULAR_COLOR;
                 }
             }
