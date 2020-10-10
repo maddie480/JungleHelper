@@ -103,19 +103,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
         public override void Update() {
             base.Update();
 
-            Player maddy = Scene.Tracker.GetEntity<Player>();
-            if (maddy?.Sprite.Mode != Lantern.SpriteModeMadelineLantern) {
-                maddy = null; // Maddy has no torch = Maddy is not here.
-            }
-
             // this is collidable by default, until we figure out that a part of the plant is close enough to the player.
             Collidable = true;
 
             foreach (Sprite plantPart in Components.GetAll<Sprite>()) {
-                float distance = float.MaxValue;
-                if (maddy != null) {
-                    distance = (TopCenter + plantPart.Position - maddy.Position).Length();
-                }
+                float distance = Lantern.GetClosestLanternDistanceTo(TopCenter + plantPart.Position, Scene, out Vector2 objectPosition);
 
                 if (distance < LANTERN_ACTIVATION_RADIUS) {
                     // plant is retracted!
@@ -125,13 +117,13 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     if (plantPart.CurrentAnimationID.StartsWith("extend")) {
                         // no, so go ahead and retract it.
                         int frame = (plantPart.CurrentAnimationID == "extended" ? 0 : 6 - plantPart.CurrentAnimationFrame);
-                        plantPart.Play(Top + plantPart.Position.Y - (maddy?.Position.Y ?? 0) < 0 ? "retract_below" : "retract_above");
+                        plantPart.Play(Top + plantPart.Position.Y - objectPosition.Y < 0 ? "retract_below" : "retract_above");
                         plantPart.SetAnimationFrame(frame);
                     }
                 } else if (plantPart.CurrentAnimationID.StartsWith("retract")) {
                     // we are out of radius and retracting/retracted, so extend.
                     int frame = (plantPart.CurrentAnimationID == "retracted" ? 0 : 6 - plantPart.CurrentAnimationFrame);
-                    plantPart.Play(Top + plantPart.Position.Y - (maddy?.Position.Y ?? 0) < 0 ? "extend_below" : "extend_above");
+                    plantPart.Play(Top + plantPart.Position.Y - objectPosition.Y < 0 ? "extend_below" : "extend_above");
                     plantPart.SetAnimationFrame(frame);
                 }
             }

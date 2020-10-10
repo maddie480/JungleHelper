@@ -214,12 +214,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private int hiddenUpdate() {
-            Player player = Scene.Tracker.GetEntity<Player>();
-
-            if (player != null && player.Sprite.Mode == Lantern.SpriteModeMadelineLantern
-                && (startingPosition - player.Center).LengthSquared() < ACTIVATION_RADIUS * ACTIVATION_RADIUS) {
-
-                // player is still here! stay hidden.
+            if (Lantern.GetClosestLanternDistanceTo(startingPosition, Scene, out _) < ACTIVATION_RADIUS) {
+                // lantern is still here! stay hidden.
                 return 4;
             }
 
@@ -231,15 +227,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
             base.Update();
 
             // this check applies to all states where the snake is aggressive (waiting for player, attacking, returning to starting point).
-            if (sprite.CurrentAnimationID.Contains("_aggro")) {
-                Player player = Scene.Tracker.GetEntity<Player>();
-
-                if (player != null && player.Sprite.Mode == Lantern.SpriteModeMadelineLantern
-                    && (startingPosition - player.Center).LengthSquared() < ACTIVATION_RADIUS * ACTIVATION_RADIUS) {
-
-                    // oh h the player is coming with the lantern! snake is now shocked.
-                    stateMachine.State = 3;
-                }
+            if (sprite.CurrentAnimationID.Contains("_aggro") && Lantern.GetClosestLanternDistanceTo(startingPosition, Scene, out _) < ACTIVATION_RADIUS) {
+                // oh h the player is coming with the lantern! snake is now shocked.
+                stateMachine.State = 3;
             }
         }
     }

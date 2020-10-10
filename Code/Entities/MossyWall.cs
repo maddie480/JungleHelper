@@ -78,19 +78,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
         public override void Update() {
             base.Update();
 
-            Player maddy = Scene.Tracker.GetEntity<Player>();
-            if (maddy?.Sprite.Mode != Lantern.SpriteModeMadelineLantern) {
-                maddy = null; // Maddy has no torch = Maddy is not here.
-            }
-
             // this is collidable by default, until we figure out that a moss part is close enough to the player.
             Collidable = true;
 
             foreach (Image mossPart in mossParts) {
-                float distance = float.MaxValue;
-                if (maddy != null) {
-                    distance = (TopCenter + mossPart.Position - maddy.Position).Length();
-                }
+                float distance = Lantern.GetClosestLanternDistanceTo(TopCenter + mossPart.Position, Scene, out _);
 
                 if (distance < LANTERN_ACTIVATION_RADIUS) {
                     // moss is dissolved, make it uncollidable.
