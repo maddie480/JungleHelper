@@ -15,6 +15,8 @@
         <Loop id="climbup" path="climb/lanternclimb" delay="0.0667" frames="0-5" />
         <Anim id="climbLookBackStart" path="climb/lanternclimb" delay="0.08" frames="6,7,8" goto="climbLookBack" />
         <Loop id="climbLookBack" path="climb/lanternclimb" frames="8" />
+
+        <Loop id="edge" path="edge/lanternedge" delay="0.25" frames="0-13" />
         
         <Metadata>
             <Frames path="idle/idlelantern" hair="0,-2|0,-2|0,-2|0,-2|0,-1|0,-1|0,-1|0,-1|0,-1"/>
@@ -22,6 +24,7 @@
             <Frames path="jump/jumplantern" hair="1,-3|1,-3|1,-2|0,-2"/>
             <Frames path="slide/slidelantern" hair="0,-2|0,-2|0,-2|0,-2|0,-2"/>
             <Frames path="climb/lanternclimb" hair="0,-2|0,-2|0,-2|0,-2|-1,-2|-1,-2|0,-1|1,-2:1|2,-2:2"/>
+            <Frames path="edge/lanternedge" hair="-1,-2|-1,-2|-1,-2|-1,-1|-1,-1|-1,-1|-1,-2|0,-2|1,-2|0,-2|0,-1|-1,-1|-1,-1|-1,-2"/>
         </Metadata>
     </junglehelper_madeline_lantern>
 </Sprites>
