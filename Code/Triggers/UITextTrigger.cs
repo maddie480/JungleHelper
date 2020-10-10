@@ -75,9 +75,16 @@ namespace Celeste.Mod.JungleHelper.Triggers {
         
 
         public UITextSeparatelyBcTriggersDontRender UItext;
+        public float fadeIn = 1f;
+        public float fadeOut = 1f;
+        public string flag = "";
+        public Coroutine fader = new Coroutine();
         public UITextTrigger(EntityData data, Vector2 offset) : base(data, offset) {
 
             Vector2 textOffset = new Vector2(data.Float("TextX"),data.Float("TextY"));
+            fadeIn = data.Float("FadeIn",1);
+            fadeOut = data.Float("FadeOut", 1);
+            flag = data.Attr("Flag","");
             UItext = new UITextSeparatelyBcTriggersDontRender(textOffset, Dialog.Get(data.Attr("Dialog")));
         }
         public override void Awake(Scene scene) {
@@ -85,26 +92,48 @@ namespace Celeste.Mod.JungleHelper.Triggers {
             base.Awake(scene);
         }
         public override void OnEnter(Player player) {
-            Add(new Coroutine(MakeTextAppear()));
+            if (SceneAs<Level>().Session.GetFlag(flag) && flag != "") {
+                fader.RemoveSelf();
+                Add(fader = new Coroutine(MakeTextAppear()));
+            }
             base.OnEnter(player);
         }
         public override void OnLeave(Player player) {
-            UItext.Add(new Coroutine(MakeTextDisappear()));
+            if (SceneAs<Level>().Session.GetFlag(flag) && flag != "") {
+                fader.RemoveSelf();
+                Add(fader = new Coroutine(MakeTextDisappear()));
+            }
             base.OnLeave(player);
         }
         private IEnumerator MakeTextAppear() {
             UItext.displayed = true;
-            for (float t2 = 0f; t2 < 1f; t2 += Engine.RawDeltaTime) {
+            for (float t2 = 0f; t2 < 1; t2 += Engine.RawDeltaTime/fadeIn) {
                 UItext.Alpha = Ease.CubeOut(t2);
                 yield return null;
             }
+            UItext.Alpha = 1;
         }
         private IEnumerator MakeTextDisappear() {
             UItext.displayed = false;
-            for (float t = 0f; t < 1f; t += Engine.RawDeltaTime * 2f) {
-                UItext.Alpha = Ease.CubeIn(1f - t);
+            for (float t = 0f; t < 1; t += Engine.RawDeltaTime/fadeOut * 2f) {
+                UItext.Alpha = Ease.CubeIn(1 - t);
                 yield return null;
             }
+            UItext.Alpha = 0;
+        }
+        private bool updateFlag;
+        public override void Update() {
+            if (updateFlag != SceneAs<Level>().Session.GetFlag(flag) && flag != "") {
+                if (PlayerIsInside && UItext.Alpha < 0.1) {
+                    fader.RemoveSelf();
+                    Add(fader = new Coroutine(MakeTextAppear()));
+                } else if (PlayerIsInside && UItext.Alpha > 0.9) {
+                    fader.RemoveSelf();
+                    Add(fader = new Coroutine(MakeTextDisappear()));
+                }
+                updateFlag = SceneAs<Level>().Session.GetFlag(flag);
+            }
+            base.Update();
         }
     }
 }
