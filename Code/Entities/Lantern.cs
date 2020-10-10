@@ -13,6 +13,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private const PlayerSpriteMode SpriteModeMadelineLantern = (PlayerSpriteMode) 444480;
 
         private static Hook hookCanDash;
+        private static Hook hookVariantMode;
 
         public static void Load() {
             On.Celeste.LevelLoader.ctor += onLevelLoaderConstructor;
@@ -21,6 +22,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
             On.Celeste.Player.OnTransition += onPlayerTransition;
 
             hookCanDash = new Hook(typeof(Player).GetMethod("get_CanDash"), typeof(Lantern).GetMethod("playerCanDash", BindingFlags.NonPublic | BindingFlags.Static));
+
+            // the method called when changing the "Other Self" variant is a method defined inside Level.VariantMode(). patching it requires a bit of _fun_
+            hookVariantMode = new Hook(typeof(Level).GetNestedType("<>c__DisplayClass151_0", BindingFlags.NonPublic).GetMethod("<VariantMode>b__9", BindingFlags.NonPublic | BindingFlags.Instance),
+                typeof(Lantern).GetMethod("levelChangePlayAsBadeline", BindingFlags.NonPublic | BindingFlags.Static));
         }
 
         public static void Unload() {
@@ -31,8 +36,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             hookCanDash?.Dispose();
             hookCanDash = null;
+            hookVariantMode?.Dispose();
+            hookVariantMode = null;
         }
-
 
         private static void onLevelLoaderConstructor(On.Celeste.LevelLoader.orig_ctor orig, LevelLoader self, Session session, Vector2? startPosition) {
             orig(self, session, startPosition);
@@ -63,6 +69,19 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private delegate bool orig_CanDash(Player self);
         private static bool playerCanDash(orig_CanDash orig, Player self) {
             return orig(self) && self.Sprite.Mode != SpriteModeMadelineLantern;
+        }
+
+        private delegate void orig_ChangePlayAsBadeline(object self, bool on);
+        private static void levelChangePlayAsBadeline(orig_ChangePlayAsBadeline orig, object self, bool on) {
+            Player player = Engine.Scene.Tracker.GetEntity<Player>();
+            bool hasLantern = player?.Sprite.Mode == SpriteModeMadelineLantern;
+
+            orig(self, on);
+
+            if (hasLantern) {
+                // give the lantern back to the player! Messing with the Other Self variant shouldn't make them lose the lantern.
+                changePlayerSpriteMode(player, SpriteModeMadelineLantern);
+            }
         }
 
         private static ParticleType P_Regen;
@@ -219,6 +238,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             // if the player is holding a lantern, it shouldn't respawn, since it is from another screen.
             new DynData<Player>(self)["JungleHelper_LanternDoRespawn"] = false;
         }
+
 
         public static float GetClosestLanternDistanceTo(Vector2 position, Scene scene, out Vector2 objectPosition) {
             float distance = float.MaxValue;
