@@ -10,7 +10,7 @@ using System.Collections;
 using Celeste.Mod.Entities;
 
 namespace Celeste.Mod.JungleHelper.Triggers {
-    public class UITextSeparatelyBcTriggersDontRender : Entity {
+    public class UIText : Entity {
         private VirtualRenderTarget textTarget;
         public bool disposed = false;
         public float Alpha = 0f;
@@ -18,7 +18,7 @@ namespace Celeste.Mod.JungleHelper.Triggers {
         public string text;
         public Vector2 textOffset;
 
-        public UITextSeparatelyBcTriggersDontRender(Vector2 textOffset, string text) {
+        public UIText(Vector2 textOffset, string text) {
             int num = Math.Min(1920, Engine.ViewWidth);
             int num2 = Math.Min(1080, Engine.ViewHeight);
             textTarget = VirtualContent.CreateRenderTarget("text", num, num2);
@@ -74,7 +74,7 @@ namespace Celeste.Mod.JungleHelper.Triggers {
     public class UITextTrigger : Trigger {
         
 
-        public UITextSeparatelyBcTriggersDontRender UItext;
+        public UIText UItext;
         public float fadeIn = 1f;
         public float fadeOut = 1f;
         public string flag = "";
@@ -85,21 +85,21 @@ namespace Celeste.Mod.JungleHelper.Triggers {
             fadeIn = data.Float("FadeIn",1);
             fadeOut = data.Float("FadeOut", 1);
             flag = data.Attr("Flag","");
-            UItext = new UITextSeparatelyBcTriggersDontRender(textOffset, Dialog.Get(data.Attr("Dialog")));
+            UItext = new UIText(textOffset, Dialog.Get(data.Attr("Dialog")));
         }
         public override void Awake(Scene scene) {
             scene.Add(UItext);
             base.Awake(scene);
         }
         public override void OnEnter(Player player) {
-            if (SceneAs<Level>().Session.GetFlag(flag) && flag != "") {
+            if (SceneAs<Level>().Session.GetFlag(flag) || flag == "") {
                 fader.RemoveSelf();
                 Add(fader = new Coroutine(MakeTextAppear()));
             }
             base.OnEnter(player);
         }
         public override void OnLeave(Player player) {
-            if (SceneAs<Level>().Session.GetFlag(flag) && flag != "") {
+            if (SceneAs<Level>().Session.GetFlag(flag) || flag == "") {
                 fader.RemoveSelf();
                 Add(fader = new Coroutine(MakeTextDisappear()));
             }
@@ -123,7 +123,7 @@ namespace Celeste.Mod.JungleHelper.Triggers {
         }
         private bool updateFlag;
         public override void Update() {
-            if (updateFlag != SceneAs<Level>().Session.GetFlag(flag) && flag != "") {
+            if (updateFlag != SceneAs<Level>().Session.GetFlag(flag) || flag == "") {
                 if (PlayerIsInside && UItext.Alpha < 0.1) {
                     fader.RemoveSelf();
                     Add(fader = new Coroutine(MakeTextAppear()));

@@ -109,6 +109,7 @@
     <Compile Include="Entities\TheoStatue.cs" />
     <Compile Include="Entities\TheoStatueGate.cs" />
     <Compile Include="Entities\UnrandomizedCrumblePlatform.cs" />
+    <Compile Include="Triggers\UIImageTrigger.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
