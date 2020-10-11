@@ -28,10 +28,12 @@ namespace Celeste.Mod.JungleHelper.Triggers {
             Add(new BeforeRenderHook(BeforeRender));
         }
 
-        private void DrawImage(Vector2 offset, Color color) {
-            Vector2 vector = /*new Vector2(960f, 540f) +*/ offset + imageOffset;
-            Console.WriteLine(Alpha.ToString());
-            image.Draw(vector, Vector2.Zero, color);
+        private void DrawImage( Color color) {
+            if (!SceneAs<Level>().FrozenOrPaused) {
+                Vector2 vector = imageOffset;
+                Console.WriteLine(Alpha.ToString());
+                image.Draw(vector, Vector2.Zero, color);
+            }
         }
 
         public void BeforeRender() {
@@ -40,7 +42,7 @@ namespace Celeste.Mod.JungleHelper.Triggers {
                 Engine.Graphics.GraphicsDevice.Clear(Color.Transparent);
                 Matrix transformationMatrix = Matrix.CreateScale((float) imageTarget.Width / 1920f);
                 Draw.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.LinearClamp, null, null, null, transformationMatrix);
-                DrawImage(Vector2.Zero, Color.White);
+                DrawImage(Color.White);
                 Draw.SpriteBatch.End();
 
             }

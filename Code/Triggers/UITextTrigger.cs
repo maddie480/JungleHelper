@@ -29,12 +29,14 @@ namespace Celeste.Mod.JungleHelper.Triggers {
         }
 
         private void DrawText(Vector2 offset, Color color) {
-            if (text != null) {
-                text = ActiveFont.FontSize.AutoNewline(text, 1024);
+            if (!SceneAs<Level>().FrozenOrPaused) {
+                if (text != null) {
+                    text = ActiveFont.FontSize.AutoNewline(text, 1024);
+                }
+                float num = ActiveFont.Measure(text).X * 1.5f;
+                Vector2 vector = new Vector2(960f, 540f) + offset + textOffset;
+                ActiveFont.Draw(text, vector, new Vector2(0.5f, 0.5f), Vector2.One * 1.5f, color);
             }
-            float num = ActiveFont.Measure(text).X * 1.5f;
-            Vector2 vector = new Vector2(960f, 540f) + offset + textOffset;
-            ActiveFont.Draw(text, vector, new Vector2(0.5f, 0.5f), Vector2.One * 1.5f, color);
         }
 
         public void BeforeRender() {
