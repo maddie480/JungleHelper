@@ -10,7 +10,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/Lantern")]
     [Tracked]
     class Lantern : Actor {
-        private const PlayerSpriteMode SpriteModeMadelineLantern = (PlayerSpriteMode) 444480;
+        internal const PlayerSpriteMode SpriteModeMadelineLantern = (PlayerSpriteMode) 444480;
 
         private static Hook hookCanDash;
         private static Hook hookVariantMode;
@@ -19,6 +19,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             On.Celeste.LevelLoader.ctor += onLevelLoaderConstructor;
             On.Celeste.PlayerSprite.ctor += onPlayerSpriteConstructor;
             On.Celeste.Player.NormalUpdate += onPlayerNormalUpdate;
+            On.Celeste.Player.SwimBegin += onPlayerSwimBegin;
             On.Celeste.Player.OnTransition += onPlayerTransition;
 
             hookCanDash = new Hook(typeof(Player).GetMethod("get_CanDash"), typeof(Lantern).GetMethod("playerCanDash", BindingFlags.NonPublic | BindingFlags.Static));
@@ -32,6 +33,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             On.Celeste.LevelLoader.ctor -= onLevelLoaderConstructor;
             On.Celeste.PlayerSprite.ctor -= onPlayerSpriteConstructor;
             On.Celeste.Player.NormalUpdate -= onPlayerNormalUpdate;
+            On.Celeste.Player.SwimBegin -= onPlayerSwimBegin;
             On.Celeste.Player.OnTransition -= onPlayerTransition;
 
             hookCanDash?.Dispose();
@@ -92,9 +94,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private Vector2 startingPosition;
         private bool doRespawn = true;
+        private Sprite sprite;
+        private float fadeOutAlpha = 1f;
 
         public Lantern(EntityData data, Vector2 offset) : base(data.Position + offset) {
-            Sprite sprite = JungleHelperModule.SpriteBank.Create("lantern");
+            sprite = JungleHelperModule.SpriteBank.Create("lantern");
             sprite.Y = 5;
             Add(sprite);
             Collider = new Hitbox(8, 8, -4, 0);
@@ -155,7 +159,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
                 regrabDelay -= Engine.DeltaTime;
                 if (regrabDelay <= 0f) {
-                    Collidable = true;
+                    Collidable = (sprite.CurrentAnimationID != "unlit");
                 }
             }
 
@@ -168,6 +172,19 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 speedY = Calc.Approach(speedY, 200f, acceleration * Engine.DeltaTime);
             }
             MoveV(speedY * Engine.DeltaTime, onCollideV);
+
+            // enforce fading out.
+            if (OnGround() && sprite.CurrentAnimationID == "unlit") {
+                fadeOutAlpha = Calc.Approach(fadeOutAlpha, 0, Engine.DeltaTime);
+                sprite.Color = Color.White * fadeOutAlpha;
+                if (fadeOutAlpha == 0f) {
+                    // it ended fading out. so make it respawn
+                    lanternIsLost();
+                    fadeOutAlpha = 1f;
+                    sprite.Color = Color.White;
+                    sprite.Play("idle");
+                }
+            }
 
             // handle the lantern getting dropped off the level
             if (Top > (Scene as Level).Bounds.Bottom) {
@@ -213,23 +230,39 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private static int onPlayerNormalUpdate(On.Celeste.Player.orig_NormalUpdate orig, Player self) {
             if (self.Sprite.Mode == SpriteModeMadelineLantern && Input.Grab.Check && Input.MoveY > 0f) {
                 // drop the lantern.
-                // technically, this means "Madeline's sprite returns to normal, and we spawn a Lantern entity".
-                changePlayerSpriteMode(self, SaveData.Instance.Assists.PlayAsBadeline ? PlayerSpriteMode.MadelineAsBadeline : self.DefaultSpriteMode);
-
-                Lantern lantern = new Lantern(new EntityData { Position = self.Center }, Vector2.Zero);
-                lantern.regrabDelay = 0.25f;
-                lantern.Collidable = false;
-
-                DynData<Player> playerData = new DynData<Player>(self);
-                if (playerData.Data.ContainsKey("JungleHelper_LanternStartingPosition")) {
-                    lantern.startingPosition = playerData.Get<Vector2>("JungleHelper_LanternStartingPosition");
-                    lantern.doRespawn = playerData.Get<bool>("JungleHelper_LanternDoRespawn");
-                }
-
-                self.Scene.Add(lantern);
+                DropLantern(self, destroy: false);
             }
 
             return orig(self);
+        }
+
+        private static void onPlayerSwimBegin(On.Celeste.Player.orig_SwimBegin orig, Player self) {
+            orig(self);
+
+            if (self.Sprite.Mode == SpriteModeMadelineLantern) {
+                // drop the lantern.
+                DropLantern(self, destroy: true);
+            }
+        }
+
+        public static void DropLantern(Player player, bool destroy) {
+            // technically, this means "Madeline's sprite returns to normal, and we spawn a Lantern entity".
+            changePlayerSpriteMode(player, SaveData.Instance.Assists.PlayAsBadeline ? PlayerSpriteMode.MadelineAsBadeline : player.DefaultSpriteMode);
+
+            Lantern lantern = new Lantern(new EntityData { Position = new Vector2((int) player.Center.X, (int) player.Center.Y) }, Vector2.Zero);
+            lantern.regrabDelay = 0.25f;
+            lantern.Collidable = false;
+
+            DynData<Player> playerData = new DynData<Player>(player);
+            if (playerData.Data.ContainsKey("JungleHelper_LanternStartingPosition")) {
+                lantern.startingPosition = playerData.Get<Vector2>("JungleHelper_LanternStartingPosition");
+                lantern.doRespawn = playerData.Get<bool>("JungleHelper_LanternDoRespawn");
+            }
+            if (destroy) {
+                lantern.sprite.Play("unlit");
+            }
+
+            player.Scene.Add(lantern);
         }
 
         private static void onPlayerTransition(On.Celeste.Player.orig_OnTransition orig, Player self) {

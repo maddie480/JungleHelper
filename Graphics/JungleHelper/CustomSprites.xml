@@ -184,6 +184,7 @@
         <Center/>
         
         <Loop id="idle" path="lantern_" delay="0.1"/>
+        <Loop id="unlit" path="unlit_"/>
     </lantern>
     
     <spiny_plant_yellow_top path="JungleHelper/" start="extended">

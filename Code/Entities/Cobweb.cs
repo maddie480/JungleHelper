@@ -37,6 +37,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             // ensure the player has at least 1 dash to dash out of the cobweb.
             player.Dashes = Math.Max(player.Dashes, 1);
+
+            if (player.Sprite.Mode == Lantern.SpriteModeMadelineLantern) {
+                // drop the lantern to avoid a softlock.
+                Lantern.DropLantern(player, destroy: false);
+            }
         }
 
         public override void Update() {
