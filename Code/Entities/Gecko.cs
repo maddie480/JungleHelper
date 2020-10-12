@@ -121,7 +121,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private void idle() {
             Random random = new Random();
             random.Range(0, 100);
-            Console.WriteLine(random.NextFloat());
             if (random.NextFloat() > 0.03 && random.NextFloat() < 0.04)
                 sprite.Play("dance");
             else

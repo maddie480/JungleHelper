@@ -53,7 +53,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
                         // do the usual throw!
 
                         Player player = SceneAs<Level>().Tracker.GetEntity<Player>();
-                        Console.WriteLine(player.Speed);
                         if (player != null) {
                             player.StateMachine.State = 0;
                             player.DummyGravity = true;

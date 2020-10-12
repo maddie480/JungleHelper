@@ -1,4 +1,5 @@
 ﻿using Celeste.Mod.Entities;
+using Celeste.Mod.JungleHelper.Triggers;
 using Microsoft.Xna.Framework;
 using Monocle;
 using MonoMod.RuntimeDetour;
@@ -115,7 +116,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private void onPlayer(Player player) {
-            if (Input.Grab.Check) {
+            if (Input.Grab.Check && !player.CollideCheck<DropLanternTrigger>()) {
                 // the player grabs the lantern.
                 // on a technical level, Maddy's sprite changes to have her holding the lantern, and the lantern disappears.
                 changePlayerSpriteMode(player, SpriteModeMadelineLantern);
@@ -292,6 +293,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             // then take the distance between all lanterns into account.
             foreach (Lantern lantern in scene.Tracker.GetEntities<Lantern>()) {
+                if (lantern.sprite.CurrentAnimationID == "unlit" || !lantern.Visible) {
+                    // skip unlit lanterns.
+                    continue;
+                }
+
                 float distanceLantern = (position - lantern.Center).Length();
                 if (distance > distanceLantern) {
                     distance = distanceLantern;

@@ -83,3 +83,26 @@ placements.entities.JungleHelper/AttachTriggerController.tooltips.entityFilter=A
 
 # Falling Killbox
 placements.entities.JungleHelper/FallingKillbox.tooltips.fallSpeed=The falling speed of the killbox, in pixels per second.
+
+# Drop Lantern Trigger
+placements.triggers.JungleHelper/DropLanternTrigger.tooltips.oneUse=If checked, the trigger will only make the player drop the lantern once. It will reactivate once the player leaves the room or respawns.
+placements.triggers.JungleHelper/DropLanternTrigger.tooltips.destroyLantern=If checked, the player won't be able to grab the lantern again. Instead, it will fade out and respawn at its starting position.
+
+# UI Text Trigger
+placements.triggers.JungleHelper/UITextTrigger.tooltips.Dialog=The dialog ID of the text to display.
+placements.triggers.JungleHelper/UITextTrigger.tooltips.FadeIn=The time (in seconds) the text takes to fade in.
+placements.triggers.JungleHelper/UITextTrigger.tooltips.FadeOut=The time (in seconds) the text takes to fade out.
+placements.triggers.JungleHelper/UITextTrigger.tooltips.Flag=If filled out, the text will only show up when this flag is active.
+placements.triggers.JungleHelper/UITextTrigger.tooltips.TextX=The text horizontal position, 0 being the center of the screen. The screen is 1920x1080 pixels.
+placements.triggers.JungleHelper/UITextTrigger.tooltips.TextY=The text vertical position, 0 being the center of the screen, negative values being higher on the screen. The screen is 1920x1080 pixels.
+
+# UI Image Trigger
+placements.triggers.JungleHelper/UIImageTrigger.tooltips.ImagePath=The image path, in the Gui atlas. To display the image in Graphics/Atlases/Gui/mycampaignname/mylogo.png, type "mycampaignname/mylogo" in this field.
+placements.triggers.JungleHelper/UIImageTrigger.tooltips.FadeIn=The time (in seconds) the image takes to fade in.
+placements.triggers.JungleHelper/UIImageTrigger.tooltips.FadeOut=The time (in seconds) the image takes to fade out.
+placements.triggers.JungleHelper/UIImageTrigger.tooltips.Flag=If filled out, the image will only show up when this flag is active.
+placements.triggers.JungleHelper/UIImageTrigger.tooltips.ImageX=The image horizontal position, 0 being the left of the screen. The screen is 1920x1080 pixels.
+placements.triggers.JungleHelper/UIImageTrigger.tooltips.ImageY=The image vertical position, 0 being the top of the screen. The screen is 1920x1080 pixels.
+
+# Snake
+placements.entities.JungleHelper/Snake.tooltips.left=Whether the snake should spawn facing left.
