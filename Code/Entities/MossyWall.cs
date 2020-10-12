@@ -10,17 +10,17 @@ namespace Celeste.Mod.JungleHelper.Entities {
     class MossyWall : Entity {
         private const int LANTERN_ACTIVATION_RADIUS = 50;
 
-        // colors used when player gets closed but moss isn't dissolved yet (from closest to furthest, 1 line per pixel).
+        // colors used when player gets close but moss isn't dissolved yet (from closest to furthest, 1 line per pixel).
         private static readonly Color[] DISTANCE_BASED_COLORS = {
-            new Color(Calc.HexToColor("7A612D"), 25),
-            new Color(Calc.HexToColor("7A612D"), 50),
-            new Color(Calc.HexToColor("7A612D"), 75),
-            new Color(Calc.HexToColor("7A612D"), 100),
-            new Color(Calc.HexToColor("7A612D"), 125),
-            new Color(Calc.HexToColor("7A612D"), 150),
-            new Color(Calc.HexToColor("7A612D"), 175),
-            new Color(Calc.HexToColor("7A612D"), 200),
-            new Color(Calc.HexToColor("7A612D"), 225),
+            Calc.HexToColor("7A612D") * 0.1f,
+            Calc.HexToColor("7A612D") * 0.2f,
+            Calc.HexToColor("7A612D") * 0.3f,
+            Calc.HexToColor("7A612D") * 0.4f,
+            Calc.HexToColor("7A612D") * 0.5f,
+            Calc.HexToColor("7A612D") * 0.6f,
+            Calc.HexToColor("7A612D") * 0.7f,
+            Calc.HexToColor("7A612D") * 0.8f,
+            Calc.HexToColor("7A612D") * 0.9f,
             Calc.HexToColor("7A612D"),
             Color.Lerp(Calc.HexToColor("7A612D"), Calc.HexToColor("AABF3D"), 0.1f),
             Color.Lerp(Calc.HexToColor("7A612D"), Calc.HexToColor("AABF3D"), 0.2f),
