@@ -18,7 +18,7 @@ namespace Celeste.Mod.JungleHelper.Triggers {
         public override void OnEnter(Player player) {
             base.OnEnter(player);
 
-            if (player.Sprite.Mode == Lantern.SpriteModeMadelineLantern) {
+            if (EnforceSkinController.HasLantern(player.Sprite.Mode)) {
                 Lantern.DropLantern(player, destroyLantern);
 
                 if (oneUse) {

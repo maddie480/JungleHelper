@@ -11,80 +11,28 @@ namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/Lantern")]
     [Tracked]
     class Lantern : Actor {
-        internal const PlayerSpriteMode SpriteModeMadelineLantern = (PlayerSpriteMode) 444480;
-
         private static Hook hookCanDash;
-        private static Hook hookVariantMode;
 
         public static void Load() {
-            On.Celeste.LevelLoader.ctor += onLevelLoaderConstructor;
-            On.Celeste.PlayerSprite.ctor += onPlayerSpriteConstructor;
             On.Celeste.Player.NormalUpdate += onPlayerNormalUpdate;
             On.Celeste.Player.SwimBegin += onPlayerSwimBegin;
             On.Celeste.Player.OnTransition += onPlayerTransition;
 
             hookCanDash = new Hook(typeof(Player).GetMethod("get_CanDash"), typeof(Lantern).GetMethod("playerCanDash", BindingFlags.NonPublic | BindingFlags.Static));
-
-            // the method called when changing the "Other Self" variant is a method defined inside Level.VariantMode(). patching it requires a bit of _fun_
-            hookVariantMode = new Hook(typeof(Level).GetNestedType("<>c__DisplayClass151_0", BindingFlags.NonPublic).GetMethod("<VariantMode>b__9", BindingFlags.NonPublic | BindingFlags.Instance),
-                typeof(Lantern).GetMethod("levelChangePlayAsBadeline", BindingFlags.NonPublic | BindingFlags.Static));
         }
 
         public static void Unload() {
-            On.Celeste.LevelLoader.ctor -= onLevelLoaderConstructor;
-            On.Celeste.PlayerSprite.ctor -= onPlayerSpriteConstructor;
             On.Celeste.Player.NormalUpdate -= onPlayerNormalUpdate;
             On.Celeste.Player.SwimBegin -= onPlayerSwimBegin;
             On.Celeste.Player.OnTransition -= onPlayerTransition;
 
             hookCanDash?.Dispose();
             hookCanDash = null;
-            hookVariantMode?.Dispose();
-            hookVariantMode = null;
-        }
-
-        private static void onLevelLoaderConstructor(On.Celeste.LevelLoader.orig_ctor orig, LevelLoader self, Session session, Vector2? startPosition) {
-            orig(self, session, startPosition);
-
-            // we want Madeline's sprite to load its metadata (that is, her hair positions on her frames of animation).
-            PlayerSprite.CreateFramesMetadata("junglehelper_madeline_lantern");
-        }
-
-        private static void onPlayerSpriteConstructor(On.Celeste.PlayerSprite.orig_ctor orig, PlayerSprite self, PlayerSpriteMode mode) {
-            bool lantern = mode == SpriteModeMadelineLantern;
-            if (lantern) {
-                // build regular Madeline with backpack as a reference.
-                mode = PlayerSpriteMode.Madeline;
-            }
-
-            orig(self, mode);
-
-            if (lantern) {
-                // throw lantern Madeline sprites in the mix.
-                GFX.SpriteBank.CreateOn(self, "junglehelper_madeline_lantern");
-                new DynData<PlayerSprite>(self)["Mode"] = SpriteModeMadelineLantern;
-
-                // replay the "idle" sprite to make it apply immediately.
-                self.Play("idle", restart: true);
-            }
         }
 
         private delegate bool orig_CanDash(Player self);
         private static bool playerCanDash(orig_CanDash orig, Player self) {
-            return orig(self) && self.Sprite.Mode != SpriteModeMadelineLantern;
-        }
-
-        private delegate void orig_ChangePlayAsBadeline(object self, bool on);
-        private static void levelChangePlayAsBadeline(orig_ChangePlayAsBadeline orig, object self, bool on) {
-            Player player = Engine.Scene.Tracker.GetEntity<Player>();
-            bool hasLantern = player?.Sprite.Mode == SpriteModeMadelineLantern;
-
-            orig(self, on);
-
-            if (hasLantern) {
-                // give the lantern back to the player! Messing with the Other Self variant shouldn't make them lose the lantern.
-                changePlayerSpriteMode(player, SpriteModeMadelineLantern);
-            }
+            return orig(self) && !EnforceSkinController.HasLantern(self.Sprite.Mode);
         }
 
         private static ParticleType P_Regen;
@@ -119,7 +67,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             if (Input.Grab.Check && !player.CollideCheck<DropLanternTrigger>()) {
                 // the player grabs the lantern.
                 // on a technical level, Maddy's sprite changes to have her holding the lantern, and the lantern disappears.
-                changePlayerSpriteMode(player, SpriteModeMadelineLantern);
+                EnforceSkinController.ChangePlayerSpriteMode(player, hasLantern: true);
                 RemoveSelf();
                 new DynData<Player>(player)["JungleHelper_LanternStartingPosition"] = startingPosition;
                 new DynData<Player>(player)["JungleHelper_LanternDoRespawn"] = doRespawn;
@@ -203,14 +151,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
             }
         }
 
-        private static void changePlayerSpriteMode(Player player, PlayerSpriteMode spriteMode) {
-            if (player.Active) {
-                player.ResetSpriteNextFrame(spriteMode);
-            } else {
-                player.ResetSprite(spriteMode);
-            }
-        }
-
         private void onCollideV(CollisionData data) {
             if (speedY > 0f) {
                 // there is a 99% chance this sound is going to be changed, but here it is.
@@ -229,7 +169,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private static int onPlayerNormalUpdate(On.Celeste.Player.orig_NormalUpdate orig, Player self) {
-            if (self.Sprite.Mode == SpriteModeMadelineLantern && Input.Grab.Check && Input.MoveY > 0f) {
+            if (EnforceSkinController.HasLantern(self.Sprite.Mode) && Input.Grab.Check && Input.MoveY > 0f) {
                 // drop the lantern.
                 DropLantern(self, destroy: false);
             }
@@ -240,7 +180,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private static void onPlayerSwimBegin(On.Celeste.Player.orig_SwimBegin orig, Player self) {
             orig(self);
 
-            if (self.Sprite.Mode == SpriteModeMadelineLantern) {
+            if (EnforceSkinController.HasLantern(self.Sprite.Mode)) {
                 // drop the lantern.
                 DropLantern(self, destroy: true);
             }
@@ -248,7 +188,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         public static void DropLantern(Player player, bool destroy) {
             // technically, this means "Madeline's sprite returns to normal, and we spawn a Lantern entity".
-            changePlayerSpriteMode(player, SaveData.Instance.Assists.PlayAsBadeline ? PlayerSpriteMode.MadelineAsBadeline : player.DefaultSpriteMode);
+            EnforceSkinController.ChangePlayerSpriteMode(player, hasLantern: false);
 
             Lantern lantern = new Lantern(new EntityData { Position = new Vector2((int) player.Center.X, (int) player.Center.Y) }, Vector2.Zero);
             lantern.regrabDelay = 0.25f;
@@ -282,7 +222,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             if (maddy != null) {
                 objectPosition = maddy.Center;
             }
-            if (maddy?.Sprite.Mode != SpriteModeMadelineLantern) {
+            if (maddy != null && !EnforceSkinController.HasLantern(maddy.Sprite.Mode)) {
                 maddy = null; // Maddy has no torch = Maddy is not here.
             }
 

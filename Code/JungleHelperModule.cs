@@ -18,6 +18,7 @@ namespace Celeste.Mod.JungleHelper {
             UnrandomizedCrumblePlatform.Load();
             Lantern.Load();
             SpiderBoss.Load();
+            EnforceSkinController.Load();
         }
 
         public override void Unload() {
@@ -26,6 +27,7 @@ namespace Celeste.Mod.JungleHelper {
             UnrandomizedCrumblePlatform.Unload();
             Lantern.Unload();
             SpiderBoss.Unload();
+            EnforceSkinController.Unload();
         }
 
         public override void LoadContent(bool firstLoad) {

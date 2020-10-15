@@ -1,5 +1,287 @@
 <Sprites>
-    <junglehelper_madeline_lantern path="JungleHelper/Lantern/" copy="player">
+	<junglehelper_madeline_copy path="characters/junglehelper_player_copy/" start="idle">
+		<Origin x="16" y="32" />
+
+		<Loop id="idle_carry" path="idle_carry" delay="0.1" />
+		<Anim id="runSlow_carry" path="run_carry" delay="0.07" />
+		<Loop id="jumpSlow_carry" path="jump_carry" delay="0.1" frames="0,1" />
+		<Anim id="fallSlow_carry" path="jump_carry" delay="0.1" frames="2,3" />
+		<Anim id="pickUp" path="pickup" delay="0.06" />
+		<Anim id="throw" path="throw" delay="0.06" goto="idle" />
+
+		<Anim id="idle" path="idle" delay="0.1" goto="idle"/>
+
+		<Anim id="idleA" path="idleA" delay="0.12" goto="idle"/>
+		<Anim id="idleB" path="idleB" delay="0.16" goto="idle"/>
+		<Anim id="idleC" path="idleC" delay="0.05" goto="idle"/>
+
+		<Anim id="lookUp" path="lookUp" delay="0.1" frames="2-7" />
+		<Loop id="walk" path="walk" delay="0.06" />
+		<Loop id="push" path="push" delay="0.1" />
+		<Anim id="runSlow" path="runSlow" delay="0.07" goto="runFast" />
+		<Loop id="runFast" path="runFast" delay="0.05" />
+		<Anim id="runStumble" path="runStumble" delay="0.05" frames="10-11,0-11" goto="runFast"/>
+		<Loop id="runWind" path="run_wind" delay="0.095" frames="0-11"/>
+		<Loop id="dash" path="dash" delay="0.09" />
+		<Anim id="dreamDashIn" path="dreamDash" frames="0-3" delay="0.04" goto="dreamDashLoop"/>
+		<Loop id="dreamDashLoop" path="dreamDash" frames="4-16" delay="0.03" />
+		<Anim id="dreamDashOut" path="dreamDash" frames="17-20" delay="0.04" />
+		<Loop id="slide" path="slide" delay="0.03" />
+		<Loop id="jumpSlow" path="jumpSlow" delay="0.1" frames="0,1" />
+		<Loop id="jumpFast" path="jumpFast" delay="0.1" frames="0,1" />
+		<Anim id="fallSlow" path="jumpSlow" delay="0.1" frames="2,3" />
+		<Anim id="fallFast" path="jumpFast" delay="0.1" frames="2,3" />
+		<Loop id="tired" path="tired" delay="0.18" />
+		<Anim id="tiredStill" path="tired" frames="0" />
+		<Loop id="wallslide" path="climb" frames="0" />
+		<Anim id="climbLookBackStart" path="climb" delay="0.08" frames="6,7,8" goto="climbLookBack" />
+		<Loop id="climbLookBack" path="climb" frames="8" />
+		<Loop id="climbup" path="climb" delay="0.04" frames="0-5" />
+		<Anim id="climbPush" path="climb" delay="0.04" frames="0,9-11" />
+		<Anim id="climbPull" path="climb" delay="0.04" frames="0,12-14" />
+		<Loop id="duck" path="duck" delay="0" frames="0" />
+		<Anim id="fallPose" path="fallPose" delay="0.1" frames="0-10" goto="idle"/>
+		<Loop id="edge" path="edge" delay="0.25" frames="0-13" />
+		<Loop id="edgeBack" path="edge_back" delay="0.25"/>
+		<Anim id="faint" path="faint" delay="0.1" frames="0-10" goto="fainted" />
+		<Loop id="fainted" path="faint" delay="0.1" frames="10" />
+		<Anim id="flip" path="flip" delay="0.04" frames="0-7" goto="runFast"/>
+		<Loop id="skid" path="flip" delay="0.04" frames="8"/>
+		<Loop id="dangling" path="dangling" delay="0.11" frames="0-9" />
+		<Anim id="deadside" path="death_h" delay="0.02" frames="0-12" />
+		<Anim id="deadup"   path="death_h" delay="0.02" frames="0-12" />
+		<Anim id="deaddown" path="death_h" delay="0.02" frames="0-12" />
+
+		<Loop id="swimIdle" path="swim" frames="0-5" delay="0.08" />
+		<Loop id="swimUp" path="swim" frames="6-11" delay="0.08" />
+		<Loop id="swimDown" path="swim" frames="12-17" delay="0.08" />
+
+		<Anim id="startStarFly" path="startStarFly" delay="0.08" goto="starFly"/>
+		<Loop id="starFly" path="starFly" delay="0.08"/>
+		<Loop id="bubble" path="bubble" delay="0.08"/>
+
+		<Anim id="fall" path="fall" delay="0.06" frames="0-7" />
+		<Loop id="bigFall" path="bigFall" frames="0-4" delay="0.06"/>
+		<Anim id="bigFallRecover" path="bigFall" frames="5*5,6*4,7*3,8,8,9,9,10,10,10" delay="0.08" goto="swimIdle"/>
+
+		<Anim id="sleep" path="sleep" delay="0.1" frames="0-10,10*5,11-23" />
+		<Anim id="bagdown" path="sleep" delay="0.1" frames="0-10" />
+		<Anim id="asleep" path="wakeUp/" frames="0" />
+		<Anim id="wakeUp" path="wakeUp/" delay=".1" frames="0-4,5*10,6-14" />
+		<Anim id="halfWakeUp" path="halfWakeUp" delay=".1"/>
+
+		<Loop id="spin" path="spin" delay="0.1" />
+		<Loop id="shaking" path="shaking" delay="0.1" />
+		<Loop id="hug" path="hug" delay="0.08"/>
+
+		<Anim id="starMorph" path="starMorph" delay="0.06" frames="0-9" goto="starMorphIdle"/>
+		<Loop id="starMorphIdle" path="starMorph" frames="10" delay="0.06"/>
+
+		<Loop id="carryTheoWalk" path="walk_carry_theo" frames="0-11" delay="0.06"/>
+		<Anim id="carryTheoCollapse" path="walk_carry_theo" frames="12-18" delay="0.06"/>
+
+		<Anim id="tentacle_grab" path="tentacle/grab" delay="0.06" frames="0-14" goto="tentacle_grabbed"/>
+		<Loop id="tentacle_grabbed" path="tentacle/grab" delay="0.1" frames="15-23"/>
+		<Loop id="tentacle_pull" path="tentacle/grab" frames="24" delay="0.1"/>
+		<Loop id="tentacle_dangling" path="tentacle/grab" frames="25" delay="0.1"/>
+
+		<Anim id="sitDown" path="sitDown" delay="0.1" />
+
+		<Loop id="launch" path="launch" delay="0.06" frames="0-7"/>
+		<Anim id="launzchRecover" path="launchRecover" delay="0.06"/>
+
+		<Metadata>
+			<Frames path="idle" hair="0,-2|0,-2|0,-2|0,-2|0,-1|0,-1|0,-1|0,-1|0,-1"/>
+			<Frames path="idleA" hair="0,-2|-1,-2:1|-1,-2:2|-1,-2:2|-1,-2:2|-1,-1:2|-1,-1:2|-1,-1:2|-1,-1:1|-1,-1:1|-1,-1|0,-1|0,-1"/>
+			<Frames path="idleB" hair="0,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2:1|-1,-2:2|-1,-2:2|-1,-2:2|-1,-2:2|-1,-2:1|-1,-2|-1,-2|-1,-2|0,-2|0,-2|0,-1|0,-1|0,-1|0,-1|0,-1"/>
+			<Frames path="idleC" hair="0,-2|-1,-2|-2,-2|-2,-2|-2,-2|-2,-2|1,-1|2,0|0,0|-1,-1|0,-1|0,-1"/>
+
+			<Frames path="lookUp" hair="0,-2|0,-2|0,-2|0,-2|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-3:1"/>
+			<Frames path="edge" hair="-1,-2|-1,-2|-1,-2|-1,-1|-1,-1|-1,-1|-1,-2|0,-2|1,-2|0,-2|0,-1|-1,-1|-1,-1|-1,-2"/>
+			<Frames path="edge_back" hair="1,-2:1|1,-2:2|0,-2:2|0,-1:2|-1,-2:2|0,-2:2|1,-2:2|1,-2:2|1,-2:2|1,-2:2|2,-1|2,-1|2,-1|2,-2"/>
+			<Frames path="walk" hair="0,-2|0,-1|0,-1|0,-1|0,-3|0,-2|0,-1|0,-1|0,-1|0,-1|0,-3|0,-2"/>
+			<Frames path="push" hair="1,-2|1,-1|1,-1|1,-1|1,-2|1,-2|1,-2|1,-2|1,-1|1,-1|1,-1|1,-1|1,-2|1,-2|1,-2|1,-2"/>
+			<Frames path="runSlow" hair="1,-2|1,-1|1,-1|1,-1|1,-3|1,-2|1,-1|1,-1|1,-1|1,-1|1,-3|1,-2"/>
+			<Frames path="runFast" hair="1,-2|1,-1|1,-1|1,-1|1,-3|1,-2|1,-1|1,-1|1,-1|1,-1|1,-3|1,-2"/>
+			<Frames path="run_wind" hair="4,-1|4,0|5,0|5,0|4,-2|4,-1|4,0|4,0|4,0|4,0|4,-2|4,-1"/>
+			<Frames path="runStumble" hair="1, 1|1,2|1,2|1,0|1,-2|1,-2|1,-1|1,-1|1,-1|1,-1|1,-3|1,-2"/>
+			<Frames path="dash" hair="2,0|2,0|2,0|2,1"/>
+			<Frames path="dreamDash" hair="2,0|1,0|0,0|0,0|1,1|2,1|2,1|2,0|1,0|1,0|1,0|1,0|1,0|1,0|1,0|1,0|1,0|0,0|1,0|1,0|2,1"/>
+			<Frames path="slide" hair="0,3|0,3|0,3"/>
+			<Frames path="jumpSlow" hair="1,-3|1,-3|1,-2|0,-2"/>
+			<Frames path="jumpFast" hair="1,-3|1,-3|1,-2|0,-2"/>
+			<Frames path="tired" hair="0,1|0,2|0,1|0,0"/>
+			<Frames path="climb" hair="0,-2|0,-2|0,-2|0,-2|-1,-2|-1,-2|0,-1|1,-2:1|2,-2:2"/>
+			<Frames path="duck" hair="0,3"/>
+			<Frames path="fallPose" hair="x|x|x|x|x|x|x|x|x"/>
+			<Frames path="hug" hair="0,2"/>
+			<Frames path="sleep" hair=""/>
+			<Frames path="flip" hair="-1,-1:2|-1,-1:1|0,-1:1|1,-1:0|1,-1:0|1,0:0|2,0:0|2,0:0|2,0:0"/>
+			<Frames path="faint" hair="0,1|0,1|0,1|0,1|1,1|2,1|2,2|5,5|6,8|6,7"/>
+			<Frames path="fainted" hair="6,7"/>
+			<Frames path="dangling" hair="0,-2|0,-2|0,-2|0,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2"/>
+			<Frames path="shaking" hair="0,-1"/>
+
+			<Frames path="idle_carry" hair="0,-2|0,-2|0,-2|0,-2|0,-1|0,-1|0,-1|0,-1|0,-1" carry="-1,-1,-1,0,0,0,0,0,-1"/>
+			<Frames path="jump_carry" hair="1,-3|1,-3|1,-2|0,-2" carry="-3,-3,-1,-1"/>
+			<Frames path="run_carry" hair="1,-2|1,-1|1,-1|1,-1|1,-3|1,-2|1,-1|1,-1|1,-1|1,-1|1,-3|1,-2" carry="-1,0,0,0,-3,-2,-1,0,0,0,-3,-1"/>
+			<Frames path="pickup" hair="2,0|1,-1|0,-2|0,-2|0,-2"/>
+			<Frames path="throw" hair="0,-3|2,-2|2,-2|1,-2"/>
+
+			<Frames path="swim" hair="0,-2|0,-2|0,-2|0,-2|0,-2|0,-2|0,-3|0,-3|0,-2|0,-2|0,-2|0,-2|1,-1|1,-1|1,0|1,0|1,0|1,0"/>
+			<Frames path="fall" hair="1,-2|1,-2|1,-2|1,-2|1,-2|1,-2|1,-2|1,-2"/>
+			<Frames path="bigFall" hair="1,-2|1,-2|1,-2|1,-2|1,-2|1,-2|1,-2|1,-2|1,-2|1,-2|1,-2"/>
+
+			<Frames path="startStarFly" hair="0,-2|0,-2|0,-2|0,-2"/>
+			<Frames path="starFly" hair="0,3"/>
+			<Frames path="starMorph" hair="0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0"/>
+		</Metadata>
+	</junglehelper_madeline_copy>
+	
+	<junglehelper_player_badeline_copy path="characters/junglehelper_player_badeline_copy/" start="idle">
+		<Anim id="roll" path="roll" frames="0-12" delay="0.05"/>
+		<Anim id="rollGetUp" path="roll" frames="12-15" delay=".1" goto="downed"/>
+		<Loop id="downed" path="sitDown" delay="0.8" frames="15"/>
+		
+		<Origin x="16" y="32" />
+
+		<Loop id="idle_carry" path="idle_carry" delay="0.1" />
+		<Anim id="runSlow_carry" path="run_carry" delay="0.07" />
+		<Loop id="jumpSlow_carry" path="jump_carry" delay="0.1" frames="0,1" />
+		<Anim id="fallSlow_carry" path="jump_carry" delay="0.1" frames="2,3" />
+		<Anim id="pickUp" path="pickup" delay="0.06" />
+		<Anim id="throw" path="throw" delay="0.06" goto="idle" />
+
+		<Anim id="idle" path="idle" delay="0.1" goto="idle"/>
+
+		<Anim id="idleA" path="idleA" delay="0.12" goto="idle"/>
+		<Anim id="idleB" path="idleB" delay="0.16" goto="idle"/>
+		<Anim id="idleC" path="idleC" delay="0.05" goto="idle"/>
+
+		<Anim id="lookUp" path="lookUp" delay="0.1" frames="2-7" />
+		<Loop id="walk" path="walk" delay="0.06" />
+		<Loop id="push" path="push" delay="0.1" />
+		<Anim id="runSlow" path="runSlow" delay="0.07" goto="runFast" />
+		<Loop id="runFast" path="runFast" delay="0.05" />
+		<Anim id="runStumble" path="runStumble" delay="0.05" frames="10-11,0-11" goto="runFast"/>
+		<Loop id="runWind" path="run_wind" delay="0.095" frames="0-11"/>
+		<Loop id="dash" path="dash" delay="0.09" />
+		<Anim id="dreamDashIn" path="dreamDash" frames="0-3" delay="0.04" goto="dreamDashLoop"/>
+		<Loop id="dreamDashLoop" path="dreamDash" frames="4-16" delay="0.03" />
+		<Anim id="dreamDashOut" path="dreamDash" frames="17-20" delay="0.04" />
+		<Loop id="slide" path="slide" delay="0.03" />
+		<Loop id="jumpSlow" path="jumpSlow" delay="0.1" frames="0,1" />
+		<Loop id="jumpFast" path="jumpFast" delay="0.1" frames="0,1" />
+		<Anim id="fallSlow" path="jumpSlow" delay="0.1" frames="2,3" />
+		<Anim id="fallFast" path="jumpFast" delay="0.1" frames="2,3" />
+		<Loop id="tired" path="tired" delay="0.18" />
+		<Anim id="tiredStill" path="tired" frames="0" />
+		<Loop id="wallslide" path="climb" frames="0" />
+		<Anim id="climbLookBackStart" path="climb" delay="0.08" frames="6,7,8" goto="climbLookBack" />
+		<Loop id="climbLookBack" path="climb" frames="8" />
+		<Loop id="climbup" path="climb" delay="0.04" frames="0-5" />
+		<Anim id="climbPush" path="climb" delay="0.04" frames="0,9-11" />
+		<Anim id="climbPull" path="climb" delay="0.04" frames="0,12-14" />
+		<Loop id="duck" path="duck" delay="0" frames="0" />
+		<Anim id="fallPose" path="fallPose" delay="0.1" frames="0-10" goto="idle"/>
+		<Loop id="edge" path="edge" delay="0.25" frames="0-13" />
+		<Loop id="edgeBack" path="edge_back" delay="0.25"/>
+		<Anim id="faint" path="faint" delay="0.1" frames="0-10" goto="fainted" />
+		<Loop id="fainted" path="faint" delay="0.1" frames="10" />
+		<Anim id="flip" path="flip" delay="0.04" frames="0-7" goto="runFast"/>
+		<Loop id="skid" path="flip" delay="0.04" frames="8"/>
+		<Loop id="dangling" path="dangling" delay="0.11" frames="0-9" />
+		<Anim id="deadside" path="death_h" delay="0.02" frames="0-12" />
+		<Anim id="deadup"   path="death_h" delay="0.02" frames="0-12" />
+		<Anim id="deaddown" path="death_h" delay="0.02" frames="0-12" />
+
+		<Loop id="swimIdle" path="swim" frames="0-5" delay="0.08" />
+		<Loop id="swimUp" path="swim" frames="6-11" delay="0.08" />
+		<Loop id="swimDown" path="swim" frames="12-17" delay="0.08" />
+
+		<Anim id="startStarFly" path="startStarFly" delay="0.08" goto="starFly"/>
+		<Loop id="starFly" path="starFly" delay="0.08"/>
+		<Loop id="bubble" path="bubble" delay="0.08"/>
+
+		<Anim id="fall" path="fall" delay="0.06" frames="0-7" />
+		<Loop id="bigFall" path="bigFall" frames="0-4" delay="0.06"/>
+		<Anim id="bigFallRecover" path="bigFall" frames="5*5,6*4,7*3,8,8,9,9,10,10,10" delay="0.08" goto="swimIdle"/>
+
+		<Anim id="sleep" path="sleep" delay="0.1" frames="0-10,10*5,11-23" />
+		<Anim id="bagdown" path="sleep" delay="0.1" frames="0-10" />
+		<Anim id="asleep" path="wakeUp/" frames="0" />
+		<Anim id="wakeUp" path="wakeUp/" delay=".1" frames="0-4,5*10,6-14" />
+		<Anim id="halfWakeUp" path="halfWakeUp" delay=".1"/>
+
+		<Loop id="spin" path="spin" delay="0.1" />
+		<Loop id="shaking" path="shaking" delay="0.1" />
+		<Loop id="hug" path="hug" delay="0.08"/>
+
+		<Anim id="starMorph" path="starMorph" delay="0.06" frames="0-9" goto="starMorphIdle"/>
+		<Loop id="starMorphIdle" path="starMorph" frames="10" delay="0.06"/>
+
+		<Loop id="carryTheoWalk" path="walk_carry_theo" frames="0-11" delay="0.06"/>
+		<Anim id="carryTheoCollapse" path="walk_carry_theo" frames="12-18" delay="0.06"/>
+
+		<Anim id="tentacle_grab" path="tentacle/grab" delay="0.06" frames="0-14" goto="tentacle_grabbed"/>
+		<Loop id="tentacle_grabbed" path="tentacle/grab" delay="0.1" frames="15-23"/>
+		<Loop id="tentacle_pull" path="tentacle/grab" frames="24" delay="0.1"/>
+		<Loop id="tentacle_dangling" path="tentacle/grab" frames="25" delay="0.1"/>
+
+		<Anim id="sitDown" path="sitDown" delay="0.1" />
+
+		<Loop id="launch" path="launch" delay="0.06" frames="0-7"/>
+		<Anim id="launzchRecover" path="launchRecover" delay="0.06"/>
+
+		<Metadata>
+			<Frames path="idle" hair="0,-2|0,-2|0,-2|0,-2|0,-1|0,-1|0,-1|0,-1|0,-1"/>
+			<Frames path="idleA" hair="0,-2|-1,-2:1|-1,-2:2|-1,-2:2|-1,-2:2|-1,-1:2|-1,-1:2|-1,-1:2|-1,-1:1|-1,-1:1|-1,-1|0,-1|0,-1"/>
+			<Frames path="idleB" hair="0,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2:1|-1,-2:2|-1,-2:2|-1,-2:2|-1,-2:2|-1,-2:1|-1,-2|-1,-2|-1,-2|0,-2|0,-2|0,-1|0,-1|0,-1|0,-1|0,-1"/>
+			<Frames path="idleC" hair="0,-2|-1,-2|-2,-2|-2,-2|-2,-2|-2,-2|1,-1|2,0|0,0|-1,-1|0,-1|0,-1"/>
+
+			<Frames path="lookUp" hair="0,-2|0,-2|0,-2|0,-2|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-3:1"/>
+			<Frames path="edge" hair="-1,-2|-1,-2|-1,-2|-1,-1|-1,-1|-1,-1|-1,-2|0,-2|1,-2|0,-2|0,-1|-1,-1|-1,-1|-1,-2"/>
+			<Frames path="edge_back" hair="1,-2:1|1,-2:2|0,-2:2|0,-1:2|-1,-2:2|0,-2:2|1,-2:2|1,-2:2|1,-2:2|1,-2:2|2,-1|2,-1|2,-1|2,-2"/>
+			<Frames path="walk" hair="0,-2|0,-1|0,-1|0,-1|0,-3|0,-2|0,-1|0,-1|0,-1|0,-1|0,-3|0,-2"/>
+			<Frames path="push" hair="1,-2|1,-1|1,-1|1,-1|1,-2|1,-2|1,-2|1,-2|1,-1|1,-1|1,-1|1,-1|1,-2|1,-2|1,-2|1,-2"/>
+			<Frames path="runSlow" hair="1,-2|1,-1|1,-1|1,-1|1,-3|1,-2|1,-1|1,-1|1,-1|1,-1|1,-3|1,-2"/>
+			<Frames path="runFast" hair="1,-2|1,-1|1,-1|1,-1|1,-3|1,-2|1,-1|1,-1|1,-1|1,-1|1,-3|1,-2"/>
+			<Frames path="run_wind" hair="4,-1|4,0|5,0|5,0|4,-2|4,-1|4,0|4,0|4,0|4,0|4,-2|4,-1"/>
+			<Frames path="runStumble" hair="1, 1|1,2|1,2|1,0|1,-2|1,-2|1,-1|1,-1|1,-1|1,-1|1,-3|1,-2"/>
+			<Frames path="dash" hair="2,0|2,0|2,0|2,1"/>
+			<Frames path="dreamDash" hair="2,0|1,0|0,0|0,0|1,1|2,1|2,1|2,0|1,0|1,0|1,0|1,0|1,0|1,0|1,0|1,0|1,0|0,0|1,0|1,0|2,1"/>
+			<Frames path="slide" hair="0,3|0,3|0,3"/>
+			<Frames path="jumpSlow" hair="1,-3|1,-3|1,-2|0,-2"/>
+			<Frames path="jumpFast" hair="1,-3|1,-3|1,-2|0,-2"/>
+			<Frames path="tired" hair="0,1|0,2|0,1|0,0"/>
+			<Frames path="climb" hair="0,-2|0,-2|0,-2|0,-2|-1,-2|-1,-2|0,-1|1,-2:1|2,-2:2"/>
+			<Frames path="duck" hair="0,3"/>
+			<Frames path="fallPose" hair="x|x|x|x|x|x|x|x|x"/>
+			<Frames path="hug" hair="0,2"/>
+			<Frames path="sleep" hair=""/>
+			<Frames path="flip" hair="-1,-1:2|-1,-1:1|0,-1:1|1,-1:0|1,-1:0|1,0:0|2,0:0|2,0:0|2,0:0"/>
+			<Frames path="faint" hair="0,1|0,1|0,1|0,1|1,1|2,1|2,2|5,5|6,8|6,7"/>
+			<Frames path="fainted" hair="6,7"/>
+			<Frames path="dangling" hair="0,-2|0,-2|0,-2|0,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2"/>
+			<Frames path="shaking" hair="0,-1"/>
+
+			<Frames path="idle_carry" hair="0,-2|0,-2|0,-2|0,-2|0,-1|0,-1|0,-1|0,-1|0,-1" carry="-1,-1,-1,0,0,0,0,0,-1"/>
+			<Frames path="jump_carry" hair="1,-3|1,-3|1,-2|0,-2" carry="-3,-3,-1,-1"/>
+			<Frames path="run_carry" hair="1,-2|1,-1|1,-1|1,-1|1,-3|1,-2|1,-1|1,-1|1,-1|1,-1|1,-3|1,-2" carry="-1,0,0,0,-3,-2,-1,0,0,0,-3,-1"/>
+			<Frames path="pickup" hair="2,0|1,-1|0,-2|0,-2|0,-2"/>
+			<Frames path="throw" hair="0,-3|2,-2|2,-2|1,-2"/>
+
+			<Frames path="swim" hair="0,-2|0,-2|0,-2|0,-2|0,-2|0,-2|0,-3|0,-3|0,-2|0,-2|0,-2|0,-2|1,-1|1,-1|1,0|1,0|1,0|1,0"/>
+			<Frames path="fall" hair="1,-2|1,-2|1,-2|1,-2|1,-2|1,-2|1,-2|1,-2"/>
+			<Frames path="bigFall" hair="1,-2|1,-2|1,-2|1,-2|1,-2|1,-2|1,-2|1,-2|1,-2|1,-2|1,-2"/>
+
+			<Frames path="startStarFly" hair="0,-2|0,-2|0,-2|0,-2"/>
+			<Frames path="starFly" hair="0,3"/>
+			<Frames path="starMorph" hair="0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0"/>
+		</Metadata>
+	</junglehelper_player_badeline_copy>
+
+    <junglehelper_madeline_lantern path="JungleHelper/Lantern/" copy="junglehelper_madeline_copy">
         <Anim id="idle" path="idle/idlelantern" delay="0.1" goto="idle"/>
         
         <Loop id="jumpSlow" path="jump/jumplantern" delay="0.1" frames="0,1" />
@@ -27,4 +309,33 @@
             <Frames path="edge/lanternedge" hair="-1,-2|-1,-2|-1,-2|-1,-1|-1,-1|-1,-1|-1,-2|0,-2|1,-2|0,-2|0,-1|-1,-1|-1,-1|-1,-2"/>
         </Metadata>
     </junglehelper_madeline_lantern>
+	
+    <junglehelper_badeline_lantern path="JungleHelper/Lantern/Badeline/" copy="junglehelper_player_badeline_copy">
+		<Anim id="idle" path="idle/idlelantern" delay="0.1" goto="idle"/>
+        
+        <Loop id="jumpSlow" path="jump/jumplantern" delay="0.1" frames="0,1" />
+        <Loop id="jumpFast" path="jump/jumplantern" delay="0.1" frames="0,1" />
+        <Anim id="fallSlow" path="jump/jumplantern" delay="0.1" frames="2,3" />
+        <Anim id="fallFast" path="jump/jumplantern" delay="0.1" frames="2,3" />
+        
+        <Anim id="runSlow" path="run/lanternrun" delay="0.07" goto="runFast" />
+        <Loop id="runFast" path="run/lanternrun" delay="0.05" />
+        
+        <Loop id="wallslide" path="slide/slidelantern" delay="0.1" />
+        
+        <Loop id="climbup" path="climb/lanternclimb" delay="0.0667" frames="0-5" />
+        <Anim id="climbLookBackStart" path="climb/lanternclimb" delay="0.08" frames="6,7,8" goto="climbLookBack" />
+        <Loop id="climbLookBack" path="climb/lanternclimb" frames="8" />
+
+        <Loop id="edge" path="edge/lanternedge" delay="0.25" frames="0-13" />
+        
+        <Metadata>
+            <Frames path="idle/idlelantern" hair="0,-2|0,-2|0,-2|0,-2|0,-1|0,-1|0,-1|0,-1|0,-1"/>
+            <Frames path="run/lanternrun" hair="1,-2|1,-1|1,-1|1,-1|1,-3|1,-2|1,-1|1,-1|1,-1|1,-1|1,-3|1,-2"/>
+            <Frames path="jump/jumplantern" hair="1,-3|1,-3|1,-2|0,-2"/>
+            <Frames path="slide/slidelantern" hair="0,-2|0,-2|0,-2|0,-2|0,-2"/>
+            <Frames path="climb/lanternclimb" hair="0,-2|0,-2|0,-2|0,-2|-1,-2|-1,-2|0,-1|1,-2:1|2,-2:2"/>
+            <Frames path="edge/lanternedge" hair="-1,-2|-1,-2|-1,-2|-1,-1|-1,-1|-1,-1|-1,-2|0,-2|1,-2|0,-2|0,-1|-1,-1|-1,-1|-1,-2"/>
+        </Metadata>
+	</junglehelper_badeline_lantern>
 </Sprites>
