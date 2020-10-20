@@ -87,6 +87,7 @@
     <Compile Include="Entities\FallingKillbox.cs" />
     <Compile Include="Entities\Lantern.cs" />
     <Compile Include="Entities\Snake.cs" />
+    <Compile Include="SpriteWipe.cs" />
     <Compile Include="Triggers\DropLanternTrigger.cs" />
     <Compile Include="Triggers\UITextTrigger.cs" />
     <Compile Include="Triggers\GeckoTutorialTrigger.cs" />
