@@ -64,6 +64,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             IgnoreJumpThrus = true;
             AllowPushing = false;
+
+            // make the boulder pop out of existence on the beginning of transitions because it looks better than it freezing into place.
+            Add(new TransitionListener {
+                OnOutBegin = () => Visible = false
+            });
         }
 
         private void onPlayer(Player player) {
