@@ -1,13 +1,44 @@
 ﻿using Celeste.Mod.Entities;
 using Celeste.Mod.JungleHelper.Components;
 using Microsoft.Xna.Framework;
+using Mono.Cecil.Cil;
 using Monocle;
+using MonoMod.Cil;
 using MonoMod.Utils;
 using System;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/RollingRock")]
     class RollingRock : Actor {
+        public static void Load() {
+            IL.Celeste.DashBlock.Removed += onDashBlockRemove;
+        }
+
+        public static void Unload() {
+            IL.Celeste.DashBlock.Removed -= onDashBlockRemove;
+        }
+
+        // component used to tell dash blocks not to freeze the game on remove
+        private class NoFreezeComponent : Component {
+            public NoFreezeComponent() : base(false, false) { }
+        }
+
+        private static void onDashBlockRemove(ILContext il) {
+            ILCursor cursor = new ILCursor(il);
+
+            while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdcR4(0.05f))) {
+                Logger.Log("JungleHelper/RollingRock", $"Modifying freeze at {cursor.Index} in IL for DashBlock.Remove");
+
+                cursor.Emit(OpCodes.Ldarg_0);
+                cursor.EmitDelegate<Func<float, DashBlock, float>>((orig, self) => {
+                    if (self.Get<NoFreezeComponent>() != null) {
+                        return 0f; // no freeze!
+                    }
+                    return orig;
+                });
+            }
+        }
+
         // configuration constants
         private const float SPEED = 100f;
         private const float FALLING_SPEED = 200f;
@@ -87,9 +118,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private void hitGroundWhileFalling(CollisionData collisionData) {
             if (collisionData.Hit is DashBlock dashBlock) {
                 // we landed on a dash block: break it!
-                dashBlock.Break(Center, Vector2.UnitY, true);
-                SceneAs<Level>().Shake(0.2f);
-                Input.Rumble(RumbleStrength.Medium, RumbleLength.Medium);
+                breakDashBlock(dashBlock);
 
                 // we continue falling, but the dash block "stopped" the boulder.
                 fallingSpeed = 0f;
@@ -112,13 +141,18 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private void hitSolidWhileMovingForward(CollisionData collisionData) {
             if (collisionData.Hit is DashBlock dashBlock) {
                 // we want the boulder to break dash blocks.
-                dashBlock.Break(Center, Vector2.UnitX, true);
-                SceneAs<Level>().Shake(0.2f);
-                Input.Rumble(RumbleStrength.Medium, RumbleLength.Medium);
+                breakDashBlock(dashBlock);
             } else {
                 // but if it touches anything else, it shatters.
                 shatter();
             }
+        }
+
+        private void breakDashBlock(DashBlock dashBlock) {
+            dashBlock.Break(Center, Vector2.UnitY, true);
+            SceneAs<Level>().Shake(0.2f);
+            Input.Rumble(RumbleStrength.Medium, RumbleLength.Medium);
+            dashBlock.Add(new NoFreezeComponent());
         }
 
         private void shatter() {

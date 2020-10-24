@@ -20,6 +20,7 @@ namespace Celeste.Mod.JungleHelper {
             SpiderBoss.Load();
             EnforceSkinController.Load();
             SpriteWipe.Load();
+            RollingRock.Load();
         }
 
         public override void Unload() {
@@ -30,6 +31,7 @@ namespace Celeste.Mod.JungleHelper {
             SpiderBoss.Unload();
             EnforceSkinController.Unload();
             SpriteWipe.Unload();
+            RollingRock.Unload();
         }
 
         public override void LoadContent(bool firstLoad) {
