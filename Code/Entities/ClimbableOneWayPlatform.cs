@@ -47,7 +47,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private static void onOverworldLoad(On.Celeste.OverworldLoader.orig_ctor orig, OverworldLoader self, Overworld.StartMode startMode, HiresSnow snow) {
             orig(self, startMode, snow);
 
-            deactivateHooks();
+            if (startMode != (Overworld.StartMode) (-1)) { // -1 = in-game overworld from the collab utils
+                deactivateHooks();
+            }
         }
 
         public static void activateHooks() {
