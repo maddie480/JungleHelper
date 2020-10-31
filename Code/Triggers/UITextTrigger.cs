@@ -128,7 +128,7 @@ namespace Celeste.Mod.JungleHelper.Triggers {
 
         private bool flagWasActive;
         public override void Update() {
-            if (flagWasActive != SceneAs<Level>().Session.GetFlag(flag) || flag == "") {
+            if (flag != "" && flagWasActive != SceneAs<Level>().Session.GetFlag(flag)) {
                 if (PlayerIsInside && uiText.Alpha < 0.1) {
                     fader.RemoveSelf();
                     Add(fader = new Coroutine(makeTextAppear()));
