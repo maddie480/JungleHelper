@@ -97,15 +97,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             // enforce the regrab delay.
             if (regrabDelay > 0f) {
-                if (regrabDelay == 0.25f) {
-                    // it was just dropped. let's ensure it is not in the ground.
-                    Collidable = true;
-                    while (CollideCheck<Solid>()) {
-                        Position.Y--;
-                    }
-                    Collidable = false;
-                }
-
                 regrabDelay -= Engine.DeltaTime;
                 if (regrabDelay <= 0f) {
                     Collidable = (sprite.CurrentAnimationID != "unlit");
@@ -190,7 +181,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             // technically, this means "Madeline's sprite returns to normal, and we spawn a Lantern entity".
             EnforceSkinController.ChangePlayerSpriteMode(player, hasLantern: false);
 
-            Lantern lantern = new Lantern(new EntityData { Position = new Vector2((int) player.Center.X, (int) player.Center.Y) }, Vector2.Zero);
+            Lantern lantern = new Lantern(new EntityData { Position = new Vector2((int) player.Center.X, (int) player.Center.Y - 5f) }, Vector2.Zero);
             lantern.regrabDelay = 0.25f;
             lantern.Collidable = false;
 
