@@ -133,9 +133,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private void lanternIsLost() {
+            Visible = Collidable = false;
             if (doRespawn) {
                 respawnDelay = 2f;
-                Visible = Collidable = false;
             } else {
                 // this happens when the lantern comes from another screen and thus can't respawn
                 RemoveSelf();
