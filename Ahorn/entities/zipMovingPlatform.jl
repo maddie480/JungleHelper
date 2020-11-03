@@ -50,6 +50,20 @@ placements["Platform (Zip, Night) (JungleHelper)"] = Ahorn.EntityPlacement(
     end
 )
 
+placements["Platform (Zip, Escape) (JungleHelper)"] = Ahorn.EntityPlacement(
+    MovingZipPlatform,
+    "rectangle",
+    Dict{String, Any}(
+        "texture" => "escape"
+    ),
+    function(entity)
+        x, y = Int(entity.data["x"]), Int(entity.data["y"])
+        width = Int(get(entity.data, "width", 8))
+        entity.data["x"], entity.data["y"] = x + width, y
+        entity.data["nodes"] = [(x, y)]
+    end
+)
+
 Ahorn.nodeLimits(entity::MovingZipPlatform) = 1, 1
 Ahorn.resizable(entity::MovingZipPlatform) = true, false
 Ahorn.minimumSize(entity::MovingZipPlatform) = 8, 0
