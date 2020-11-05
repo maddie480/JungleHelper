@@ -1,5 +1,6 @@
 ﻿using Celeste.Mod.Entities;
 using Celeste.Mod.JungleHelper.Triggers;
+using Celeste.Mod.MaxHelpingHand.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
 using MonoMod.RuntimeDetour;
@@ -129,6 +130,24 @@ namespace Celeste.Mod.JungleHelper.Entities {
             // handle the lantern getting dropped off the level
             if (Top > (Scene as Level).Bounds.Bottom) {
                 lanternIsLost();
+            }
+
+            // trigger touch switches while falling.
+            bool oldCollidable = Collidable;
+            Collidable = true;
+            foreach (TouchSwitch touchSwitch in CollideAll<TouchSwitch>()) {
+                touchSwitch.TurnOn();
+            }
+            if (Everest.Loader.DependencyLoaded(new EverestModuleMetadata { Name = "MaxHelpingHand", Version = new Version(1, 10, 0) })) {
+                turnOnFlagTouchSwitches();
+            }
+            Collidable = oldCollidable;
+        }
+
+        // this method only exists to isolate usages of Max Helping Hand.
+        private void turnOnFlagTouchSwitches() {
+            foreach (FlagTouchSwitch touchSwitch in CollideAll<FlagTouchSwitch>()) {
+                touchSwitch.TurnOn();
             }
         }
 
