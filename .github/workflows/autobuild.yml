@@ -16,18 +16,30 @@ jobs:
       with:
         dotnet-version: 2.2.108
 
-    - name: Restore with NuGet
+    - name: Restore with NuGet (Jungle Helper)
       run: nuget restore *.sln
 
-    - name: Build using Mono
+    - name: Build using Mono (Jungle Helper)
       run: msbuild *.sln "/p:Configuration=Debug"
 
-    - name: Upload artifact
+    - name: Upload artifact (Jungle Helper)
       uses: actions/upload-artifact@v2
       with:
-        name: main
+        name: JungleHelper
         path: Code/bin/Debug/JungleHelper.dll
         
+    - name: Restore with NuGet (Into The Jungle Code Mod)
+      run: nuget restore Z_IntoTheJungleCodeMod/*.sln
+
+    - name: Build using Mono (Into The Jungle Code Mod)
+      run: msbuild Z_IntoTheJungleCodeMod/*.sln "/p:Configuration=Debug"
+
+    - name: Upload artifact (Into The Jungle Code Mod)
+      uses: actions/upload-artifact@v2
+      with:
+        name: IntoTheJungleCodeMod
+        path: Z_IntoTheJungleCodeMod/bin/Debug/IntoTheJungleCodeMod.dll
+
     - name: git fetch
       uses: actions/checkout@v2
       with:
@@ -63,6 +75,7 @@ jobs:
             ZIPNAME=$ZIPNAME-${GITHUB_SHA:0:8}.zip
             zip -qq -r $ZIPNAME everest.yaml Code/bin/Debug/JungleHelper.dll Ahorn Graphics Audio Dialog DecalRegistry.xml
             url=$(curl -H 'Content-Type: multipart/form-data' -X POST -F "file=@$ZIPNAME" -F "content=$PING **New Jungle Helper update!**" "$DISCORD_WEBHOOK" | grep -Po 'cdn.discordapp.com\/.*?\.zip' | tr -d '\n')
+            curl -H 'Content-Type: multipart/form-data' -X POST -F "file=@Z_IntoTheJungleCodeMod/bin/Debug/IntoTheJungleCodeMod.dll" "$DISCORD_WEBHOOK"
             curl -H 'Content-Type: application/json' -X POST -d "$(jq -n \
                 --arg zipname "$ZIPNAME" \
                 --arg url "$url" \
