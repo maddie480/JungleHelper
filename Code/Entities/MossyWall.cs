@@ -8,7 +8,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
     // functionally identical to an ice wall, except it looks like moss and can be dissolved with a lantern.
     [CustomEntity("JungleHelper/MossyWall")]
     class MossyWall : Entity {
-        private const int LANTERN_ACTIVATION_RADIUS = 50;
+        private const int LANTERN_ACTIVATION_RADIUS = 75;
 
         // colors used when player gets close but moss isn't dissolved yet (from closest to furthest, 1 line per pixel).
         private static readonly Color[] DISTANCE_BASED_COLORS = {

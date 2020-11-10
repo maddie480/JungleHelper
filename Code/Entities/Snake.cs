@@ -6,7 +6,7 @@ using System;
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/Snake")]
     class Snake : Actor {
-        private const float ACTIVATION_RADIUS = 100f;
+        private const float ACTIVATION_RADIUS = 75f;
         private const float LOST_RADIUS = 200f;
 
         private const float PEAK_ATTACKING_SPEED = 200f;
