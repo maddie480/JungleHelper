@@ -19,6 +19,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             On.Celeste.Player.NormalUpdate += onPlayerNormalUpdate;
             On.Celeste.Player.SwimBegin += onPlayerSwimBegin;
             On.Celeste.Player.OnTransition += onPlayerTransition;
+            On.Celeste.Mod.AssetReloadHelper.ReloadLevel += onLevelReload;
 
             hookCanDash = new Hook(typeof(Player).GetMethod("get_CanDash"), typeof(Lantern).GetMethod("playerCanDash", BindingFlags.NonPublic | BindingFlags.Static));
         }
@@ -27,6 +28,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             On.Celeste.Player.NormalUpdate -= onPlayerNormalUpdate;
             On.Celeste.Player.SwimBegin -= onPlayerSwimBegin;
             On.Celeste.Player.OnTransition -= onPlayerTransition;
+            On.Celeste.Mod.AssetReloadHelper.ReloadLevel -= onLevelReload;
 
             hookCanDash?.Dispose();
             hookCanDash = null;
@@ -248,6 +250,25 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             // if the player is holding a lantern, it shouldn't respawn, since it is from another screen.
             new DynData<Player>(self)["JungleHelper_LanternDoRespawn"] = false;
+        }
+
+        private static void onLevelReload(On.Celeste.Mod.AssetReloadHelper.orig_ReloadLevel orig) {
+            // check if we are in a level, or if we are going to return to a level after a reload.
+            Level level = Engine.Scene as Level;
+            if (level == null && Engine.Scene is AssetReloadHelper) {
+                level = AssetReloadHelper.ReturnToScene as Level;
+            }
+
+            if (level != null) {
+                // check if the player is here, and if they have the lantern.
+                Player player = level.Tracker.GetEntity<Player>();
+                if (player != null && player.Sprite != null && EnforceSkinController.HasLantern(player.Sprite.Mode)) {
+                    // make the player drop the lantern (destroy doesn't matter much, the reload will kick the lantern out anyway).
+                    DropLantern(player, destroy: false);
+                }
+            }
+
+            orig();
         }
 
 
