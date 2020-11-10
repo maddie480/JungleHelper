@@ -1,4 +1,5 @@
 ﻿using Celeste.Mod.Entities;
+using Celeste.Mod.JungleHelper.Components;
 using Celeste.Mod.JungleHelper.Triggers;
 using Celeste.Mod.MaxHelpingHand.Entities;
 using Microsoft.Xna.Framework;
@@ -46,6 +47,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private bool doRespawn = true;
         private Sprite sprite;
         private float fadeOutAlpha = 1f;
+        private ComponentWithDepth<Image> lanternOverlay;
 
         public Lantern(EntityData data, Vector2 offset) : base(data.Position + offset) {
             sprite = JungleHelperModule.SpriteBank.Create("lantern");
@@ -62,6 +64,21 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     Color2 = Calc.HexToColor("FCFFC3")
                 };
             }
+
+            Image overlay = new Image(GFX.Game["JungleHelper/Lantern/Overlay"]);
+            overlay.Position = new Vector2((int) (Center - Position).X, (int) (Center - Position).Y);
+            overlay.CenterOrigin();
+            Add(lanternOverlay = new ComponentWithDepth<Image>(overlay) { Depth = 1500 });
+
+            lanternOverlay.Add(new TransitionListener {
+                OnOut = progress => {
+                    if (lanternOverlay.Entity == null || !lanternOverlay.Entity.TagCheck(Tags.Persistent)) {
+                        // fade out the light emitted by the lanterns we're leaving behind.
+                        // This allows the transition to look smoother if the player dropped a lantern just before transitioning screens.
+                        lanternOverlay.Component.Color = Color.White * (1 - progress);
+                    }
+                }
+            });
         }
 
         private void onPlayer(Player player) {
@@ -72,6 +89,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 RemoveSelf();
                 new DynData<Player>(player)["JungleHelper_LanternStartingPosition"] = startingPosition;
                 new DynData<Player>(player)["JungleHelper_LanternDoRespawn"] = doRespawn;
+
+                // detach the glow from the lantern and attach it to the player.
+                player.Add(lanternOverlay);
+                lanternOverlay.Component.Position = new Vector2((int) (player.Center - player.Position).X, (int) (player.Center - player.Position).Y);
             }
         }
 
@@ -142,6 +163,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 turnOnFlagTouchSwitches();
             }
             Collidable = oldCollidable;
+
+            // turn off lantern overlay if the lantern isn't lit.
+            lanternOverlay.Component.Visible = sprite.CurrentAnimationID != "unlit" && Visible;
         }
 
         // this method only exists to isolate usages of Max Helping Hand.
@@ -214,6 +238,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
             }
 
             player.Scene.Add(lantern);
+
+            // delete the lantern glow from the player!
+            player.Get<ComponentWithDepth<Image>>()?.RemoveSelf();
         }
 
         private static void onPlayerTransition(On.Celeste.Player.orig_OnTransition orig, Player self) {
