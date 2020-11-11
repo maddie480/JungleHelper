@@ -1,4 +1,4 @@
-module JungleHelperNightMovingPlatform
+module JungleHelperEscapeMovingPlatform
 
 using ..Ahorn, Maple
 

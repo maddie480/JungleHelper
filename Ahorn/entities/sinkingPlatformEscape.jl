@@ -1,4 +1,4 @@
-module JungleHelperNightSinkingPlatform
+module JungleHelperEscapeSinkingPlatform
 
 using ..Ahorn, Maple
 
