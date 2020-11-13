@@ -39,6 +39,10 @@
       <HintPath>..\lib-stripped\FNA.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="MarioSkin">
+      <HintPath>..\lib-stripped\MarioSkin.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="MaxHelpingHand">
       <HintPath>..\lib-stripped\MaxHelpingHand.dll</HintPath>
       <Private>False</Private>
