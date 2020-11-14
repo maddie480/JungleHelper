@@ -80,7 +80,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 time += Engine.DeltaTime;
 
                 float opacity = (0.2f + Ease.SineInOut(Calc.YoYo(time % 1f)) * 0.8f);
-                Color color = Color.White * opacity;
+                Color color = Color.Lerp(Color.Black, Color.White, opacity);
                 foreach (Image img in outline) {
                     img.Color = color;
                 }
