@@ -47,23 +47,19 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private static readonly Color REGULAR_COLOR = Calc.HexToColor("33C111");
 
         private List<Image> mossParts = new List<Image>();
+        private List<Hitbox> hitboxes = new List<Hitbox>();
+
+        private Vector2 topCenter;
 
         public MossyWall(EntityData data, Vector2 offset) : base(data.Position + offset) {
-            float height = data.Height;
             bool left = data.Bool("left");
 
             Depth = -20000; // FG tiles have depth -10000
 
-            if (left) {
-                Collider = new Hitbox(2f, height, 8f);
-            } else {
-                Collider = new Hitbox(2f, height, -2f);
-            }
-
             Add(new StaticMover());
             Add(new ClimbBlocker(edge: false));
 
-            for (int i = 0; i < Height; i += 8) {
+            for (int i = 0; i < data.Height; i += 8) {
                 string id = (i == 0) ? "moss_top" : (i + 16 <= Height ? "moss_mid" + Calc.Random.Next(1, 3) : "moss_bottom");
                 Image sprite = new Image(GFX.Game["JungleHelper/Moss/" + id]);
                 sprite.Position = new Vector2(0f, i);
@@ -72,32 +68,48 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 Add(sprite);
 
                 mossParts.Add(sprite);
+
+                Hitbox hitbox;
+                if (left) {
+                    hitbox = new Hitbox(2f, 8f, 8f, i);
+                } else {
+                    hitbox = new Hitbox(2f, 8f, -2f, i);
+                }
+                hitboxes.Add(hitbox);
             }
+
+            Collider = new ColliderList(hitboxes.ToArray());
+            topCenter = TopCenter;
         }
 
         public override void Update() {
             base.Update();
 
-            // this is collidable by default, until we figure out that a moss part is close enough to the player.
-            Collidable = true;
+            List<Hitbox> enabledHitboxes = new List<Hitbox>();
 
-            foreach (Image mossPart in mossParts) {
-                float distance = Lantern.GetClosestLanternDistanceTo(TopCenter + mossPart.Position, Scene, out _);
+            for (int i = 0; i < mossParts.Count; i++) {
+                Image mossPart = mossParts[i];
+                Hitbox hitbox = hitboxes[i];
+
+                float distance = Lantern.GetClosestLanternDistanceTo(topCenter + mossPart.Position, Scene, out _);
 
                 if (distance < LANTERN_ACTIVATION_RADIUS) {
                     // moss is dissolved, make it uncollidable.
                     mossPart.Visible = false;
-                    Collidable = false;
                 } else if (distance - LANTERN_ACTIVATION_RADIUS < DISTANCE_BASED_COLORS.Length) {
-                    // moss has a particular fade of color.
+                    // moss has a particular fade of color, make it collidable.
                     mossPart.Visible = true;
                     mossPart.Color = DISTANCE_BASED_COLORS[(int) Math.Floor(distance - LANTERN_ACTIVATION_RADIUS)];
+                    enabledHitboxes.Add(hitbox);
                 } else {
-                    // moss is green (player is too far or not here).
+                    // moss is green (player is too far or not here), make it collidable.
                     mossPart.Visible = true;
                     mossPart.Color = REGULAR_COLOR;
+                    enabledHitboxes.Add(hitbox);
                 }
             }
+
+            Collider = new ColliderList(enabledHitboxes.ToArray());
         }
     }
 }
