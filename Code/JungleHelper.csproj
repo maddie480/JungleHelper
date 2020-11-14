@@ -90,6 +90,7 @@
     <Compile Include="Entities\AutoFallingBlockDelay.cs" />
     <Compile Include="Entities\BouncyShroom.cs" />
     <Compile Include="Entities\EnforceSkinController.cs" />
+    <Compile Include="Entities\EnforceSkinVanillaSpriteDump.cs" />
     <Compile Include="Entities\FallingKillbox.cs" />
     <Compile Include="Entities\Lantern.cs" />
     <Compile Include="Entities\Snake.cs" />

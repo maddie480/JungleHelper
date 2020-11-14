@@ -100,10 +100,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
                 // check if there is a controller, or a lantern.
                 if (controllerData != null || session.MapData.Levels.Exists(levelData => levelData.Entities.Exists(entityData => entityData.Name == "JungleHelper/Lantern"))) {
-                    bool isThereASkin = Everest.Content.Map.Keys.Any(asset => asset.StartsWith("Graphics/Atlases/Gameplay/characters/player/"))
-                        || Everest.Content.Map.Keys.Any(asset => asset.StartsWith("Graphics/Atlases/Gameplay/characters/player_no_backpack/"))
-                        || Everest.Content.Map.Keys.Any(asset => asset.StartsWith("Graphics/Atlases/Gameplay/characters/player_badeline/"));
-
+                    bool isThereASkin = Everest.Content.Map.Keys.Any(asset => EnforceSkinVanillaSpriteDump.VanillaPlayerSprites.Contains(asset));
                     bool isLanternReskinned = Everest.Content.Map.Keys.Any(asset => asset.StartsWith("Graphics/Atlases/Gameplay/JungleHelper/Lantern/")
                         && Everest.Content.Map[asset].Source?.Mod != null
                         && Everest.Content.Map[asset].Source.Mod.Name != "JungleHelper");
