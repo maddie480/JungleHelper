@@ -106,3 +106,6 @@ placements.triggers.JungleHelper/UIImageTrigger.tooltips.ImageY=The image vertic
 
 # Snake
 placements.entities.JungleHelper/Snake.tooltips.left=Whether the snake should spawn facing left.
+
+# Enforce Skin Controller
+placements.entities.JungleHelper/EnforceSkinController.tooltips.showPostcard=Whether a warning postcard will be shown when the player's skins are forcibly disabled.
