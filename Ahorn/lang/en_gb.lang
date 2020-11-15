@@ -109,3 +109,9 @@ placements.entities.JungleHelper/Snake.tooltips.left=Whether the snake should sp
 
 # Enforce Skin Controller
 placements.entities.JungleHelper/EnforceSkinController.tooltips.showPostcard=Whether a warning postcard will be shown when the player's skins are forcibly disabled.
+
+# Delayed Auto-Falling Block
+placements.entities.JungleHelper/AutoFallingBlockDelayed.tooltips.tiletype=Changes the visual appearance of the wall.
+placements.entities.JungleHelper/AutoFallingBlockDelayed.tooltips.delay=The delay (in seconds) before the block starts falling.
+placements.entities.JungleHelper/AutoFallingBlockDelayed.names.ShakeDelay=Shake Time
+placements.entities.JungleHelper/AutoFallingBlockDelayed.tooltips.ShakeDelay=The time (in seconds) the block spends shaking before falling. This parameter doesn't change the time the block will wait for before falling.
