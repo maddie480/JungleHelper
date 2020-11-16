@@ -147,11 +147,16 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private void onPlayer(Player player) {
-            // kill the player.
-            if (player.Position != Position) {
-                player.Die(Vector2.Normalize(player.Position - Position));
-            } else {
-                player.Die(Vector2.Zero);
+            if (!SaveData.Instance.Assists.Invincible) {
+                // kill the player.
+                if (player.Position != Position) {
+                    player.Die(Vector2.Normalize(player.Position - Position));
+                } else {
+                    player.Die(Vector2.Zero);
+                }
+
+                // play the impact sprite
+                spider.Play("impact");
             }
         }
 
@@ -196,7 +201,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             Visible = true;
             Collidable = true;
             light.Visible = true;
-            spider.Play("idle");
+            spider.Play("idle_0");
             web.Play("idle");
 
             // set up the spider pop position according to camera and player position.
@@ -242,6 +247,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 return 4;
             }
 
+            float originalX = Position.X;
+
             // track the X position of the player.
             Player player = Scene.Tracker.GetEntity<Player>();
             if (player != null) {
@@ -252,6 +259,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     Position.X = approachKeepingMoveDirection(Position.X, player.X, speed * Engine.DeltaTime);
                 }
             }
+
+            // update sprite depending on speed (we can't use speed directly, because red spiders with "infinite speed" are a thing...)
+            float effectiveSpeed = (Position.X - originalX) / Engine.DeltaTime;
+            int sprite = Calc.Clamp((int) ((effectiveSpeed / 45f) + Math.Sign(effectiveSpeed)), -2, 2);
+            spider.Play($"idle_{sprite}");
 
             // if delay is over, switch to the Falling state.
             if (stateDelay <= 0f) {
@@ -325,7 +337,14 @@ namespace Celeste.Mod.JungleHelper.Entities {
         public override void Update() {
             stateDelay -= Engine.DeltaTime;
 
-            base.Update();
+            if (spider.CurrentAnimationID == "impact") {
+                // we hit the player: freeze, only animate the sprite.
+                spider.Update();
+            } else {
+                // update all components.
+                base.Update();
+            }
+
             Position.Y = SceneAs<Level>().Camera.Top + cameraRelativeY;
         }
     }

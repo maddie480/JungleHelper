@@ -103,26 +103,48 @@
         <Loop id="invisible" path="WebStrand" frames="7"/>
     </spiderboss_web>
 
-    <spider_boss_blue path="JungleHelper/SpiderBoss/" start="idle">
+    <spider_boss_blue path="JungleHelper/SpiderBoss/" start="idle_0">
         <Center/>
-        <Loop id="idle" path="spiderBlue" frames="0"/>
-        <Anim id="start_falling" path="spiderBlue" frames="0-4" delay="0.08" goto="falling"/>
-        <Loop id="falling" path="spiderBlue" frames="4"/>
+
+        <Loop id="idle_0" path="spider_b_" frames="0"/>
+        <Loop id="idle_-1" path="spider_b_lturn" frames="0"/>
+        <Loop id="idle_-2" path="spider_b_lturn" frames="1"/>
+        <Loop id="idle_1" path="spider_b_rturn" frames="0"/>
+        <Loop id="idle_2" path="spider_b_rturn" frames="1"/>
+
+        <Anim id="start_falling" path="spider_b_" frames="0-4" delay="0.08" goto="falling"/>
+        <Loop id="falling" path="spider_b_" frames="4"/>
+        <Loop id="impact" path="spider_b_impact" frames="0"/>
     </spider_boss_blue>
 
-    <spider_boss_purple path="JungleHelper/SpiderBoss/" start="idle">
+    <spider_boss_purple path="JungleHelper/SpiderBoss/" start="idle_0">
         <Center/>
-        <Loop id="idle" path="spiderPurple" frames="0"/>
-        <Anim id="start_falling" path="spiderPurple" frames="0-4" delay="0.08" goto="falling"/>
-        <Loop id="falling" path="spiderPurple" frames="4"/>
+		
+        <Loop id="idle_0" path="spider_p_" frames="0"/>
+        <Loop id="idle_-1" path="spider_p_lturn" frames="0"/>
+        <Loop id="idle_-2" path="spider_p_lturn" frames="1"/>
+        <Loop id="idle_1" path="spider_p_rturn" frames="0"/>
+        <Loop id="idle_2" path="spider_p_rturn" frames="1"/>
+
+        <Anim id="start_falling" path="spider_p_" frames="0-4" delay="0.08" goto="falling"/>
+        <Loop id="falling" path="spider_p_" frames="4"/>
+        <Loop id="impact" path="spider_p_impact" frames="0"/>
     </spider_boss_purple>
 
-    <spider_boss_red path="JungleHelper/SpiderBoss/" start="idle">
+    <spider_boss_red path="JungleHelper/SpiderBoss/" start="idle_0">
         <Center/>
-        <Loop id="idle" path="spiderRed" frames="0"/>
-        <Anim id="start_falling" path="spiderRed" frames="0-4" delay="0.08" goto="falling"/>
-        <Loop id="falling" path="spiderRed" frames="4"/>
+
+        <Loop id="idle_0" path="spider_r_" frames="0"/>
+        <Loop id="idle_-1" path="spider_r_lturn" frames="0"/>
+        <Loop id="idle_-2" path="spider_r_lturn" frames="1"/>
+        <Loop id="idle_1" path="spider_r_rturn" frames="0"/>
+        <Loop id="idle_2" path="spider_r_rturn" frames="1"/>
+
+        <Anim id="start_falling" path="spider_r_" frames="0-4" delay="0.08" goto="falling"/>
+        <Loop id="falling" path="spider_r_" frames="4"/>
+        <Loop id="impact" path="spider_r_impact" frames="0"/>
     </spider_boss_red>
+
     <hawk path="objects/hawk/" start="hover">
         <Origin x="16" y="24"/>
         <Loop id="hover" path="hold" delay="0.05" frames="0-5,5-0" />
