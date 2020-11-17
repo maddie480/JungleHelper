@@ -253,4 +253,11 @@
         <Anim id="shock" path="Shock/shock" delay="0.1" goto="moving_scared"/>
         <Anim id="idle_hiss" path="IdleAggro/hiss" delay="0.1"/>
     </snek>
+
+    <rolling_rock path="JungleHelper/RollingRock/" start="rolling">
+	    <Center/>
+        <Loop id="rolling" path="boulder"/>
+        <Loop id="rolling_cracked" path="boulder_cracked"/>
+        <Anim id="break" path="break_" frames="0-3" delay="0.0333"/>
+    </rolling_rock>
 </Sprites>

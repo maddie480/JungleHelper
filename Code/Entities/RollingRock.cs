@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework;
 using Mono.Cecil.Cil;
 using Monocle;
 using MonoMod.Cil;
-using MonoMod.Utils;
 using System;
 
 namespace Celeste.Mod.JungleHelper.Entities {
@@ -46,29 +45,47 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private const float ROTATION_SPEED = 2f;
 
         // state info
-        private Image image;
-        private MTexture debrisTexture = null;
+        private Sprite sprite;
         private bool rolling = false;
         private bool falling = false;
         private bool shattered = false;
         private float fallingSpeed = 0f;
 
+        private Rectangle levelBounds;
+
         public RollingRock(EntityData data, Vector2 offset) : base(data.Position + offset) {
-            Add(image = new Image(GFX.Game[$"JungleHelper/RollingRock/{data.Attr("sprite")}"]));
-            if (GFX.Game.Has($"JungleHelper/RollingRock/debris_{data.Attr("sprite")}")) {
-                debrisTexture = GFX.Game[$"JungleHelper/RollingRock/debris_{data.Attr("sprite")}"];
+            Add(sprite = JungleHelperModule.SpriteBank.Create("rolling_rock"));
+            if (data.Bool("cracked")) {
+                sprite.Play("rolling_cracked");
             }
-            image.CenterOrigin();
+
             Collider = new CircleColliderWithRectangles(32);
             Add(new PlayerCollider(onPlayer));
 
             IgnoreJumpThrus = true;
             AllowPushing = false;
 
-            // make the boulder pop out of existence on the beginning of transitions because it looks better than it freezing into place.
             Add(new TransitionListener {
-                OnOutBegin = () => Visible = false
+                OnOutBegin = () => {
+                    if (!levelBounds.Contains(Collider.Bounds)) {
+                        // boulder went at least partially off-screen, hide it so that it doesn't pop out on transition end.
+                        Visible = false;
+                    }
+                },
+                OnInBegin = () => {
+                    if (Scene != null && !SceneAs<Level>().Bounds.Contains(Collider.Bounds)) {
+                        // boulder isn't entirely onscreen: hide it for the time of the transition, or the player will be able to see it.
+                        Visible = false;
+                    }
+                },
+                OnInEnd = () => Visible = true
             });
+        }
+
+        public override void Added(Scene scene) {
+            base.Added(scene);
+
+            levelBounds = SceneAs<Level>().Bounds;
         }
 
         private void onPlayer(Player player) {
@@ -88,7 +105,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
             base.Update();
 
             if (shattered) {
-                // shattered rocks do nothing.
+                // continue moving right until the break animation ends.
+                Position.X += SPEED * Engine.DeltaTime;
                 return;
             }
 
@@ -108,7 +126,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 MoveH(SPEED * Engine.DeltaTime, hitSolidWhileMovingForward);
 
                 // rotate the boulder sprite.
-                image.Rotation += ROTATION_SPEED * Engine.DeltaTime;
+                sprite.Rotation += ROTATION_SPEED * Engine.DeltaTime;
             }
 
             if (!falling && !rolling) {
@@ -166,18 +184,60 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             Audio.Play("event:/junglehelper/sfx/BoulderBoss_Break", Center);
 
-            for (int i = -3; i < 4; i++) {
-                int chunkWidth = (int) Math.Abs(Math.Cos(Math.Asin((double) i / 4)) * 4);
-                for (int j = -chunkWidth; j < chunkWidth; j++) {
-                    Debris debris = Engine.Pooler.Create<Debris>().Init(Position + new Vector2(4 + i * 8, 4 + j * 8), '6' /* stone */, true);
-                    if (debrisTexture != null) {
-                        new DynData<Debris>(debris).Get<Image>("image").Texture = debrisTexture;
-                    }
-                    Scene.Add(debris.BlastFrom(CenterRight));
-                }
+            sprite.Play("break");
+            sprite.OnFinish += _ => {
+                // Spawn the debris. Welcome to the Hardcode Zone!
+                Scene.Add(new RockDebris(Position, sprite.Rotation, "00", new Vector2(42, 41)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, "01", new Vector2(63, 38)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, "02", new Vector2(63, 61)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, "03", new Vector2(47, 53)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, "04", new Vector2(47, 69)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, "05", new Vector2(40, 75)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, "06", new Vector2(29, 63)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, "07", new Vector2(14, 64)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, "08", new Vector2(19, 50)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, "09", new Vector2(29, 38)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, "10", new Vector2(10, 39)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, "11", new Vector2(19, 27)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, "12", new Vector2(23, 14)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, "13", new Vector2(25, 10)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, "14", new Vector2(40, 34)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, "15", new Vector2(45, 17)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, "16", new Vector2(63, 16)));
+
+                // And remove the rock. The debris will deal with the rest.
+                RemoveSelf();
+            };
+        }
+
+        private class RockDebris : Entity {
+            private Vector2 speed;
+
+            public RockDebris(Vector2 position, float rockOrientation, string index, Vector2 debrisCenter) : base(position) {
+                // the debris will fly in the direction of the debris compared to the center.
+                speed = (debrisCenter - new Vector2(41, 41)).Rotate(rockOrientation) * 2 + SPEED * Vector2.UnitX + 20 * Vector2.UnitY;
+
+                // spawn a static image oriented like the rock.
+                Image image = new Image(GFX.Game[$"JungleHelper/RollingRock/debris_{index}"]);
+                image.Rotation = rockOrientation;
+                image.CenterOrigin();
+                Add(image);
             }
 
-            RemoveSelf();
+            public override void Update() {
+                base.Update();
+
+                // apply speed.
+                Position += speed * Engine.DeltaTime;
+
+                // apply gravity.
+                speed.Y = Calc.Approach(speed.Y, 160, 400 * Engine.DeltaTime);
+
+                // if the debris fell off-screen, remove it from the scene.
+                if (Position.Y - 42 > SceneAs<Level>().Bounds.Bottom) {
+                    RemoveSelf();
+                }
+            }
         }
     }
 }

@@ -63,7 +63,7 @@ placements.entities.JungleHelper/SpinyPlant.tooltips.color=Defines the color of 
 placements.entities.JungleHelper/SpiderBoss.tooltips.color=Defines the color and the difficulty of the spider boss:\n- Blue: speed capped at 50 px/s, respawns after 1 second\n- Purple: speed capped at 100 px/s, respawns immediately\n- Red: no speed cap, a new one respawns as soon as the previous one starts falling
 
 # Rolling Rock
-placements.entities.JungleHelper/RollingRock.tooltips.sprite=Determines the appearance of the rock.
+placements.entities.JungleHelper/RollingRock.tooltips.cracked=Whether the rock should look cracked.
 
 # Zip Moving Platforms
 placements.entities.JungleHelper/ZipMovingPlatform.tooltips.texture=What texture to use for the platform.
