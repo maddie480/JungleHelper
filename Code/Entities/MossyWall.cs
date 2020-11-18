@@ -50,13 +50,21 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private List<Hitbox> hitboxes = new List<Hitbox>();
 
         private Vector2 topCenter;
+        private Vector2 shake;
 
         public MossyWall(EntityData data, Vector2 offset) : base(data.Position + offset) {
             bool left = data.Bool("left");
 
             Depth = -20000; // FG tiles have depth -10000
 
-            Add(new StaticMover());
+            Add(new StaticMover {
+                SolidChecker = solid => CollideCheck(solid, Position + (left ? -1 : 1) * Vector2.UnitX),
+                OnMove = move => {
+                    Position += move;
+                    topCenter += move;
+                },
+                OnShake = move => shake += move
+            });
             Add(new ClimbBlocker(edge: false));
 
             for (int i = 0; i < data.Height; i += 8) {
@@ -110,6 +118,13 @@ namespace Celeste.Mod.JungleHelper.Entities {
             }
 
             Collider = new ColliderList(enabledHitboxes.ToArray());
+        }
+
+        public override void Render() {
+            Vector2 position = Position;
+            Position += shake;
+            base.Render();
+            Position = position;
         }
     }
 }
