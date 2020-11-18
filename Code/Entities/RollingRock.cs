@@ -212,13 +212,15 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private class RockDebris : Entity {
             private Vector2 speed;
+            private Image image;
+            private float fade = 1f;
 
             public RockDebris(Vector2 position, float rockOrientation, string index, Vector2 debrisCenter) : base(position) {
                 // the debris will fly in the direction of the debris compared to the center.
                 speed = (debrisCenter - new Vector2(41, 41)).Rotate(rockOrientation) * 2 + SPEED * Vector2.UnitX + 20 * Vector2.UnitY;
 
                 // spawn a static image oriented like the rock.
-                Image image = new Image(GFX.Game[$"JungleHelper/RollingRock/debris_{index}"]);
+                image = new Image(GFX.Game[$"JungleHelper/RollingRock/debris_{index}"]);
                 image.Rotation = rockOrientation;
                 image.CenterOrigin();
                 Add(image);
@@ -233,8 +235,12 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 // apply gravity.
                 speed.Y = Calc.Approach(speed.Y, 160, 400 * Engine.DeltaTime);
 
-                // if the debris fell off-screen, remove it from the scene.
-                if (Position.Y - 42 > SceneAs<Level>().Bounds.Bottom) {
+                // fade out.
+                fade = Calc.Approach(fade, 0f, Engine.DeltaTime * 2.5f);
+                image.Color = Color.White * fade;
+
+                if (fade == 0f) {
+                    // finished fading out!
                     RemoveSelf();
                 }
             }
