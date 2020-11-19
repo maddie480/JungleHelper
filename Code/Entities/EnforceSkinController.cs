@@ -20,6 +20,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private static bool disabledMarioSkin = false;
         private static bool forceMarioSkinDisabled = false;
+
+        private static bool disabledBananaSkin = false;
+        private static bool forceBananaSkinDisabled = false;
+
         private static bool skinsDisabled = false;
 
         private static bool showForceSkinsDisabledPostcard = false;
@@ -37,7 +41,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             On.Celeste.LevelEnter.Routine += addForceSkinsDisabledPostcard;
             On.Celeste.LevelEnter.BeforeRender += addForceSkinsDisabledPostcardRendering;
 
-            On.Celeste.Mod.EverestModule.CreateModMenuSection += greyOutMarioSkinToggle;
+            On.Celeste.Mod.EverestModule.CreateModMenuSection += greyOutCodeModSkinToggles;
 
             // the method called when changing the "Other Self" variant is a method defined inside Level.VariantMode(). patching it requires a bit of _fun_
             hookVariantMode = new Hook(typeof(Level).GetNestedType("<>c__DisplayClass151_0", BindingFlags.NonPublic).GetMethod("<VariantMode>b__9", BindingFlags.NonPublic | BindingFlags.Instance),
@@ -56,7 +60,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             On.Celeste.LevelEnter.Routine -= addForceSkinsDisabledPostcard;
             On.Celeste.LevelEnter.BeforeRender -= addForceSkinsDisabledPostcardRendering;
 
-            On.Celeste.Mod.EverestModule.CreateModMenuSection -= greyOutMarioSkinToggle;
+            On.Celeste.Mod.EverestModule.CreateModMenuSection -= greyOutCodeModSkinToggles;
 
             hookVariantMode?.Dispose();
             hookVariantMode = null;
@@ -87,7 +91,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private static void checkForSkinReset(Session session) {
-            if (!skinsDisabled && !forceMarioSkinDisabled && AreaData.Areas.Count > session.Area.ID && AreaData.Areas[session.Area.ID].Mode.Length > (int) session.Area.Mode) {
+            if (!skinsDisabled && !forceMarioSkinDisabled && !forceBananaSkinDisabled
+                && AreaData.Areas.Count > session.Area.ID && AreaData.Areas[session.Area.ID].Mode.Length > (int) session.Area.Mode) {
+
                 // look for the first Enforce Skin Controller we can find.
                 EntityData controllerData = null;
                 foreach (LevelData levelData in session.MapData.Levels) {
@@ -114,7 +120,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
                         resetMarioSkin();
                     }
 
-                    if (skinsDisabled || disabledMarioSkin) {
+                    if (Everest.Loader.DependencyLoaded(new EverestModuleMetadata { Name = "ProBananaSkin", Version = new Version(1, 0) })) {
+                        resetBananaSkin();
+                    }
+
+                    if (skinsDisabled || disabledMarioSkin || disabledBananaSkin) {
                         showForceSkinsDisabledPostcard = controllerData == null || controllerData.Bool("showPostcard", true);
                     }
                 }
@@ -151,6 +161,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             if (forceMarioSkinDisabled) {
                 restoreMarioSkin();
+            }
+
+            if (forceBananaSkinDisabled) {
+                restoreBananaSkin();
             }
         }
 
@@ -241,7 +255,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             }
         }
 
-        // Mario skin stuff
+        // Mario and Banana skin stuff
 
         private static void resetMarioSkin() {
             Logger.Log(LogLevel.Info, "JungleHelper/EnforceSkinController", "Mario skin is force-disabled from now");
@@ -258,11 +272,31 @@ namespace Celeste.Mod.JungleHelper.Entities {
             forceMarioSkinDisabled = false;
         }
 
-        private static void greyOutMarioSkinToggle(On.Celeste.Mod.EverestModule.orig_CreateModMenuSection orig, EverestModule self, TextMenu menu, bool inGame, EventInstance snapshot) {
+        private static void resetBananaSkin() {
+            Logger.Log(LogLevel.Info, "JungleHelper/EnforceSkinController", "Banana skin is force-disabled from now");
+            disabledBananaSkin = ProBananaSkin.ProBananaSkinModule.Settings.Enabled;
+            ProBananaSkin.ProBananaSkinModule.Settings.Enabled = false;
+            forceBananaSkinDisabled = true;
+        }
+
+        private static void restoreBananaSkin() {
+            Logger.Log(LogLevel.Info, "JungleHelper/EnforceSkinController", $"Banana skin can be enabled again, restoring its old status {disabledBananaSkin}");
+
+            ProBananaSkin.ProBananaSkinModule.Settings.Enabled = disabledBananaSkin;
+            disabledBananaSkin = false;
+            forceBananaSkinDisabled = false;
+        }
+
+        private static void greyOutCodeModSkinToggles(On.Celeste.Mod.EverestModule.orig_CreateModMenuSection orig, EverestModule self, TextMenu menu, bool inGame, EventInstance snapshot) {
             orig(self, menu, inGame, snapshot);
 
             if (forceMarioSkinDisabled && self.GetType().FullName == "Celeste.Mod.MarioSkin.MarioSkin") {
                 // disable the Mario Skin toggle.
+                menu.Items[menu.Items.Count - 1].Disabled = true;
+            }
+
+            if (forceBananaSkinDisabled && self.GetType().FullName == "Celeste.Mod.ProBananaSkin.ProBananaSkinModule") {
+                // disable the Banana Skin toggle.
                 menu.Items[menu.Items.Count - 1].Disabled = true;
             }
         }
