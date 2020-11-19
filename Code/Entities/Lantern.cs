@@ -84,7 +84,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private void onPlayer(Player player) {
-            if (Input.Grab.Check && !player.CollideCheck<DropLanternTrigger>()) {
+            if (Input.Grab.Pressed && !player.CollideCheck<DropLanternTrigger>() && doesNotHaveAndWontHaveLantern(player)) {
                 // the player grabs the lantern.
                 // on a technical level, Maddy's sprite changes to have her holding the lantern, and the lantern disappears.
                 EnforceSkinController.ChangePlayerSpriteMode(player, hasLantern: true);
@@ -96,6 +96,19 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 player.Add(lanternOverlay);
                 lanternOverlay.Component.Position = new Vector2((int) (player.Center - player.Position).X, (int) (player.Center - player.Position).Y);
             }
+        }
+
+        private static bool doesNotHaveAndWontHaveLantern(Player player) {
+            // check if the player has the lantern.
+            bool result = !EnforceSkinController.HasLantern(player.Sprite.Mode);
+            if (result) {
+                // check if the player will have the lantern on the next frame.
+                PlayerSpriteMode? nextMode = new DynData<Player>(player).Get<PlayerSpriteMode?>("nextSpriteMode");
+                if (nextMode != null) {
+                    result = !EnforceSkinController.HasLantern(nextMode ?? default);
+                }
+            }
+            return result;
         }
 
         public override void Update() {
@@ -205,7 +218,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private static int onPlayerNormalUpdate(On.Celeste.Player.orig_NormalUpdate orig, Player self) {
-            if (EnforceSkinController.HasLantern(self.Sprite.Mode) && Input.Grab.Check && Input.MoveY > 0f) {
+            if (EnforceSkinController.HasLantern(self.Sprite.Mode) && Input.Grab.Pressed && Input.MoveY > 0f) {
                 // drop the lantern.
                 DropLantern(self, destroy: false);
             }
