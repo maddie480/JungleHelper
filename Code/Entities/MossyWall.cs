@@ -58,7 +58,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             Depth = -20000; // FG tiles have depth -10000
 
             Add(new StaticMover {
-                SolidChecker = solid => CollideCheck(solid, Position + (left ? -1 : 1) * Vector2.UnitX),
+                SolidChecker = solid => CollideCheck(solid, Position + (left ? -2 : 2) * Vector2.UnitX),
                 OnMove = move => {
                     Position += move;
                     topCenter += move;
