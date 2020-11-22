@@ -218,7 +218,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private static int onPlayerNormalUpdate(On.Celeste.Player.orig_NormalUpdate orig, Player self) {
-            if (EnforceSkinController.HasLantern(self.Sprite.Mode) && Input.Grab.Pressed && Input.MoveY > 0f) {
+            if (EnforceSkinController.HasLantern(self.Sprite.Mode) && Input.Grab.Check && Input.MoveY > 0f) {
                 // drop the lantern.
                 DropLantern(self, destroy: false);
             }
