@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Monocle;
 using System;
+using System.Collections.Generic;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/SpinyPlant")]
@@ -11,12 +12,15 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private int lines;
         private string color;
 
+        private Vector2 topCenter;
+        private List<Sprite> plantParts;
+        private List<Hitbox> hitboxes;
+
         public SpinyPlant(EntityData data, Vector2 offset) : base(data.Position + offset) {
             lines = data.Height / 8;
             color = data.Attr("color", "Blue");
             Depth = -9500;
 
-            Collider = new Hitbox(12f, data.Height - 8f, 6f, 4f);
             Add(new PlayerCollider(killPlayer));
         }
 
@@ -25,13 +29,14 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         public override void Awake(Scene scene) {
+            plantParts = new List<Sprite>();
+            hitboxes = new List<Hitbox>();
+
             if (lines == 2) {
-                Collider bak = Collider;
                 Collider = new Hitbox(8f, 1f, 8, -1);
                 bool topOpen = !CollideCheck<Solid>();
                 Collider = new Hitbox(8f, 1f, 8, lines * 8);
                 bool bottomOpen = !CollideCheck<Solid>();
-                Collider = bak;
 
                 string section;
                 if (topOpen) {
@@ -51,6 +56,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 GraphicsComponent image = generateSpinyPlantPart(section);
                 image.X = section == "Solo" ? 4 : 0;
                 Add(image);
+                hitboxes.Add(generateHitbox(section, image));
+                if (image is Sprite sprite) {
+                    plantParts.Add(sprite);
+                }
             } else {
                 for (int i = 0; i < lines; i += 2) {
                     if (i == lines - 1) {
@@ -59,35 +68,33 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
                     string section = "Mid";
                     if (i == 0) {
-                        Collider bak = Collider;
                         Collider = new Hitbox(8f, 1f, 8, -1);
                         bool solidAbove = CollideCheck<Solid>();
-                        Collider = bak;
 
                         if (!solidAbove) {
                             section = "Top";
-                        } else {
-                            Collider.Top -= 4f;
-                            Collider.Height += 4f;
                         }
                     } else if (i == lines - 2) {
-                        Collider bak = Collider;
                         Collider = new Hitbox(8f, 1f, 8, lines * 8);
                         bool solidBelow = CollideCheck<Solid>();
-                        Collider = bak;
 
                         if (!solidBelow) {
                             section = "Bottom";
-                        } else {
-                            Collider.Height += 4f;
                         }
                     }
 
                     GraphicsComponent image = generateSpinyPlantPart(section);
                     image.Y = i * 8;
                     Add(image);
+                    hitboxes.Add(generateHitbox(section, image));
+                    if (image is Sprite sprite) {
+                        plantParts.Add(sprite);
+                    }
                 }
             }
+
+            Collider = new ColliderList(hitboxes.ToArray());
+            topCenter = TopCenter;
         }
 
         private GraphicsComponent generateSpinyPlantPart(string section) {
@@ -100,33 +107,59 @@ namespace Celeste.Mod.JungleHelper.Entities {
             }
         }
 
+        private Hitbox generateHitbox(string section, GraphicsComponent image) {
+            switch (section) {
+                case "Top":
+                    return new Hitbox(12f, 12f, 6f, 4f + image.Y);
+                case "Mid":
+                    return new Hitbox(12f, 16f, 6f, image.Y);
+                case "Bottom":
+                    return new Hitbox(12f, 12f, 6f, image.Y);
+                default: // case "Solo"
+                    return new Hitbox(12f, 8f, 6f, 4f + image.Y);
+            }
+        }
+
         public override void Update() {
             base.Update();
 
-            // this is collidable by default, until we figure out that a part of the plant is close enough to the player.
-            Collidable = true;
+            if (plantParts.Count == 0) {
+                // this plant doesn't support retracting/expanding, so skip over everything.
+                return;
+            }
 
-            foreach (Sprite plantPart in Components.GetAll<Sprite>()) {
-                float distance = Lantern.GetClosestLanternDistanceTo(TopCenter + plantPart.Position, Scene, out Vector2 objectPosition);
+            List<Hitbox> activeHitboxes = new List<Hitbox>();
+
+            for (int i = 0; i < plantParts.Count; i++) {
+                Sprite plantPart = plantParts[i];
+                Hitbox hitbox = hitboxes[i];
+
+                float distance = Lantern.GetClosestLanternDistanceTo(topCenter + plantPart.Position, Scene, out Vector2 objectPosition);
 
                 if (distance < LANTERN_ACTIVATION_RADIUS) {
                     // plant is retracted!
-                    Collidable = false;
 
                     // is this part retracted yet?
                     if (plantPart.CurrentAnimationID.StartsWith("extend")) {
                         // no, so go ahead and retract it.
                         int frame = (plantPart.CurrentAnimationID == "extended" ? 0 : 6 - plantPart.CurrentAnimationFrame);
-                        plantPart.Play(Top + plantPart.Position.Y - objectPosition.Y < 0 ? "retract_below" : "retract_above");
+                        plantPart.Play(topCenter.Y + plantPart.Position.Y - objectPosition.Y < 0 ? "retract_below" : "retract_above");
                         plantPart.SetAnimationFrame(frame);
                     }
-                } else if (plantPart.CurrentAnimationID.StartsWith("retract")) {
-                    // we are out of radius and retracting/retracted, so extend.
-                    int frame = (plantPart.CurrentAnimationID == "retracted" ? 0 : 6 - plantPart.CurrentAnimationFrame);
-                    plantPart.Play(Top + plantPart.Position.Y - objectPosition.Y < 0 ? "extend_below" : "extend_above");
-                    plantPart.SetAnimationFrame(frame);
+                } else {
+                    // plant is extended, so it hurts the player.
+                    activeHitboxes.Add(hitbox);
+
+                    if (plantPart.CurrentAnimationID.StartsWith("retract")) {
+                        // we are out of radius and retracting/retracted, so extend.
+                        int frame = (plantPart.CurrentAnimationID == "retracted" ? 0 : 6 - plantPart.CurrentAnimationFrame);
+                        plantPart.Play(topCenter.Y + plantPart.Position.Y - objectPosition.Y < 0 ? "extend_below" : "extend_above");
+                        plantPart.SetAnimationFrame(frame);
+                    }
                 }
             }
+
+            Collider = new ColliderList(activeHitboxes.ToArray());
         }
     }
 }
