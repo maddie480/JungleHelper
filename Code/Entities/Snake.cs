@@ -214,7 +214,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private int hiddenUpdate() {
-            if (Lantern.GetClosestLanternDistanceTo(startingPosition, Scene, out _) < ACTIVATION_RADIUS) {
+            if (Lantern.GetClosestLanternDistanceTo(startingPosition + (Center - Position), Scene, out _) < ACTIVATION_RADIUS) {
                 // lantern is still here! stay hidden.
                 return 4;
             }
@@ -227,7 +227,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             base.Update();
 
             // this check applies to all states where the snake is aggressive (waiting for player, attacking, returning to starting point).
-            if (sprite.CurrentAnimationID.Contains("_aggro") && Lantern.GetClosestLanternDistanceTo(startingPosition, Scene, out _) < ACTIVATION_RADIUS) {
+            if (sprite.CurrentAnimationID.Contains("_aggro") && Lantern.GetClosestLanternDistanceTo(startingPosition + (Center - Position), Scene, out _) < ACTIVATION_RADIUS) {
                 // oh h the player is coming with the lantern! snake is now shocked.
                 stateMachine.State = 3;
             }
