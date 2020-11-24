@@ -6,6 +6,12 @@ using ..Ahorn, Maple
 
 const bossColors = String["Blue", "Purple", "Red"]
 
+const bossSprites = Dict{String, String}(
+	"Blue" => "JungleHelper/SpiderBoss/spider_b_00",
+	"Purple" => "JungleHelper/SpiderBoss/spider_p_00",
+	"Red" => "JungleHelper/SpiderBoss/spider_r_00"
+)
+
 const placements = Ahorn.PlacementDict(
 	"Spider Boss ($(color)) (Jungle Helper)" => Ahorn.EntityPlacement(
 		SpiderBoss,
@@ -22,12 +28,12 @@ Ahorn.editingOptions(entity::SpiderBoss) = Dict{String, Any}(
 
 function Ahorn.selection(entity::SpiderBoss)
     x, y = Ahorn.position(entity)
-    return Ahorn.Rectangle(x - 8, y - 8, 16, 16)
+    return Ahorn.Rectangle(x - 9, y - 9, 17, 17)
 end
 
 function Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::SpiderBoss, room::Maple.Room)
 	color = get(entity.data, "color", "Blue")
-	Ahorn.drawSprite(ctx, "JungleHelper/SpiderBoss/spider$(color)0", 0, 0)
+	Ahorn.drawSprite(ctx, bossSprites[color], 0, 0)
 end
 
 end
