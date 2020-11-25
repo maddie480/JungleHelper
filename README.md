@@ -24,6 +24,7 @@ This repository contains the helper and assets for the _Celeste: Into the Jungle
 - **Spider Boss**: a spider that falls down from the top of the screen, killing Madeline if she hits it. The spider color determines its difficulty: Blue, Purple and Red in this order, with Red being the one falling the most often, and tracking the player at the fastest speed.
 - **Theo Statue**: much like a Theo crystal, except it cannot be held. It can only be moved around by moving/removing the platform it is standing on.
 - **Theo Statue Gate**: a temple gate that only opens when a Theo Statue is nearby.
+- **Torch**: a torch that sets a session flag when Madeline lights it by touching it.
 - **Zip Moving Platform**: a moving platform behaving much like a zip mover.
 
 ## Custom Triggers

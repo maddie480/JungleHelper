@@ -270,4 +270,10 @@
 	    <Center/>
         <Anim id="flash" path="flash" delay="0.05"/>
     </slide_block_refill_flash>
+
+    <torch path="JungleHelper/TorchNight/" start="off">
+        <Origin x="16" y="27"/>
+        <Loop id="off" path="TorchNightOff"/>
+        <Loop id="on" path="TorchNightOn" delay="0.1"/>
+    </torch>
 </Sprites>
