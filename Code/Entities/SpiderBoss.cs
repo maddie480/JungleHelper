@@ -105,7 +105,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             Collider = new Hitbox(13f, 13f, -7f, -7f);
             Add(new PlayerCollider(onPlayer));
 
-            Depth = -12500; // as deep as the Oshiro boss
+            Depth = -13500; // in front of exit blocks
 
             // set up the state machine.
             StateMachine stateMachine = new StateMachine();
