@@ -260,4 +260,14 @@
         <Loop id="rolling_cracked" path="boulder_cracked"/>
         <Anim id="break" path="break_" frames="0-3" delay="0.0333"/>
     </rolling_rock>
+
+    <slide_block_refill path="JungleHelper/SlideBlockRefill/" start="idle">
+	    <Center/>
+        <Loop id="idle" path="idle" delay="0.1"/>
+    </slide_block_refill>
+
+    <slide_block_refill_flash path="JungleHelper/SlideBlockRefill/" start="flash">
+	    <Center/>
+        <Anim id="flash" path="flash" delay="0.05"/>
+    </slide_block_refill_flash>
 </Sprites>

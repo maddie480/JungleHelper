@@ -110,8 +110,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         public void OnDash(Vector2 direction) {
             // if one of the directions is zero and the other isn't, this is a straight (non diagonal) dash, so we should trigger the Kevin.
-            if (!isHit && refilled && (direction.X == 0) != (direction.Y == 0) && (direction.X == 0 || canMoveHorizontally) && (direction.Y == 0 || canMoveVertically)) {
-                refilled = false;
+            if (!isHit && Refilled && (direction.X == 0) != (direction.Y == 0) && (direction.X == 0 || canMoveHorizontally) && (direction.Y == 0 || canMoveVertically)) {
+                Refilled = false;
 
                 attack(direction);
             }
@@ -419,8 +419,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         // returns true if the Kevin was refilled, false if it didn't need refilling
         public bool Refill() {
-            if (!refilled) {
-                refilled = true;
+            if (!Refilled) {
+                Refilled = true;
                 activeOverlay.Visible = true;
                 return true;
             }
@@ -448,7 +448,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private Sprite face;
         private Image activeOverlay;
 
-        private bool refilled = true;
+        public bool Refilled { get; private set; } = true;
 
         private bool canMoveHorizontally;
         private bool canMoveVertically;

@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Monocle;
 using System;
 using System.Collections;
+using System.Linq;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     // mostly a refill copypaste, also looks like a refill for now, waiting for the sprites.
@@ -30,6 +31,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private float respawnTimer;
 
+        private float fade = 1f;
+
         public RemoteKevinRefill(Vector2 position, bool oneUse) : base(position) {
             Collider = new Hitbox(16f, 16f, -8f, -8f);
 
@@ -40,16 +43,12 @@ namespace Celeste.Mod.JungleHelper.Entities {
             Add(outline = new Image(GFX.Game["JungleHelper/SlideBlockRefill/outline"]));
             outline.CenterOrigin();
             outline.Visible = false;
-            Add(sprite = new Sprite(GFX.Game, "JungleHelper/SlideBlockRefill/idle"));
-            sprite.AddLoop("idle", "", 0.1f);
-            sprite.Play("idle");
-            sprite.CenterOrigin();
-            Add(flash = new Sprite(GFX.Game, "JungleHelper/SlideBlockRefill/flash"));
-            flash.Add("flash", "", 0.05f);
+            Add(sprite = JungleHelperModule.SpriteBank.Create("slide_block_refill"));
+            Add(flash = JungleHelperModule.SpriteBank.Create("slide_block_refill_flash"));
             flash.OnFinish = delegate {
                 flash.Visible = false;
             };
-            flash.CenterOrigin();
+
             Add(wiggler = Wiggler.Create(1f, 4f, delegate (float v) {
                 sprite.Scale = (flash.Scale = Vector2.One * (1f + v * 0.2f));
             }));
@@ -97,7 +96,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 Respawn();
             }
 
-            if (Collidable && Scene.OnInterval(0.1f)) {
+            if (Collidable && Scene.OnInterval(0.1f) && fade == 1f) {
                 level.ParticlesFG.Emit(P_SlideRefillGlow, 1, Position, Vector2.One * 5f);
             }
 
@@ -110,6 +109,14 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 flash.Play("flash", restart: true);
                 flash.Visible = true;
             }
+
+            // usable = there is a Kevin that needs refilling.
+            bool usable = Scene.Tracker.GetEntities<RemoteKevin>().OfType<RemoteKevin>().Any(kevin => !kevin.Refilled);
+
+            // update the fade to match whether the refill is usable or not.
+            fade = Calc.Approach(fade, usable ? 1f : 0.5f, 2f * Engine.DeltaTime);
+            sprite.Color = Color.White * fade;
+            flash.Color = Color.White * fade;
         }
 
         private void Respawn() {
@@ -130,7 +137,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         public override void Render() {
             if (sprite.Visible) {
-                sprite.DrawOutline();
+                sprite.DrawOutline(Color.Black * Calc.ClampedMap(fade, 0.5f, 1f, 0.25f, 1f));
             }
             base.Render();
         }
