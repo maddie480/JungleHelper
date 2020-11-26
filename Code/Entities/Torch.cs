@@ -29,7 +29,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private void onPlayer(Player player) {
             // light the torch and play the lighting sound.
             lightTorch();
-            Add(new SoundSource(new Vector2(-1f, -18f), "event:/game/05_mirror_temple/mainmirror_torch_lit_1") { RemoveOnOneshotEnd = true });
+            Add(new SoundSource(new Vector2(-1f, -18f), "event:/game/05_mirror_temple/torch_activate") { RemoveOnOneshotEnd = true });
 
             // set the session flag tied to this torch.
             SceneAs<Level>().Session.SetFlag(flag);
@@ -39,7 +39,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             // light the torch and add some special effects to it.
             sprite.Play("on");
             Add(new SoundSource(new Vector2(-1f, -18f), "event:/game/05_mirror_temple/mainmirror_torch_loop"));
-            Add(new VertexLight(new Vector2(-1f, -18f), Calc.HexToColor("FFCC61"), 1f, 16, 32));
+            Add(new VertexLight(new Vector2(-1f, -18f), Color.White, 1f, 40, 64));
             Add(new BloomPoint(new Vector2(-1f, -18f), 0.5f, 16f));
 
             // the player cannot interact with a lit torch.
