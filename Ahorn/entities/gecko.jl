@@ -55,6 +55,10 @@ function Ahorn.renderSelectedAbs(ctx::Ahorn.Cairo.CairoContext, entity::Gecko)
     px, py = Ahorn.position(entity)
     nx, ny = Int.(entity.nodes[1])
 
+    # align node vertically with entity
+    entity.nodes[1] = (px, ny)
+    nx = px
+
     if get(entity.data, "left", false)
         Ahorn.drawSprite(ctx, sprite, nx + 26, ny - 8, sx = scaleX, rot = pi * 0.5)
     else
