@@ -10,6 +10,7 @@ This repository contains the helper and assets for the _Celeste: Into the Jungle
 - **Cobweb**: Madeline gets stuck in those if she hits them, and can only get out by dashing. Cobwebs are one-use: once Madeline dashed out, the cobweb disappears and does not respawn.
 - **Delayed Auto-Falling Block**: a falling block that falls automatically after a set delay. Also has customizable shake time before falling.
 - **Falling Killbox**: a killbox... except falling. Useful to prevent the player from going down too fast in a falling section.
+- **Firefly**: a flying dot that goes around and follows the player when touched, much like moon creatures.
 - **Gecko**: goes up and down on a set path. It can be made to kill the player, or to be purely decorative. It can also be used to show a tutorial similar to the Custom Tutorial Bird (with a _Gecko Tutorial Trigger_ that allows showing or hiding the tutorial bubble).
 - **Hawk**: when Madeline touches it, it will carry her to the right until she jumps or dashes out. It has customizable speed.
 - **Lantern**: a light the player can grab and keep without having to hold Grab. To drop it, the player can press Down + Grab. She will also lose the lantern when she touches water. When Madeline has the lantern, she cannot dash, but the lantern has effects on a few entities:
