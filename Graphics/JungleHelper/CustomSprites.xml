@@ -276,4 +276,23 @@
         <Loop id="off" path="TorchNightOff"/>
         <Loop id="on" path="TorchNightOn" delay="0.1"/>
     </torch>
+
+    <firefly path="JungleHelper/Firefly/" start="idle_init">
+        <Center/>
+
+        <Anim id="idle_init" path="firefly" delay="0.1" frames="0*15" goto="animating,idle_duration1,idle_duration2,idle_duration3,idle_duration4,idle_duration5,idle_duration6,idle_duration7,idle_duration8,idle_duration9,idle_duration10" />
+
+        <Anim id="idle_duration1" path="firefly" delay="0.1" frames="0*1" goto="animating" />
+        <Anim id="idle_duration2" path="firefly" delay="0.1" frames="0*2" goto="animating" />
+        <Anim id="idle_duration3" path="firefly" delay="0.1" frames="0*3" goto="animating" />
+        <Anim id="idle_duration4" path="firefly" delay="0.1" frames="0*4" goto="animating" />
+        <Anim id="idle_duration5" path="firefly" delay="0.1" frames="0*5" goto="animating" />
+        <Anim id="idle_duration6" path="firefly" delay="0.1" frames="0*6" goto="animating" />
+        <Anim id="idle_duration7" path="firefly" delay="0.1" frames="0*7" goto="animating" />
+        <Anim id="idle_duration8" path="firefly" delay="0.1" frames="0*8" goto="animating" />
+        <Anim id="idle_duration9" path="firefly" delay="0.1" frames="0*9" goto="animating" />
+        <Anim id="idle_duration10" path="firefly" delay="0.1" frames="0*10" goto="animating" />
+
+        <Anim id="animating" path="firefly" delay="0.1" frames="1,2,3*5,4,5" goto="idle_init" />
+    </firefly>
 </Sprites>

@@ -118,3 +118,6 @@ placements.entities.JungleHelper/AutoFallingBlockDelayed.tooltips.ShakeDelay=The
 
 # Torch
 placements.entities.JungleHelper/Torch.tooltips.flag=The session flag this torch will set when lit.
+
+# Firefly
+placements.entities.JungleHelper/Firefly.tooltips.number=How many fireflies should spawn in the cluster.
