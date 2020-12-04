@@ -15,11 +15,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             // with a différent sprite...
             Remove(self.Get<Sprite>("sprite"));
-            Sprite sprite = new Sprite(GFX.Game, data.Attr("directory") + "/");
-            sprite.Add("idle", "idle", 0.8f);
+            Sprite sprite = JungleHelperModule.SpriteBank.Create("theo_statue");
             self["sprite"] = sprite;
-            sprite.Play("idle");
-            sprite.SetOrigin(32f, 45f);
             Add(sprite);
 
             // a different hitbox...

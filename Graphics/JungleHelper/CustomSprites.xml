@@ -119,7 +119,7 @@
 
     <spider_boss_purple path="JungleHelper/SpiderBoss/" start="idle_0">
         <Center/>
-		
+        
         <Loop id="idle_0" path="spider_p_" frames="0"/>
         <Loop id="idle_-1" path="spider_p_lturn" frames="0"/>
         <Loop id="idle_-2" path="spider_p_lturn" frames="1"/>
@@ -150,25 +150,25 @@
         <Loop id="hover" path="hold" delay="0.05" frames="0-5,5-0" />
         <Loop id="fly" path="fly" delay="0.05" frames="0-3,3-0"/>
         <Anim id="throw" path="throw" delay="0.08" frames="0-3" goto="fly"/>
-   </hawk>
+    </hawk>
   
-   <gecko_normal path="objects/gecko/normal/" start="idle">
+    <gecko_normal path="objects/gecko/normal/" start="idle">
         <Origin x="12" y="6"/>
         <Loop id="idle" path="idle" delay="0.2" frames="0-1"/>
         <Anim id="dance" path="idle" frames="2-3" goto="idle"/>
         <Loop id="walk" path="walk" delay="0.2" frames="0-29"/>
         <Loop id="slide" path="walk" frames="0"/>
         <Anim id="hit" path="walk" frames="0" goto="idle"/>
-   </gecko_normal>
+    </gecko_normal>
    
-   <gecko_hostile path="objects/gecko/hostile/" start="idle">
+    <gecko_hostile path="objects/gecko/hostile/" start="idle">
         <Origin x="12" y="6"/>
         <Loop id="idle" path="idle" delay="0.2" frames="0-1"/>
         <Anim id="dance" path="idle" frames="2-3" goto="idle"/>
         <Loop id="walk" path="walk" delay="0.2" frames="0-29"/>
         <Loop id="slide" path="walk" frames="0"/>
         <Anim id="hit" path="hit" frames="0"/>
-   </gecko_hostile>
+    </gecko_hostile>
   
     <predator_plant_pink path="JungleHelper/PredatorPlant/" start="idle">
         <Center/>
@@ -255,19 +255,19 @@
     </snek>
 
     <rolling_rock path="JungleHelper/RollingRock/" start="rolling">
-	    <Center/>
+        <Center/>
         <Loop id="rolling" path="boulder"/>
         <Loop id="rolling_cracked" path="boulder_cracked"/>
         <Anim id="break" path="break_" frames="0-3" delay="0.0333"/>
     </rolling_rock>
 
     <slide_block_refill path="JungleHelper/SlideBlockRefill/" start="idle">
-	    <Center/>
+        <Center/>
         <Loop id="idle" path="idle" delay="0.1"/>
     </slide_block_refill>
 
     <slide_block_refill_flash path="JungleHelper/SlideBlockRefill/" start="flash">
-	    <Center/>
+        <Center/>
         <Anim id="flash" path="flash" delay="0.05"/>
     </slide_block_refill_flash>
 
@@ -295,4 +295,10 @@
 
         <Anim id="animating" path="firefly" delay="0.1" frames="1,2,3*5,4,5" goto="idle_init" />
     </firefly>
+    
+    <theo_statue path="JungleHelper/TheoStatue/" start="idle">
+        <Origin x="32" y="45"/>
+        <Anim id="idle" path="idle" frames="0" delay="2" goto="flash" />
+        <Anim id="flash" path="flash" frames="0-5" delay="0.1" goto="idle" />
+    </theo_statue>
 </Sprites>
