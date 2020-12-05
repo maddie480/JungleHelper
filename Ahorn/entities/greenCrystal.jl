@@ -5,7 +5,7 @@ using ..Ahorn, Maple
 @mapdef Entity "JungleHelper/TheoStatue" TheoStatue(x::Integer, y::Integer, directory::String="JungleHelper/TheoStatue")
 
 const placements = Ahorn.PlacementDict(
-    "Theo Statue (Jungle Helper)" => Ahorn.EntityPlacement(
+    "Green Crystal (Jungle Helper)" => Ahorn.EntityPlacement(
         TheoStatue
     )
 )

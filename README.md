@@ -12,6 +12,8 @@ This repository contains the helper and assets for the _Celeste: Into the Jungle
 - **Falling Killbox**: a killbox... except falling. Useful to prevent the player from going down too fast in a falling section.
 - **Firefly**: a flying dot that goes around and follows the player when touched, much like moon creatures.
 - **Gecko**: goes up and down on a set path. It can be made to kill the player, or to be purely decorative. It can also be used to show a tutorial similar to the Custom Tutorial Bird (with a _Gecko Tutorial Trigger_ that allows showing or hiding the tutorial bubble).
+- **Green Crystal**: much like a Theo crystal, except it cannot be held. It can only be moved around by moving/removing the platform it is standing on.
+- **Green Crystal Gate**: a temple gate that only opens when a Green Crystal is nearby.
 - **Hawk**: when Madeline touches it, it will carry her to the right until she jumps or dashes out. It has customizable speed.
 - **Lantern**: a light the player can grab and keep without having to hold Grab. To drop it, the player can press Down + Grab. She will also lose the lantern when she touches water. When Madeline has the lantern, she cannot dash, but the lantern has effects on a few entities:
   - **Mossy Wall**: moss that sticks to a wall, preventing Madeline from grabbing it, like ice walls. When a lantern gets close, the moss fades away and allows Madeline to climb.
@@ -23,8 +25,6 @@ This repository contains the helper and assets for the _Celeste: Into the Jungle
 - **Slide Block**: a Kevin-looking block that moves in the direction Madeline is dashing. Once the block moved once, it needs to be refilled to move again. Comes in restrained (green) and restraintless (red) versions: restrained blocks stop after they moved by their own width/height; restraintless blocks move until they hit a wall or the edge of the screen.
 - **Slide Block Refill**: a refill that can be collected by the player to refill all slide blocks in the room, so that they can be moved again.
 - **Spider Boss**: a spider that falls down from the top of the screen, killing Madeline if she hits it. The spider color determines its difficulty: Blue, Purple and Red in this order, with Red being the one falling the most often, and tracking the player at the fastest speed.
-- **Theo Statue**: much like a Theo crystal, except it cannot be held. It can only be moved around by moving/removing the platform it is standing on.
-- **Theo Statue Gate**: a temple gate that only opens when a Theo Statue is nearby.
 - **Torch**: a torch that sets a session flag when Madeline lights it by touching it.
 - **Zip Moving Platform**: a moving platform behaving much like a zip mover.
 

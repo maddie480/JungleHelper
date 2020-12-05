@@ -5,7 +5,7 @@ using ..Ahorn, Maple
 @mapdef Entity "JungleHelper/TheoStatueGate" TheoStatueGate(x::Integer, y::Integer, height::Integer=48, sprite::String="default")
 
 const placements = Ahorn.PlacementDict(
-    "Theo Statue Gate (Jungle Helper)" => Ahorn.EntityPlacement(
+    "Green Crystal Gate (Jungle Helper)" => Ahorn.EntityPlacement(
         TheoStatueGate,
         "point",
         Dict{String, Any}(
