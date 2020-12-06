@@ -1,4 +1,6 @@
 ﻿using Celeste.Editor;
+using MonoMod.Cil;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -8,10 +10,12 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
 
         public override void Load() {
             On.Celeste.Editor.MapEditor.ctor += modHideMap;
+            IL.Celeste.Overworld.Update += modOverworldUpdate;
         }
 
         public override void Unload() {
             On.Celeste.Editor.MapEditor.ctor -= modHideMap;
+            IL.Celeste.Overworld.Update -= modOverworldUpdate;
         }
 
         private static void modHideMap(On.Celeste.Editor.MapEditor.orig_ctor orig, MapEditor self, AreaKey area, bool reloadMapData) {
@@ -25,6 +29,17 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
                         mapList.Remove(mapList[i]);
                     }
                 }
+            }
+        }
+
+        private void modOverworldUpdate(ILContext il) {
+            ILCursor cursor = new ILCursor(il);
+            if (cursor.TryGotoNext(MoveType.After, instr => instr.MatchCallvirt<Overworld>("IsCurrent"))) {
+                // this is one of the checks to prevent custom music from leaking into the main menu
+                // ... but we *want* it to play on the main menu, so we need to skip that check if we are in the Into The Jungle code mod.
+                cursor.EmitDelegate<Func<bool, bool>>(orig => {
+                    return orig || SaveData.Instance.LevelSet == "Into The Jungle";
+                });
             }
         }
     }
