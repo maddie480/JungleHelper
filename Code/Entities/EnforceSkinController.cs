@@ -92,7 +92,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private static void checkForSkinReset(Session session) {
             if (!skinsDisabled && !forceMarioSkinDisabled && !forceBananaSkinDisabled
-                && AreaData.Areas.Count > session.Area.ID && AreaData.Areas[session.Area.ID].Mode.Length > (int) session.Area.Mode) {
+                && AreaData.Areas.Count > session.Area.ID && AreaData.Areas[session.Area.ID].Mode.Length > (int) session.Area.Mode
+                && AreaData.Areas[session.Area.ID].Mode[(int) session.Area.Mode] != null) {
 
                 // look for the first Enforce Skin Controller we can find.
                 EntityData controllerData = null;
