@@ -48,6 +48,19 @@ Those are reskinned entities that are placeable in Ahorn.
 
 Mosaic Crumble Blocks and Invisible Jump Throughs are custom entities, the other ones are reskins of vanilla entities.
 
+## The Sprite Wipe
+
+The **Sprite Wipe** is a wipe (screen transition from/to black played when you die or exit the map) that uses a full-screen sprite animation.
+
+To use it:
+- Put your sprites in `Graphics/Atlases/Wipes/MyMod/WipeName`
+  - Frames should be called `wipeoutXX.png` for the "fade to black" animation, and `wipeinXX.png` for the "fade from black" animation. XX are numbers counting up from 0.
+  - The frame rate is determined by the wipe duration, most of the time the animation will play in 0.5 seconds.
+  - Frames should be 1920x1080 and use white and transparent as only colors (the wipe is then tinted by the game).
+- In Ahorn map metadata, type this in the Wipe field: `JungleHelper/SpriteWipe:MyMod/WipeName`
+
+Two test wipes are included for reference. You can see them in-game by using `JungleHelper/SpriteWipe:JungleHelper/TestWipe1` and `JungleHelper/SpriteWipe:JungleHelper/TestWipe2` as wipes in Ahorn Map metadata, and you can see their files in `Graphics/Atlases/Wipes` in the mod zip.
+
 ## The Lantern and Skin Mods
 
 Since the Lantern works by changing the player sprites to ones that have Maddy carry the lantern, it is incompatible with skin mods unless those provide sprites for it.
