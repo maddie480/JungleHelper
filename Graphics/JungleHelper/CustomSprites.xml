@@ -301,4 +301,12 @@
         <Anim id="idle" path="idle" frames="0" delay="2" goto="flash" />
         <Anim id="flash" path="flash" frames="0-5" delay="0.1" goto="idle" />
     </theo_statue>
+
+    <cockatiel path="JungleHelper/Cockatiel/" start="idle">
+        <Origin x="6" y="4"/>
+        <Loop id="idle" path="idle" frames="0*6,1*2,0*14,2*2,3*8,4*2" delay="0.1" />
+        <Loop id="aggressive" path="aggressive" frames="1*2,2*12" delay="0.1" />
+        <Anim id="backout" path="aggressive" frames="3*2" delay="0.1" goto="idle" />
+        <Loop id="flyaway" path="fly" frames="0-3" delay="0.1" />
+    </cockatiel>
 </Sprites>

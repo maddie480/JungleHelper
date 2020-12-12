@@ -121,3 +121,6 @@ placements.entities.JungleHelper/Torch.tooltips.flag=The session flag this torch
 
 # Firefly
 placements.entities.JungleHelper/Firefly.tooltips.number=How many fireflies should spawn in the cluster.
+
+# Cockatiel
+placements.entities.JungleHelper/Cockatiel.tooltips.facingLeft=Whether the cockatiel should face left when spawning. It will turn around to face the player if they get close.
