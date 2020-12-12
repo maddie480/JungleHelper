@@ -52,7 +52,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 sprite.Play("backout");
                 return 0;
             }
-            if (player != null && (Position - player.Center).LengthSquared() < 12 * 12) {
+            if (player != null && (Position - player.Center).LengthSquared() < 32 * 32) {
                 // player got even closer: fly away.
                 return 2;
             }
