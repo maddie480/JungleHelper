@@ -8,6 +8,7 @@ using System.Linq;
 using MonoMod.Cil;
 using System.Collections;
 using FMOD.Studio;
+using Mono.Cecil;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     static class EnforceSkinController {
@@ -44,8 +45,17 @@ namespace Celeste.Mod.JungleHelper.Entities {
             On.Celeste.Mod.EverestModule.CreateModMenuSection += greyOutCodeModSkinToggles;
 
             // the method called when changing the "Other Self" variant is a method defined inside Level.VariantMode(). patching it requires a bit of _fun_
-            hookVariantMode = new Hook(typeof(Level).GetNestedType("<>c__DisplayClass151_0", BindingFlags.NonPublic).GetMethod("<VariantMode>b__9", BindingFlags.NonPublic | BindingFlags.Instance),
+            hookVariantMode = new Hook(findOutVariantModeType().GetMethod("<VariantMode>b__9", BindingFlags.NonPublic | BindingFlags.Instance),
                 typeof(EnforceSkinController).GetMethod("levelChangePlayAsBadeline", BindingFlags.NonPublic | BindingFlags.Static));
+        }
+
+        private static Type findOutVariantModeType() {
+            // the "display class" type that contains the Play as Badeline code is used for the first variable in the Level.VariantMode method. Find this out!
+            ModuleDefinition celeste = Everest.Relinker.SharedRelinkModuleMap["Celeste.Mod.mm"];
+            MethodDefinition variantModeMethod = celeste.GetType("Celeste.Level").FindMethod("System.Void VariantMode(System.Int32,System.Boolean)");
+            Type resolvedType = variantModeMethod.Body.Variables[0].VariableType.ResolveReflection();
+            Logger.Log("JungleHelper/EnforceSkinController", "Nested type associated to Level.VariantMode is: " + resolvedType.FullName);
+            return resolvedType;
         }
 
         public static void Unload() {
