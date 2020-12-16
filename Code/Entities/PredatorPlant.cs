@@ -2,6 +2,7 @@
 using Celeste.Mod.JungleHelper.Components;
 using Microsoft.Xna.Framework;
 using Monocle;
+using System;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/PredatorPlant")]
@@ -21,6 +22,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private SlopedColliderWithRectangles triggerCollider;
         private BlockField blockfield;
 
+        private string cassetteColor;
+
         public PredatorPlant(EntityData data, Vector2 offset) : base(data.Position + offset) {
             facingRight = data.Bool("facingRight");
 
@@ -34,13 +37,15 @@ namespace Celeste.Mod.JungleHelper.Entities {
             Add(bounceCollider = new PlayerCollider(onJumpOnPlant));
             Add(new StaticMover() {
                 OnShake = OnShake,
-                SolidChecker = s => s.CollideRect(new Rectangle((int) (Position.X + (facingRight ? -16 : 0)), (int) Position.Y + 8, 16, 1)),
+                SolidChecker = CheckAttachToSolid,
                 JumpThruChecker = jt => jt.CollideRect(new Rectangle((int) (Position.X + (facingRight ? -16 : 0)), (int) Position.Y + 8, 16, 1)),
                 OnMove = move => {
                     Position += move;
                     blockfield.Position += move;
                     triggerCollider.Move(move);
-                }
+                },
+                OnEnable = OnEnable,
+                OnDisable = OnDisable
             });
 
             Collider = new Hitbox(8, 9, 3, -13);
@@ -63,7 +68,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             // if the plant is currently idle, check if the player is close enough to trigger it.
             if (isIdle) {
                 Player player = Scene.Tracker.GetEntity<Player>();
-                if (player != null && triggerCollider.Collide(player.Collider)) {
+                if (player != null && Collidable && triggerCollider.Collide(player.Collider)) {
                     sprite.Play("attack");
                 }
             }
@@ -90,7 +95,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             if (!isIdle) {
                 // the attack or knockout animation is finished. pick if the plant should be attacking or idle now.
                 Player player = Scene.Tracker.GetEntity<Player>();
-                if (player != null && triggerCollider.Collide(player.Collider)) {
+                if (player != null && Collidable && triggerCollider.Collide(player.Collider)) {
                     sprite.Play("attack");
                 } else {
                     sprite.Play("idle");
@@ -169,6 +174,65 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 Audio.Play("event:/game/general/thing_booped", Position);
 
                 sprite.Play("knockout");
+            }
+        }
+
+        // handling of predator plants attached to cassette blocks
+
+        private bool CheckAttachToSolid(Solid solid) {
+            bool collides = solid.CollideRect(new Rectangle((int) (Position.X + (facingRight ? -16 : 0)), (int) Position.Y + 8, 16, 1));
+            if (collides && solid is CassetteBlock cassetteBlock) {
+                // check the color of the cassette block we're attached to, to apply it to the plant.
+                switch (cassetteBlock.Index) {
+                    case 0:
+                    default:
+                        cassetteColor = "blue";
+                        break;
+                    case 1:
+                        cassetteColor = "pink";
+                        break;
+                    case 2:
+                        cassetteColor = "yellow";
+                        break;
+                    case 3:
+                        cassetteColor = "green";
+                        break;
+                }
+            }
+            return collides;
+        }
+
+        private void OnEnable() {
+            // make the plant collidable (to enable it).
+            Collidable = true;
+
+            if (cassetteColor != null) {
+                // change the animation to the active one.
+                string currentAnimationId = sprite.CurrentAnimationID;
+                int currentAnimationFrame = sprite.CurrentAnimationFrame;
+                JungleHelperModule.SpriteBank.CreateOn(sprite, $"cassette_predator_plant_{cassetteColor}_active");
+                sprite.Play(currentAnimationId);
+                sprite.SetAnimationFrame(currentAnimationFrame);
+            } else {
+                // we're not attached to a cassette block: make the plant visible instead.
+                Visible = true;
+            }
+        }
+
+        private void OnDisable() {
+            // make the plant uncollidable (to disable it).
+            Collidable = false;
+
+            if (cassetteColor != null) {
+                // change the animation to the inactive one.
+                string currentAnimationId = sprite.CurrentAnimationID;
+                int currentAnimationFrame = sprite.CurrentAnimationFrame;
+                JungleHelperModule.SpriteBank.CreateOn(sprite, $"cassette_predator_plant_{cassetteColor}_inactive");
+                sprite.Play(currentAnimationId);
+                sprite.SetAnimationFrame(currentAnimationFrame);
+            } else {
+                // we're not attached to a cassette block: make the plant invisible instead.
+                Visible = false;
             }
         }
     }
