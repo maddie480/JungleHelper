@@ -53,6 +53,8 @@ jobs:
         GITHUB_SHA: ${{ github.sha }}
         DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
         RATE_LIMITING_API: ${{ secrets.RATE_LIMITING_API }}
+        JUNGLE_HELPER_DOWNLOAD_URL: ${{ secrets.JUNGLE_HELPER_DOWNLOAD_URL }}
+        JUNGLE_HELPER_UPLOAD_URL: ${{ secrets.JUNGLE_HELPER_UPLOAD_URL }}
       run: |
         # Does the commit message contain [ci skip]?
         msg=$(git log -n 1 "--format=%B" | head -n 1 | tr -d '\n')
@@ -74,11 +76,11 @@ jobs:
             # Zip out the file, and send it to Discord.
             ZIPNAME=$ZIPNAME-${GITHUB_SHA:0:8}.zip
             zip -qq -r $ZIPNAME everest.yaml Code/bin/Debug/JungleHelper.dll Ahorn Graphics Audio Dialog DecalRegistry.xml
-            url=$(curl -H 'Content-Type: multipart/form-data' -X POST -F "file=@$ZIPNAME" -F "content=$PING **New Jungle Helper update!**" "$DISCORD_WEBHOOK" | grep -Po 'cdn.discordapp.com\/.*?\.zip' | tr -d '\n')
-            curl -H 'Content-Type: multipart/form-data' -X POST -F "file=@Z_IntoTheJungleCodeMod/bin/Debug/IntoTheJungleCodeMod.dll" "$DISCORD_WEBHOOK"
+            curl --fail --data-binary "@$ZIPNAME" $JUNGLE_HELPER_UPLOAD_URL
+            curl -H 'Content-Type: multipart/form-data' -X POST -F "file=@Z_IntoTheJungleCodeMod/bin/Debug/IntoTheJungleCodeMod.dll" -F "content=$PING **New Jungle Helper update!** Download here: $JUNGLE_HELPER_DOWNLOAD_URL" "$DISCORD_WEBHOOK" | grep -Po 'cdn.discordapp.com\/.*?\.zip' | tr -d '\n'
             curl -H 'Content-Type: application/json' -X POST -d "$(jq -n \
                 --arg zipname "$ZIPNAME" \
-                --arg url "$url" \
+                --arg url "$JUNGLE_HELPER_DOWNLOAD_URL" \
                 --arg msg "$msg" \
                 --arg change_embed "[Click here to see changes in this commit](https://github.com/max4805/JungleHelper/commit/$GITHUB_SHA)" \
                 '{embeds: [{title: "Install \($zipname)", url: "https://0x0ade.ga/twoclick/?\($url)", description: $msg, fields: [{name: "Changes", value: $change_embed}]}]}' \
