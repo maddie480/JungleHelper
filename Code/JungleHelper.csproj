@@ -41,6 +41,7 @@
     </Reference>
     <Reference Include="KaydenSpriteMod">
       <HintPath>..\lib-stripped\KaydenSpriteMod.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="MarioSkin">
       <HintPath>..\lib-stripped\MarioSkin.dll</HintPath>
