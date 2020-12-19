@@ -60,8 +60,8 @@ To use it:
   - Frames should be 1920x1080 and use white and transparent as only colors (the wipe is then tinted by the game).
 - In Ahorn map metadata, type this in the Wipe field: `JungleHelper/SpriteWipe:MyMod/WipeName`
 
-The following wipes are included with the helper:
-- `JungleHelper/SpriteWipe:JungleHelper/Ch3Vine`
+The following wipes are included with the helper, and are available for picking in the Ahorn metadata window dropdown:
+- Vines
 
 ## The Lantern and Skin Mods
 
