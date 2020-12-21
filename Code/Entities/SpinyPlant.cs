@@ -95,6 +95,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             Collider = new ColliderList(hitboxes.ToArray());
             topCenter = TopCenter;
+
+            updateLanternRetract(animate: false);
         }
 
         private GraphicsComponent generateSpinyPlantPart(string section) {
@@ -122,7 +124,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         public override void Update() {
             base.Update();
+            updateLanternRetract(animate: true);
+        }
 
+        private void updateLanternRetract(bool animate) {
             if (plantParts.Count == 0) {
                 // this plant doesn't support retracting/expanding, so skip over everything.
                 return;
@@ -140,21 +145,27 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     // plant is retracted!
 
                     // is this part retracted yet?
-                    if (plantPart.CurrentAnimationID.StartsWith("extend")) {
+                    if (plantPart.CurrentAnimationID.StartsWith("extend") && animate) {
                         // no, so go ahead and retract it.
                         int frame = (plantPart.CurrentAnimationID == "extended" ? 0 : 6 - plantPart.CurrentAnimationFrame);
                         plantPart.Play(topCenter.Y + plantPart.Position.Y - objectPosition.Y < 0 ? "retract_below" : "retract_above");
                         plantPart.SetAnimationFrame(frame);
+                    } else if (!animate) {
+                        // just retract right away.
+                        plantPart.Play("retracted");
                     }
                 } else {
                     // plant is extended, so it hurts the player.
                     activeHitboxes.Add(hitbox);
 
-                    if (plantPart.CurrentAnimationID.StartsWith("retract")) {
+                    if (plantPart.CurrentAnimationID.StartsWith("retract") && animate) {
                         // we are out of radius and retracting/retracted, so extend.
                         int frame = (plantPart.CurrentAnimationID == "retracted" ? 0 : 6 - plantPart.CurrentAnimationFrame);
                         plantPart.Play(topCenter.Y + plantPart.Position.Y - objectPosition.Y < 0 ? "extend_below" : "extend_above");
                         plantPart.SetAnimationFrame(frame);
+                    } else if (!animate) {
+                        // just extend right away.
+                        plantPart.Play("extended");
                     }
                 }
             }

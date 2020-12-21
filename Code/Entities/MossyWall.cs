@@ -90,9 +90,17 @@ namespace Celeste.Mod.JungleHelper.Entities {
             topCenter = TopCenter;
         }
 
+        public override void Awake(Scene scene) {
+            base.Awake(scene);
+            updateLanternFade();
+        }
+
         public override void Update() {
             base.Update();
+            updateLanternFade();
+        }
 
+        private void updateLanternFade() {
             List<Hitbox> enabledHitboxes = new List<Hitbox>();
 
             for (int i = 0; i < mossParts.Count; i++) {
