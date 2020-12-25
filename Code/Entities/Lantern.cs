@@ -160,6 +160,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     fadeOutAlpha = 1f;
                     sprite.Color = Color.White;
                     sprite.Play("idle");
+
+                    // move it back to its original position to be sure we move it out of water.
+                    Position = startingPosition;
                 }
             }
 
@@ -178,6 +181,12 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 turnOnFlagTouchSwitches();
             }
             Collidable = oldCollidable;
+
+            // if touching water, the lantern should destroy itself.
+            if (sprite.CurrentAnimationID != "unlit" && CollideCheck<Water>()) {
+                Collidable = false;
+                sprite.Play("unlit");
+            }
 
             // turn off lantern overlay if the lantern isn't lit.
             lanternOverlay.Component.Visible = sprite.CurrentAnimationID != "unlit" && Visible;
