@@ -17,7 +17,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         public static void Load() {
             On.Celeste.Player.NormalUpdate += onPlayerNormalUpdate;
-            On.Celeste.Player.SwimBegin += onPlayerSwimBegin;
+            On.Celeste.Player.SwimUpdate += onPlayerSwimUpdate;
             On.Celeste.Player.OnTransition += onPlayerTransition;
             On.Celeste.Mod.AssetReloadHelper.ReloadLevel += onLevelReload;
 
@@ -26,7 +26,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         public static void Unload() {
             On.Celeste.Player.NormalUpdate -= onPlayerNormalUpdate;
-            On.Celeste.Player.SwimBegin -= onPlayerSwimBegin;
+            On.Celeste.Player.SwimUpdate -= onPlayerSwimUpdate;
             On.Celeste.Player.OnTransition -= onPlayerTransition;
             On.Celeste.Mod.AssetReloadHelper.ReloadLevel -= onLevelReload;
 
@@ -235,13 +235,13 @@ namespace Celeste.Mod.JungleHelper.Entities {
             return orig(self);
         }
 
-        private static void onPlayerSwimBegin(On.Celeste.Player.orig_SwimBegin orig, Player self) {
-            orig(self);
-
+        private static int onPlayerSwimUpdate(On.Celeste.Player.orig_SwimUpdate orig, Player self) {
             if (EnforceSkinController.HasLantern(self.Sprite.Mode)) {
                 // drop the lantern.
                 DropLantern(self, destroy: true);
             }
+
+            return orig(self);
         }
 
         public static void DropLantern(Player player, bool destroy) {
