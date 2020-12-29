@@ -1,5 +1,8 @@
 ﻿using Celeste.Editor;
+using Microsoft.Xna.Framework;
+using Monocle;
 using MonoMod.Cil;
+using MonoMod.Utils;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -41,6 +44,15 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
                     return orig || SaveData.Instance.LevelSet == "Into The Jungle";
                 });
             }
+        }
+
+        // for use in Lua cutscenes
+        public static void DirectionalShakeRegardlessOfSetting(Level level, Vector2 dir, float time = 0.3f) {
+            DynData<Level> levelData = new DynData<Level>(level);
+
+            levelData["shakeDirection"] = dir.SafeNormalize();
+            levelData["lastDirectionalShake"] = 0;
+            levelData["shakeTimer"] = Math.Max(levelData.Get<float>("shakeTimer"), time);
         }
     }
 }
