@@ -115,6 +115,7 @@ placements.entities.JungleHelper/AutoFallingBlockDelayed.tooltips.tiletype=Chang
 placements.entities.JungleHelper/AutoFallingBlockDelayed.tooltips.delay=The delay (in seconds) before the block starts falling.
 placements.entities.JungleHelper/AutoFallingBlockDelayed.names.ShakeDelay=Shake Time
 placements.entities.JungleHelper/AutoFallingBlockDelayed.tooltips.ShakeDelay=The time (in seconds) the block spends shaking before falling. This parameter doesn't change the time the block will wait for before falling.
+placements.entities.JungleHelper/AutoFallingBlockDelayed.tooltips.silent=If checked, the block will not emit sound when shaking and touching the ground.
 
 # Torch
 placements.entities.JungleHelper/Torch.tooltips.flag=The session flag this torch will set when lit.

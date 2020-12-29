@@ -16,17 +16,21 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private int originalY;
         private float delay = 2;
         private float shakeTimer;
+        private bool silent = false;
+
+        private bool manuallyTriggered = false;
 
         public AutoFallingBlockDelayed(EntityData data, Vector2 offset)
-            : this(data.Position + offset, data.Char("tiletype", '3'), data.Width, data.Height,data.Float("delay",2),data.Float("ShakeDelay",0.5f)) {
+            : this(data.Position + offset, data.Char("tiletype", '3'), data.Width, data.Height, data.Float("delay", 2), data.Float("ShakeDelay", 0.5f), data.Bool("silent", false)) {
         }
 
 
-        public AutoFallingBlockDelayed(Vector2 position, char tile, int width, int height, float delay, float shakeTimer)
+        public AutoFallingBlockDelayed(Vector2 position, char tile, int width, int height, float delay, float shakeTimer, bool silent)
             : base(position, width, height, safe: false) {
             originalY = (int) position.Y;
             this.delay = delay;
             this.shakeTimer = shakeTimer;
+            this.silent = silent;
             int newSeed = Calc.Random.Next();
             Calc.PushRandom(newSeed);
             Add(tiles = GFX.FGAutotiler.GenerateBox(tile, width / 8, height / 8).TileGrid);
@@ -44,6 +48,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
             tileGrid.Position += amount;
         }
         private void ShakeSfx() {
+            if (silent) {
+                return;
+            }
+
             if (TileType == '3') {
                 Audio.Play("event:/game/01_forsaken_city/fallblock_ice_shake", base.Center);
             } else if (TileType == '9') {
@@ -57,7 +65,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private IEnumerator Sequence() {
             if (delay > 0) {
                 if (delay > shakeTimer) {
-                    yield return delay - shakeTimer;
+                    float timer = delay - shakeTimer;
+                    while (timer > 0f && !manuallyTriggered) {
+                        yield return null;
+                        timer -= Engine.DeltaTime;
+                    }
                     StartShaking();
                     ShakeSfx();
                     Input.Rumble(RumbleStrength.Medium, RumbleLength.Medium);
@@ -70,7 +82,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     yield return delay;
                     StopShaking();
                 }
-                
+
             }
             while (true) {
                 for (int i = 2; (float) i < base.Width; i += 4) {
@@ -143,6 +155,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private void ImpactSfx() {
+            if (silent) {
+                return;
+            }
+
             if (TileType == '3') {
                 Audio.Play("event:/game/01_forsaken_city/fallblock_ice_impact", base.BottomCenter);
             } else if (TileType == '9') {
@@ -152,6 +168,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
             } else {
                 Audio.Play("event:/game/general/fallblock_impact", base.BottomCenter);
             }
+        }
+
+        public void ForceFall() {
+            manuallyTriggered = true;
         }
     }
 
