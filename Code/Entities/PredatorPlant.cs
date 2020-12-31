@@ -213,6 +213,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 string currentAnimationId = sprite.CurrentAnimationID;
                 int currentAnimationFrame = sprite.CurrentAnimationFrame;
                 JungleHelperModule.CreateReskinnableSpriteOn(sprite, string.IsNullOrEmpty(spritePath) ? "" : spritePath + "_cassette_active", $"cassette_predator_plant_{cassetteColor}_active");
+                sprite.Y = -4;
                 sprite.Play(currentAnimationId);
                 sprite.SetAnimationFrame(currentAnimationFrame);
             } else {
@@ -230,6 +231,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 string currentAnimationId = sprite.CurrentAnimationID;
                 int currentAnimationFrame = sprite.CurrentAnimationFrame;
                 JungleHelperModule.CreateReskinnableSpriteOn(sprite, string.IsNullOrEmpty(spritePath) ? "" : spritePath + "_cassette_inactive", $"cassette_predator_plant_{cassetteColor}_inactive");
+                sprite.Y = -4;
                 sprite.Play(currentAnimationId);
                 sprite.SetAnimationFrame(currentAnimationFrame);
             } else {
