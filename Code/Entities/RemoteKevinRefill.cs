@@ -33,7 +33,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private float fade = 1f;
 
-        public RemoteKevinRefill(Vector2 position, bool oneUse) : base(position) {
+        public RemoteKevinRefill(Vector2 position, bool oneUse, string spriteName, string flashSpriteName) : base(position) {
             Collider = new Hitbox(16f, 16f, -8f, -8f);
 
             Add(new PlayerCollider(OnPlayer));
@@ -43,8 +43,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
             Add(outline = new Image(GFX.Game["JungleHelper/SlideBlockRefill/outline"]));
             outline.CenterOrigin();
             outline.Visible = false;
-            Add(sprite = JungleHelperModule.SpriteBank.Create("slide_block_refill"));
-            Add(flash = JungleHelperModule.SpriteBank.Create("slide_block_refill_flash"));
+            Add(sprite = JungleHelperModule.CreateReskinnableSprite(spriteName, "slide_block_refill"));
+            Add(flash = JungleHelperModule.CreateReskinnableSprite(flashSpriteName, "slide_block_refill_flash"));
             flash.OnFinish = delegate {
                 flash.Visible = false;
             };
@@ -79,7 +79,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             }
         }
 
-        public RemoteKevinRefill(EntityData data, Vector2 offset) : this(data.Position + offset, data.Bool("oneUse")) { }
+        public RemoteKevinRefill(EntityData data, Vector2 offset) : this(data.Position + offset, data.Bool("oneUse"), data.Attr("sprite"), data.Attr("flashSprite")) { }
 
         public override void Added(Scene scene) {
             base.Added(scene);

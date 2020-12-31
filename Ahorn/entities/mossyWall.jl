@@ -2,7 +2,7 @@ module JungleHelperMossyWall
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/MossyWall" MossyWall(x::Integer, y::Integer, height::Integer=8, left::Bool=false)
+@mapdef Entity "JungleHelper/MossyWall" MossyWall(x::Integer, y::Integer, height::Integer=8, left::Bool=false, spriteDirectory::String="JungleHelper/Moss")
 
 const placements = Ahorn.PlacementDict(
     "Mossy Wall (Right) (Jungle Helper)" => Ahorn.EntityPlacement(
@@ -42,25 +42,27 @@ function Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::MossyWall, room::Ma
 
     height = Int(get(entity.data, "height", 8))
     tileHeight = div(height, 8)
+    
+    spriteDirectory = get(entity.data, "spriteDirectory", "JungleHelper/Moss")
 
     if left
         for i in 2:tileHeight - 1
-            Ahorn.drawImage(ctx, "JungleHelper/Moss/moss_mid1", 8, (i - 1) * 8, tint=mossColor)
+            Ahorn.drawImage(ctx, "$(spriteDirectory)/moss_mid1", 8, (i - 1) * 8, tint=mossColor)
         end
 
-        Ahorn.drawImage(ctx, "JungleHelper/Moss/moss_top", 8, 0, tint=mossColor)
-        Ahorn.drawImage(ctx, "JungleHelper/Moss/moss_bottom", 8, (tileHeight - 1) * 8, tint=mossColor)
+        Ahorn.drawImage(ctx, "$(spriteDirectory)/moss_top", 8, 0, tint=mossColor)
+        Ahorn.drawImage(ctx, "$(spriteDirectory)/moss_bottom", 8, (tileHeight - 1) * 8, tint=mossColor)
 
     else
         Ahorn.Cairo.save(ctx)
         Ahorn.scale(ctx, -1, 1)
 
         for i in 2:tileHeight - 1
-            Ahorn.drawImage(ctx, "JungleHelper/Moss/moss_mid1", 0, (i - 1) * 8, tint=mossColor)
+            Ahorn.drawImage(ctx, "$(spriteDirectory)/moss_mid1", 0, (i - 1) * 8, tint=mossColor)
         end
 
-        Ahorn.drawImage(ctx, "JungleHelper/Moss/moss_top", 0, 0, tint=mossColor)
-        Ahorn.drawImage(ctx, "JungleHelper/Moss/moss_bottom", 0, (tileHeight - 1) * 8, tint=mossColor)
+        Ahorn.drawImage(ctx, "$(spriteDirectory)/moss_top", 0, 0, tint=mossColor)
+        Ahorn.drawImage(ctx, "$(spriteDirectory)/moss_bottom", 0, (tileHeight - 1) * 8, tint=mossColor)
 
         Ahorn.restore(ctx)
     end

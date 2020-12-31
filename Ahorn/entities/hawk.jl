@@ -2,7 +2,7 @@ module JungleHelperHawk
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/Hawk" Hawk(x::Integer, y::Integer, mainSpeed::Number=100.0, slowerSpeed::Number=80.0)
+@mapdef Entity "JungleHelper/Hawk" Hawk(x::Integer, y::Integer, mainSpeed::Number=100.0, slowerSpeed::Number=80.0, sprite::String="")
 
 const placements = Ahorn.PlacementDict(
     "Hawk (Jungle Helper)" => Ahorn.EntityPlacement(

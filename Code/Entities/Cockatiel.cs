@@ -18,7 +18,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             stateMachine.SetCallbacks(2, null, flyAwayRoutine);
             Add(stateMachine);
 
-            sprite = JungleHelperModule.SpriteBank.Create("cockatiel");
+            sprite = JungleHelperModule.CreateReskinnableSprite(data, "cockatiel");
             sprite.Scale.X = data.Bool("facingLeft") ? 1 : -1;
             Add(sprite);
         }

@@ -2,7 +2,7 @@
 placements.entities.JungleHelper/NodedCrumblePlatform.tooltips.texture=What texture to use for the crumble block.
 
 # Theo Statue
-placements.entities.JungleHelper/TheoStatue.tooltips.directory=The directory containing the Theo statue sprites.
+placements.entities.JungleHelper/TheoStatue.tooltips.sprite=If you want to reskin the crystal, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
 
 # Theo Statue Gate
 placements.entities.JungleHelper/TheoStatueGate.tooltips.sprite=Determines the visual appearance of the gate.
@@ -19,34 +19,43 @@ placements.triggers.JungleHelper/GeckoTutorialTrigger.tooltips.showTutorial=If t
 
 # Remote Kevin Refill
 placements.entities.JungleHelper/RemoteKevinRefill.tooltips.oneUse=Whether the refill should respawn after being used.
+placements.entities.JungleHelper/RemoteKevinRefill.tooltips.sprite=If you want to reskin the refill, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+placements.entities.JungleHelper/RemoteKevinRefill.tooltips.flashSprite=If you want to reskin the refill flash animation, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
 
 # Remote Kevin
 placements.entities.JungleHelper/RemoteKevin.tooltips.axes=placements.entities.crushBlock.tooltips.axes=Determines in which directions the slide block can move.
 placements.entities.JungleHelper/RemoteKevin.tooltips.restrained=If checked, the slide block will stop after moving a distance matching its width/height.\nIf unchecked, the slide block will move until it hits a wall or the screen boundaries.
+placements.entities.JungleHelper/RemoteKevin.tooltips.spriteXmlName=If you want to reskin the slide block center, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+placements.entities.JungleHelper/RemoteKevin.tooltips.spriteDirectory=The directory the sprites for the block will be taken from. For example, if the directory is set to MyMap/MySlideBlock, sprites will be read from Mods/yourmod/Graphics/Atlases/Gameplay/MyMap/MySlideBlock.
 
 # Unrandomized Crumble Platform
 placements.entities.JungleHelper/UnrandomizedCrumblePlatform.tooltips.texture=What texture to use for the crumble block.
 
 # Mossy Wall
 placements.entities.JungleHelper/MossyWall.tooltips.left=Whether the entity attaches to the left wall or not.
+placements.entities.JungleHelper/MossyWall.tooltips.spriteDirectory=The directory the sprites will be taken from. For example, if the directory is set to MyMap/MyMoss, sprites will be read from Mods/yourmod/Graphics/Atlases/Gameplay/MyMap/MyMoss.
 
 # Predator Plant
 placements.entities.JungleHelper/PredatorPlant.tooltips.color=Defines the color of the plant.
 placements.entities.JungleHelper/PredatorPlant.tooltips.facingRight=Whether this plant should face right or left.
+placements.entities.JungleHelper/PredatorPlant.tooltips.sprite=If you want to reskin the plant, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.\nWhen the plant is put on a cassette, "_cassette_inactive" and "_cassette_active" will be added to the end of this animation name.
 
 # Bouncy Shroom
 placements.entities.JungleHelper/BouncyShroomRight.names.yeetx=Bounce Speed X
 placements.entities.JungleHelper/BouncyShroomRight.names.yeety=Bounce Speed Y
 placements.entities.JungleHelper/BouncyShroomRight.tooltips.yeetx=Determines how much horizontal speed the player will get from the mushroom (for left and right mushrooms only).
 placements.entities.JungleHelper/BouncyShroomRight.tooltips.yeety=Determines how much vertical speed the player will get from the mushroom.
+placements.entities.JungleHelper/BouncyShroomRight.tooltips.spriteDirectory=The directory the sprites will be taken from. For example, if the directory is set to MyMap/MyShrooms, sprites will be read from Mods/yourmod/Graphics/Atlases/Gameplay/MyMap/MyShrooms.
 placements.entities.JungleHelper/BouncyShroomLeft.names.yeetx=Bounce Speed X
 placements.entities.JungleHelper/BouncyShroomLeft.names.yeety=Bounce Speed Y
 placements.entities.JungleHelper/BouncyShroomLeft.tooltips.yeetx=Determines how much horizontal speed the player will get from the mushroom (for left and right mushrooms only).
 placements.entities.JungleHelper/BouncyShroomLeft.tooltips.yeety=Determines how much vertical speed the player will get from the mushroom.
+placements.entities.JungleHelper/BouncyShroomLeft.tooltips.spriteDirectory=The directory the sprites will be taken from. For example, if the directory is set to MyMap/MyShrooms, sprites will be read from Mods/yourmod/Graphics/Atlases/Gameplay/MyMap/MyShrooms.
 placements.entities.JungleHelper/BouncyShroomUp.names.yeetx=Bounce Speed X
 placements.entities.JungleHelper/BouncyShroomUp.names.yeety=Bounce Speed Y
 placements.entities.JungleHelper/BouncyShroomUp.tooltips.yeetx=Determines how much horizontal speed the player will get from the mushroom (for left and right mushrooms only).
 placements.entities.JungleHelper/BouncyShroomUp.tooltips.yeety=Determines how much vertical speed the player will get from the mushroom.
+placements.entities.JungleHelper/BouncyShroomUp.tooltips.spriteDirectory=The directory the sprites will be taken from. For example, if the directory is set to MyMap/MyShrooms, sprites will be read from Mods/yourmod/Graphics/Atlases/Gameplay/MyMap/MyShrooms.
 
 # Gecko
 placements.entities.JungleHelper/Gecko.tooltips.left=Determines if the wall the gecko hangs to is on the left of it.
@@ -55,15 +64,20 @@ placements.entities.JungleHelper/Gecko.tooltips.controls=The controls to display
 placements.entities.JungleHelper/Gecko.tooltips.info=The speech bubble title. Can either be a dialog ID or a path to a texture in the GUI atlas. Leave empty if the gecko has no tutorial to display.
 placements.entities.JungleHelper/Gecko.tooltips.delay=The time (in seconds) the gecko will pause when turning around.
 placements.entities.JungleHelper/Gecko.tooltips.hostile=Whether the gecko should kill the player when they touch it.
+placements.entities.JungleHelper/Gecko.tooltips.sprite=If you want to reskin the gecko, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
 
 # Spiny Plant
 placements.entities.JungleHelper/SpinyPlant.tooltips.color=Defines the color of the plant. Only yellow plants can retract when the player gets close with a lantern.
+placements.entities.JungleHelper/SpinyPlant.tooltips.sprite=If you want to reskin the plant, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.\nTo generate the different sections, "_solo", "_top", "_mid" or "_bottom" will be added to the name you specify here.
 
 # Spider Boss
 placements.entities.JungleHelper/SpiderBoss.tooltips.color=Defines the color and the difficulty of the spider boss:\n- Blue: speed capped at 50 px/s, respawns after 1 second\n- Purple: speed capped at 100 px/s, respawns immediately\n- Red: no speed cap, a new one respawns as soon as the previous one starts falling
+placements.entities.JungleHelper/SpiderBoss.tooltips.sprite=If you want to reskin the spider boss, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+placements.entities.JungleHelper/SpiderBoss.tooltips.webSprite=If you want to reskin the spider boss's web, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
 
 # Rolling Rock
 placements.entities.JungleHelper/RollingRock.tooltips.cracked=Whether the rock should look cracked.
+placements.entities.JungleHelper/RollingRock.tooltips.sprite=If you want to reskin the rolling rock, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
 
 # Zip Moving Platforms
 placements.entities.JungleHelper/ZipMovingPlatform.tooltips.texture=What texture to use for the platform.
@@ -76,6 +90,7 @@ placements.entities.JungleHelper/Hawk.names.mainSpeed=Speed with Player
 placements.entities.JungleHelper/Hawk.names.slowerSpeed=Speed without Player
 placements.entities.JungleHelper/Hawk.tooltips.mainSpeed=The hawk's horizontal speed when carrying the player.
 placements.entities.JungleHelper/Hawk.tooltips.slowerSpeed=The hawk's horizontal speed when moving around without the player.
+placements.entities.JungleHelper/Hawk.tooltips.sprite=If you want to reskin the hawk, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
 
 # Attach Trigger Controller
 placements.entities.JungleHelper/AttachTriggerController.tooltips.triggerFilter=Allows to pick the type of trigger to attach, in case multiple ones intersect with the "T" node. Uses the C# class name (which *often* matches the entity name). Leave empty to match any trigger.
@@ -106,6 +121,7 @@ placements.triggers.JungleHelper/UIImageTrigger.tooltips.ImageY=The image vertic
 
 # Snake
 placements.entities.JungleHelper/Snake.tooltips.left=Whether the snake should spawn facing left.
+placements.entities.JungleHelper/Snake.tooltips.sprite=If you want to reskin the snake, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
 
 # Enforce Skin Controller
 placements.entities.JungleHelper/EnforceSkinController.tooltips.showPostcard=Whether a warning postcard will be shown when the player's skins are forcibly disabled.
@@ -119,9 +135,18 @@ placements.entities.JungleHelper/AutoFallingBlockDelayed.tooltips.silent=If chec
 
 # Torch
 placements.entities.JungleHelper/Torch.tooltips.flag=The session flag this torch will set when lit.
+placements.entities.JungleHelper/Torch.tooltips.sprite=If you want to reskin the torch, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
 
 # Firefly
 placements.entities.JungleHelper/Firefly.tooltips.number=How many fireflies should spawn in the cluster.
+placements.entities.JungleHelper/Firefly.tooltips.sprite=If you want to reskin the firefly, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
 
 # Cockatiel
 placements.entities.JungleHelper/Cockatiel.tooltips.facingLeft=Whether the cockatiel should face left when spawning. It will turn around to face the player if they get close.
+placements.entities.JungleHelper/Cockatiel.tooltips.sprite=If you want to reskin the cockatiel, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+
+# Cobweb
+placements.entities.JungleHelper/Cobweb.tooltips.sprite=If you want to reskin the cobweb, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+
+# Lantern
+placements.entities.JungleHelper/Lantern.tooltips.sprite=If you want to reskin the lantern, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.

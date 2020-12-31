@@ -1,7 +1,7 @@
 module JungleHelperSnake
 
 using ..Ahorn, Maple
-@pardef Snake(x1::Integer, y1::Integer, x2::Integer=x1, y2::Integer=y1+ 16, left::Bool=false) = Entity("JungleHelper/Snake", x=x1, y=y1, nodes=Tuple{Int, Int}[(x2, y2)], left=left)
+@pardef Snake(x1::Integer, y1::Integer, x2::Integer=x1, y2::Integer=y1+ 16, left::Bool=false, sprite::String="") = Entity("JungleHelper/Snake", x=x1, y=y1, nodes=Tuple{Int, Int}[(x2, y2)], left=left, sprite=sprite)
     
 const placements = Ahorn.PlacementDict(
     "Snake (Jungle Helper)" => Ahorn.EntityPlacement(

@@ -34,7 +34,7 @@ namespace Celeste.Mod.JungleHelper {
         }
 
         public override void LoadContent(bool firstLoad) {
-            SpriteBank = new SpriteBank(GFX.Game, "Graphics/JungleHelper/CustomSprites.xml");
+            spriteBank = new SpriteBank(GFX.Game, "Graphics/JungleHelper/CustomSprites.xml");
 
             RemoteKevin.P_Red = new ParticleType {
                 Source = GFX.Game["particles/rect"],
@@ -73,6 +73,24 @@ namespace Celeste.Mod.JungleHelper {
             };
         }
 
-        public static SpriteBank SpriteBank;
+        private static SpriteBank spriteBank;
+
+        public static Sprite CreateReskinnableSprite(EntityData data, string defaultSpriteName) {
+            return CreateReskinnableSprite(data.Attr("sprite"), defaultSpriteName);
+        }
+
+        public static Sprite CreateReskinnableSprite(string reskinName, string defaultSpriteName) {
+            if (string.IsNullOrEmpty(reskinName)) {
+                return spriteBank.Create(defaultSpriteName);
+            }
+            return GFX.SpriteBank.Create(reskinName);
+        }
+
+        public static Sprite CreateReskinnableSpriteOn(Sprite sprite, string reskinName, string defaultSpriteName) {
+            if (string.IsNullOrEmpty(reskinName)) {
+                return spriteBank.CreateOn(sprite, defaultSpriteName);
+            }
+            return GFX.SpriteBank.CreateOn(sprite, reskinName);
+        }
     }
 }

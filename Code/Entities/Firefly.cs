@@ -23,10 +23,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private VertexLight light;
 
         private readonly int spawn;
+        private readonly string reskinName;
 
         private Rectangle originLevelBounds;
 
-        public Firefly(Vector2 position) {
+        public Firefly(Vector2 position, string reskinName) {
             Tag = Tags.TransitionUpdate;
             Depth = -13010;
 
@@ -38,12 +39,14 @@ namespace Celeste.Mod.JungleHelper.Entities {
             Position = target;
 
             Add(new PlayerCollider(onPlayer));
-            Add(sprite = JungleHelperModule.SpriteBank.Create("firefly"));
+            Add(sprite = JungleHelperModule.CreateReskinnableSprite(reskinName, "firefly"));
             Add(light = new VertexLight(Color.White, 1f, 4, 8));
+
+            this.reskinName = reskinName;
         }
 
         public Firefly(EntityData data, Vector2 offset)
-            : this(data.Position + offset) {
+            : this(data.Position + offset, data.Attr("sprite")) {
 
             spawn = data.Int("number", 1) - 1;
         }
@@ -53,7 +56,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             for (int i = 0; i < spawn; i++) {
                 // spawn more fireflies according to the "number" property.
-                scene.Add(new Firefly(Position + new Vector2(Calc.Random.Range(-4, 4), Calc.Random.Range(-4, 4))));
+                scene.Add(new Firefly(Position + new Vector2(Calc.Random.Range(-4, 4), Calc.Random.Range(-4, 4)), reskinName));
             }
 
             originLevelBounds = (scene as Level).Bounds;

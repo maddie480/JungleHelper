@@ -51,12 +51,16 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private float fadeOutAlpha = 1f;
         private ComponentWithDepth<Image> lanternOverlay;
 
+        private readonly string reskinName;
+
         public Lantern(EntityData data, Vector2 offset) : base(data.Position + offset) {
-            sprite = JungleHelperModule.SpriteBank.Create("lantern");
+            sprite = JungleHelperModule.CreateReskinnableSprite(data, "lantern");
             sprite.Y = 5;
             Add(sprite);
             Collider = new Hitbox(8, 8, -4, 0);
             startingPosition = Position;
+
+            reskinName = data.Attr("sprite");
 
             Add(new PlayerCollider(onPlayer));
 
@@ -91,6 +95,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 RemoveSelf();
                 new DynData<Player>(player)["JungleHelper_LanternStartingPosition"] = startingPosition;
                 new DynData<Player>(player)["JungleHelper_LanternDoRespawn"] = doRespawn;
+                new DynData<Player>(player)["JungleHelper_LanternReskinName"] = reskinName;
 
                 // detach the glow from the lantern and attach it to the player.
                 player.Add(lanternOverlay);
@@ -248,11 +253,20 @@ namespace Celeste.Mod.JungleHelper.Entities {
             // technically, this means "Madeline's sprite returns to normal, and we spawn a Lantern entity".
             EnforceSkinController.ChangePlayerSpriteMode(player, hasLantern: false);
 
-            Lantern lantern = new Lantern(new EntityData { Position = new Vector2((int) player.Center.X, (int) player.Center.Y - 5f) }, Vector2.Zero);
+            DynData<Player> playerData = new DynData<Player>(player);
+            string reskinName = "";
+            if (playerData.Data.ContainsKey("JungleHelper_LanternReskinName")) {
+                reskinName = playerData.Get<string>("JungleHelper_LanternReskinName");
+            }
+
+            Lantern lantern = new Lantern(new EntityData {
+                Position = new Vector2((int) player.Center.X, (int) player.Center.Y - 5f),
+                Values = new System.Collections.Generic.Dictionary<string, object>() { { "sprite", reskinName } }
+            }, Vector2.Zero);
+
             lantern.regrabDelay = 0.25f;
             lantern.Collidable = false;
 
-            DynData<Player> playerData = new DynData<Player>(player);
             if (playerData.Data.ContainsKey("JungleHelper_LanternStartingPosition")) {
                 lantern.startingPosition = playerData.Get<Vector2>("JungleHelper_LanternStartingPosition");
                 lantern.doRespawn = playerData.Get<bool>("JungleHelper_LanternDoRespawn");

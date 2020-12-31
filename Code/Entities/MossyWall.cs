@@ -69,7 +69,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             for (int i = 0; i < data.Height; i += 8) {
                 string id = (i == 0) ? "moss_top" : (i + 16 <= Height ? "moss_mid" + Calc.Random.Next(1, 3) : "moss_bottom");
-                Image sprite = new Image(GFX.Game["JungleHelper/Moss/" + id]);
+                Image sprite = new Image(GFX.Game[data.Attr("spriteDirectory", "JungleHelper/Moss") + "/" + id]);
                 sprite.Position = new Vector2(0f, i);
                 sprite.FlipX = !left;
                 sprite.Color = REGULAR_COLOR;

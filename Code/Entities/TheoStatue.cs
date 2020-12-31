@@ -13,9 +13,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
             // a Theo statue is a Theo crystal...
             DynData<TheoCrystal> self = new DynData<TheoCrystal>(this);
 
-            // with a différent sprite...
+            // with a different sprite...
             Remove(self.Get<Sprite>("sprite"));
-            Sprite sprite = JungleHelperModule.SpriteBank.Create("theo_statue");
+            Sprite sprite = JungleHelperModule.CreateReskinnableSprite(data, "theo_statue");
             self["sprite"] = sprite;
             Add(sprite);
 

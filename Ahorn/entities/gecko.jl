@@ -1,8 +1,8 @@
 module JungleHelperGecko
 
 using ..Ahorn, Maple
-@pardef Gecko(x1::Integer, y1::Integer, x2::Integer=x1, y2::Integer=y1+ 16, hostile::Bool=false, left::Bool=false, delay::Number=0.5, geckoId::String="geckoId", info::String="", controls::String="") =
-    Entity("JungleHelper/Gecko", x=x1, y=y1, nodes=Tuple{Int, Int}[(x2, y2)], hostile=hostile, left=left, delay=delay, geckoId=geckoId, info=info, controls=controls)
+@pardef Gecko(x1::Integer, y1::Integer, x2::Integer=x1, y2::Integer=y1+ 16, hostile::Bool=false, left::Bool=false, delay::Number=0.5, geckoId::String="geckoId", info::String="", controls::String="", sprite::String="") =
+    Entity("JungleHelper/Gecko", x=x1, y=y1, nodes=Tuple{Int, Int}[(x2, y2)], hostile=hostile, left=left, delay=delay, geckoId=geckoId, info=info, controls=controls, sprite=sprite)
     
 const placements = Ahorn.PlacementDict(
     "Gecko (Jungle Helper)" => Ahorn.EntityPlacement(

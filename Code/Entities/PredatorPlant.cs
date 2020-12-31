@@ -12,6 +12,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         };
 
         private readonly bool facingRight;
+        private readonly string spritePath;
 
         private Vector2 imageOffset;
 
@@ -26,8 +27,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         public PredatorPlant(EntityData data, Vector2 offset) : base(data.Position + offset) {
             facingRight = data.Bool("facingRight");
+            spritePath = data.Attr("sprite");
 
-            Add(sprite = JungleHelperModule.SpriteBank.Create($"predator_plant_{data.Enum("color", Color.Pink).ToString().ToLowerInvariant()}"));
+            Add(sprite = JungleHelperModule.CreateReskinnableSprite(data, $"predator_plant_{data.Enum("color", Color.Pink).ToString().ToLowerInvariant()}"));
             sprite.Y = -4;
             sprite.OnFinish = _ => checkRange();
             sprite.OnFrameChange = _ => updateHitbox();
@@ -210,7 +212,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 // change the animation to the active one.
                 string currentAnimationId = sprite.CurrentAnimationID;
                 int currentAnimationFrame = sprite.CurrentAnimationFrame;
-                JungleHelperModule.SpriteBank.CreateOn(sprite, $"cassette_predator_plant_{cassetteColor}_active");
+                JungleHelperModule.CreateReskinnableSpriteOn(sprite, string.IsNullOrEmpty(spritePath) ? "" : spritePath + "_cassette_active", $"cassette_predator_plant_{cassetteColor}_active");
                 sprite.Play(currentAnimationId);
                 sprite.SetAnimationFrame(currentAnimationFrame);
             } else {
@@ -227,7 +229,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 // change the animation to the inactive one.
                 string currentAnimationId = sprite.CurrentAnimationID;
                 int currentAnimationFrame = sprite.CurrentAnimationFrame;
-                JungleHelperModule.SpriteBank.CreateOn(sprite, $"cassette_predator_plant_{cassetteColor}_inactive");
+                JungleHelperModule.CreateReskinnableSpriteOn(sprite, string.IsNullOrEmpty(spritePath) ? "" : spritePath + "_cassette_inactive", $"cassette_predator_plant_{cassetteColor}_inactive");
                 sprite.Play(currentAnimationId);
                 sprite.SetAnimationFrame(currentAnimationFrame);
             } else {

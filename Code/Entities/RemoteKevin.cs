@@ -10,9 +10,12 @@ namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/RemoteKevin")]
     [Tracked]
     public class RemoteKevin : Solid {
-        public RemoteKevin(Vector2 position, float width, float height, bool restrained, CrushBlock.Axes axes) : base(position, width, height, false) {
+        public RemoteKevin(Vector2 position, float width, float height, bool restrained, CrushBlock.Axes axes, string reskinName, string spriteDirectory) : base(position, width, height, false) {
             this.restrained = restrained;
-            texture = (restrained ? "JungleHelper/SlideBlockGreen" : "JungleHelper/SlideBlockRed");
+            texture = spriteDirectory;
+            if (string.IsNullOrEmpty(texture)) {
+                texture = restrained ? "JungleHelper/SlideBlockGreen" : "JungleHelper/SlideBlockRed";
+            }
             fill = Calc.HexToColor("8A9C60");
 
             bool giant = Width >= 48f && Height >= 48f;
@@ -45,11 +48,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
             MTexture idle = atlasSubtextures[index];
 
             string colorPrefix = restrained ? "green_" : "red_";
-            Add(face = JungleHelperModule.SpriteBank.Create(giant ? colorPrefix + "slideblock_center_big" : colorPrefix + "slideblock_center_small"));
+            Add(face = JungleHelperModule.CreateReskinnableSprite(reskinName, giant ? colorPrefix + "slideblock_center_big" : colorPrefix + "slideblock_center_small"));
             face.Position = new Vector2(Width, Height) / 2f;
             face.Play("active_up", false, false);
 
-            Add(activeOverlay = new Image(GFX.Game["JungleHelper/SlideBlock" + (restrained ? "Green" : "Red") + "/" + (giant ? "big_active_overlay" : "small_active_overlay")]));
+            Add(activeOverlay = new Image(GFX.Game[texture + "/" + (giant ? "big_active_overlay" : "small_active_overlay")]));
             activeOverlay.Position = face.Position;
             activeOverlay.CenterOrigin();
             activeOverlay.Visible = false;
@@ -73,7 +76,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
             Add(new WaterInteraction(() => crushDir != Vector2.Zero));
         }
 
-        public RemoteKevin(EntityData data, Vector2 offset) : this(data.Position + offset, data.Width, data.Height, data.Bool("restrained", false), data.Enum("axes", CrushBlock.Axes.Both)) { }
+        public RemoteKevin(EntityData data, Vector2 offset) : this(data.Position + offset, data.Width, data.Height, data.Bool("restrained", false), data.Enum("axes", CrushBlock.Axes.Both),
+            data.Attr("spriteXmlName"), data.Attr("spriteDirectory")) { }
 
         public override void Added(Scene scene) {
             base.Added(scene);

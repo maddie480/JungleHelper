@@ -12,7 +12,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         public Cobweb(EntityData data, Vector2 offset) : base(data.Position + offset) {
             Collider = new Circle(10f);
-            Add(sprite = JungleHelperModule.SpriteBank.Create("cobweb"));
+            Add(sprite = JungleHelperModule.CreateReskinnableSprite(data, "cobweb"));
             Add(new PlayerCollider(catchPlayer));
             Add(sfx = new SoundSource());
         }

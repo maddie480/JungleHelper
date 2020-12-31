@@ -11,7 +11,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         public Torch(EntityData data, Vector2 offset) : base(data.Position + offset) {
             flag = data.Attr("flag");
 
-            Add(sprite = JungleHelperModule.SpriteBank.Create("torch"));
+            Add(sprite = JungleHelperModule.CreateReskinnableSprite(data, "torch"));
             Add(new PlayerCollider(onPlayer));
 
             Collider = new Hitbox(17f, 22f, -9f, -22f);

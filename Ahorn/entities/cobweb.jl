@@ -2,7 +2,7 @@
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/Cobweb" Cobweb(x::Integer, y::Integer)
+@mapdef Entity "JungleHelper/Cobweb" Cobweb(x::Integer, y::Integer, sprite::String="")
 
 const placements = Ahorn.PlacementDict(
     "Cobweb (Jungle Helper)" => Ahorn.EntityPlacement(

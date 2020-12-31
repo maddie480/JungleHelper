@@ -2,7 +2,7 @@ module JungleHelperPredatorPlant
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/PredatorPlant" PredatorPlant(x::Integer, y::Integer, color::String="Pink", facingRight::Bool=false)
+@mapdef Entity "JungleHelper/PredatorPlant" PredatorPlant(x::Integer, y::Integer, color::String="Pink", facingRight::Bool=false, sprite::String="")
 
 const colors = String["Pink", "Blue", "Yellow"]
 

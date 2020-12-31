@@ -94,12 +94,12 @@ namespace Celeste.Mod.JungleHelper.Entities {
             color = data.Enum("color", SpiderColor.Blue);
 
             // set up the web above the spider
-            web = JungleHelperModule.SpriteBank.Create("spiderboss_web");
+            web = JungleHelperModule.CreateReskinnableSprite(data.Attr("webSprite"), "spiderboss_web");
             web.Position = new Vector2(-1f, -22f);
             Add(web);
 
             // set up the spider sprite
-            Add(spider = JungleHelperModule.SpriteBank.Create("spider_boss_" + color.ToString().ToLowerInvariant()));
+            Add(spider = JungleHelperModule.CreateReskinnableSprite(data, "spider_boss_" + color.ToString().ToLowerInvariant()));
 
             // set up the spider hitbox
             Collider = new Hitbox(13f, 13f, -7f, -7f);

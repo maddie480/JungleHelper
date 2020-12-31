@@ -2,7 +2,7 @@ module JungleHelperFirefly
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/Firefly" Firefly(x::Integer, y::Integer, number::Integer=1)
+@mapdef Entity "JungleHelper/Firefly" Firefly(x::Integer, y::Integer, number::Integer=1, sprite::String="")
 
 const placements = Ahorn.PlacementDict(
     "Firefly (Jungle Helper)" => Ahorn.EntityPlacement(

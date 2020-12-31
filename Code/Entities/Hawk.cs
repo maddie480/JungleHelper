@@ -36,7 +36,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             speedWithPlayer = data.Float("mainSpeed");
             speedWithoutPlayer = data.Float("slowerSpeed");
             initialY = Y;
-            Add(sprite = JungleHelperModule.SpriteBank.Create("hawk"));
+            Add(sprite = JungleHelperModule.CreateReskinnableSprite(data, "hawk"));
             sprite.Play("hover");
             sprite.Position = spriteOffset;
             sprite.OnFrameChange = delegate {
@@ -45,9 +45,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
             Collider = new CircleColliderWithRectangles(16);
             Add(playerCollider = new PlayerCollider(OnPlayer));
             Add(new TransitionListener {
-                 OnOutBegin = delegate{
-                     // make hawk invisible during this
-                     Visible = false;
+                OnOutBegin = delegate {
+                    // make hawk invisible during this
+                    Visible = false;
                     //if we're transitioning out of a room while still attached to the hawk...
                     if (state == States.Fling) {
                         // do the usual throw!
@@ -61,11 +61,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
                             player.DummyAutoAnimate = true;
                             playerLaunch(player);
                             player.Speed = new Vector2(hawkSpeed * 0.7f, 0);
-                            
+
                         }
                     };
                     RemoveSelf();
-                 }
+                }
             });
         }
 

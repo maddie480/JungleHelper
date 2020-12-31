@@ -2,7 +2,7 @@ module JungleHelperRemoteKevinRefills
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/RemoteKevinRefill" RemoteKevinRefill(x::Integer, y::Integer, oneUse::Bool=false)
+@mapdef Entity "JungleHelper/RemoteKevinRefill" RemoteKevinRefill(x::Integer, y::Integer, oneUse::Bool=false, sprite::String="", flashSprite::String="")
 
 const placements = Ahorn.PlacementDict(
     "Slide Block Refill (Jungle Helper)" => Ahorn.EntityPlacement(

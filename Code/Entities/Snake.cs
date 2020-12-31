@@ -37,12 +37,12 @@ namespace Celeste.Mod.JungleHelper.Entities {
             Random snakeRandom = new Random();
 
             // this is an overlay that can randomly be slapped over the "idle_aggro" animation, and disappears as soon as the animation is done.
-            Sprite spriteHissOverlay = JungleHelperModule.SpriteBank.Create("snek");
+            Sprite spriteHissOverlay = JungleHelperModule.CreateReskinnableSprite(data, "snek");
             spriteHissOverlay.Visible = false;
             spriteHissOverlay.OnFinish = _ => spriteHissOverlay.Visible = false;
 
             // this is the main sprite.
-            sprite = JungleHelperModule.SpriteBank.Create("snek");
+            sprite = JungleHelperModule.CreateReskinnableSprite(data, "snek");
             sprite.FlipX = data.Bool("left", false);
             sprite.OnLoop = animation => {
                 if (animation == "idle_aggro" && snakeRandom.Next(10) == 1) {

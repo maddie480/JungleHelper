@@ -27,7 +27,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         public readonly string GeckoId;
         private readonly bool hostile;
 
-        public Gecko(Vector2 position, bool hostile, bool left, Vector2 node, float delay, string geckoId, string info, string controls) : base(position) {
+        public Gecko(Vector2 position, bool hostile, bool left, Vector2 node, float delay, string geckoId, string info, string controls, string reskinName) : base(position) {
             this.node = node;
 
             this.hostile = hostile;
@@ -35,9 +35,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
             GeckoId = geckoId;
             this.left = left;
             if (hostile) {
-                Add(sprite = JungleHelperModule.SpriteBank.Create("gecko_hostile"));
+                Add(sprite = JungleHelperModule.CreateReskinnableSprite(reskinName, "gecko_hostile"));
             } else {
-                Add(sprite = JungleHelperModule.SpriteBank.Create("gecko_normal"));
+                Add(sprite = JungleHelperModule.CreateReskinnableSprite(reskinName, "gecko_normal"));
             }
             sprite.Rotation = -1.5f;
             sprite.UseRawDeltaTime = true;
@@ -75,7 +75,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         public Gecko(EntityData data, Vector2 offset)
             : this(data.Position + offset, data.Bool("hostile", false), data.Bool("left", false), data.Nodes[0] + offset, data.Float("delay", 0.5f),
-                  data.Attr("geckoId"), data.Attr("info"), data.Attr("controls")) { }
+                  data.Attr("geckoId"), data.Attr("info"), data.Attr("controls"), data.Attr("sprite")) { }
 
         private void onCollide(Player player) {
             if (hostile) {

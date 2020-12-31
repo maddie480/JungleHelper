@@ -2,7 +2,7 @@
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/SpinyPlant" SpinyPlant(x::Integer, y::Integer, height::Integer=16, color::String="Blue")
+@mapdef Entity "JungleHelper/SpinyPlant" SpinyPlant(x::Integer, y::Integer, height::Integer=16, color::String="Blue", sprite::String="")
 
 colors = ["Blue", "Pink", "Yellow"]
 

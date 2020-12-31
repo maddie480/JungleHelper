@@ -2,7 +2,7 @@ module JungleHelperCockatiel
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/Cockatiel" Cockatiel(x::Integer, y::Integer, facingLeft::Bool=true)
+@mapdef Entity "JungleHelper/Cockatiel" Cockatiel(x::Integer, y::Integer, facingLeft::Bool=true, sprite::String="")
 
 const placements = Ahorn.PlacementDict(
     "Cockatiel (Jungle Helper)" => Ahorn.EntityPlacement(

@@ -2,7 +2,7 @@ module JungleHelperTheoStatue
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/TheoStatue" TheoStatue(x::Integer, y::Integer, directory::String="JungleHelper/TheoStatue")
+@mapdef Entity "JungleHelper/TheoStatue" TheoStatue(x::Integer, y::Integer, sprite::String="")
 
 const placements = Ahorn.PlacementDict(
     "Green Crystal (Jungle Helper)" => Ahorn.EntityPlacement(

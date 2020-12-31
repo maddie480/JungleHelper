@@ -54,7 +54,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private Rectangle levelBounds;
 
         public RollingRock(EntityData data, Vector2 offset) : base(data.Position + offset) {
-            Add(sprite = JungleHelperModule.SpriteBank.Create("rolling_rock"));
+            Add(sprite = JungleHelperModule.CreateReskinnableSprite(data, "rolling_rock"));
             if (data.Bool("cracked")) {
                 sprite.Play("rolling_cracked");
             }

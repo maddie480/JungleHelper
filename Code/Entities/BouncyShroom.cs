@@ -37,7 +37,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private float yeetSpeedCalcY;
         private Sprite bouncyShroomSprite;
 
-        public BouncyShroom(Vector2 position, Directions direction, int yeetx, int yeety)
+        public BouncyShroom(Vector2 position, Directions direction, int yeetx, int yeety, string spriteDirectory)
             : base(position) {
 
             Depth = -1;
@@ -46,7 +46,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             // making the bounce particles
             particlePosAdjust = new Vector2(0, 1);
 
-            bouncyShroomSprite = new Sprite(GFX.Game, "objects/BouncyShroom/");
+            bouncyShroomSprite = new Sprite(GFX.Game, spriteDirectory + "/");
 
             int[] frames = { 2, 3, 4, 5, 6, 7, 8 };
 
@@ -111,7 +111,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         public BouncyShroom(EntityData data, Vector2 offset, Directions dir)
-            : this(data.Position + offset, dir, data.Int("yeetx", 200), data.Int("yeety", -290)) {
+            : this(data.Position + offset, dir, data.Int("yeetx", 200), data.Int("yeety", -290), data.Attr("spriteDirectory", "objects/BouncyShroom")) {
         }
 
         public override void Added(Scene scene) {
@@ -172,7 +172,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 collidedWithIt = true;
             }
 
-            
+
         }
 
         public override void Update() {

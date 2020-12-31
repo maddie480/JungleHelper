@@ -11,6 +11,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private int lines;
         private string color;
+        private string spriteName;
 
         private Vector2 topCenter;
         private List<Sprite> plantParts;
@@ -19,6 +20,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         public SpinyPlant(EntityData data, Vector2 offset) : base(data.Position + offset) {
             lines = data.Height / 8;
             color = data.Attr("color", "Blue");
+            spriteName = data.Attr("sprite");
             Depth = -9500;
 
             Add(new PlayerCollider(killPlayer));
@@ -100,9 +102,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private GraphicsComponent generateSpinyPlantPart(string section) {
-            if (color == "Yellow") {
+            if (!string.IsNullOrEmpty(spriteName)) {
+                return GFX.SpriteBank.Create($"{spriteName}_{section.ToLowerInvariant()}");
+            } else if (color == "Yellow") {
                 // use a sprite so that we can trigger the retract/expand animations.
-                return JungleHelperModule.SpriteBank.Create($"spiny_plant_{color.ToLowerInvariant()}_{section.ToLowerInvariant()}");
+                return JungleHelperModule.CreateReskinnableSprite("", $"spiny_plant_{color.ToLowerInvariant()}_{section.ToLowerInvariant()}");
             } else {
                 // use an image because we only have a static image anyway.
                 return new Image(GFX.Game[$"JungleHelper/SpinyPlant/Spiny{color}{section}"]);
