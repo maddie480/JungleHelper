@@ -4,11 +4,15 @@ using Monocle;
 using System.Linq;
 
 namespace Celeste.Mod.IntoTheJungleCodeMod {
-    // A very complex entity that consists in a sprite that triggers a cutscene.
+    /// <summary>
+    /// This door is an entity that triggers the chapter 3 ending cutscene, and is part of it.
+    /// It also sets up the depth for the totems that are decals supposed to be in front of it.
+    /// </summary>
     [CustomEntity("IntoTheJungleCodeMod/TempleDoor")]
     class TempleDoor : Entity {
         public readonly Sprite Sprite;
         private bool playerWasOnGround = false;
+        private TempleDoorRocks rocks;
 
         public TempleDoor(EntityData data, Vector2 offset) : base(data.Position + offset) {
             Add(Sprite = IntoTheJungleCodeModule.SpriteBank.Create("temple_door"));
@@ -28,6 +32,9 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
                     decal.Depth = 8998;
                 }
             }
+
+            // also add the rocks in front of the door (they are a different entity because they have a different depth).
+            scene.Add(rocks = new TempleDoorRocks(Position));
         }
 
         public override void Update() {
@@ -37,7 +44,7 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
             if (Collidable && player != null && player.OnGround()) {
                 if (playerWasOnGround) {
                     // trigger the cutscene!
-                    Scene.Add(new TempleDoorCutscene(player, this));
+                    Scene.Add(new TempleDoorCutscene(player, this, rocks));
                     Collidable = false;
                 } else {
                     // wait for 1 more frame.

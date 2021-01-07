@@ -6,10 +6,12 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
     class TempleDoorCutscene : CutsceneEntity {
         private Player player;
         private TempleDoor door;
+        private TempleDoorRocks rocks;
 
-        public TempleDoorCutscene(Player player, TempleDoor door) {
+        public TempleDoorCutscene(Player player, TempleDoor door, TempleDoorRocks rocks) {
             this.player = player;
             this.door = door;
+            this.rocks = rocks;
         }
 
         public override void OnBegin(Level level) {
@@ -63,6 +65,7 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
 
             // door closes behind Madeline.
             door.Sprite.Play("close");
+            rocks.Sprite.Play("close");
 
             // delay the sound by a bit.
             yield return 0.1f;
