@@ -11,6 +11,8 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
     public class IntoTheJungleCodeModule : EverestModule {
         private static FieldInfo mapEditorLevelList = typeof(MapEditor).GetField("levels", BindingFlags.Instance | BindingFlags.NonPublic);
 
+        public static SpriteBank SpriteBank;
+
         public override void Load() {
             On.Celeste.Editor.MapEditor.ctor += modHideMap;
             IL.Celeste.Overworld.Update += modOverworldUpdate;
@@ -19,6 +21,11 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
         public override void Unload() {
             On.Celeste.Editor.MapEditor.ctor -= modHideMap;
             IL.Celeste.Overworld.Update -= modOverworldUpdate;
+        }
+
+        public override void LoadContent(bool firstLoad) {
+            base.LoadContent(firstLoad);
+            SpriteBank = new SpriteBank(GFX.Game, "Graphics/IntoTheJungleCodeMod/Sprites.xml");
         }
 
         private static void modHideMap(On.Celeste.Editor.MapEditor.orig_ctor orig, MapEditor self, AreaKey area, bool reloadMapData) {
