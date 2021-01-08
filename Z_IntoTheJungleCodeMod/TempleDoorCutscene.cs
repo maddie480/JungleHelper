@@ -22,12 +22,18 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
             // remove control from the player
             player.StateMachine.State = 11;
             player.StateMachine.Locked = true;
+            player.ForceCameraUpdate = true;
 
             // walk to door
-            yield return player.DummyWalkTo(door.X);
+            yield return player.DummyWalkToExact((int) door.X);
 
             // wait for a bit because why not...
-            yield return 1f;
+            yield return 0.5f;
+
+            // zoom on Maddy (and snap the camera to be sure it is in the position we want)
+            level.Camera.Position = player.CameraTarget;
+            yield return level.ZoomTo(player.Position - level.Camera.Position - Vector2.UnitY * 20f, 2f, 0.5f);
+            yield return 0.5f;
 
             // and enter the door! this is where it gets fun.
             // let's create some sprites!
@@ -66,10 +72,7 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
             // door closes behind Madeline.
             door.Sprite.Play("close");
             rocks.Sprite.Play("close");
-
-            // delay the sound by a bit.
-            yield return 0.1f;
-            Audio.Play("event:/game/05_mirror_temple/gate_main_close", door.Position);
+            Audio.Play("event:/junglehelper/sfx/templedoor_cutscene_slam", door.Position);
 
             while (door.Sprite.CurrentAnimationFrame < 14) {
                 yield return null;
@@ -83,6 +86,11 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
 
         public override void OnEnd(Level level) {
             level.CompleteArea(true, false);
+
+            if (!WasSkipped) {
+                SpotlightWipe.Modifier = 70f;
+                SpotlightWipe.FocusPoint = new Vector2(160f, 94f);
+            }
         }
     }
 }
