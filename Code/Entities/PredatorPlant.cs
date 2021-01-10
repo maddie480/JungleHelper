@@ -114,26 +114,31 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 Collider = new Hitbox(8, 9, 3, -13);
             } else {
                 // when attacking, the hitbox moves with the plant's head in the animation.
+                // displayed frame changes on frames 0, 8, 10, 11, 12, 13, 22, 24, 26, 28 and 30
                 switch (sprite.CurrentAnimationFrame) {
-                    case 5:
-                        Collider = new Hitbox(8, 9, -8, -8);
-                        break;
-                    case 6:
-                        Collider = new Hitbox(8, 9, -15, -5);
-                        break;
-                    case 11:
-                        Collider = new Hitbox(8, 9, -11, -6);
-                        break;
-                    case 12:
-                        Collider = new Hitbox(8, 9, -8, -8);
-                        break;
-                    case 13:
-                        Collider = new Hitbox(8, 9, -6, -10);
-                        break;
-                    case 14:
+                    case 10:
                         Collider = new Hitbox(8, 9, -4, -10);
                         break;
-                    case 15:
+                    case 11:
+                        Collider = new Hitbox(8, 9, -10, -8);
+                        break;
+                    case 12:
+                    case 13:
+                        Collider = new Hitbox(8, 9, -15, -5);
+                        break;
+                    case 22:
+                        Collider = new Hitbox(8, 9, -11, -6);
+                        break;
+                    case 24:
+                        Collider = new Hitbox(8, 9, -8, -8);
+                        break;
+                    case 26:
+                        Collider = new Hitbox(8, 9, -6, -10);
+                        break;
+                    case 28:
+                        Collider = new Hitbox(8, 9, -4, -10);
+                        break;
+                    case 30:
                         Collider = new Hitbox(8, 9, 0, -12);
                         break;
                     default:

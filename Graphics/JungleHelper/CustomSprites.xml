@@ -174,80 +174,80 @@
         <Center/>
         <Anim id="idle" path="Bitey" frames="0*7,1*2" delay="0.1" goto="idle:19,idleAlt:1"/>
         <Anim id="idleAlt" path="Biteyidle" frames="0-9,8,9,8-12" delay="0.1" goto="idle"/>
-        <Anim id="attack" path="BiteyAtt" frames="0*5,1,2*5,3-7" delay="0.1"/>
-        <Anim id="knockout" path="BiteyBonk" frames="0-2,3*20,4-8" delay="0.1"/>
+        <Anim id="attack" path="BiteyAtt" frames="0*8,1,1-4,5*9,6,6,7,7,8,8,9,9,10,10" delay="0.05"/>
+        <Anim id="knockout" path="BiteyBonk" frames="0-5,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,10-17" delay="0.05"/>
     </predator_plant_pink>
     
     <predator_plant_blue path="JungleHelper/PredatorPlant/Blue/" start="idle">
         <Center/>
         <Anim id="idle" path="BiteyB" frames="0*7,1*2" delay="0.1" goto="idle:19,idleAlt:1"/>
         <Anim id="idleAlt" path="BiteyBidle" frames="0-9,8,9,8-12" delay="0.1" goto="idle"/>
-        <Anim id="attack" path="BiteyBAtt" frames="0*5,1,2*5,3-7" delay="0.1"/>
-        <Anim id="knockout" path="BiteyBBonk" frames="0-2,3*20,4-8" delay="0.1"/>
+        <Anim id="attack" path="BiteyBAtt" frames="0*8,1,1-4,5*9,6,6,7,7,8,8,9,9,10,10" delay="0.05"/>
+        <Anim id="knockout" path="BiteyBBonk" frames="0-5,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,10-17" delay="0.05"/>
     </predator_plant_blue>
     
     <predator_plant_yellow path="JungleHelper/PredatorPlant/Yellow/" start="idle">
         <Center/>
         <Anim id="idle" path="BiteyC" frames="0*7,1*2" delay="0.1" goto="idle:19,idleAlt:1"/>
         <Anim id="idleAlt" path="BiteyCidle" frames="0-9,8,9,8-12" delay="0.1" goto="idle"/>
-        <Anim id="attack" path="BiteyCAtt" frames="0*5,1,2*5,3-7" delay="0.1"/>
-        <Anim id="knockout" path="BiteyCBonk" frames="0-2,3*20,4-8" delay="0.1"/>
+        <Anim id="attack" path="BiteyCAtt" frames="0*8,1,1-4,5*9,6,6,7,7,8,8,9,9,10,10" delay="0.05"/>
+        <Anim id="knockout" path="BiteyCBonk" frames="0-5,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,10-17" delay="0.05"/>
     </predator_plant_yellow>
 
     <cassette_predator_plant_blue_active path="JungleHelper/PredatorPlant/CassetteBlue/" start="idle">
         <Center/>
         <Anim id="idle" path="BiteyBlueActive" frames="0*7,1*2" delay="0.1"/>
-        <Anim id="attack" path="BiteyBlueActiveAtt" frames="0*5,1,2*5,3-7" delay="0.1"/>
-        <Anim id="knockout" path="BiteyBlueActiveBonk" frames="0-2,3*20,4-8" delay="0.1"/>
+        <Anim id="attack" path="BiteyBlueActiveAtt" frames="0*8,1,1-4,5*9,6,6,7,7,8,8,9,9,10,10" delay="0.05"/>
+        <Anim id="knockout" path="BiteyBlueActiveBonk" frames="0-5,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,10-17" delay="0.05"/>
     </cassette_predator_plant_blue_active>
 
     <cassette_predator_plant_blue_inactive path="JungleHelper/PredatorPlant/CassetteBlue/" start="idle">
         <Center/>
         <Anim id="idle" path="BiteyBlueInactive" frames="0*7,1*2" delay="0.1"/>
-        <Anim id="attack" path="BiteyBlueInactiveAtt" frames="0*5,1,2*5,3-7" delay="0.1"/>
-        <Anim id="knockout" path="BiteyBlueInactiveBonk" frames="0-2,3*20,4-8" delay="0.1"/>
+        <Anim id="attack" path="BiteyBlueInactiveAtt" frames="0*8,1,1-4,5*9,6,6,7,7,8,8,9,9,10,10" delay="0.05"/>
+        <Anim id="knockout" path="BiteyBlueInactiveBonk" frames="0-5,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,10-17" delay="0.05"/>
     </cassette_predator_plant_blue_inactive>
 
     <cassette_predator_plant_green_active path="JungleHelper/PredatorPlant/CassetteGreen/" start="idle">
         <Center/>
         <Anim id="idle" path="BiteyGreenActive" frames="0*7,1*2" delay="0.1"/>
-        <Anim id="attack" path="BiteyGreenActiveAtt" frames="0*5,1,2*5,3-7" delay="0.1"/>
-        <Anim id="knockout" path="BiteyGreenActiveBonk" frames="0-2,3*20,4-8" delay="0.1"/>
+        <Anim id="attack" path="BiteyGreenActiveAtt" frames="0*8,1,1-4,5*9,6,6,7,7,8,8,9,9,10,10" delay="0.05"/>
+        <Anim id="knockout" path="BiteyGreenActiveBonk" frames="0-5,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,10-17" delay="0.05"/>
     </cassette_predator_plant_green_active>
 
     <cassette_predator_plant_green_inactive path="JungleHelper/PredatorPlant/CassetteGreen/" start="idle">
         <Center/>
         <Anim id="idle" path="BiteyGreenInactive" frames="0*7,1*2" delay="0.1"/>
-        <Anim id="attack" path="BiteyGreenInactiveAtt" frames="0*5,1,2*5,3-7" delay="0.1"/>
-        <Anim id="knockout" path="BiteyGreenInactiveBonk" frames="0-2,3*20,4-8" delay="0.1"/>
+        <Anim id="attack" path="BiteyGreenInactiveAtt" frames="0*8,1,1-4,5*9,6,6,7,7,8,8,9,9,10,10" delay="0.05"/>
+        <Anim id="knockout" path="BiteyGreenInactiveBonk" frames="0-5,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,10-17" delay="0.05"/>
     </cassette_predator_plant_green_inactive>
 
     <cassette_predator_plant_pink_active path="JungleHelper/PredatorPlant/CassettePink/" start="idle">
         <Center/>
         <Anim id="idle" path="BiteyPinkActive" frames="0*7,1*2" delay="0.1"/>
-        <Anim id="attack" path="BiteyPinkActiveAtt" frames="0*5,1,2*5,3-7" delay="0.1"/>
-        <Anim id="knockout" path="BiteyPinkActiveBonk" frames="0-2,3*20,4-8" delay="0.1"/>
+        <Anim id="attack" path="BiteyPinkActiveAtt" frames="0*8,1,1-4,5*9,6,6,7,7,8,8,9,9,10,10" delay="0.05"/>
+        <Anim id="knockout" path="BiteyPinkActiveBonk" frames="0-5,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,10-17" delay="0.05"/>
     </cassette_predator_plant_pink_active>
 
     <cassette_predator_plant_pink_inactive path="JungleHelper/PredatorPlant/CassettePink/" start="idle">
         <Center/>
         <Anim id="idle" path="BiteyPinkInactive" frames="0*7,1*2" delay="0.1"/>
-        <Anim id="attack" path="BiteyPinkInactiveAtt" frames="0*5,1,2*5,3-7" delay="0.1"/>
-        <Anim id="knockout" path="BiteyPinkInactiveBonk" frames="0-2,3*20,4-8" delay="0.1"/>
+        <Anim id="attack" path="BiteyPinkInactiveAtt" frames="0*8,1,1-4,5*9,6,6,7,7,8,8,9,9,10,10" delay="0.05"/>
+        <Anim id="knockout" path="BiteyPinkInactiveBonk" frames="0-5,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,10-17" delay="0.05"/>
     </cassette_predator_plant_pink_inactive>
 
     <cassette_predator_plant_yellow_active path="JungleHelper/PredatorPlant/CassetteYellow/" start="idle">
         <Center/>
         <Anim id="idle" path="BiteyYellowActive" frames="0*7,1*2" delay="0.1"/>
-        <Anim id="attack" path="BiteyYellowActiveAtt" frames="0*5,1,2*5,3-7" delay="0.1"/>
-        <Anim id="knockout" path="BiteyYellowActiveBonk" frames="0-2,3*20,4-8" delay="0.1"/>
+        <Anim id="attack" path="BiteyYellowActiveAtt" frames="0*8,1,1-4,5*9,6,6,7,7,8,8,9,9,10,10" delay="0.05"/>
+        <Anim id="knockout" path="BiteyYellowActiveBonk" frames="0-5,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,10-17" delay="0.05"/>
     </cassette_predator_plant_yellow_active>
 
     <cassette_predator_plant_yellow_inactive path="JungleHelper/PredatorPlant/CassetteYellow/" start="idle">
         <Center/>
         <Anim id="idle" path="BiteyYellowInactive" frames="0*7,1*2" delay="0.1"/>
-        <Anim id="attack" path="BiteyYellowInactiveAtt" frames="0*5,1,2*5,3-7" delay="0.1"/>
-        <Anim id="knockout" path="BiteyYellowInactiveBonk" frames="0-2,3*20,4-8" delay="0.1"/>
+        <Anim id="attack" path="BiteyYellowInactiveAtt" frames="0*8,1,1-4,5*9,6,6,7,7,8,8,9,9,10,10" delay="0.05"/>
+        <Anim id="knockout" path="BiteyYellowInactiveBonk" frames="0-5,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,10-17" delay="0.05"/>
     </cassette_predator_plant_yellow_inactive>
 
     <cobweb path="JungleHelper/Cobweb/" start="idle">
