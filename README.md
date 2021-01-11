@@ -12,6 +12,7 @@ This repository contains the helper and assets for the _Celeste: Into the Jungle
 - **Delayed Auto-Falling Block**: a falling block that falls automatically after a set delay. Also has customizable shake time before falling.
 - **Falling Killbox**: a killbox... except falling. Useful to prevent the player from going down too fast in a falling section.
 - **Firefly**: a flying dot that goes around and follows the player when touched, much like moon creatures.
+- **Grabless Golden Berry**: like the vanilla dashless golden berry, except it flies away when the player grabs on a wall.
 - **Gecko**: goes up and down on a set path. It can be made to kill the player, or to be purely decorative. It can also be used to show a tutorial similar to the Custom Tutorial Bird (with a _Gecko Tutorial Trigger_ that allows showing or hiding the tutorial bubble).
 - **Green Crystal**: much like a Theo crystal, except it cannot be held. It can only be moved around by moving/removing the platform it is standing on.
 - **Green Crystal Gate**: a temple gate that only opens when a Green Crystal is nearby.

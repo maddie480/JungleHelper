@@ -2,7 +2,7 @@ module IntoTheJungleCodeModTempleDoor
 
 using ..Ahorn, Maple
 
-@mapdef Entity "IntoTheJungleCodeMod/TempleDoor" TempleDoor(x::Integer, y::Integer, flag::String="torch_flag", sprite::String="")
+@mapdef Entity "IntoTheJungleCodeMod/TempleDoor" TempleDoor(x::Integer, y::Integer)
 
 const placements = Ahorn.PlacementDict(
     "Temple Door (Into The Jungle code mod)" => Ahorn.EntityPlacement(

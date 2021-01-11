@@ -6,6 +6,9 @@ namespace Celeste.Mod.JungleHelper {
     public class JungleHelperModule : EverestModule {
         public static JungleHelperModule Instance;
 
+        public override System.Type SessionType => typeof(JungleHelperSession);
+        public static JungleHelperSession Session => (JungleHelperSession) Instance._Session;
+
         public JungleHelperModule() {
             Instance = this;
         }
@@ -20,6 +23,7 @@ namespace Celeste.Mod.JungleHelper {
             EnforceSkinController.Load();
             SpriteWipe.Load();
             RollingRock.Load();
+            GrablessGoldenBerry.Load();
         }
 
         public override void Unload() {
@@ -31,6 +35,7 @@ namespace Celeste.Mod.JungleHelper {
             EnforceSkinController.Unload();
             SpriteWipe.Unload();
             RollingRock.Unload();
+            GrablessGoldenBerry.Unload();
         }
 
         public override void LoadContent(bool firstLoad) {
