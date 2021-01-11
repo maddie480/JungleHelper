@@ -78,6 +78,13 @@ namespace Celeste.Mod.JungleHelper {
             };
         }
 
+        public override void LoadSession(int index, bool forceNew) {
+            base.LoadSession(index, forceNew);
+
+            // initial value for GrablessBerryWillFlyAway is equel to GrablessBerryFlewAway.
+            Session.GrablessBerryWillFlyAway = Session.GrablessBerryFlewAway;
+        }
+
         private static SpriteBank spriteBank;
 
         public static Sprite CreateReskinnableSprite(EntityData data, string defaultSpriteName) {
