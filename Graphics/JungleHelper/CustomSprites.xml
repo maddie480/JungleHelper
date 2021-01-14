@@ -365,4 +365,10 @@
         <Anim id="backout" path="aggressive" frames="3*2" delay="0.1" goto="idle" />
         <Loop id="flyaway" path="fly" frames="0-3" delay="0.1" />
     </cockatiel>
+
+    <breakable_pot path="JungleHelper/Breakable Pot/" start="idle">
+        <Origin x="12" y="21"/>
+        <Loop id="idle" path="breakpotidle" />
+        <Anim id="break" path="breakpot" delay="0.05" />
+    </breakable_pot>
 </Sprites>

@@ -97,6 +97,7 @@
     <Compile Include="Entities\AttachTriggerController.cs" />
     <Compile Include="Entities\AutoFallingBlockDelay.cs" />
     <Compile Include="Entities\BouncyShroom.cs" />
+    <Compile Include="Entities\BreakablePot.cs" />
     <Compile Include="Entities\Cockatiel.cs" />
     <Compile Include="Entities\EnforceSkinController.cs" />
     <Compile Include="Entities\EnforceSkinVanillaSpriteDump.cs" />
