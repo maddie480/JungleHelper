@@ -56,6 +56,11 @@ namespace Celeste.Mod.JungleHelper.Triggers {
             dispose();
         }
 
+        public override void SceneEnd(Scene scene) {
+            base.SceneEnd(scene);
+            dispose();
+        }
+
         public override void Render() {
             Draw.SpriteBatch.Draw(imageTarget, Vector2.Zero, imageTarget.Bounds, Color.White * Alpha, 0f, Vector2.Zero, 1920f / imageTarget.Width, SpriteEffects.None, 0f);
         }

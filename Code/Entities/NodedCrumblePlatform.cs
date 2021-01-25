@@ -1,5 +1,6 @@
 ﻿using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Monocle;
 using MonoMod.Utils;
 using System.Collections;
@@ -10,6 +11,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
     class NodedCrumblePlatform : CrumblePlatform {
         private List<Image> outline;
         private Coroutine outlineFader;
+
+        private VirtualRenderTarget ghostVersion;
 
         private readonly Vector2[] allPositions;
 
@@ -35,6 +38,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
             DynData<CrumblePlatform> self = new DynData<CrumblePlatform>(this);
             outline = self.Get<List<Image>>("outline");
             outlineFader = self.Get<Coroutine>("outlineFader");
+
+            // place a "ghost" platform at every position the platform can take.
+            foreach (Vector2 position in allPositions) {
+                scene.Add(new GhostPlatform(this, position));
+            }
         }
 
         private IEnumerator moveBetweenNodesRoutine() {
@@ -85,6 +93,77 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     img.Color = color;
                 }
                 yield return null;
+            }
+        }
+
+        public override void Render() {
+            base.Render();
+
+            if (ghostVersion == null) {
+                // we are going to render the platform in greyscale on a separate render target, so that we can render it at the different positions.
+                ghostVersion = VirtualContent.CreateRenderTarget("noded-crumble-platform-ghost", (int) Width, (int) Height);
+
+                // switch rendering to the noded platform ghost.
+                GameplayRenderer.End();
+                Engine.Instance.GraphicsDevice.SetRenderTarget(ghostVersion);
+                Engine.Instance.GraphicsDevice.Clear(Color.Transparent);
+
+                // start drawing with a greyscale color grade.
+                ColorGrade.Set(GFX.ColorGrades["JungleHelper/greyscale"]);
+                Draw.SpriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, ColorGrade.Effect);
+
+                // draw the crumble platform at (0, 0).
+                Vector2 oldPosition = Position;
+                Position = Vector2.Zero;
+                base.Render();
+                Position = oldPosition;
+
+                // end drawing.
+                Draw.SpriteBatch.End();
+
+                // switch back to rendering gameplay.
+                Engine.Instance.GraphicsDevice.SetRenderTarget(GameplayBuffers.Gameplay);
+                GameplayRenderer.Begin();
+            }
+        }
+
+        public override void Removed(Scene scene) {
+            base.Removed(scene);
+
+            ghostVersion?.Dispose();
+            ghostVersion = null;
+        }
+
+        public override void SceneEnd(Scene scene) {
+            base.SceneEnd(scene);
+
+            ghostVersion?.Dispose();
+            ghostVersion = null;
+        }
+
+        private class GhostPlatform : Entity {
+            private readonly NodedCrumblePlatform parent;
+
+            private float time = 0f;
+
+            public GhostPlatform(NodedCrumblePlatform parent, Vector2 position) : base(position) {
+                this.parent = parent;
+
+                Depth = 1;
+            }
+
+            public override void Update() {
+                base.Update();
+
+                time += Engine.DeltaTime;
+            }
+
+            public override void Render() {
+                base.Render();
+
+                if (parent.ghostVersion != null) {
+                    Draw.SpriteBatch.Draw(parent.ghostVersion, Position, Color.White * (0.4f + Ease.SineInOut(Calc.YoYo((time / 2f) % 1f)) * 0.2f));
+                }
             }
         }
     }
