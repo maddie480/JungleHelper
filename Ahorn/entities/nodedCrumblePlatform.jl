@@ -40,11 +40,11 @@ function Ahorn.selection(entity::NodedCrumblePlatform)
     return res
 end
 
-function renderCrumbleBlock(ctx::Ahorn.Cairo.CairoContext, x::Int, y::Int, width::Int, texture::String)
+function renderCrumbleBlock(ctx::Ahorn.Cairo.CairoContext, x::Int, y::Int, width::Int, texture::String, alpha::Number=1.0)
     tilesWidth = div(width, 8)
 
     for i in 0:floor(Int, tilesWidth / 4)
-        Ahorn.drawImage(ctx, texture, x + 32 * i, y, 0, 0, min(32, width - 32 * i), 8)
+        Ahorn.drawImage(ctx, texture, x + 32 * i, y, 0, 0, min(32, width - 32 * i), 8; alpha=alpha)
     end
 end
 
@@ -58,10 +58,7 @@ function Ahorn.renderSelectedAbs(ctx::Ahorn.Cairo.CairoContext, entity::NodedCru
 
     for node in get(entity.data, "nodes", ())
         nx, ny = Int.(node)
-
-        renderCrumbleBlock(ctx, nx, ny, width, texture)
         Ahorn.drawArrow(ctx, px + width / 2, py + 4, nx + width / 2, ny + 4, Ahorn.colors.selection_selected_fc, headLength=6)
-
         px, py = nx, ny
     end
     
@@ -79,6 +76,11 @@ function Ahorn.renderAbs(ctx::Ahorn.Cairo.CairoContext, entity::NodedCrumblePlat
     width = Int(get(entity.data, "width", 8))
 
     renderCrumbleBlock(ctx, x, y, width, texture)
+
+    for node in get(entity.data, "nodes", ())
+        nx, ny = Int.(node)
+        renderCrumbleBlock(ctx, nx, ny, width, texture, 0.5)
+    end
 end
 
 end
