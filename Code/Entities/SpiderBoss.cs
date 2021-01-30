@@ -261,7 +261,13 @@ namespace Celeste.Mod.JungleHelper.Entities {
             }
 
             // update sprite depending on speed (we can't use speed directly, because red spiders with "infinite speed" are a thing...)
-            float effectiveSpeed = (Position.X - originalX) / Engine.DeltaTime;
+            float effectiveSpeed;
+            if (Engine.DeltaTime != 0f) {
+                effectiveSpeed = (Position.X - originalX) / Engine.DeltaTime;
+            } else {
+                // time was probably frozen and divisions by 0 are bad. let's just assume effective speed is 0
+                effectiveSpeed = 0f;
+            }
             int sprite = Calc.Clamp((int) ((effectiveSpeed / 45f) + Math.Sign(effectiveSpeed)), -2, 2);
             spider.Play($"idle_{sprite}");
 
