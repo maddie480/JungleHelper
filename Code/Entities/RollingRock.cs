@@ -51,6 +51,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private bool shattered = false;
         private float fallingSpeed = 0f;
 
+        private readonly string flag;
+
         private Rectangle levelBounds;
 
         public RollingRock(EntityData data, Vector2 offset) : base(data.Position + offset) {
@@ -58,6 +60,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
             if (data.Bool("cracked")) {
                 sprite.Play("rolling_cracked");
             }
+
+            flag = data.Attr("flag");
 
             Collider = new CircleColliderWithRectangles(32);
             Add(new PlayerCollider(onPlayer));
@@ -132,7 +136,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             if (!falling && !rolling) {
                 // we are waiting. fall down when player moved and is on the right.
                 Player player = Scene.Tracker.GetEntity<Player>();
-                if (player != null && !player.JustRespawned && player.X > Right) {
+                if ((string.IsNullOrEmpty(flag) || SceneAs<Level>().Session.GetFlag(flag)) && player != null && !player.JustRespawned && player.X > Right) {
                     falling = true;
                 }
             }
