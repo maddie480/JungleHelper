@@ -2,7 +2,7 @@ module JungleHelperRollingRock
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/RollingRock" RollingRock(x::Integer, y::Integer, cracked::Bool=false, sprite::String="", flag::String="")
+@mapdef Entity "JungleHelper/RollingRock" RollingRock(x::Integer, y::Integer, cracked::Bool=false, spriteXmlName::String="", debrisSpriteDirectory::String="JungleHelper/RollingRock", flag::String="")
 
 const placements = Ahorn.PlacementDict(
     "Rolling Rock (Jungle Helper)" => Ahorn.EntityPlacement(
