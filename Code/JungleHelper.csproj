@@ -106,6 +106,7 @@
     <Compile Include="Entities\GrablessGoldenBerry.cs" />
     <Compile Include="Entities\Lantern.cs" />
     <Compile Include="Entities\Snake.cs" />
+    <Compile Include="Entities\SwingCassetteBlock.cs" />
     <Compile Include="Entities\Torch.cs" />
     <Compile Include="JungleHelperSession.cs" />
     <Compile Include="SpriteWipe.cs" />

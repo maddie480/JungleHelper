@@ -24,6 +24,7 @@ namespace Celeste.Mod.JungleHelper {
             SpriteWipe.Load();
             RollingRock.Load();
             GrablessGoldenBerry.Load();
+            SwingCassetteBlock.Load();
 
             // let's tell Everest that sprite wipe textures loading on a separate thread is nothing to worry about.
             AssetReloadHelper.SilentThreadList.Add("Jungle Helper Sprite Wipe Loading Thread");
@@ -39,6 +40,7 @@ namespace Celeste.Mod.JungleHelper {
             SpriteWipe.Unload();
             RollingRock.Unload();
             GrablessGoldenBerry.Unload();
+            SwingCassetteBlock.Unload();
         }
 
         public override void LoadContent(bool firstLoad) {
