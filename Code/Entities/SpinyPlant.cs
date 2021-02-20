@@ -159,9 +159,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
                         plantPart.Play("retracted");
                     }
                 } else {
-                    // plant is extended, so it hurts the player.
-                    activeHitboxes.Add(hitbox);
-
                     if (plantPart.CurrentAnimationID.StartsWith("retract") && animate) {
                         // we are out of radius and retracting/retracted, so extend.
                         int frame = (plantPart.CurrentAnimationID == "retracted" ? 0 : 6 - plantPart.CurrentAnimationFrame);
@@ -170,6 +167,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     } else if (!animate) {
                         // just extend right away.
                         plantPart.Play("extended");
+                    }
+
+                    if (plantPart.CurrentAnimationID == "extended") {
+                        // plant is extended, so it hurts the player.
+                        activeHitboxes.Add(hitbox);
                     }
                 }
             }
