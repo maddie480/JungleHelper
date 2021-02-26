@@ -80,6 +80,8 @@ placements.entities.JungleHelper/RollingRock.tooltips.cracked=Whether the rock s
 placements.entities.JungleHelper/RollingRock.tooltips.spriteXmlName=If you want to reskin the rolling rock, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
 placements.entities.JungleHelper/RollingRock.tooltips.debrisSpriteDirectory=The directory the debris sprites will be taken from. For example, if the directory is set to MyMap/MyDebris, sprites will be read from Mods/yourmod/Graphics/Atlases/Gameplay/MyMap/MyDebris.
 placements.entities.JungleHelper/RollingRock.tooltips.flag=If specified, the rock will only start rolling if this flag is active. Leave empty if you don't want the rock to be triggered by a flag.
+placements.entities.JungleHelper/RollingRock.tooltips.rollingSpeed=The speed of the rock when it is moving to the right (in px/s).
+placements.entities.JungleHelper/RollingRock.tooltips.fallingSpeed=The cap speed of the rock when it is falling (in px/s).
 
 # Zip Moving Platforms
 placements.entities.JungleHelper/ZipMovingPlatform.tooltips.texture=What texture to use for the platform.

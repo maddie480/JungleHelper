@@ -39,10 +39,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         // configuration constants
-        private const float SPEED = 100f;
-        private const float FALLING_SPEED = 200f;
-        private const float FALLING_ACCELERATION = 400f;
-        private const float ROTATION_SPEED = 2f;
+        private const float FALLING_ACCELERATION_FACTOR = 400f / 200f; // when fall speed is 200, fall acceleration is 400.
+        private const float ROTATION_SPEED_FACTOR = 2f / 100f; // when speed is 100, rotation is 2.
 
         // state info
         private Sprite sprite;
@@ -54,6 +52,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private readonly string debrisSpriteDirectory;
         private readonly string flag;
 
+        private readonly float rollingSpeed;
+        private readonly float fallingSpeedCap;
+
         private Rectangle levelBounds;
 
         public RollingRock(EntityData data, Vector2 offset) : base(data.Position + offset) {
@@ -64,6 +65,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             debrisSpriteDirectory = data.Attr("debrisSpriteDirectory", "JungleHelper/RollingRock");
             flag = data.Attr("flag");
+
+            rollingSpeed = data.Float("rollingSpeed", 100f);
+            fallingSpeedCap = data.Float("fallingSpeed", 200f);
 
             Collider = new CircleColliderWithRectangles(32);
             Add(new PlayerCollider(onPlayer));
@@ -112,13 +116,13 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             if (shattered) {
                 // continue moving right until the break animation ends.
-                Position.X += SPEED * Engine.DeltaTime;
+                Position.X += rollingSpeed * Engine.DeltaTime;
                 return;
             }
 
             if (falling) {
                 // move down.
-                fallingSpeed = Calc.Approach(fallingSpeed, FALLING_SPEED, FALLING_ACCELERATION * Engine.DeltaTime);
+                fallingSpeed = Calc.Approach(fallingSpeed, fallingSpeedCap, fallingSpeedCap * FALLING_ACCELERATION_FACTOR * Engine.DeltaTime);
                 MoveV(fallingSpeed * Engine.DeltaTime, hitGroundWhileFalling);
             } else if (rolling) {
                 // check if we *should* be falling.
@@ -129,10 +133,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             if (rolling) {
                 // move right.
-                MoveH(SPEED * Engine.DeltaTime, hitSolidWhileMovingForward);
+                MoveH(rollingSpeed * Engine.DeltaTime, hitSolidWhileMovingForward);
 
                 // rotate the boulder sprite.
-                sprite.Rotation += ROTATION_SPEED * Engine.DeltaTime;
+                sprite.Rotation += rollingSpeed * ROTATION_SPEED_FACTOR * Engine.DeltaTime;
             }
 
             if (!falling && !rolling) {
@@ -193,23 +197,23 @@ namespace Celeste.Mod.JungleHelper.Entities {
             sprite.Play("break");
             sprite.OnFinish += _ => {
                 // Spawn the debris. Welcome to the Hardcode Zone!
-                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, "00", new Vector2(42, 41)));
-                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, "01", new Vector2(63, 38)));
-                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, "02", new Vector2(63, 61)));
-                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, "03", new Vector2(47, 53)));
-                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, "04", new Vector2(47, 69)));
-                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, "05", new Vector2(40, 75)));
-                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, "06", new Vector2(29, 63)));
-                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, "07", new Vector2(14, 64)));
-                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, "08", new Vector2(19, 50)));
-                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, "09", new Vector2(29, 38)));
-                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, "10", new Vector2(10, 39)));
-                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, "11", new Vector2(19, 27)));
-                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, "12", new Vector2(23, 14)));
-                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, "13", new Vector2(25, 10)));
-                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, "14", new Vector2(40, 34)));
-                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, "15", new Vector2(45, 17)));
-                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, "16", new Vector2(63, 16)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, rollingSpeed, "00", new Vector2(42, 41)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, rollingSpeed, "01", new Vector2(63, 38)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, rollingSpeed, "02", new Vector2(63, 61)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, rollingSpeed, "03", new Vector2(47, 53)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, rollingSpeed, "04", new Vector2(47, 69)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, rollingSpeed, "05", new Vector2(40, 75)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, rollingSpeed, "06", new Vector2(29, 63)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, rollingSpeed, "07", new Vector2(14, 64)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, rollingSpeed, "08", new Vector2(19, 50)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, rollingSpeed, "09", new Vector2(29, 38)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, rollingSpeed, "10", new Vector2(10, 39)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, rollingSpeed, "11", new Vector2(19, 27)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, rollingSpeed, "12", new Vector2(23, 14)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, rollingSpeed, "13", new Vector2(25, 10)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, rollingSpeed, "14", new Vector2(40, 34)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, rollingSpeed, "15", new Vector2(45, 17)));
+                Scene.Add(new RockDebris(Position, sprite.Rotation, debrisSpriteDirectory, rollingSpeed, "16", new Vector2(63, 16)));
 
                 // And remove the rock. The debris will deal with the rest.
                 RemoveSelf();
@@ -221,9 +225,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
             private Image image;
             private float fade = 1f;
 
-            public RockDebris(Vector2 position, float rockOrientation, string spriteDirectory, string index, Vector2 debrisCenter) : base(position) {
+            public RockDebris(Vector2 position, float rockOrientation, string spriteDirectory, float rollingSpeed, string index, Vector2 debrisCenter) : base(position) {
                 // the debris will fly in the direction of the debris compared to the center.
-                speed = (debrisCenter - new Vector2(41, 41)).Rotate(rockOrientation) * 2 + SPEED * Vector2.UnitX + 20 * Vector2.UnitY;
+                speed = (debrisCenter - new Vector2(41, 41)).Rotate(rockOrientation) * 2 + rollingSpeed * Vector2.UnitX + 20 * Vector2.UnitY;
 
                 // spawn a static image oriented like the rock.
                 image = new Image(GFX.Game[$"{spriteDirectory}/debris_{index}"]);
