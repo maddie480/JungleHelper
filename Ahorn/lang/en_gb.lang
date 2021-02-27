@@ -82,6 +82,7 @@ placements.entities.JungleHelper/RollingRock.tooltips.debrisSpriteDirectory=The 
 placements.entities.JungleHelper/RollingRock.tooltips.flag=If specified, the rock will only start rolling if this flag is active. Leave empty if you don't want the rock to be triggered by a flag.
 placements.entities.JungleHelper/RollingRock.tooltips.rollingSpeed=The speed of the rock when it is moving to the right (in px/s).
 placements.entities.JungleHelper/RollingRock.tooltips.fallingSpeed=The cap speed of the rock when it is falling (in px/s).
+placements.entities.JungleHelper/RollingRock.tooltips.instantFalling=Whether the rock should start falling immediately after spawning. Otherwise, it will wait for the player to move and to be on the right of the rock.
 
 # Zip Moving Platforms
 placements.entities.JungleHelper/ZipMovingPlatform.tooltips.texture=What texture to use for the platform.

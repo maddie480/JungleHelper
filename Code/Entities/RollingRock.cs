@@ -54,6 +54,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private readonly float rollingSpeed;
         private readonly float fallingSpeedCap;
+        private readonly bool instantFalling;
 
         private Rectangle levelBounds;
 
@@ -68,6 +69,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             rollingSpeed = data.Float("rollingSpeed", 100f);
             fallingSpeedCap = data.Float("fallingSpeed", 200f);
+            instantFalling = data.Bool("instantFalling", false);
 
             Collider = new CircleColliderWithRectangles(32);
             Add(new PlayerCollider(onPlayer));
@@ -142,7 +144,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             if (!falling && !rolling) {
                 // we are waiting. fall down when player moved and is on the right.
                 Player player = Scene.Tracker.GetEntity<Player>();
-                if ((string.IsNullOrEmpty(flag) || SceneAs<Level>().Session.GetFlag(flag)) && player != null && !player.JustRespawned && player.X > Right) {
+                if ((string.IsNullOrEmpty(flag) || SceneAs<Level>().Session.GetFlag(flag)) && (instantFalling || (player != null && !player.JustRespawned && player.X > Right))) {
                     falling = true;
                 }
             }
