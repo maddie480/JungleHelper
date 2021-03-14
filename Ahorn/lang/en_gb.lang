@@ -163,3 +163,8 @@ placements.entities.JungleHelper/BreakablePot.tooltips.rupeeImage=The path to th
 # Swing Cassette Block
 placements.entities.JungleHelper/SwingCassetteBlock.tooltips.index=The colour of the cassette block.
 placements.entities.JungleHelper/SwingCassetteBlock.tooltips.tempo=The tempo of the cassette blocks. The first non 1 tempo cassette block decides the tempo for all cassette blocks in the room.
+
+# Cassette (Custom Preview Music)
+placements.entities.JungleHelper/CassetteCustomPreviewMusic.tooltips.musicEvent=The "B-side music preview" to play when the player collected the cassette. Vanilla uses "event:/game/general/cassette_preview".
+placements.entities.JungleHelper/CassetteCustomPreviewMusic.tooltips.musicParamName=The name of the parameter to apply to the "B-side music preview". The vanilla one is "remix".
+placements.entities.JungleHelper/CassetteCustomPreviewMusic.tooltips.musicParamValue=The value of the parameter to apply to the "B-side music preview". If you want vanilla B-side music, leave other settings to default and use 1-7 to get chapter 1-7 B-side music, and 9 to play chapter 8 B-side music.
