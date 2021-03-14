@@ -1,4 +1,5 @@
-﻿using Celeste.Mod.JungleHelper.Entities;
+﻿using Celeste.Mod.JungleHelper.Components;
+using Celeste.Mod.JungleHelper.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
 
@@ -27,6 +28,7 @@ namespace Celeste.Mod.JungleHelper {
             SwingCassetteBlock.Load();
             MossyWall.Load();
             CassetteCustomPreviewMusic.Load();
+            RainbowDecalComponent.Load();
 
             // let's tell Everest that sprite wipe textures loading on a separate thread is nothing to worry about.
             AssetReloadHelper.SilentThreadList.Add("Jungle Helper Sprite Wipe Loading Thread");
@@ -45,6 +47,7 @@ namespace Celeste.Mod.JungleHelper {
             SwingCassetteBlock.Unload();
             MossyWall.Unload();
             CassetteCustomPreviewMusic.Unload();
+            RainbowDecalComponent.Unload();
         }
 
         public override void LoadContent(bool firstLoad) {

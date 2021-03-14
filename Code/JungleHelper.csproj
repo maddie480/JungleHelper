@@ -94,6 +94,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Components\ComponentWithDepth.cs" />
+    <Compile Include="Components\RainbowDecalComponent.cs" />
     <Compile Include="Entities\AttachTriggerController.cs" />
     <Compile Include="Entities\AutoFallingBlockDelay.cs" />
     <Compile Include="Entities\BouncyShroom.cs" />
