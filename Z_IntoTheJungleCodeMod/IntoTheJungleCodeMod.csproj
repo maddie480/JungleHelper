@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="IntoTheJungleCodeModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RemovePlatformVerticalCollisionController.cs" />
     <Compile Include="TempleDoor.cs" />
     <Compile Include="TempleDoorCutscene.cs" />
     <Compile Include="TempleDoorRocks.cs" />
