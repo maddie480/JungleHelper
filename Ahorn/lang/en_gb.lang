@@ -168,3 +168,7 @@ placements.entities.JungleHelper/SwingCassetteBlock.tooltips.tempo=The tempo of 
 placements.entities.JungleHelper/CassetteCustomPreviewMusic.tooltips.musicEvent=The "B-side music preview" to play when the player collected the cassette. Vanilla uses "event:/game/general/cassette_preview".
 placements.entities.JungleHelper/CassetteCustomPreviewMusic.tooltips.musicParamName=The name of the parameter to apply to the "B-side music preview". The vanilla one is "remix".
 placements.entities.JungleHelper/CassetteCustomPreviewMusic.tooltips.musicParamValue=The value of the parameter to apply to the "B-side music preview". If you want vanilla B-side music, leave other settings to default and use 1-7 to get chapter 1-7 B-side music, and 9 to play chapter 8 B-side music.
+
+# Dragonfly
+placements.entities.JungleHelper/Dragonfly.tooltips.sprite=If you want to reskin the dragonfly, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+placements.entities.JungleHelper/Dragonfly.tooltips.wingsColor=The hex color to use for the color of the wings.

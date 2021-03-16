@@ -371,4 +371,13 @@
         <Loop id="idle" path="breakpotidle" />
         <Anim id="break" path="breakpot" delay="0.05" />
     </breakable_pot>
+
+    <dragonfly path="JungleHelper/Dragonfly/" start="idle">
+        <Origin x="0" y="0"/>
+        <!-- default animation, gets replaced by "body" or "wings" right away -->
+        <Anim id="idle" path="dragonfly_body" frames="0" />
+
+        <Loop id="body" path="dragonfly_body" delay="0.1" />
+        <Loop id="wings" path="dragonfly_wings" delay="0.1" />
+    </dragonfly>
 </Sprites>

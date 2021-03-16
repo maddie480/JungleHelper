@@ -12,6 +12,7 @@ This repository contains the helper and assets for the _Celeste: Into the Jungle
 - **Climbable One-Way Platform**: a platform you can grab on one side, but that you can also go through if you don't press Grab (contrary to sideways jumpthrus). This is useful to make ropes for example.
 - **Cobweb**: Madeline gets stuck in those if she hits them, and can only get out by dashing. Cobwebs are one-use: once Madeline dashed out, the cobweb disappears and does not respawn.
 - **Delayed Auto-Falling Block**: a falling block that falls automatically after a set delay. Also has customizable shake time before falling.
+- **Dragonfly**: a decorative entity with recolorable wings and randomized animation offset.
 - **Falling Killbox**: a killbox... except falling. Useful to prevent the player from going down too fast in a falling section.
 - **Firefly**: a flying dot that goes around and follows the player when touched, much like moon creatures.
 - **Grabless Golden Berry**: like the vanilla dashless golden berry, except it flies away when the player grabs on a wall.
