@@ -162,7 +162,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 base.Render();
 
                 if (parent.ghostVersion != null) {
-                    Draw.SpriteBatch.Draw(parent.ghostVersion, Position, Color.White * (0.4f + Ease.SineInOut(Calc.YoYo((time / 2f) % 1f)) * 0.2f));
+                    Draw.SpriteBatch.Draw(parent.ghostVersion, Position, Color.White * (0.20f + Ease.SineInOut(Calc.YoYo((time / 2f) % 1f)) * 0.15f));
                 }
             }
         }
