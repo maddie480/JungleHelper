@@ -199,10 +199,12 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private void poppingInBegin() {
             // the spider is now visible.
             Visible = true;
-            Collidable = true;
             light.Visible = true;
             spider.Play("idle_0");
             web.Play("idle");
+
+            // ... but it isn't collidable yet, it will become once the animation will have made some progress.
+            Collidable = false;
 
             // set up the spider pop position according to camera and player position.
             Position.X = Scene.Tracker.GetEntity<Player>()?.X ?? SceneAs<Level>().Camera.Left + 115f;
@@ -224,6 +226,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
             // ease the spider in.
             float progress = Calc.ClampedMap(stateDelay, SLIDE_DURATION, 0);
             cameraRelativeY = MathHelper.Lerp(-8f, SLIDE_DISTANCE, Ease.SineOut(progress));
+
+            // the spider will only be harmful after a bit.
+            Collidable = (progress > 0.6f);
 
             // also track the player at the same time if relevant.
             trackingUpdate();
