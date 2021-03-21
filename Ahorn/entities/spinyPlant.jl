@@ -4,7 +4,7 @@ using ..Ahorn, Maple
 
 @mapdef Entity "JungleHelper/SpinyPlant" SpinyPlant(x::Integer, y::Integer, height::Integer=16, color::String="Blue", sprite::String="")
 
-colors = ["Blue", "Pink", "Yellow"]
+colors = ["Blue", "Pink", "Yellow", "Orange"]
 
 const placements = Ahorn.PlacementDict(
     "Spiny Plant ($(color)) (Jungle Helper)" => Ahorn.EntityPlacement(
