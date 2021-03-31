@@ -43,7 +43,7 @@ const borderMultiplier = (0.9, 0.9, 0.9, 1)
 const frame = "objects/cassetteblock/solid"
 
 function getCassetteBlockRectangles(room::Maple.Room)
-    entities = filter(e -> e.name == "cassetteBlock", room.entities)
+    entities = filter(e -> e.name == "cassetteBlock" || e.name == "JungleHelper/SwingCassetteBlock", room.entities)
     rects = Dict{Int, Array{Ahorn.Rectangle, 1}}()
 
     for e in entities
