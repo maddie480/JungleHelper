@@ -1,7 +1,9 @@
 ﻿using Celeste.Editor;
 using Microsoft.Xna.Framework;
+using Mono.Cecil.Cil;
 using Monocle;
 using MonoMod.Cil;
+using MonoMod.RuntimeDetour;
 using MonoMod.Utils;
 using System;
 using System.Collections.Generic;
@@ -11,16 +13,24 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
     public class IntoTheJungleCodeModule : EverestModule {
         private static FieldInfo mapEditorLevelList = typeof(MapEditor).GetField("levels", BindingFlags.Instance | BindingFlags.NonPublic);
 
+        private static ILHook hookOuiFileSelectRender;
         public static SpriteBank SpriteBank;
 
         public override void Load() {
             On.Celeste.Editor.MapEditor.ctor += modHideMap;
             IL.Celeste.Overworld.Update += modOverworldUpdate;
+            On.Celeste.SaveData.AfterInitialize += updateChapter5Name;
+
+            hookOuiFileSelectRender = new ILHook(typeof(OuiFileSelectSlot).GetMethod("orig_Render"), patchChapter5NameOnFileSelectSlot);
         }
 
         public override void Unload() {
             On.Celeste.Editor.MapEditor.ctor -= modHideMap;
             IL.Celeste.Overworld.Update -= modOverworldUpdate;
+            On.Celeste.SaveData.AfterInitialize -= updateChapter5Name;
+
+            hookOuiFileSelectRender?.Dispose();
+            hookOuiFileSelectRender = null;
         }
 
         public override void LoadContent(bool firstLoad) {
@@ -60,6 +70,44 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
             levelData["shakeDirection"] = dir.SafeNormalize();
             levelData["lastDirectionalShake"] = 0;
             levelData["shakeTimer"] = Math.Max(levelData.Get<float>("shakeTimer"), time);
+        }
+
+        private void updateChapter5Name(On.Celeste.SaveData.orig_AfterInitialize orig, SaveData self) {
+            orig(self);
+
+            AreaData chapter5 = AreaData.Get("Into The Jungle/ch5");
+            if (chapter5 != null) {
+                if (self.FoundAnyCheckpoints(chapter5.ToKey())) {
+                    chapter5.Name = "Into_The_Jungle_ch5";
+                } else {
+                    chapter5.Name = "Into_The_Jungle_ch5_unrevealed";
+                }
+            }
+        }
+
+        private void patchChapter5NameOnFileSelectSlot(ILContext il) {
+            ILCursor cursor = new ILCursor(il);
+
+            while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdfld<AreaData>("Name"))) {
+                Logger.Log("IntoTheJungleCodeMod", $"Patching file select slot chapter name at {cursor.Index} in IL for OuiFileSelectSlot.orig_Render");
+
+                cursor.Emit(OpCodes.Ldarg_0);
+                cursor.EmitDelegate<Func<string, OuiFileSelectSlot, string>>((orig, self) => {
+                    if (orig == "Into The Jungle/ch5" || orig == "Into_The_Jungle_ch5" || orig == "Into_The_Jungle_ch5_unrevealed") {
+                        // show or hide the name depending on if a checkpoint was found or not.
+                        AreaData chapter5 = AreaData.Get("Into The Jungle/ch5");
+                        if (chapter5 != null) {
+                            if (self.SaveData.FoundAnyCheckpoints(chapter5.ToKey())) {
+                                return "Into_The_Jungle_ch5";
+                            } else {
+                                return "Into_The_Jungle_ch5_unrevealed";
+                            }
+                        }
+                    }
+
+                    return orig;
+                });
+            }
         }
     }
 }
