@@ -82,7 +82,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private Vector2 topCenter;
         private Vector2 shake;
         private Color[] distanceColors = DEFAULT_DISTANCE_BASED_COLORS;
-        private bool attachedToCassette = false;
 
         public MossyWall(EntityData data, Vector2 offset) : base(data.Position + offset) {
             bool left = data.Bool("left");
@@ -126,8 +125,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private bool checkAttachToSolid(Solid solid, bool left) {
             bool collides = CollideCheck(solid, Position + (left ? -2 : 2) * Vector2.UnitX);
             if (collides && solid is CassetteBlock cassetteBlock) {
-                attachedToCassette = true;
-
                 // check the color of the cassette block we're attached to, to apply it to the moss.
                 Color mossColor;
                 switch (cassetteBlock.Index) {
@@ -158,6 +155,13 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     Depth = -20000;
                     Scene.Entities.UpdateLists();
                 }));
+
+                // ... then, when the cassette block is done setting the depth,
+                // make sure the moss appears on top of it (because the cassette block moves it just behind).
+                Add(new PostUpdateHook(() => {
+                    Depth -= 2;
+                    Scene.Entities.UpdateLists();
+                }));
             }
 
             return collides;
@@ -171,14 +175,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
         public override void Update() {
             base.Update();
             updateLanternFade();
-
-            if (attachedToCassette) {
-                // the cassette block sets the depth of the moss at their own depth + 1. Turn that into their depth - 1 to have it display on top!
-                Scene.OnEndOfFrame += () => {
-                    Depth -= 2;
-                    Scene.Entities.UpdateLists();
-                };
-            }
         }
 
         private void updateLanternFade() {
