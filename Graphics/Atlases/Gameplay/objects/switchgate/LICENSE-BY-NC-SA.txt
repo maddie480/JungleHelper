@@ -1,0 +1,3 @@
+The assets in this folder are licensed using this license
+https://creativecommons.org/licenses/by-nc-sa/4.0/
+
