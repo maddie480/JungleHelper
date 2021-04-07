@@ -77,9 +77,17 @@
     <Compile Include="TempleDoor.cs" />
     <Compile Include="TempleDoorCutscene.cs" />
     <Compile Include="TempleDoorRocks.cs" />
+    <Compile Include="LanternHeartSpawner.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Code\JungleHelper.csproj">
+      <Project>{8f1a039d-37bd-4286-83c0-c30b747b9ceb}</Project>
+      <Name>JungleHelper</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

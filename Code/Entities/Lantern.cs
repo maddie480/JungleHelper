@@ -12,7 +12,7 @@ using System.Reflection;
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/Lantern")]
     [Tracked]
-    class Lantern : Actor {
+    public class Lantern : Actor {
         private static Hook hookCanDash;
 
         public static void Load() {
