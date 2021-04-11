@@ -27,12 +27,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private static IEnumerator onWatchtowerUse(On.Celeste.Lookout.orig_LookRoutine orig, Lookout self, Player player) {
             usingWatchtower = true;
-
-            IEnumerator origRoutine = orig(self, player);
-            while (origRoutine.MoveNext()) {
-                yield return origRoutine.Current;
-            }
-
+            yield return orig(self, player);
             usingWatchtower = false;
         }
 

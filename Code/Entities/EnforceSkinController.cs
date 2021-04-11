@@ -161,10 +161,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             }
 
             // just go on with vanilla behavior (other postcards, B-side intro, etc)
-            IEnumerator origEnum = orig(self);
-            while (origEnum.MoveNext()) {
-                yield return origEnum.Current;
-            }
+            yield return orig(self);
         }
 
         private static void addForceSkinsDisabledPostcardRendering(On.Celeste.LevelEnter.orig_BeforeRender orig, LevelEnter self) {
