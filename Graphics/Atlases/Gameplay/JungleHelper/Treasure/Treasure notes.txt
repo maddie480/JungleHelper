@@ -1,0 +1,31 @@
+Everything is a single frame animation unless noted.
+
+Idle animation:
+TreasureIdle00 to 11 (repeat)
+
+
+Key Interaction:
+1. When the player approaches with a key, we need the key to fly over to the treasure keyhole.
+
+2. The key can disappear when it reaches the Treasure, after playing TreasureIdle11.
+
+3. When the key disappears play
+	-TreasureKeyA00 thru 11 (2 times)
+	This is the Key rotating in the air in front of keyhole:
+4. Then play TreasureKeyB00 thru 09 (1 time)
+	TreasureKeyB07 should be 5 frames
+	
+
+Treasure Opening:
+TreasureOpen00 thru 07 (1 time)
+
+
+Heart Raising:
+TreasureOpenIdle00 thru 01 (repeat)
+
+Also you can use the "TreasureFace" decal to cover up the heart as it raises out.
+
+
+Heart Collect:
+After the Heart is collected, you can stop repeating "TreasureOpenIdle" animation.
+And simply show the decal "TreasureCollected"
