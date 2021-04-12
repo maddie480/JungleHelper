@@ -23,9 +23,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private readonly float delay;
         private readonly bool left = false;
-        private readonly BirdTutorialGui gui;
+        private readonly BirdTutorialGui[] guis;
         public readonly string GeckoId;
         private readonly bool hostile;
+
+        private Coroutine birdTutorialScrollRoutine;
 
         public Gecko(Vector2 position, bool hostile, bool left, Vector2 node, float delay, string geckoId, string info, string controls, string reskinName) : base(position) {
             this.node = node;
@@ -46,15 +48,26 @@ namespace Celeste.Mod.JungleHelper.Entities {
             if (!string.IsNullOrEmpty(info) || !string.IsNullOrEmpty(controls)) {
                 Add(new VertexLight(new Vector2(0f, -8f), Color.White, 1f, 8, 32));
 
-                // just leave Custom Bird Tutorial deal with the parsing, then steal the result from it.
-                CustomBirdTutorial caw = new CustomBirdTutorial(new EntityData() {
-                    Values = new Dictionary<string, object>() { { "info", info }, { "controls", controls } },
-                    Level = AreaData.Areas[0].Mode[0].MapData.Levels[0], // I just want some random level data to dodge NREs please
-                    ID = -1
-                }, Vector2.Zero);
-                gui = new DynData<CustomBirdTutorial>(caw).Get<BirdTutorialGui>("gui");
-                gui.Entity = this;
-                gui.Position = new Vector2(left ? -4f : 4f, -20f);
+                // split infos and controls separated in multiple screens with | characters.
+                string[] infoPages = info.Split('|');
+                string[] controlPages = controls.Split('|');
+
+                guis = new BirdTutorialGui[Math.Max(infoPages.Length, controlPages.Length)];
+                for (int i = 0; i < guis.Length; i++) {
+                    // if info or controls gets out of bounds, just consider them empty.
+                    string thisInfo = infoPages.Length > i ? infoPages[i] : "";
+                    string thisControl = controlPages.Length > i ? controlPages[i] : "";
+
+                    // just leave Custom Bird Tutorial deal with the parsing, then steal the result from it.
+                    CustomBirdTutorial caw = new CustomBirdTutorial(new EntityData() {
+                        Values = new Dictionary<string, object>() { { "info", thisInfo }, { "controls", thisControl } },
+                        Level = AreaData.Areas[0].Mode[0].MapData.Levels[0], // I just want some random level data to dodge NREs please
+                        ID = -1
+                    }, Vector2.Zero);
+                    guis[i] = new DynData<CustomBirdTutorial>(caw).Get<BirdTutorialGui>("gui");
+                    guis[i].Entity = this;
+                    guis[i].Position = new Vector2(left ? -4f : 4f, -20f);
+                }
             }
 
             startPosition = Position;
@@ -93,16 +106,20 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
                 TriggerShowTutorial();
             }
-
-            if (gui != null) {
-                scene.Add(gui);
-            }
         }
 
         public void TriggerShowTutorial() {
-            if (!triggered && gui != null) {
+            if (!triggered && guis != null) {
                 triggered = true;
-                gui.Open = true;
+
+                if (guis.Length == 1) {
+                    // open the tutorial
+                    Scene.Add(guis[0]);
+                    guis[0].Open = true;
+                } else {
+                    // run the routine that will switch between all pages.
+                    Add(birdTutorialScrollRoutine = new Coroutine(showAllTutorialsCoroutine()));
+                }
 
                 moving = false;
                 sprite.Play("idle");
@@ -110,11 +127,62 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         public void TriggerHideTutorial() {
-            if (triggered && !showedTutorial && gui != null) {
+            if (triggered && !showedTutorial && guis != null) {
                 showedTutorial = true;
-                gui.Open = false;
+
+                if (guis.Length == 1) {
+                    // close the tutorial
+                    guis[0].Open = false;
+                } else {
+                    // close all tutorials and stop the coroutine that switches between them.
+                    birdTutorialScrollRoutine?.RemoveSelf();
+                    foreach (BirdTutorialGui gui in guis) {
+                        gui.Open = false;
+                    }
+                }
 
                 moving = true;
+            }
+        }
+
+        private IEnumerator showAllTutorialsCoroutine() {
+            while (true) {
+                // show first page
+                Scene.Add(guis[0]);
+                guis[0].Open = true;
+                while (guis[0].Scale < 1f) {
+                    yield return null;
+                }
+
+                // wait
+                yield return 2f;
+
+                for (int i = 1; i < guis.Length; i++) {
+                    // show page N
+                    guis[i].Open = true;
+                    guis[i].Scale = 1f;
+                    Scene.Add(guis[i]);
+                    yield return null;
+
+                    // hide page N - 1
+                    guis[i - 1].Open = false;
+                    guis[i - 1].Scale = 0f;
+                    Scene.Remove(guis[i - 1]);
+
+                    // wait
+                    yield return 2f;
+                }
+
+                // hide last page
+                int lastGui = guis.Length - 1;
+                guis[lastGui].Open = false;
+                while (guis[lastGui].Scale > 0f) {
+                    yield return null;
+                }
+                Scene.Remove(guis[lastGui]);
+
+                // wait
+                yield return 2f;
             }
         }
 
