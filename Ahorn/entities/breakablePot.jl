@@ -2,7 +2,7 @@ module JungleHelperBreakablePot
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/BreakablePot" BreakablePot(x::Integer, y::Integer, sprite::String="", rupeeImage::String="JungleHelper/Breakable Pot/rupee")
+@mapdef Entity "JungleHelper/BreakablePot" BreakablePot(x::Integer, y::Integer, sprite::String="", rupeeImage::String="JungleHelper/Breakable Pot/rupee", containsKey::Bool=false)
 
 const placements = Ahorn.PlacementDict(
     "Breakable Pot (Jungle Helper)" => Ahorn.EntityPlacement(

@@ -13,12 +13,20 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private Vector2 speed;
 
-        public BreakablePot(EntityData data, Vector2 offset) : base(data.Position + offset) {
-            // set up the rupee first, so that it is behind the pot.
-            Add(rupee = new Image(GFX.Game[data.Attr("rupeeImage", "JungleHelper/Breakable Pot/rupee")]));
-            rupee.CenterOrigin();
-            rupee.Y = -8;
-            rupee.X = 1;
+        private readonly EntityID potID;
+        private readonly bool containsKey;
+
+        public BreakablePot(EntityData data, Vector2 offset, EntityID id) : base(data.Position + offset) {
+            containsKey = data.Bool("containsKey", defaultValue: false);
+            potID = id;
+
+            if (!containsKey) {
+                // set up the rupee first, so that it is behind the pot.
+                Add(rupee = new Image(GFX.Game[data.Attr("rupeeImage", "JungleHelper/Breakable Pot/rupee")]));
+                rupee.CenterOrigin();
+                rupee.Y = -8;
+                rupee.X = 1;
+            }
 
             // set up the pot sprite.
             Add(sprite = JungleHelperModule.CreateReskinnableSprite(data, "breakable_pot"));
@@ -74,10 +82,14 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 Remove(hold);
                 hold = null;
 
-                // play breaking animation and sound, and animate the rupee.
+                // play breaking animation and sound, and animate the rupee (or spawn the key).
                 sprite.Play("break");
                 Add(new SoundSource("event:/junglehelper/sfx/ch2_secret_ding"));
-                Add(new Coroutine(animateRupeeRoutine()));
+                if (containsKey) {
+                    Add(new Coroutine(animateKeyRoutine()));
+                } else {
+                    Add(new Coroutine(animateRupeeRoutine()));
+                }
             }
         }
 
@@ -100,6 +112,33 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 rupee.Color = Color.White * a;
                 yield return null;
                 a -= 4f * Engine.DeltaTime;
+            }
+
+            // entity is now invisible so it can go away.
+            RemoveSelf();
+        }
+
+        private IEnumerator animateKeyRoutine() {
+            // spawn the key!
+            Key key = new Key(Center, potID, new Vector2[0]);
+            key.Depth = 1;
+            Scene.Add(key);
+
+            // animate it (stopping the animation if the key is grabbed).
+            float p = 0f;
+            while (p < 1f && key.Collidable) {
+                key.Y = Center.Y - 5 - Ease.CubeOut(p) * 20f;
+                yield return null;
+                p += 3f * Engine.DeltaTime;
+            }
+            if (key.Collidable) {
+                key.Y = Center.Y - 25f;
+                key.Depth = 0;
+            }
+
+            // wait until the pot animation is finished
+            while (sprite.Animating) {
+                yield return null;
             }
 
             // entity is now invisible so it can go away.
