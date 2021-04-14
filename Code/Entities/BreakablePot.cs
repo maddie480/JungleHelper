@@ -84,10 +84,12 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
                 // play breaking animation and sound, and animate the rupee (or spawn the key).
                 sprite.Play("break");
-                Add(new SoundSource("event:/junglehelper/sfx/ch2_secret_ding"));
                 if (containsKey) {
-                    Add(new Coroutine(animateKeyRoutine()));
+                    SoundSource sound = new SoundSource("event:/junglehelper/sfx/pot_ding") { RemoveOnOneshotEnd = true };
+                    Add(sound);
+                    Add(new Coroutine(animateKeyRoutine(sound)));
                 } else {
+                    Add(new SoundSource("event:/junglehelper/sfx/ch2_secret_ding"));
                     Add(new Coroutine(animateRupeeRoutine()));
                 }
             }
@@ -118,7 +120,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             RemoveSelf();
         }
 
-        private IEnumerator animateKeyRoutine() {
+        private IEnumerator animateKeyRoutine(SoundSource sound) {
             // spawn the key!
             Key key = new Key(Center, potID, new Vector2[0]);
             key.Depth = 1;
@@ -141,7 +143,12 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 yield return null;
             }
 
-            // entity is now invisible so it can go away.
+            // wait for sound to end
+            while (sound.Scene != null) {
+                yield return null;
+            }
+
+            // entity is now invisible and doesn't emit any sound so it can go away.
             RemoveSelf();
         }
     }
