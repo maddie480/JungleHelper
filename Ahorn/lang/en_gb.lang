@@ -173,3 +173,6 @@ placements.entities.JungleHelper/CassetteCustomPreviewMusic.tooltips.musicParamV
 # Dragonfly
 placements.entities.JungleHelper/Dragonfly.tooltips.sprite=If you want to reskin the dragonfly, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
 placements.entities.JungleHelper/Dragonfly.tooltips.wingsColor=The hex color to use for the color of the wings.
+
+# Treasure Chest
+placements.entities.JungleHelper/TreasureChest.tooltips.sprite=If you want to reskin the treasure chest, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.

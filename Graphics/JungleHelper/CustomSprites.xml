@@ -380,4 +380,13 @@
         <Loop id="body" path="dragonfly_body" delay="0.1" />
         <Loop id="wings" path="dragonfly_wings" delay="0.1" />
     </dragonfly>
+
+    <treasure_chest path="JungleHelper/Treasure/" start="closed">
+        <Center />
+        <Loop id="closed" path="TreasureIdle" delay="0.1" frames="0-11" />
+        <Anim id="openChest" path="TreasureOpen" delay="0.06" frames="0-7" goto="open" />
+        <Loop id="face" path="TreasureFace" frames="0" />
+        <Loop id="open" path="TreasureOpenIdle" delay="0.1" frames="0-1" />
+        <Loop id="collected" path="TreasureCollected" frames="0" />
+    </treasure_chest>
 </Sprites>

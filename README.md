@@ -6,7 +6,7 @@ This repository contains the helper and assets for the _Celeste: Into the Jungle
 
 - **Attach Trigger Controller**: a controller allowing to attach any trigger to any entity. Place the "T" on the trigger, and the "E" on the entity. If you need filters (because entities or triggers overlap), you can use the controller's properties.
 - **Bouncy Shroom**: a mushroom that bounces Madeline. Comes in up, up-left and up-right variants.
-- **Breakable Pot**: a pot you can throw on the ground or on a wall to get a rupee... that does nothing.
+- **Breakable Pot**: a pot you can throw on the ground or on a wall to get either a key to open doors, or... a rupee that does nothing.
 - **Cassette with Custom Preview Music**: works like a cassette, except you can pick which music event is played when you collect the cassette (if you have custom B-side music), or pick which of the vanilla B-side songs to use.
 - **Cockatiel**: a decorative entity working much like vanilla flutter birds.
 - **Climbable One-Way Platform**: a platform you can grab on one side, but that you can also go through if you don't press Grab (contrary to sideways jumpthrus). This is useful to make ropes for example.
@@ -32,6 +32,7 @@ This repository contains the helper and assets for the _Celeste: Into the Jungle
 - **Spider Boss**: a spider that falls down from the top of the screen, killing Madeline if she hits it. The spider color determines its difficulty: Blue, Purple and Red in this order, with Red being the one falling the most often, and tracking the player at the fastest speed.
 - **Swing Cassette Block**: cassette blocks that play their music in a 66-34-66-34... pattern instead of 50-50-50-50...
 - **Torch**: a torch that sets a session flag when Madeline lights it by touching it.
+- **Treasure Chest**: a chest that opens with a key, and spawns a crystal heart when open.
 - **Zip Moving Platform**: a moving platform behaving much like a zip mover.
 
 ## Custom Triggers
