@@ -492,7 +492,8 @@
 {7c01de41-a31a-43c3-9c0f-9ae85ad94c68} event:/game/general/wall_break_ice
 {92f75010-4e90-428e-834c-1315ddbd9460} event:/game/general/wall_break_stone
 {634bdd66-3f53-4679-8ced-fadfc60d412f} event:/game/general/wall_break_wood
-{b799ced6-afce-4b5f-b0cf-8028fb86581e} event:/ITJ_Bside_remixes/CH1_by_Kodiak4LIFE
+{4e98fa11-63ad-4aba-9e1a-c41458c12f5c} event:/ITJ_Bside_remixes/cassette_preview
+{b799ced6-afce-4b5f-b0cf-8028fb86581e} event:/ITJ_Bside_remixes/CH1_by_Tensai
 {9bf252bd-22f9-42aa-9e47-7d2bf21fe4ea} event:/ITJ_Bside_remixes/CH2_By_Tortoise
 {c283b296-84b7-4012-8cc3-6b6608f971b0} event:/ITJ_Bside_remixes/CH3_By_Nikko
 {2e73272c-d5a0-4cf9-be2f-562194b0d2ae} event:/ITJ_Bside_remixes/CH4_By_Cephx_
@@ -505,6 +506,7 @@
 {aab9c0da-f829-4b96-bdab-5d7e18671fd8} event:/JungleAmbient_tg90/ch5
 {28210d80-59c4-4548-90f4-15b66a7bedff} event:/junglehelper/sfx/BoulderBoss_Break
 {32091a97-b71a-4621-af1b-9a4ff50fec04} event:/junglehelper/sfx/BoulderBoss_impact
+{c3d79583-11f8-401d-af27-04911ab64a20} event:/junglehelper/sfx/ch2_secret_ding
 {704b001d-b023-4815-9546-6b61c2473dfb} event:/junglehelper/sfx/Cobweb_Entry
 {fbc780e1-b5cb-4ba5-a78e-9c8542c43270} event:/junglehelper/sfx/Cobweb_Snap
 {42c50378-59d9-4214-ae02-b2df2d72e614} event:/junglehelper/sfx/Hawk_Flap
@@ -516,11 +518,19 @@
 {1a059f27-5954-4c93-9827-b6fa0af25051} event:/junglehelper/sfx/SpiderBoss_Snap
 {3ade7542-1f8a-4a42-add5-bc9c2545671a} event:/junglehelper/sfx/spiny_appear
 {aeab4ad7-fc86-443a-bf53-5271fd4be965} event:/junglehelper/sfx/spiny_dissapear
-{2fac677a-8da6-4f7a-a223-0ab60b39ee2a} event:/junglehelper/sfx/Zip_platform
 {64340158-38cb-4d13-96e9-49c38e000578} event:/junglehelper/sfx/templedoor_cutscene_slam
-{c3d79583-11f8-401d-af27-04911ab64a20} event:/junglehelper/sfx/ch2_secret_ding
+{2fac677a-8da6-4f7a-a223-0ab60b39ee2a} event:/junglehelper/sfx/Zip_platform
+{ce527e7c-1ed9-4206-8110-37000280ee2c} event:/junglehelper/sfx/pot_ding
 {4e183293-be8c-450f-bf67-4fbdcfefbfc0} event:/JungleMusicByTg90/cassette/ch1
+{4a967747-c464-4506-b69d-923d2a13e05e} event:/JungleMusicByTg90/cassette/ch2
+{cbde5ebe-ef55-42c9-a763-4d2a9b6acac0} event:/JungleMusicByTg90/cassette/ch3
+{a8cd6194-00ad-4f29-a78d-c806be96115d} event:/JungleMusicByTg90/cassette/ch4
+{71a0344d-21b4-4678-ac8b-08a93c3cce89} event:/JungleMusicByTg90/cassette/ch5
 {ea700811-7081-4e65-9f73-dbdbf0c5730e} event:/JungleMusicByTg90/cassette/template
+{09dfddc0-b8a1-45be-8417-a7d5e54e21f9} event:/JungleMusicByTg90/endscreen/Aside ch5
+{2a4baa94-e759-4f71-a7bd-21fd7be90739} event:/JungleMusicByTg90/endscreen/Aside
+{1c10b0d0-8877-445c-9357-b3687f3c297b} event:/JungleMusicByTg90/endscreen/Bside ch5
+{d58b1bde-7dbd-4e3b-8b94-4490b06eb33d} event:/JungleMusicByTg90/endscreen/Bside
 {cde6e164-e252-43df-a84c-674db1dfb09e} event:/JungleMusicByTg90/tg90_cjc_c1
 {9abe2967-eb39-4f96-9d05-aa30a3407765} event:/JungleMusicByTg90/tg90_cjc_c2_p1
 {852289da-99ed-4b97-97b5-08309cfc6393} event:/JungleMusicByTg90/tg90_cjc_c2_p2
@@ -532,6 +542,7 @@
 {ddb9e8db-0d93-4424-8036-0eb389369618} event:/JungleMusicByTg90/tg90_cjc_overworld001
 {74fbe736-91fb-44d3-9f2d-6a2181dfcd65} event:/JungleMusicByTg90/tg90_cjc_prologue
 {4d8d8d80-f94a-4ff4-b1d7-25e3674dbf0c} event:/JungleMusicByTg90/tg90_cjc_template
+{bb462ab7-aa7e-4737-9347-e78ecc694d70} event:/JungleMusicByTg90/Untitled.jpeg
 {8e19bca6-3d66-4405-9dfa-1e4bf030eab4} event:/LunaticHelper/BerryGate_Fill
 {f96588da-d6ad-40a5-b53a-2cbb2c726ca2} event:/LunaticHelper/GoldenGate_Fill
 {d688294f-4061-44b2-8522-b2ed6af615ba} event:/LunaticHelper/GoldenGate_Open
@@ -736,6 +747,7 @@
 {b5fd173e-9a58-4412-9be1-094108b82157} event:/state/cafe_computer_active
 {d85a0635-cbcf-4ba3-8466-b6e24aa45894} event:/state/underwater
 {d5dda0fc-4742-448d-9a38-6d1187d16c35} event:/tg90_UH/001
+{b43ee113-e863-490e-b1c2-9b444900a00c} event:/tg90flcc_boxkaizo/001
 {c4d2289a-859e-42e9-ba38-eee1791a3a62} event:/ui/game/chatoptions_appear
 {dd4cb027-0132-4039-9303-c9ad8589683e} event:/ui/game/chatoptions_roll_down
 {1b030b2e-c125-40d5-b582-5819c6c29584} event:/ui/game/chatoptions_roll_up
@@ -1070,6 +1082,7 @@
 {98263171-3ea2-482b-abb7-9af01e4c002a} bank:/sfx
 {ed4d4765-2013-409b-b298-40ffe6fbef78} bank:/tg90_Canadian_UH
 {6968e21c-aa32-4ff2-81fc-8078625555da} bank:/tg90_NLH_iamdadbod_sanctuary
+{064d384b-4bda-4839-9b41-c5f7cbe0649d} bank:/tg90flccboxkaizo
 {f0efde81-92ec-4f1a-8b48-815f4d8a3255} bank:/ui
 {6e44066e-2513-4dd3-9544-2e7e3d1570e0} bank:/Unassigned
 {8718cdd3-d53a-42ef-9522-b93dda1ee959} bank:/why
