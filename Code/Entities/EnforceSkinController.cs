@@ -161,7 +161,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             }
 
             // just go on with vanilla behavior (other postcards, B-side intro, etc)
-            yield return orig(self);
+            yield return new SwapImmediately(orig(self));
         }
 
         private static void addForceSkinsDisabledPostcardRendering(On.Celeste.LevelEnter.orig_BeforeRender orig, LevelEnter self) {
