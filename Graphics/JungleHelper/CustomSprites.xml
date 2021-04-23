@@ -389,4 +389,13 @@
         <Loop id="open" path="TreasureOpenIdle" delay="0.1" frames="0-1" />
         <Loop id="collected" path="TreasureCollected" frames="0" />
     </treasure_chest>
+	
+	<crab_small path="JungleHelper/CrabSmall/" start="idleA">
+        <Center/>
+        <Anim id="idleA" path="IdleA" frames="0*3,1" delay="0.1" goto="idleA:8,idleAltA:1"/>
+        <Anim id="idleAltA" path="AltA" frames="0-18" delay="0.1" goto="idleB"/>
+		<Anim id="idleB" path="IdleB" frames="0*5" delay="0.1" goto="idleB:7,idleAltB:1"/>
+        <Anim id="idleAltB" path="AltB" frames="0-15" delay="0.1" goto="idleA"/>
+	</crab_small>
+	
 </Sprites>
