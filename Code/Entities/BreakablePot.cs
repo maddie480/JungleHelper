@@ -125,16 +125,19 @@ namespace Celeste.Mod.JungleHelper.Entities {
             Key key = new Key(Center, potID, new Vector2[0]);
             key.Depth = 1;
             Scene.Add(key);
+            yield return null; // make sure the key is actually added to the scene by waiting for a frame
 
             // animate it (stopping the animation if the key is grabbed).
             float p = 0f;
-            while (p < 1f && key.Collidable) {
+            while (p < 1f && key.Collidable && !key.CollideCheck<Solid>()) {
                 key.Y = Center.Y - 5 - Ease.CubeOut(p) * 20f;
                 yield return null;
                 p += 3f * Engine.DeltaTime;
             }
             if (key.Collidable) {
-                key.Y = Center.Y - 25f;
+                if (!key.CollideCheck<Solid>()) {
+                    key.Y = Center.Y - 25f;
+                }
                 key.Depth = 0;
             }
 
