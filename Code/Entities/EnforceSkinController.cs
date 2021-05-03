@@ -28,6 +28,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private static bool disabledKaydenSkin = false;
         private static bool forceKaydenSkinDisabled = false;
 
+        private static string disabledSkinModHelperSkin = null;
+        private static bool forceSkinModHelperDisabled = false;
+
         private static bool skinsDisabled = false;
 
         private static bool showForceSkinsDisabledPostcard = false;
@@ -104,7 +107,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private static void checkForSkinReset(Session session) {
-            if (!skinsDisabled && !forceMarioSkinDisabled && !forceBananaSkinDisabled && !forceKaydenSkinDisabled
+            if (!skinsDisabled && !forceMarioSkinDisabled && !forceBananaSkinDisabled && !forceKaydenSkinDisabled && !forceSkinModHelperDisabled
                 && AreaData.Areas.Count > session.Area.ID && AreaData.Areas[session.Area.ID].Mode.Length > (int) session.Area.Mode
                 && AreaData.Areas[session.Area.ID].Mode[(int) session.Area.Mode] != null) {
 
@@ -142,7 +145,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
                         resetKaydenSkin();
                     }
 
-                    if (skinsDisabled || disabledMarioSkin || disabledBananaSkin || disabledKaydenSkin) {
+                    if (Everest.Loader.DependencyLoaded(new EverestModuleMetadata { Name = "SkinModHelper", Version = new Version(0, 5) })) {
+                        resetSkinModHelperSkin();
+                    }
+
+                    if (skinsDisabled || disabledMarioSkin || disabledBananaSkin || disabledKaydenSkin || disabledSkinModHelperSkin != null) {
                         showForceSkinsDisabledPostcard = controllerData == null || controllerData.Bool("showPostcard", true);
                     }
                 }
@@ -188,6 +195,15 @@ namespace Celeste.Mod.JungleHelper.Entities {
             if (disabledKaydenSkin) {
                 restoreKaydenSkin();
             }
+
+            if (disabledSkinModHelperSkin != null) {
+                restoreSkinModHelperSkin();
+            }
+
+            forceMarioSkinDisabled = false;
+            forceBananaSkinDisabled = false;
+            forceKaydenSkinDisabled = false;
+            forceSkinModHelperDisabled = false;
         }
 
         private static void onLevelExit(On.Celeste.LevelExit.orig_ctor orig, LevelExit self, LevelExit.Mode mode, Session session, HiresSnow snow) {
@@ -291,7 +307,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             MarioSkin.MarioSkin.Settings.SkinEnabled = disabledMarioSkin;
             disabledMarioSkin = false;
-            forceMarioSkinDisabled = false;
         }
 
         private static void resetBananaSkin() {
@@ -306,7 +321,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             ProBananaSkin.ProBananaSkinModule.Settings.Enabled = disabledBananaSkin;
             disabledBananaSkin = false;
-            forceBananaSkinDisabled = false;
         }
 
         private static void resetKaydenSkin() {
@@ -321,7 +335,23 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             KaydenSpriteMod.KaydenSpriteModule.Settings.Enabled = disabledKaydenSkin;
             disabledKaydenSkin = false;
-            forceKaydenSkinDisabled = false;
+        }
+
+        private static void resetSkinModHelperSkin() {
+            Logger.Log(LogLevel.Info, "JungleHelper/EnforceSkinController", "Skin Mod Helper is force-disabled from now");
+            disabledSkinModHelperSkin = SkinModHelper.Module.SkinModHelperModule.Settings.SelectedSkinMod;
+            if (disabledSkinModHelperSkin == SkinModHelper.SkinModHelperConfig.DEFAULT_SKIN) {
+                disabledSkinModHelperSkin = null;
+            }
+            SkinModHelper.Module.SkinModHelperModule.Settings.SelectedSkinMod = SkinModHelper.SkinModHelperConfig.DEFAULT_SKIN;
+            forceSkinModHelperDisabled = true;
+        }
+
+        private static void restoreSkinModHelperSkin() {
+            Logger.Log(LogLevel.Info, "JungleHelper/EnforceSkinController", $"Restoring old status of Skin Mod Helper: {disabledSkinModHelperSkin}");
+
+            SkinModHelper.Module.SkinModHelperModule.Settings.SelectedSkinMod = disabledSkinModHelperSkin;
+            disabledSkinModHelperSkin = null;
         }
 
         private static void greyOutCodeModSkinToggles(On.Celeste.Mod.EverestModule.orig_CreateModMenuSection orig, EverestModule self, TextMenu menu, bool inGame, EventInstance snapshot) {
@@ -334,6 +364,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             if (forceBananaSkinDisabled && self.GetType().FullName == "Celeste.Mod.ProBananaSkin.ProBananaSkinModule") {
                 // disable the Banana Skin toggle.
+                menu.Items[menu.Items.Count - 1].Disabled = true;
+            }
+
+            if (forceSkinModHelperDisabled && self.GetType().FullName == "SkinModHelper.Module.SkinModHelperModule") {
+                // disable the Skin Mod Helper toggle.
                 menu.Items[menu.Items.Count - 1].Disabled = true;
             }
         }
