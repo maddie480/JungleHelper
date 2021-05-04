@@ -90,6 +90,12 @@ namespace Celeste.Mod.JungleHelper {
             };
         }
 
+        public override void PrepareMapDataProcessors(MapDataFixup context) {
+            base.PrepareMapDataProcessors(context);
+
+            context.Add<JungleHelperMapDataProcessor>();
+        }
+
         public override void LoadSession(int index, bool forceNew) {
             base.LoadSession(index, forceNew);
 

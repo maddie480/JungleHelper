@@ -116,6 +116,7 @@
     <Compile Include="Entities\SwingCassetteBlock.cs" />
     <Compile Include="Entities\Torch.cs" />
     <Compile Include="Entities\TreasureChest.cs" />
+    <Compile Include="JungleHelperMapDataProcessor.cs" />
     <Compile Include="JungleHelperSession.cs" />
     <Compile Include="SpriteWipe.cs" />
     <Compile Include="SpriteWipeLoadingScreen.cs" />

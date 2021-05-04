@@ -47,6 +47,12 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
             SpriteBank = new SpriteBank(GFX.Game, "Graphics/IntoTheJungleCodeMod/Sprites.xml");
         }
 
+        public override void PrepareMapDataProcessors(MapDataFixup context) {
+            base.PrepareMapDataProcessors(context);
+
+            context.Add<IntoTheJungleMapDataProcessor>();
+        }
+
         private static void modHideMap(On.Celeste.Editor.MapEditor.orig_ctor orig, MapEditor self, AreaKey area, bool reloadMapData) {
             orig(self, area, reloadMapData);
 
