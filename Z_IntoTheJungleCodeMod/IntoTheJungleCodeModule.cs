@@ -11,10 +11,19 @@ using System.Reflection;
 
 namespace Celeste.Mod.IntoTheJungleCodeMod {
     public class IntoTheJungleCodeModule : EverestModule {
+        public override Type SaveDataType => typeof(IntoTheJungleSaveData);
+        public static IntoTheJungleCodeModule Instance;
+
+        public static HashSet<string> EndingDialogueBlacklist => ((IntoTheJungleSaveData) Instance._SaveData).EndingDialogueBlacklist;
+
         private static FieldInfo mapEditorLevelList = typeof(MapEditor).GetField("levels", BindingFlags.Instance | BindingFlags.NonPublic);
 
         private static ILHook hookOuiFileSelectRender;
         public static SpriteBank SpriteBank;
+
+        public IntoTheJungleCodeModule() {
+            Instance = this;
+        }
 
         public override void Load() {
             On.Celeste.Editor.MapEditor.ctor += modHideMap;
