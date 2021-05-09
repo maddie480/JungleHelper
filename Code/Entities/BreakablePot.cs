@@ -44,6 +44,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private void onPickup() {
             speed = Vector2.Zero;
             AddTag(Tags.Persistent);
+
+            // give the pot the same hitbox width as Madeline, odd stuff is going to happen otherwise.
+            Collider.Width = 8f;
+            Collider.Position.X = -4f;
         }
 
         private void onRelease(Vector2 force) {
@@ -52,6 +56,32 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 force.Y = -0.4f;
             }
             speed = force * 200f;
+
+            // restore the normal pot hitbox.
+            Collider.Width = 17f;
+            Collider.Position.X = -8f;
+
+            // vanilla code ensured we weren't in a wall before, by dragging the pot down.
+            // if **now** we're colliding with a wall, we should move the pot out of it horizontally!
+            if (CollideCheck<Solid>()) {
+                // try to move the pot by increasing distances, and stop when we got out of the wall (by 100px max, just in case).
+                int displacement = 0;
+                for (int safe = 0; safe < 100; safe++) {
+                    displacement++;
+
+                    // move it left?
+                    if (!CollideCheck<Solid>(Position - Vector2.UnitX * displacement)) {
+                        Position -= Vector2.UnitX * displacement;
+                        break;
+                    }
+
+                    // move it right?
+                    if (!CollideCheck<Solid>(Position + Vector2.UnitX * displacement)) {
+                        Position += Vector2.UnitX * displacement;
+                        break;
+                    }
+                }
+            }
         }
 
         public override void Update() {
@@ -121,24 +151,38 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private IEnumerator animateKeyRoutine(SoundSource sound) {
-            // spawn the key!
+            // spawn the key! it shouldn't be collectable by the player, though.
             Key key = new Key(Center, potID, new Vector2[0]);
             key.Depth = 1;
+            key.Collidable = false;
             Scene.Add(key);
             yield return null; // make sure the key is actually added to the scene by waiting for a frame
 
-            // animate it (stopping the animation if the key is grabbed).
+            // animate it coming out of the pot.
             float p = 0f;
-            while (p < 1f && key.Collidable && !key.CollideCheck<Solid>()) {
+            while (p < 1f && !key.CollideCheck<Solid>()) {
                 key.Y = Center.Y - 5 - Ease.CubeOut(p) * 20f;
                 yield return null;
                 p += 3f * Engine.DeltaTime;
             }
-            if (key.Collidable) {
-                if (!key.CollideCheck<Solid>()) {
-                    key.Y = Center.Y - 25f;
-                }
-                key.Depth = 0;
+
+            // set final position.
+            if (!key.CollideCheck<Solid>()) {
+                key.Y = Center.Y - 25f;
+            }
+
+            // auto collect the key if player is still alive.
+            Player player = Scene.Tracker.GetEntity<Player>();
+            if (player != null) {
+                SceneAs<Level>().Particles.Emit(Key.P_Collect, 10, key.Position, Vector2.One * 3f);
+                player.Leader.GainFollower(key.Get<Follower>());
+                Collidable = false;
+                Session session = SceneAs<Level>().Session;
+                session.DoNotLoad.Add(key.ID);
+                session.Keys.Add(key.ID);
+                session.UpdateLevelStartDashes();
+                key.Get<Wiggler>().Start();
+                key.Depth = -1000000;
             }
 
             // wait until the pot animation is finished
