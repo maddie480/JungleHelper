@@ -213,7 +213,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 }
             }
 
-            Collider = new ColliderList(enabledHitboxes.ToArray());
+            if (enabledHitboxes.Count == 0) {
+                Collider = null;
+            } else {
+                Collider = new ColliderList(enabledHitboxes.ToArray());
+            }
         }
 
         public override void Render() {
