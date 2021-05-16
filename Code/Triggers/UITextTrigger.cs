@@ -10,6 +10,7 @@ namespace Celeste.Mod.JungleHelper.Triggers {
         private VirtualRenderTarget textTarget;
         private bool disposed = false;
         private string text;
+        private bool newlineApplied = false;
         private Vector2 textOffset;
 
         public float Alpha = 0f;
@@ -27,8 +28,9 @@ namespace Celeste.Mod.JungleHelper.Triggers {
 
         private void drawText(Vector2 offset, Color color) {
             if (!SceneAs<Level>().FrozenOrPaused) {
-                if (text != null) {
+                if (text != null && !newlineApplied) {
                     text = ActiveFont.FontSize.AutoNewline(text, 1024);
+                    newlineApplied = true;
                 }
                 Vector2 position = new Vector2(960f, 540f) + offset + textOffset;
                 ActiveFont.Draw(text, position, new Vector2(0.5f, 0.5f), Vector2.One * 1.5f, color);
