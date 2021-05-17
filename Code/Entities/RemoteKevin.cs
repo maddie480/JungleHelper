@@ -4,12 +4,46 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Monocle;
 using Celeste.Mod.Entities;
+using MonoMod.Cil;
+using Mono.Cecil.Cil;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     // IT MAY BE A "SLIDE BLOCK" OFFICIALLY, BUT IT WILL ALWAYS BE A REMOTE KEVIN IN MY HEART
     [CustomEntity("JungleHelper/RemoteKevin")]
     [Tracked]
     public class RemoteKevin : Solid {
+        public static void Load() {
+            On.Celeste.CassetteBlock.BlockedCheck += blockCassetteBlocks;
+            IL.Celeste.CassetteBlock.WillToggle += fixWillToggle;
+        }
+
+        public static void Unload() {
+            On.Celeste.CassetteBlock.BlockedCheck -= blockCassetteBlocks;
+            IL.Celeste.CassetteBlock.WillToggle -= fixWillToggle;
+        }
+
+        private static bool blockCassetteBlocks(On.Celeste.CassetteBlock.orig_BlockedCheck orig, CassetteBlock self) {
+            // slide blocks should block cassette blocks.
+            return orig(self) || self.CollideCheck<RemoteKevin>();
+        }
+
+        private static void fixWillToggle(ILContext il) {
+            ILCursor cursor = new ILCursor(il);
+            while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdfld<Entity>("Collidable"))) {
+                Logger.Log("JungleHelper/RemoteKevin", $"Patching cassette block ascending bug at {cursor.Index} in IL for CassetteBlock.WillToggle");
+
+                cursor.Emit(OpCodes.Ldarg_0);
+                cursor.EmitDelegate<Func<bool, CassetteBlock, bool>>((orig, self) => {
+                    if (self.Scene.Tracker.CountEntities<RemoteKevin>() > 0) {
+                        // Collidable isn't reliable to check the state of the block because it could be activated but blocked by the player / a slide block.
+                        // so, use Activated instead.
+                        return self.Activated;
+                    }
+                    return orig;
+                });
+            }
+        }
+
         public RemoteKevin(Vector2 position, float width, float height, bool restrained, CrushBlock.Axes axes, string reskinName, string spriteDirectory) : base(position, width, height, false) {
             this.restrained = restrained;
             texture = spriteDirectory;
