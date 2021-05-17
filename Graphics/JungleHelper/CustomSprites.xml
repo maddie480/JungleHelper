@@ -390,14 +390,6 @@
         <Loop id="collected" path="TreasureCollected" frames="0" />
     </treasure_chest>
 	
-	<crab_small path="JungleHelper/CrabSmall/" start="idleA">
-        <Center/>
-        <Anim id="idleA" path="IdleA" frames="0*3,1" delay="0.1" goto="idleA:8,idleAltA:1"/>
-        <Anim id="idleAltA" path="AltA" frames="0-18" delay="0.1" goto="idleB"/>
-		<Anim id="idleB" path="IdleB" frames="0*5" delay="0.1" goto="idleB:7,idleAltB:1"/>
-        <Anim id="idleAltB" path="AltB" frames="0-15" delay="0.1" goto="idleA"/>
-	</crab_small>
-	
 	<dashSwitch_default path="JungleHelper/IntroBoat/DashSwitchReskin/Introboat" start="idle">
 		<Justify x="1.5" y="0.5"/>
 		<Loop id="idle" path="" delay="0.14" frames="0"/>
