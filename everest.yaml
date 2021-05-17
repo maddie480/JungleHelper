@@ -4,3 +4,5 @@
   Dependencies:
     - Name: Everest
       Version: 1.2781.0
+    - Name: Celeste
+      Version: 1.4.0.0
