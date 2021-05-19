@@ -390,11 +390,4 @@
         <Loop id="collected" path="TreasureCollected" frames="0" />
     </treasure_chest>
 	
-	<dashSwitch_default path="JungleHelper/IntroBoat/DashSwitchReskin/Introboat" start="idle">
-		<Justify x="1.5" y="0.5"/>
-		<Loop id="idle" path="" delay="0.14" frames="0"/>
-		<Loop id="pushed" path="" delay="0.08" frames="0"/>
-		<Anim id="push" path="" delay="0.07" frames="0" goto="pushed"/>
-	</dashSwitch_default>
-	
 </Sprites>
