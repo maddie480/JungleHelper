@@ -52,6 +52,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private ComponentWithDepth<Image> lanternOverlay;
 
         private readonly string reskinName;
+        private readonly bool onlyIfMaddyNotHolding;
 
         public Lantern(EntityData data, Vector2 offset) : base(data.Position + offset) {
             sprite = JungleHelperModule.CreateReskinnableSprite(data, "lantern");
@@ -61,6 +62,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             startingPosition = Position;
 
             reskinName = data.Attr("sprite");
+            onlyIfMaddyNotHolding = data.Bool("onlyIfMaddyNotHolding", defaultValue: false);
 
             Add(new PlayerCollider(onPlayer));
 
@@ -85,6 +87,18 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     }
                 }
             });
+        }
+
+        public override void Added(Scene scene) {
+            base.Added(scene);
+
+            if (onlyIfMaddyNotHolding) {
+                Player p = Scene.Tracker.GetEntity<Player>();
+                if (p != null && EnforceSkinController.HasLantern(p.Sprite.Mode)) {
+                    // Maddy is coming from another room with a lantern: we should destroy this one.
+                    RemoveSelf();
+                }
+            }
         }
 
         private void onPlayer(Player player) {

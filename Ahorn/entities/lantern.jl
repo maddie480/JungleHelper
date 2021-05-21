@@ -2,7 +2,7 @@
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/Lantern" Lantern(x::Integer, y::Integer, sprite::String="")
+@mapdef Entity "JungleHelper/Lantern" Lantern(x::Integer, y::Integer, sprite::String="", onlyIfMaddyNotHolding::Bool=false)
 
 const placements = Ahorn.PlacementDict(
     "Lantern (Jungle Helper)" => Ahorn.EntityPlacement(
