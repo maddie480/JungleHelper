@@ -57,7 +57,12 @@ namespace Celeste.Mod.JungleHelper {
             runIfMapUsesSpriteWipe(session.Area, spritePath => {
                 // start loading sprites ahead of time.
                 Logger.Log("JungleHelper/SpriteWipe", $"Starting loading sprites for {spritePath} (from LevelEnter)...");
-                startLoadingSpritesFor(spritePath);
+
+                if (spritePath == null) {
+                    unloadAllSprites();
+                } else {
+                    startLoadingSpritesFor(spritePath);
+                }
             });
 
             orig(session, fromSaveData);
@@ -76,7 +81,13 @@ namespace Celeste.Mod.JungleHelper {
                 runIfMapUsesSpriteWipe(self.Level.Session.Area, spritePath => {
                     // we didn't start the sprite loading on level enter (console load possibly?), so do that right now.
                     Logger.Log("JungleHelper/SpriteWipe", $"Starting loading sprites for {spritePath} (from LevelLoader)...");
-                    startLoadingSpritesFor(spritePath);
+
+                    if (spritePath == null) {
+                        unloadAllSprites();
+                    } else {
+                        startLoadingSpritesFor(spritePath);
+                    }
+
                     Engine.Scene = new SpriteWipeLoadingScreen(self, spriteLoadingTask);
                     goingToSpriteWipeLoadingScreen = true;
                 });
@@ -93,7 +104,7 @@ namespace Celeste.Mod.JungleHelper {
 
         /// <summary>
         /// Runs the given action if the given area uses the sprite wipe.
-        /// The parameter given to the action is the path of the sprite wipe.
+        /// The parameter given to the action is the path of the sprite wipe, or null if the sprite wipe should be unloaded.
         /// </summary>
         private static void runIfMapUsesSpriteWipe(AreaKey area, Action<string> toRun) {
             string wipe = AreaData.Get(area)?.GetMeta()?.Wipe;
@@ -102,6 +113,8 @@ namespace Celeste.Mod.JungleHelper {
                 if (atlasPath != spriteName) {
                     toRun(spriteName);
                 }
+            } else if (wipeAtlas != null) {
+                toRun(null);
             }
         }
 
@@ -128,6 +141,34 @@ namespace Celeste.Mod.JungleHelper {
                     // log time
                     timer.Stop();
                     Logger.Log(LogLevel.Info, "JungleHelper/SpriteWipe", $"Loading sprites for {spritePath} ({wipeAtlas.Textures.Count} texture(s)) took {timer.ElapsedMilliseconds} ms");
+
+                } catch (Exception e) {
+                    // log and rethrow the exception, so that it leaves a trace in log.txt.
+                    Logger.LogDetailed(e, "JungleHelper/SpriteWipe");
+                    throw;
+                }
+            });
+            spriteLoadingTask.Start();
+        }
+
+        private static void unloadAllSprites() {
+            spriteLoadingTask = new Task(() => {
+                try {
+                    // allow Everest to identify this is a thread that can load textures silently, so that AssetReloadHelper doesn't kick in...
+                    // because triggering it on level enter messes up scene transitions and makes you stuck on a black screen.
+                    // we're providing our own loading screen anyway.
+                    Thread.CurrentThread.Name = "Jungle Helper Sprite Wipe Loading Thread";
+
+                    Stopwatch timer = Stopwatch.StartNew();
+
+                    // unload the wipe
+                    wipeAtlas.Dispose();
+                    wipeAtlas = null;
+                    atlasPath = null;
+
+                    // log time
+                    timer.Stop();
+                    Logger.Log(LogLevel.Info, "JungleHelper/SpriteWipe", $"Unloading wipe sprites took {timer.ElapsedMilliseconds} ms");
 
                 } catch (Exception e) {
                     // log and rethrow the exception, so that it leaves a trace in log.txt.
