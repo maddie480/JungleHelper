@@ -14,6 +14,7 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
         public override Type SaveDataType => typeof(IntoTheJungleSaveData);
         public static IntoTheJungleCodeModule Instance;
 
+        public static IntoTheJungleSaveData ModSaveData => (IntoTheJungleSaveData) Instance._SaveData;
         public static HashSet<string> EndingDialogueBlacklist => ((IntoTheJungleSaveData) Instance._SaveData).EndingDialogueBlacklist;
 
         private static FieldInfo mapEditorLevelList = typeof(MapEditor).GetField("levels", BindingFlags.Instance | BindingFlags.NonPublic);

@@ -53,7 +53,14 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
             }
 
             string dialogue;
+
+            // draw a number between 0 and 1
             double rng = new Random().NextDouble();
+            if (IntoTheJungleCodeModule.ModSaveData.NoRareEndingCounter > 50) {
+                // more than 50 endings without a rare one => force a rare ending (0.98 to 1)
+                rng = (rng / 50) + 0.98;
+            }
+
             LevelSetStats stats = SaveData.Instance.GetLevelSetStats();
             double redBerryPercent = stats.TotalStrawberries / (double) stats.MaxStrawberries;
 
@@ -120,30 +127,37 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
             } else if (rng < 0.5) {
                 // 50% chance if no other endings trigger.
                 dialogue = "JungleEnd_Percent_A";
+                IntoTheJungleCodeModule.ModSaveData.NoRareEndingCounter++;
 
             } else if (rng < 0.9) {
                 // 40% chance if no other endings trigger.
                 dialogue = "JungleEnd_Percent_B";
+                IntoTheJungleCodeModule.ModSaveData.NoRareEndingCounter++;
 
             } else if (rng < 0.98) {
                 // 8% chance if no other endings trigger.
                 dialogue = "JungleEnd_Percent_C";
+                IntoTheJungleCodeModule.ModSaveData.NoRareEndingCounter++;
 
             } else if (rng < 0.985) {
                 // 0.5% chance if no other endings trigger.
                 dialogue = "JungleEnd_Percent_D";
+                IntoTheJungleCodeModule.ModSaveData.NoRareEndingCounter = 0;
 
             } else if (rng < 0.99) {
                 // 0.5% chance if no other endings trigger.
                 dialogue = "JungleEnd_Percent_E";
+                IntoTheJungleCodeModule.ModSaveData.NoRareEndingCounter = 0;
 
             } else if (rng < 0.995) {
                 // 0.5% chance if no other endings trigger.
                 dialogue = "JungleEnd_Percent_F";
+                IntoTheJungleCodeModule.ModSaveData.NoRareEndingCounter = 0;
 
             } else {
                 // 0.5% chance if no other endings trigger.
                 dialogue = "JungleEnd_Percent_G";
+                IntoTheJungleCodeModule.ModSaveData.NoRareEndingCounter = 0;
 
             }
 
