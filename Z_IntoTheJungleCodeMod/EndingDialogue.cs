@@ -6,16 +6,50 @@ using System.Collections;
 namespace Celeste.Mod.IntoTheJungleCodeMod {
     [CustomEvent("IntoTheJungleCodeMod/EndingDialogue")]
     class EndingDialogue : CutsceneEntity {
+        private SoundSource phoneSfx;
+
         public EndingDialogue() : base(fadeInOnSkip: false, endingChapterAfter: true) { }
 
         public override void OnBegin(Level level) {
+            level.RegisterAreaComplete();
             Add(new Coroutine(cutscene()));
+            Add(phoneSfx = new SoundSource());
         }
 
         private IEnumerator cutscene() {
-            Player p = Scene.Tracker.GetEntity<Player>();
-            if (p != null) {
-                p.StateMachine.State = Player.StDummy;
+            Player player = Scene.Tracker.GetEntity<Player>();
+            Payphone payphone = Scene.Tracker.GetEntity<Payphone>();
+            if (player != null) {
+                // replicate the ch2 ending cutscene.
+                player.StateMachine.State = Player.StDummy;
+                player.Dashes = 1;
+                while (player.Light.Alpha > 0f) {
+                    player.Light.Alpha -= Engine.DeltaTime * 1.25f;
+                    yield return null;
+                }
+                yield return 1f;
+
+                // align with the phone
+                yield return player.DummyWalkTo(payphone.X - 4f);
+                yield return 0.2f;
+
+                // turn around
+                player.Facing = Facings.Right;
+                yield return 0.5f;
+
+                // pick it up
+                player.Visible = false;
+                Audio.Play("event:/game/02_old_site/sequence_phone_pickup", player.Position);
+                yield return payphone.Sprite.PlayRoutine("pickUp");
+                yield return 0.25f;
+
+                // wait for sound effect to finish
+                phoneSfx.Position = player.Position;
+                phoneSfx.Play("event:/game/02_old_site/sequence_phone_ringtone_loop");
+                yield return 6f;
+
+                phoneSfx.Stop();
+                payphone.Sprite.Play("talkPhone");
             }
 
             string dialogue;
@@ -116,6 +150,12 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
             // whatever the dialogue is, the first playthrough is now done.
             IntoTheJungleCodeModule.EndingDialogueBlacklist.Add("JungleEnd_First_Run");
 
+            // change music
+            Level level = SceneAs<Level>();
+            level.Session.Audio.Music.Event = "event:/JungleMusicByTg90/tg90_cjc_epilogue";
+            level.Session.Audio.Apply(forceSixteenthNoteHack: false);
+
+            // play dialogue
             yield return Textbox.Say(dialogue);
             EndCutscene(Level);
         }

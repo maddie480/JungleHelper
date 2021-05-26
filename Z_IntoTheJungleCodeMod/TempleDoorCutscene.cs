@@ -15,6 +15,7 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
         }
 
         public override void OnBegin(Level level) {
+            level.RegisterAreaComplete();
             Add(new Coroutine(Cutscene(level)));
         }
 
