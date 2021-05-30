@@ -9,7 +9,7 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
         private SoundSource phoneSfx;
 
         private static string lastEnding;
-        private static long lastEndingTimestamp = long.MinValue;
+        private static long lastEndingTimestamp = -100000;
 
         public EndingDialogue() : base(fadeInOnSkip: false, endingChapterAfter: true) { }
 
