@@ -71,7 +71,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
             }
 
             startPosition = Position;
-            Add(new Coroutine(movement()));
+
+            // if the two positions of the gecko are not overlapping, it should move.
+            if (startPosition != node) {
+                Add(new Coroutine(movement()));
+            }
 
             if (left) {
                 sprite.Scale.Y = -1f;
