@@ -183,8 +183,13 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
             level.Session.Audio.Apply(forceSixteenthNoteHack: false);
 
             // play dialogue
-            yield return Textbox.Say(dialogue);
+            yield return Textbox.Say(dialogue, crashSounds);
             EndCutscene(Level);
+        }
+
+        private IEnumerator crashSounds() {
+            Audio.Play("event:/junglehelper/sfx/TheoFridgeCrash");
+            yield break;
         }
 
         public override void OnEnd(Level level) {
