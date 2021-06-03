@@ -64,6 +64,10 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
                     if (mapList[i].Name.EndsWith("_HideInMap")) {
                         mapList.Remove(mapList[i]);
                     }
+                    // Remove room "Filler5" in ch4 A-side
+                    if (area.GetSID() == "Into The Jungle/ch4" && area.Mode == AreaMode.Normal && mapList[i].Name == "Filler5") {
+                        mapList.Remove(mapList[i]);
+                    }
                 }
             }
         }
