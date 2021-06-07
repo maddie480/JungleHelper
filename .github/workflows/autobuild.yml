@@ -75,7 +75,7 @@ jobs:
             
             # Zip out the file, and send it to Discord.
             ZIPNAME=$ZIPNAME-${GITHUB_SHA:0:8}.zip
-            zip -qq -r $ZIPNAME everest.yaml Code/bin/Debug/JungleHelper.dll Ahorn Graphics Audio Dialog DecalRegistry.xml
+            zip -qq -r $ZIPNAME everest.yaml Code/bin/Debug/JungleHelper.dll Ahorn Graphics Audio Dialog MaxHelpingHandWipes DecalRegistry.xml
             curl --fail --data-binary "@$ZIPNAME" $JUNGLE_HELPER_UPLOAD_URL
             curl -H 'Content-Type: multipart/form-data' -X POST -F "file=@Z_IntoTheJungleCodeMod/bin/Debug/IntoTheJungleCodeMod.dll" -F "content=$PING **New Jungle Helper update!** Download here: $JUNGLE_HELPER_DOWNLOAD_URL" "$DISCORD_WEBHOOK" | grep -Po 'cdn.discordapp.com\/.*?\.zip' | tr -d '\n'
             curl -H 'Content-Type: application/json' -X POST -d "$(jq -n \

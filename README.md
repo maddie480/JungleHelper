@@ -59,18 +59,9 @@ Mosaic Crumble Blocks and Invisible Jump Throughs are custom entities, the other
 
 - `<jungleHelper_rainbow>`: gives a rainbow tint to the decal, like rainbow spinners. Also works with rainbow spinner color controllers from max480's Helping Hand.
 
-## The Sprite Wipe
+## Wipes included in the pack
 
-The **Sprite Wipe** is a wipe (screen transition from/to black played when you die or exit the map) that uses a full-screen sprite animation.
-
-To use it:
-- Put your sprites in `Graphics/Atlases/Wipes/MyMod/WipeName`
-  - Frames should be called `wipeoutXX.png` for the "fade to black" animation, and `wipeinXX.png` for the "fade from black" animation. XX are numbers counting up from 0.
-  - The frame rate is determined by the wipe duration, most of the time the animation will play in 0.5 seconds.
-  - Frames should be 1920x1080 and use white and transparent as only colors (the wipe is then tinted by the game).
-- In Ahorn map metadata, type this in the Wipe field: `JungleHelper/SpriteWipe:MyMod/WipeName`
-
-The following wipes are included with the helper, and are available for picking in the Ahorn metadata window dropdown:
+The following wipes are included with the helper, and can be used if you also have [max480's Helping Hand](https://github.com/max4805/MaxHelpingHand):
 - **Arrow** with plant-like edges around it
 - **Dots** that grow to cover the screen
 - **Rocks** that fall off from the top of the screen

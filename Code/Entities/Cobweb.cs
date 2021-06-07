@@ -73,6 +73,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             }
         }
 
+        // keeping player.Position an integer is very important, otherwise weirdness ensues with jumpthrus notably.
         private static void roundUpPlayerPosition(Player player) {
             player.Position = new Vector2((int) player.Position.X, (int) player.Position.Y);
         }

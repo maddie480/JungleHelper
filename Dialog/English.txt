@@ -1,5 +1,2 @@
 JUNGLEHELPER_POSTCARD_SKINSFORCEDISABLED=
 	You have a skin mod installed which is not compatible with this campaign.{n}{n}It will be re-enabled once you play something else.
-
-JUNGLEHELPER_SPRITEWIPE_LOADING=
-	Loading...

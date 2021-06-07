@@ -22,7 +22,6 @@ namespace Celeste.Mod.JungleHelper {
             Lantern.Load();
             SpiderBoss.Load();
             EnforceSkinController.Load();
-            SpriteWipe.Load();
             RollingRock.Load();
             GrablessGoldenBerry.Load();
             SwingCassetteBlock.Load();
@@ -42,7 +41,6 @@ namespace Celeste.Mod.JungleHelper {
             Lantern.Unload();
             SpiderBoss.Unload();
             EnforceSkinController.Unload();
-            SpriteWipe.Unload();
             RollingRock.Unload();
             GrablessGoldenBerry.Unload();
             SwingCassetteBlock.Unload();

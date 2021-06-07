@@ -118,8 +118,6 @@
     <Compile Include="Entities\TreasureChest.cs" />
     <Compile Include="JungleHelperMapDataProcessor.cs" />
     <Compile Include="JungleHelperSession.cs" />
-    <Compile Include="SpriteWipe.cs" />
-    <Compile Include="SpriteWipeLoadingScreen.cs" />
     <Compile Include="Triggers\DropLanternTrigger.cs" />
     <Compile Include="Triggers\UITextTrigger.cs" />
     <Compile Include="Triggers\GeckoTutorialTrigger.cs" />
