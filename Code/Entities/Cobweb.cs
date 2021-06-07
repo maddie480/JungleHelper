@@ -33,6 +33,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             // stick the player in the middle of the cobweb
             player.Center = Position;
+            roundUpPlayerPosition(player);
             player.Speed = Vector2.Zero;
 
             // ensure the player has at least 1 dash to dash out of the cobweb.
@@ -50,6 +51,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             if (stuckPlayer != null) {
                 // make sure the player is still stuck in the middle of the cobweb.
                 stuckPlayer.Center = Position;
+                roundUpPlayerPosition(stuckPlayer);
                 stuckPlayer.Speed = Vector2.Zero;
 
                 if (stuckPlayer.CanDash) {
@@ -69,6 +71,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     sfx.Play("event:/junglehelper/sfx/Cobweb_Snap");
                 }
             }
+        }
+
+        private static void roundUpPlayerPosition(Player player) {
+            player.Position = new Vector2((int) player.Position.X, (int) player.Position.Y);
         }
     }
 }
