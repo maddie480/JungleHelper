@@ -54,6 +54,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private readonly string reskinName;
         private readonly bool onlyIfMaddyNotHolding;
 
+        // registers the player's position when the lantern was dropped (if it was dropped),
+        // to check if Maddy moved between the lantern drop and its actual spawn.
+        private Vector2? playerPositionWhenDropped;
+
         public Lantern(EntityData data, Vector2 offset) : base(data.Position + offset) {
             sprite = JungleHelperModule.CreateReskinnableSprite(data, "lantern");
             sprite.Y = 5;
@@ -97,6 +101,13 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 if (p != null && EnforceSkinController.HasLantern(p.Sprite.Mode)) {
                     // Maddy is coming from another room with a lantern: we should destroy this one.
                     RemoveSelf();
+                }
+            }
+
+            if (playerPositionWhenDropped.HasValue) {
+                Player p = Scene.Tracker.GetEntity<Player>();
+                if (p != null) {
+                    Position += (p.Position - playerPositionWhenDropped.Value);
                 }
             }
         }
@@ -288,6 +299,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
             if (destroy) {
                 lantern.sprite.Play("unlit");
             }
+
+            lantern.playerPositionWhenDropped = player.Position;
 
             player.Scene.Add(lantern);
 
