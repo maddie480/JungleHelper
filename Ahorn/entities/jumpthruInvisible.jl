@@ -56,7 +56,7 @@ function Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::InvisibleJumpthruPl
         end
 
         quad = quads[2 - connected, qx]
-        Ahorn.drawImage(ctx, "objects/jumpthru/Invisible", 8 * i, 0, quad...)
+        Ahorn.drawImage(ctx, "objects/jumpthru/JungleHelper/Invisible", 8 * i, 0, quad...)
     end
 end
 

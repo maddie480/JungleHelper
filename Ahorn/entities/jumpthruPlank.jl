@@ -7,7 +7,7 @@ const placements = Ahorn.PlacementDict(
         Maple.JumpThru,
         "rectangle",
         Dict{String, Any}(
-          "texture" => "Plank"
+          "texture" => "JungleHelper/Plank"
         )
     )
 )

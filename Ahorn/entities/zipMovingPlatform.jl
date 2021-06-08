@@ -26,7 +26,7 @@ placements["Platform (Zip, Jungle) (JungleHelper)"] = Ahorn.EntityPlacement(
     MovingZipPlatform,
     "rectangle",
     Dict{String, Any}(
-        "texture" => "jungle"
+        "texture" => "JungleHelper/jungle"
     ),
     function(entity)
         x, y = Int(entity.data["x"]), Int(entity.data["y"])
@@ -40,7 +40,7 @@ placements["Platform (Zip, Night) (JungleHelper)"] = Ahorn.EntityPlacement(
     MovingZipPlatform,
     "rectangle",
     Dict{String, Any}(
-        "texture" => "night"
+        "texture" => "JungleHelper/night"
     ),
     function(entity)
         x, y = Int(entity.data["x"]), Int(entity.data["y"])
@@ -54,7 +54,7 @@ placements["Platform (Zip, Escape) (JungleHelper)"] = Ahorn.EntityPlacement(
     MovingZipPlatform,
     "rectangle",
     Dict{String, Any}(
-        "texture" => "escape"
+        "texture" => "JungleHelper/escape"
     ),
     function(entity)
         x, y = Int(entity.data["x"]), Int(entity.data["y"])

@@ -7,7 +7,7 @@ const placements = Ahorn.PlacementDict(
         Maple.SwitchGate,
         "rectangle",
         Dict{String, Any}(
-          "sprite" => "wood"
+          "sprite" => "JungleHelper/wood"
         ),
         
         function(entity)

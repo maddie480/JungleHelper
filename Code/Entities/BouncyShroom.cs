@@ -111,7 +111,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         public BouncyShroom(EntityData data, Vector2 offset, Directions dir)
-            : this(data.Position + offset, dir, data.Int("yeetx", 200), data.Int("yeety", -290), data.Attr("spriteDirectory", "objects/BouncyShroom")) {
+            : this(data.Position + offset, dir, data.Int("yeetx", 200), data.Int("yeety", -290), data.Attr("spriteDirectory", "JungleHelper/BouncyShroom")) {
         }
 
         public override void Added(Scene scene) {

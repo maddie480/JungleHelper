@@ -10,7 +10,7 @@ const placements = Ahorn.PlacementDict(
         UnrandomizedCrumblePlatform,
         "rectangle",
         Dict{String, Any}(
-          "texture" => "mosaic"
+          "texture" => "JungleHelper/mosaic"
         )
     )
 )

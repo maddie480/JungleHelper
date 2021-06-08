@@ -145,14 +145,14 @@
         <Loop id="impact" path="spider_r_impact" frames="0"/>
     </spider_boss_red>
 
-    <hawk path="objects/hawk/" start="hover">
+    <hawk path="JungleHelper/hawk/" start="hover">
         <Origin x="16" y="24"/>
         <Loop id="hover" path="hold" delay="0.05" frames="0-5,5-0" />
         <Loop id="fly" path="fly" delay="0.05" frames="0-3,3-0"/>
         <Anim id="throw" path="throw" delay="0.08" frames="0-3" goto="fly"/>
     </hawk>
   
-    <gecko_normal path="objects/gecko/normal/" start="idle">
+    <gecko_normal path="JungleHelper/gecko/normal/" start="idle">
         <Origin x="12" y="6"/>
         <Loop id="idle" path="idle" delay="0.2" frames="0-1"/>
         <Anim id="dance" path="idle" frames="2-3" goto="idle"/>
@@ -161,7 +161,7 @@
         <Anim id="hit" path="walk" frames="0" goto="idle"/>
     </gecko_normal>
    
-    <gecko_hostile path="objects/gecko/hostile/" start="idle">
+    <gecko_hostile path="JungleHelper/gecko/hostile/" start="idle">
         <Origin x="12" y="6"/>
         <Loop id="idle" path="idle" delay="0.2" frames="0-1"/>
         <Anim id="dance" path="idle" frames="2-3" goto="idle"/>

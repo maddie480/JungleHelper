@@ -7,7 +7,7 @@ const placements = Ahorn.PlacementDict(
         Maple.MovingPlatform,
         "rectangle",
         Dict{String, Any}(
-          "texture" => "jungle"
+          "texture" => "JungleHelper/jungle"
         ),
         
         function(entity)

@@ -7,7 +7,7 @@ const placements = Ahorn.PlacementDict(
         Maple.CrumbleBlock,
         "rectangle",
         Dict{String, Any}(
-          "texture" => "mossy"
+          "texture" => "JungleHelper/mossy"
         )
     )
 )
