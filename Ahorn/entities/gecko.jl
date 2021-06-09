@@ -37,7 +37,7 @@ Ahorn.editingOptions(entity::Gecko) = return Dict{String, Any}(
 )
 
 function Ahorn.selection(entity::Gecko)
-    sprite = (get(entity.data, "hostile", false) ? "objects/gecko/hostile/idle00" : "objects/gecko/normal/idle00")
+    sprite = (get(entity.data, "hostile", false) ? "JungleHelper/gecko/hostile/idle00" : "JungleHelper/gecko/normal/idle00")
     x, y = Ahorn.position(entity)
     nx, ny = Int.(entity.nodes[1])
     
@@ -50,7 +50,7 @@ function Ahorn.selection(entity::Gecko)
 end
 
 function Ahorn.renderSelectedAbs(ctx::Ahorn.Cairo.CairoContext, entity::Gecko)
-    sprite = (get(entity.data, "hostile", false) ? "objects/gecko/hostile/idle00" : "objects/gecko/normal/idle00")
+    sprite = (get(entity.data, "hostile", false) ? "JungleHelper/gecko/hostile/idle00" : "JungleHelper/gecko/normal/idle00")
     scaleX = (get(entity.data, "left", false) ? 1 : -1)
     px, py = Ahorn.position(entity)
     nx, ny = Int.(entity.nodes[1])
@@ -73,7 +73,7 @@ function Ahorn.renderSelectedAbs(ctx::Ahorn.Cairo.CairoContext, entity::Gecko)
 end
 
 function Ahorn.renderAbs(ctx::Ahorn.Cairo.CairoContext, entity::Gecko, room::Maple.Room)
-    sprite = (get(entity.data, "hostile", false) ? "objects/gecko/hostile/idle00" : "objects/gecko/normal/idle00")
+    sprite = (get(entity.data, "hostile", false) ? "JungleHelper/gecko/hostile/idle00" : "JungleHelper/gecko/normal/idle00")
     scaleX = (get(entity.data, "left", false) ? 1 : -1)
     x, y = Ahorn.position(entity)
     

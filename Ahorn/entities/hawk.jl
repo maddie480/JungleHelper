@@ -17,7 +17,7 @@ const placements = Ahorn.PlacementDict(
 )
 
 
-sprite = "objects/hawk/hold03"
+sprite = "JungleHelper/hawk/hold03"
 
 function Ahorn.selection(entity::Hawk)
     x, y = Ahorn.position(entity)

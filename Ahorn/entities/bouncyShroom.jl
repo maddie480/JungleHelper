@@ -2,9 +2,9 @@ module JungleHelperBouncyShroom
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/BouncyShroomUp" BouncyShroomUp(x::Integer, y::Integer, yeetx::Integer = 200, yeety::Integer = -290, spriteDirectory::String="objects/BouncyShroom")
-@mapdef Entity "JungleHelper/BouncyShroomLeft" BouncyShroomLeft(x::Integer, y::Integer, yeetx::Integer = 200, yeety::Integer = -290, spriteDirectory::String="objects/BouncyShroom")
-@mapdef Entity "JungleHelper/BouncyShroomRight" BouncyShroomRight(x::Integer, y::Integer, yeetx::Integer = 200, yeety::Integer = -290, spriteDirectory::String="objects/BouncyShroom")
+@mapdef Entity "JungleHelper/BouncyShroomUp" BouncyShroomUp(x::Integer, y::Integer, yeetx::Integer = 200, yeety::Integer = -290, spriteDirectory::String="JungleHelper/BouncyShroom")
+@mapdef Entity "JungleHelper/BouncyShroomLeft" BouncyShroomLeft(x::Integer, y::Integer, yeetx::Integer = 200, yeety::Integer = -290, spriteDirectory::String="JungleHelper/BouncyShroom")
+@mapdef Entity "JungleHelper/BouncyShroomRight" BouncyShroomRight(x::Integer, y::Integer, yeetx::Integer = 200, yeety::Integer = -290, spriteDirectory::String="JungleHelper/BouncyShroom")
 
 const placements = Ahorn.PlacementDict()
 
@@ -35,8 +35,8 @@ function Ahorn.selection(entity::BouncyShroomUnion)
     return Ahorn.Rectangle(x - 16, y - 16, 24, 24)
 end
 
-Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::BouncyShroomUp, room::Maple.Room) = Ahorn.drawSprite(ctx, get(entity, "spriteDirectory", "objects/BouncyShroom") * "/mushroom00", -4, -4)
-Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::BouncyShroomLeft, room::Maple.Room) = Ahorn.drawSprite(ctx, get(entity, "spriteDirectory", "objects/BouncyShroom") * "/mushroom_ld_00", -4, -4)
-Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::BouncyShroomRight, room::Maple.Room) = Ahorn.drawSprite(ctx, get(entity, "spriteDirectory", "objects/BouncyShroom") * "/mushroom_rd_00", -4, -4)
+Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::BouncyShroomUp, room::Maple.Room) = Ahorn.drawSprite(ctx, get(entity, "spriteDirectory", "JungleHelper/BouncyShroom") * "/mushroom00", -4, -4)
+Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::BouncyShroomLeft, room::Maple.Room) = Ahorn.drawSprite(ctx, get(entity, "spriteDirectory", "JungleHelper/BouncyShroom") * "/mushroom_ld_00", -4, -4)
+Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::BouncyShroomRight, room::Maple.Room) = Ahorn.drawSprite(ctx, get(entity, "spriteDirectory", "JungleHelper/BouncyShroom") * "/mushroom_rd_00", -4, -4)
 
 end

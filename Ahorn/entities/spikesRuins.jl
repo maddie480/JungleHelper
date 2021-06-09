@@ -7,28 +7,28 @@ const placements = Ahorn.PlacementDict(
         Maple.SpikesUp,
         "rectangle",
         Dict{String, Any}(
-          "type" => "ruins"
+          "type" => "JungleHelper/ruins"
         )
     ),
     "Spikes (Down, Ruins) (Jungle Helper)" => Ahorn.EntityPlacement(
         Maple.SpikesDown,
         "rectangle",
         Dict{String, Any}(
-          "type" => "ruins"
+          "type" => "JungleHelper/ruins"
         )
     ),
 	"Spikes (Left, Ruins) (Jungle Helper)" => Ahorn.EntityPlacement(
         Maple.SpikesLeft,
         "rectangle",
         Dict{String, Any}(
-          "type" => "ruins"
+          "type" => "JungleHelper/ruins"
         )
     ),
 	"Spikes (Right, Ruins) (Jungle Helper)" => Ahorn.EntityPlacement(
         Maple.SpikesRight,
         "rectangle",
         Dict{String, Any}(
-          "type" => "ruins"
+          "type" => "JungleHelper/ruins"
         )
     )
 )
