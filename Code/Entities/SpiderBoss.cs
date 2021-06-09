@@ -69,6 +69,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         // settings
         private readonly SpiderColor color;
+        private readonly string flag;
 
         private SoundSource sfx;
         private VertexLight light;
@@ -87,6 +88,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         public SpiderBoss(EntityData data, Vector2 offset) : base(data.Position + offset) {
             color = data.Enum("color", SpiderColor.Blue);
+            flag = data.Attr("flag");
 
             // set up the web above the spider
             web = JungleHelperModule.CreateReskinnableSprite(data.Attr("webSprite"), "spiderboss_web");
@@ -141,6 +143,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
             }
         }
 
+        private bool shouldPause() {
+            // the spider should pause when the player is using a watchtower, or if the spider is flag-activated and the flag is not set.
+            return usingWatchtower || (!string.IsNullOrEmpty("flag") && !SceneAs<Level>().Session.GetFlag(flag));
+        }
+
         private void onPlayer(Player player) {
             if (!SaveData.Instance.Assists.Invincible) {
                 // kill the player.
@@ -164,7 +171,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private int waitingUpdate() {
             // if player is using a watchtower, give them some delay before the spider shows up again (camera has to come back to them).
-            if (usingWatchtower) {
+            if (shouldPause()) {
                 stateDelay = RESPAWN_DELAY_AFTER_WATCHTOWER;
             }
 
@@ -214,7 +221,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private int poppingInUpdate() {
             // if player is using a watchtower, give up and switch to the "Watchtower Retract" state.
-            if (usingWatchtower) {
+            if (shouldPause()) {
                 return 4;
             }
 
@@ -243,7 +250,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private int trackingUpdate() {
             // if player is using a watchtower, give up and switch to the "Watchtower Retract" state.
-            if (usingWatchtower) {
+            if (shouldPause()) {
                 return 4;
             }
 

@@ -74,6 +74,7 @@ placements.entities.JungleHelper/SpinyPlant.tooltips.sprite=If you want to reski
 placements.entities.JungleHelper/SpiderBoss.tooltips.color=Defines the color and the difficulty of the spider boss:\n- Blue: speed capped at 50 px/s, respawns after 1 second\n- Purple: speed capped at 100 px/s, respawns immediately\n- Red: no speed cap, a new one respawns as soon as the previous one starts falling
 placements.entities.JungleHelper/SpiderBoss.tooltips.sprite=If you want to reskin the spider boss, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
 placements.entities.JungleHelper/SpiderBoss.tooltips.webSprite=If you want to reskin the spider boss's web, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+placements.entities.JungleHelper/SpiderBoss.tooltips.flag=If specified, the spider will only appear when this flag is set.
 
 # Rolling Rock
 placements.entities.JungleHelper/RollingRock.tooltips.cracked=Whether the rock should look cracked.

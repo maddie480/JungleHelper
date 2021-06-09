@@ -2,7 +2,7 @@ module JungleHelperSpiderBoss
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/SpiderBoss" SpiderBoss(x::Integer, y::Integer, color::String="Blue", sprite::String="", webSprite::String="")
+@mapdef Entity "JungleHelper/SpiderBoss" SpiderBoss(x::Integer, y::Integer, color::String="Blue", sprite::String="", webSprite::String="", flag::String="")
 
 const bossColors = String["Blue", "Purple", "Red"]
 
