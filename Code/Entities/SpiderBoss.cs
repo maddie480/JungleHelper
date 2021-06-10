@@ -145,7 +145,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private bool shouldPause() {
             // the spider should pause when the player is using a watchtower, or if the spider is flag-activated and the flag is not set.
-            return usingWatchtower || (!string.IsNullOrEmpty("flag") && !SceneAs<Level>().Session.GetFlag(flag));
+            return usingWatchtower || (!string.IsNullOrEmpty(flag) && !SceneAs<Level>().Session.GetFlag(flag));
         }
 
         private void onPlayer(Player player) {
