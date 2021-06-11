@@ -257,6 +257,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             orig(self, mode);
 
+            bool lookUpAnimTweak = false;
+
             if (customSprite) {
                 switch (requestedMode) {
                     case SpriteModeMadelineNormal:
@@ -267,6 +269,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                         break;
                     case SpriteModeMadelineLantern:
                         GFX.SpriteBank.CreateOn(self, "junglehelper_madeline_lantern");
+                        lookUpAnimTweak = true;
                         break;
                     case SpriteModeBadelineLantern:
                         GFX.SpriteBank.CreateOn(self, "junglehelper_badeline_lantern");
@@ -277,6 +280,16 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
                 // replay the "idle" sprite to make it apply immediately.
                 self.Play("idle", restart: true);
+
+                if (lookUpAnimTweak) {
+                    // when the look up animation finishes, rewind it to frame 7: this way we are getting 7-11 playing in a loop.
+                    self.OnFinish = anim => {
+                        if (anim == "lookUp") {
+                            self.Play("lookUp", restart: true);
+                            self.SetAnimationFrame(5);
+                        }
+                    };
+                }
             }
         }
 

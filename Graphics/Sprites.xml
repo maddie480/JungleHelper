@@ -304,7 +304,7 @@
 
 		<Loop id="edgeBack" path="edge_back/lanternedge_back" delay="0.25"/>
 
-		<Anim id="lookUp" path="lookUp/lanternLookUp" delay="0.1" frames="2-7" />
+		<Anim id="lookUp" path="lookUp/lanternLookUp" delay="0.1" frames="2-11" />
 
 		<Loop id="push" path="push/lanternpush" delay="0.1" />
 
@@ -317,7 +317,7 @@
 			<Frames path="edge/lanternedge" hair="-1,-2|-1,-2|-1,-2|-1,-1|-1,-1|-1,-1|-1,-2|0,-2|1,-2|0,-2|0,-1|-1,-1|-1,-1|-1,-2"/>
 			<Frames path="dangling/lanterndangling" hair="0,-2|0,-2|0,-2|0,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2"/>
 			<Frames path="edge_back/lanternedge_back" hair="1,-2:1|2,-2:2|1,-2:2|1,-1:2|0,-2:2|1,-2:2|2,-2:2|1,-2:2|2,-2:2|2,-2:2|2,-1|2,-1|2,-1|2,-2"/>
-			<Frames path="lookUp/lanternLookUp" hair="0,-2|0,-2|0,-2|0,-2|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-3:1"/>
+			<Frames path="lookUp/lanternLookUp" hair="0,-2|0,-2|0,-2|0,-2|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1"/>
 			<Frames path="push/lanternpush" hair="1,-2|1,-1|1,-1|1,-1|1,-2|1,-2|1,-2|1,-2|1,-1|1,-1|1,-1|1,-1|1,-2|1,-2|1,-2|1,-2"/>
 		</Metadata>
 	</junglehelper_madeline_lantern>
