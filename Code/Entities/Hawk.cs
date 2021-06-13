@@ -52,7 +52,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     if (state == States.Fling) {
                         // do the usual throw!
 
-                        Player player = SceneAs<Level>().Tracker.GetEntity<Player>();
+                        Player player = SceneAs<Level>()?.Tracker.GetEntity<Player>();
                         if (player != null) {
                             player.StateMachine.State = 0;
                             player.DummyGravity = true;
