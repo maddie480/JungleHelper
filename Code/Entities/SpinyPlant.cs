@@ -27,7 +27,21 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private void killPlayer(Player player) {
-            player?.Die(new Vector2(Math.Sign(player.X - X - 12), 0));
+            if (player == null) {
+                return;
+            }
+
+            if (!CollideCheck<Player>(Position + Vector2.UnitX * 4)) {
+                player.Die(-Vector2.UnitX);
+            } else if (!CollideCheck<Player>(Position - Vector2.UnitX * 4)) {
+                player.Die(Vector2.UnitX);
+            } else if (!CollideCheck<Player>(Position + Vector2.UnitY * 4)) {
+                player.Die(-Vector2.UnitY);
+            } else if (!CollideCheck<Player>(Position - Vector2.UnitY * 4)) {
+                player.Die(Vector2.UnitY);
+            } else {
+                player.Die(Vector2.Zero);
+            }
         }
 
         public override void Awake(Scene scene) {
