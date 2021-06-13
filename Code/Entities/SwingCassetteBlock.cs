@@ -5,6 +5,7 @@ using Monocle;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Celeste.Mod.JungleHelper.Entities {
@@ -17,6 +18,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
         public static void Load() {
             loadLevelILHook = new ILHook(typeof(Level).GetMethod("orig_LoadLevel"), hookLoadLevel);
             IL.Celeste.CassetteBlockManager.AdvanceMusic += swingCassetteMusic;
+
+            // don't print out a warning about swing cassette block "failing to load" since they spawn in a weird way (hijacking vanilla cassette block spawn code).
+            ((HashSet<string>) typeof(Level).GetField("_LoadStrings", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null)).Add("JungleHelper/SwingCassetteBlock");
         }
 
         public static void Unload() {

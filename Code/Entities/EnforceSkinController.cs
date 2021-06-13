@@ -9,6 +9,7 @@ using MonoMod.Cil;
 using System.Collections;
 using FMOD.Studio;
 using Mono.Cecil;
+using System.Collections.Generic;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     static class EnforceSkinController {
@@ -56,6 +57,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
             // the method called when changing the "Other Self" variant is a method defined inside Level.VariantMode(). patching it requires a bit of _fun_
             hookVariantMode = new Hook(findOutVariantModeType().GetMethod("<VariantMode>b__9", BindingFlags.NonPublic | BindingFlags.Instance),
                 typeof(EnforceSkinController).GetMethod("levelChangePlayAsBadeline", BindingFlags.NonPublic | BindingFlags.Static));
+
+            // don't print out a warning about enforce skin controller "failing to load" since it acts with a hook looking for it.
+            ((HashSet<string>) typeof(Level).GetField("_LoadStrings", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null)).Add("JungleHelper/EnforceSkinController");
         }
 
         public static void Initialize() {
