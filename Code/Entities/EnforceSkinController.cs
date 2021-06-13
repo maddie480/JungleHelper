@@ -127,8 +127,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
             // we want Madeline's sprite to load its metadata (that is, her hair positions on her frames of animation).
             PlayerSprite.CreateFramesMetadata("junglehelper_madeline_copy");
             PlayerSprite.CreateFramesMetadata("junglehelper_player_badeline_copy");
+            PlayerSprite.CreateFramesMetadata("junglehelper_player_badeline_copy_vanilla");
             PlayerSprite.CreateFramesMetadata("junglehelper_madeline_lantern");
             PlayerSprite.CreateFramesMetadata("junglehelper_badeline_lantern");
+            PlayerSprite.CreateFramesMetadata("junglehelper_madeline_lantern_no_override");
+            PlayerSprite.CreateFramesMetadata("junglehelper_badeline_lantern_no_override");
         }
 
         private static void checkForSkinReset(Session session) {
@@ -293,11 +296,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
                         GFX.SpriteBank.CreateOn(self, "junglehelper_player_badeline_copy");
                         break;
                     case SpriteModeMadelineLantern:
-                        GFX.SpriteBank.CreateOn(self, "junglehelper_madeline_lantern");
+                        GFX.SpriteBank.CreateOn(self, skinsDisabled ? "junglehelper_madeline_lantern" : "junglehelper_madeline_lantern_no_override");
                         lookUpAnimTweak = true;
                         break;
                     case SpriteModeBadelineLantern:
-                        GFX.SpriteBank.CreateOn(self, "junglehelper_badeline_lantern");
+                        GFX.SpriteBank.CreateOn(self, skinsDisabled ? "junglehelper_badeline_lantern" : "junglehelper_badeline_lantern_no_override");
                         break;
                 }
 
