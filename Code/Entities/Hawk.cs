@@ -188,10 +188,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     break;
                 }
 
-                if (Input.Dash.Pressed && player.CanDash) {
+                if ((Input.DashPressed || Input.CrouchDashPressed) && player.CanDash) {
                     // player dashes out of hawk, let them do that.
-                    player.StateMachine.State = 2;
-                    player.Dashes -= 1;
+                    player.StateMachine.State = player.StartDash();
                     break;
                 }
             }
