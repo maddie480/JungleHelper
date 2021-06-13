@@ -29,9 +29,12 @@ namespace Celeste.Mod.JungleHelper {
             CassetteCustomPreviewMusic.Load();
             RainbowDecalComponent.Load();
             RemoteKevin.Load();
+        }
 
-            // let's tell Everest that sprite wipe textures loading on a separate thread is nothing to worry about.
-            AssetReloadHelper.SilentThreadList.Add("Jungle Helper Sprite Wipe Loading Thread");
+        public override void Initialize() {
+            base.Initialize();
+
+            EnforceSkinController.Initialize();
         }
 
         public override void Unload() {
