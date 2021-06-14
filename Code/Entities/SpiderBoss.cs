@@ -130,7 +130,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 // create our paired spider.
                 EntityData data = new EntityData();
                 data.Values = new Dictionary<string, object> {
-                    { "color", "Red" }
+                    { "color", "Red" },
+                    { "flag", flag }
                 };
                 pairedSpider = new SpiderBoss(data, Vector2.Zero);
                 scene.Add(pairedSpider);
