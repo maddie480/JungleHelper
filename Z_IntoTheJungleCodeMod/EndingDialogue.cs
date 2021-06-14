@@ -82,7 +82,7 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
                     IntoTheJungleCodeModule.EndingDialogueBlacklist.Add(dialogue);
 
                 } else if (stats.TotalGoldenStrawberries >= 15 /* intentionally hardcoded */ && !IntoTheJungleCodeModule.EndingDialogueBlacklist.Contains("JungleEnd_All_Golden_A")) {
-                    // After collecting all 10 golden berries the FIRST time and then completing 5A (not counting grabless 1a)
+                    // After collecting all 15 golden berries the FIRST time and then completing 5A (not counting grabless 1a)
                     dialogue = "JungleEnd_All_Golden_A";
                     IntoTheJungleCodeModule.EndingDialogueBlacklist.Add(dialogue);
 
