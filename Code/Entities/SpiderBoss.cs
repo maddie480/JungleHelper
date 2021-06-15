@@ -171,17 +171,18 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private int waitingUpdate() {
-            // if player is using a watchtower, give them some delay before the spider shows up again (camera has to come back to them).
-            if (shouldPause()) {
-                stateDelay = RESPAWN_DELAY_AFTER_WATCHTOWER;
-            }
-
             // if delay is over, player already moved and paired spider is falling if any, switch to the Popping In state.
             if (stateDelay <= 0f && !didPlayerJustRespawn() && (pairedSpider == null || ignorePairedSpider || pairedSpider.falling)) {
                 justRespawned = false;
                 ignorePairedSpider = false; // from now, both spiders should be synced up.
                 return 1;
             }
+
+            // if player is using a watchtower, give them some delay before the spider shows up again (camera has to come back to them).
+            if (shouldPause()) {
+                stateDelay = RESPAWN_DELAY_AFTER_WATCHTOWER;
+            }
+
             return 0;
         }
 
