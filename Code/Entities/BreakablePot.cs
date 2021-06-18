@@ -38,7 +38,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             hold.OnPickup = onPickup;
             hold.OnRelease = onRelease;
             hold.SpeedGetter = () => speed;
-            Collider = hold.PickupCollider;
+            Collider = new Hitbox(17f, 8f, -8f, -8f);
         }
 
         private void onPickup() {
