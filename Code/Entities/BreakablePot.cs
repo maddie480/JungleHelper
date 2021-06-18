@@ -12,6 +12,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private Holdable hold;
 
         private Vector2 speed;
+        private bool broken = false;
 
         private readonly EntityID potID;
         private readonly bool containsKey;
@@ -107,7 +108,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private void breakPot() {
-            if (speed.LengthSquared() > 200 * 200) {
+            if (!broken && speed.LengthSquared() > 200 * 200) {
                 // pot isn't holdable anymore.
                 Remove(hold);
                 hold = null;
@@ -122,6 +123,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     Add(new SoundSource("event:/junglehelper/sfx/ch2_secret_ding"));
                     Add(new Coroutine(animateRupeeRoutine()));
                 }
+
+                broken = true;
             }
         }
 
