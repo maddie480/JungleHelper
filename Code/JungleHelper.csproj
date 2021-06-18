@@ -104,6 +104,7 @@
     <Compile Include="Entities\BouncyShroom.cs" />
     <Compile Include="Entities\BreakablePot.cs" />
     <Compile Include="Entities\CassetteCustomPreviewMusic.cs" />
+    <Compile Include="Entities\CheatCodeController.cs" />
     <Compile Include="Entities\Cockatiel.cs" />
     <Compile Include="Entities\Dragonfly.cs" />
     <Compile Include="Entities\EnforceSkinController.cs" />
