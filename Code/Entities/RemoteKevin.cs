@@ -44,8 +44,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
             }
         }
 
-        public RemoteKevin(Vector2 position, float width, float height, bool restrained, CrushBlock.Axes axes, string reskinName, string spriteDirectory) : base(position, width, height, false) {
+        public RemoteKevin(Vector2 position, float width, float height, bool restrained, CrushBlock.Axes axes, string reskinName, string spriteDirectory, bool infiniteCharges) : base(position, width, height, false) {
             this.restrained = restrained;
+            this.infiniteCharges = infiniteCharges;
             texture = spriteDirectory;
             if (string.IsNullOrEmpty(texture)) {
                 texture = restrained ? "JungleHelper/SlideBlockGreen" : "JungleHelper/SlideBlockRed";
@@ -111,7 +112,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         public RemoteKevin(EntityData data, Vector2 offset) : this(data.Position + offset, data.Width, data.Height, data.Bool("restrained", false), data.Enum("axes", CrushBlock.Axes.Both),
-            data.Attr("spriteXmlName"), data.Attr("spriteDirectory")) { }
+            data.Attr("spriteXmlName"), data.Attr("spriteDirectory"), data.Bool("infiniteCharges")) { }
 
         public override void Added(Scene scene) {
             base.Added(scene);
@@ -149,7 +150,13 @@ namespace Celeste.Mod.JungleHelper.Entities {
         public void OnDash(Vector2 direction) {
             // if one of the directions is zero and the other isn't, this is a straight (non diagonal) dash, so we should trigger the Kevin.
             if (!isHit && Refilled && (direction.X == 0) != (direction.Y == 0) && (direction.X == 0 || canMoveHorizontally) && (direction.Y == 0 || canMoveVertically)) {
-                Refilled = false;
+                if (infiniteCharges) {
+                    // enable the overlay so that the block stays visually enabled.
+                    activeOverlay.Visible = true;
+                } else {
+                    // block needs refill!
+                    Refilled = false;
+                }
 
                 attack(direction);
             }
@@ -474,6 +481,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private bool restrained;
         private string texture;
         private Color fill;
+        private bool infiniteCharges;
 
         private Vector2 crushDir;
 
