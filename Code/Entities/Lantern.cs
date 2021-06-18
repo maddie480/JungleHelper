@@ -118,9 +118,12 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 // on a technical level, Maddy's sprite changes to have her holding the lantern, and the lantern disappears.
                 EnforceSkinController.ChangePlayerSpriteMode(player, hasLantern: true);
                 RemoveSelf();
-                new DynData<Player>(player)["JungleHelper_LanternStartingPosition"] = startingPosition;
-                new DynData<Player>(player)["JungleHelper_LanternDoRespawn"] = doRespawn;
-                new DynData<Player>(player)["JungleHelper_LanternReskinName"] = reskinName;
+
+                DynData<Player> playerData = new DynData<Player>(player);
+                playerData["JungleHelper_LanternStartingPosition"] = startingPosition;
+                playerData["JungleHelper_LanternDoRespawn"] = doRespawn;
+                playerData["JungleHelper_LanternReskinName"] = reskinName;
+                playerData["JungleHelper_LanternDropTimer"] = 0.1f;
 
                 // detach the glow from the lantern and attach it to the player.
                 player.Add(lanternOverlay);
@@ -257,9 +260,17 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private static int onPlayerNormalUpdate(On.Celeste.Player.orig_NormalUpdate orig, Player self) {
-            if (EnforceSkinController.HasLantern(self.Sprite.Mode) && Input.Grab.Check && Input.MoveY > 0f) {
-                // drop the lantern.
-                DropLantern(self, destroy: false);
+            if (EnforceSkinController.HasLantern(self.Sprite.Mode)) {
+                DynData<Player> selfData = new DynData<Player>(self);
+
+                float lanternDropTimer = selfData.Get<float>("JungleHelper_LanternDropTimer");
+                lanternDropTimer -= Engine.DeltaTime;
+                selfData["JungleHelper_LanternDropTimer"] = lanternDropTimer;
+
+                if (Input.Grab.Check && Input.MoveY > 0f && lanternDropTimer <= 0f) {
+                    // drop the lantern.
+                    DropLantern(self, destroy: false);
+                }
             }
 
             return orig(self);
