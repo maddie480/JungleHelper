@@ -24,6 +24,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             Depth = -9500;
 
             Add(new PlayerCollider(killPlayer));
+            Add(new LedgeBlocker());
         }
 
         private void killPlayer(Player player) {
