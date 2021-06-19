@@ -147,7 +147,8 @@
 
     <hawk path="JungleHelper/hawk/" start="hover">
         <Origin x="16" y="24"/>
-        <Loop id="hover" path="hold" delay="0.05" frames="0-5,5-0" />
+        <Anim id="hover" path="hold" delay="0.1" frames="0-5" goto="hover:29,hover_alt:1"/>
+        <Anim id="hover_alt" path="caw" frames="0-5" delay="0.1" goto="hover"/>
         <Loop id="fly" path="fly" delay="0.05" frames="0-3,3-0"/>
         <Anim id="throw" path="throw" delay="0.08" frames="0-3" goto="fly"/>
     </hawk>
