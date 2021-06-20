@@ -1,30 +1,60 @@
 ﻿using Celeste.Mod.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;
+using MonoMod.Cil;
+using MonoMod.RuntimeDetour;
+using MonoMod.Utils;
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/TreeDepthController")] // memorialTextController but jungle
     [RegisterStrawberry(tracked: false, blocksCollection: true)]
     [Tracked]
     class GrablessGoldenBerry : Strawberry {
+        private static List<ILHook> manualILHooks = new List<ILHook>();
+
         public static void Load() {
-            On.Celeste.Session.UpdateLevelStartDashes += onUpdateLevelStartDashes;
             On.Celeste.Level.Reload += onLevelReload;
             On.Celeste.Player.ClimbUpdate += onPlayerClimbUpdate;
+
+            // we can't hook UpdateLevelStartDashes because it's too short! So let's hook its usages instead.
+            IL.Celeste.SummitCheckpoint.Update += hookUpdateLevelStartDashes;
+            IL.Celeste.ChangeRespawnTrigger.OnEnter += hookUpdateLevelStartDashes;
+            IL.Celeste.HeartGem.RegisterAsCollected += hookUpdateLevelStartDashes;
+            IL.Celeste.Key.OnPlayer += hookUpdateLevelStartDashes;
+
+            manualILHooks.Add(new ILHook(typeof(Cassette).GetMethod("CollectRoutine", BindingFlags.NonPublic | BindingFlags.Instance).GetStateMachineTarget(), hookUpdateLevelStartDashes));
+            manualILHooks.Add(new ILHook(typeof(Strawberry).GetMethod("orig_OnCollect"), hookUpdateLevelStartDashes));
+            manualILHooks.Add(new ILHook(typeof(Level).GetMethod("orig_LoadLevel"), hookUpdateLevelStartDashes));
         }
 
         public static void Unload() {
-            On.Celeste.Session.UpdateLevelStartDashes -= onUpdateLevelStartDashes;
             On.Celeste.Level.Reload -= onLevelReload;
             On.Celeste.Player.ClimbUpdate -= onPlayerClimbUpdate;
+
+            IL.Celeste.SummitCheckpoint.Update -= hookUpdateLevelStartDashes;
+            IL.Celeste.ChangeRespawnTrigger.OnEnter -= hookUpdateLevelStartDashes;
+            IL.Celeste.HeartGem.RegisterAsCollected -= hookUpdateLevelStartDashes;
+            IL.Celeste.Key.OnPlayer -= hookUpdateLevelStartDashes;
+
+            foreach (ILHook hook in manualILHooks) {
+                hook.Dispose();
+            }
+            manualILHooks.Clear();
         }
 
-        private static void onUpdateLevelStartDashes(On.Celeste.Session.orig_UpdateLevelStartDashes orig, Session self) {
-            orig(self);
 
-            // "commit" the grabless berry state
-            JungleHelperModule.Session.GrablessBerryFlewAway = JungleHelperModule.Session.GrablessBerryWillFlyAway;
+        private static void hookUpdateLevelStartDashes(ILContext il) {
+            ILCursor cursor = new ILCursor(il);
+
+            while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchCallvirt<Session>("UpdateLevelStartDashes"))) {
+                Logger.Log("JungleHelper/GrablessGoldenBerry", $"Injecting code after UpdateLevelStartDashes call at {cursor.Index} in IL for {il.Method.FullName}");
+
+                // when UpdateLevelStartDashes is called, "commit" the grabless berry state
+                cursor.EmitDelegate<Action>(() => JungleHelperModule.Session.GrablessBerryFlewAway = JungleHelperModule.Session.GrablessBerryWillFlyAway);
+            }
         }
 
         private static void onLevelReload(On.Celeste.Level.orig_Reload orig, Level self) {
