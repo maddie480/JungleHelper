@@ -99,8 +99,8 @@ namespace Celeste.Mod.JungleHelper {
             context.Add<JungleHelperMapDataProcessor>();
         }
 
-        public override void LoadSession(int index, bool forceNew) {
-            base.LoadSession(index, forceNew);
+        public override void DeserializeSession(int index, byte[] data) {
+            base.DeserializeSession(index, data);
 
             // initial value for GrablessBerryWillFlyAway is equel to GrablessBerryFlewAway.
             Session.GrablessBerryWillFlyAway = Session.GrablessBerryFlewAway;
