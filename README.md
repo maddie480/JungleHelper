@@ -89,3 +89,6 @@ If, for consistency's sake, you want to enforce that skin change in your whole c
     - Name: JungleHelper
       Version: 1.0.0
 ```
+
+- if you want to add more animations than what Jungle Helper provides, you can do so by adding frames that match vanilla names in `Graphics/Atlases/Gameplay/JungleHelper/Lantern` and `Graphics/Atlases/Gameplay/JungleHelper/Lantern/Badeline`.
+- if you want to change frame counts, animation speeds or anything that involves Sprites.xml editing, copy-paste `junglehelper_madeline_lantern_no_override` or `junglehelper_badeline_lantern_no_override` into your skin's Graphics/Sprites.xml, then tweak it as needed.
