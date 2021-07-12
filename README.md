@@ -91,4 +91,4 @@ If, for consistency's sake, you want to enforce that skin change in your whole c
 ```
 
 - if you want to add more animations than what Jungle Helper provides, you can do so by adding frames that match vanilla names in `Graphics/Atlases/Gameplay/JungleHelper/Lantern` and `Graphics/Atlases/Gameplay/JungleHelper/Lantern/Badeline`.
-- if you want to change frame counts, animation speeds or anything that involves Sprites.xml editing, copy-paste `junglehelper_madeline_lantern_no_override` or `junglehelper_badeline_lantern_no_override` into your skin's Graphics/Sprites.xml, then tweak it as needed.
+- if you want to change frame counts, animation speeds or anything that involves Sprites.xml editing, copy-paste `junglehelper_madeline_lantern_no_override` or `junglehelper_badeline_lantern_no_override` into your skin's Graphics/Sprites.xml, then tweak it as needed. _For Badeline, you need to copy-paste `junglehelper_player_badeline_copy_vanilla` as well, to ensure the game doesn't crash without Jungle Helper installed._
