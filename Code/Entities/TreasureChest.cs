@@ -83,7 +83,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             Sprite face = JungleHelperModule.CreateReskinnableSprite(spriteName, "treasure_chest");
             face.Play("face");
             Entity faceHolder = new Entity(Position);
-            faceHolder.Depth = -50;
+            faceHolder.Depth = 50;
             faceHolder.Add(face);
             Scene.Add(faceHolder);
 
