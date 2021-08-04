@@ -1,5 +1,4 @@
 ﻿using Celeste.Mod.Entities;
-using Celeste.Mod.MaxHelpingHand.Entities;
 using Microsoft.Xna.Framework;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
@@ -20,7 +19,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private static FieldInfo actorMovementCounter = typeof(Actor).GetField("movementCounter", BindingFlags.Instance | BindingFlags.NonPublic);
 
         private static bool hooksActive = false;
-        private static bool maxHelpingHandIsHere = false;
 
         public static void Load() {
             On.Celeste.LevelLoader.ctor += onLevelLoad;
@@ -37,7 +35,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
             orig(self, session, startPosition);
 
             if (session.MapData?.Levels?.Any(level => level.Entities?.Any(entity => entity.Name == "JungleHelper/ClimbableOneWayPlatform") ?? false) ?? false) {
-                maxHelpingHandIsHere = Everest.Loader.DependencyLoaded(new EverestModuleMetadata { Name = "MaxHelpingHand", Version = new Version(1, 4, 2) });
                 activateHooks();
             } else {
                 deactivateHooks();
@@ -61,24 +58,20 @@ namespace Celeste.Mod.JungleHelper.Entities {
             Logger.Log(LogLevel.Info, "JungleHelper/ClimbableOneWayPlatform", "=== Activating climbable one-way platform hooks");
 
             // implement the basic collision between actors/platforms and sideways jumpthrus.
-            using (new DetourContext { Before = { "*" } }) { // these don't always call the orig methods, better apply them first.
-                On.Celeste.Actor.MoveHExact += onActorMoveHExact;
-            }
+            IL.Celeste.Actor.MoveHExact += addSidewaysJumpthrusInHorizontalMoveMethods;
 
             // block "climb hopping" on top of climbable one-way platforms, because this just looks weird.
             On.Celeste.Player.ClimbHopBlockedCheck += onPlayerClimbHopBlockedCheck;
 
-            using (new DetourContext { ID = "JungleHelper", Before = { "*" } }) { // let's take over Spring Collab 2020, we can break it, this is not a collab map!
-                // mod collide checks to include climbable one-way platforms, so that the player behaves with them like with walls.
-                IL.Celeste.Player.ClimbCheck += modCollideChecks; // allow player to climb on them
-                IL.Celeste.Player.ClimbBegin += modCollideChecks; // if not applied, the player will clip through jumpthrus if trying to climb on them
-                IL.Celeste.Player.ClimbUpdate += modCollideChecks; // when climbing, jumpthrus are handled like walls
-                IL.Celeste.Player.SlipCheck += modCollideChecks; // make climbing on jumpthrus not slippery
-                IL.Celeste.Player.OnCollideH += modCollideChecks; // handle dashes against jumpthrus properly, without "shifting" down
+            // mod collide checks to include climbable one-way platforms, so that the player behaves with them like with walls.
+            IL.Celeste.Player.ClimbCheck += modCollideChecks; // allow player to climb on them
+            IL.Celeste.Player.ClimbBegin += modCollideChecks; // if not applied, the player will clip through jumpthrus if trying to climb on them
+            IL.Celeste.Player.ClimbUpdate += modCollideChecks; // when climbing, jumpthrus are handled like walls
+            IL.Celeste.Player.SlipCheck += modCollideChecks; // make climbing on jumpthrus not slippery
+            IL.Celeste.Player.OnCollideH += modCollideChecks; // handle dashes against jumpthrus properly, without "shifting" down
 
-                // have the push animation when Madeline runs against a jumpthru for example
-                hookOnUpdateSprite = new ILHook(typeof(Player).GetMethod("orig_UpdateSprite", BindingFlags.NonPublic | BindingFlags.Instance), modCollideChecks);
-            }
+            // have the push animation when Madeline runs against a jumpthru for example
+            hookOnUpdateSprite = new ILHook(typeof(Player).GetMethod("orig_UpdateSprite", BindingFlags.NonPublic | BindingFlags.Instance), modCollideChecks);
 
             // make the player able to grab the climbable one-way even when going up.
             IL.Celeste.Player.NormalUpdate += modPlayerNormalUpdate;
@@ -95,7 +88,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             Logger.Log(LogLevel.Info, "JungleHelper/ClimbableOneWayPlatform", "=== Deactivating one-way platform hooks");
 
-            On.Celeste.Actor.MoveHExact -= onActorMoveHExact;
+            IL.Celeste.Actor.MoveHExact -= addSidewaysJumpthrusInHorizontalMoveMethods;
 
             On.Celeste.Player.ClimbHopBlockedCheck -= onPlayerClimbHopBlockedCheck;
 
@@ -113,55 +106,33 @@ namespace Celeste.Mod.JungleHelper.Entities {
             On.Celeste.SurfaceIndex.GetPlatformByPriority -= modSurfaceIndexGetPlatformByPriority;
         }
 
-        private static bool onActorMoveHExact(On.Celeste.Actor.orig_MoveHExact orig, Actor self, int moveH, Collision onCollide, Solid pusher) {
-            // fall back to vanilla if no sideways jumpthru or climbable one-way is in the room.
-            if (self.Scene == null || (self.Scene.Tracker.CountEntities<ClimbableOneWayPlatform>() == 0 && !(maxHelpingHandIsHere && RoomContainsSidewaysJumpThrus(self))))
-                return orig(self, moveH, onCollide, pusher);
+        private static void addSidewaysJumpthrusInHorizontalMoveMethods(ILContext il) {
+            ILCursor cursor = new ILCursor(il);
 
-            Vector2 targetPosition = self.Position + Vector2.UnitX * moveH;
-            int moveDirection = Math.Sign(moveH);
-            int moveAmount = 0;
-            bool movingLeftToRight = moveH > 0;
-            while (moveH != 0) {
-                bool didCollide = false;
+            if (cursor.TryGotoNext(MoveType.After, instr => instr.MatchCall<Entity>("CollideFirst"))
+                 && cursor.TryGotoNext(instr => instr.OpCode == OpCodes.Brfalse_S || instr.OpCode == OpCodes.Brtrue_S)) {
 
-                // check if colliding with a solid
-                Solid solid = self.CollideFirst<Solid>(self.Position + Vector2.UnitX * moveDirection);
-                if (solid != null) {
-                    didCollide = true;
-                } else {
-                    // check if colliding with a climbable one-way platform while pressing Grab
-                    ClimbableOneWayPlatform climbablePlatform = collideFirstOutside(self, self.Position + Vector2.UnitX * moveDirection, !movingLeftToRight);
-                    if (Input.Grab.Check && self is Player player && player.Stamina >= 20f && climbablePlatform != null && climbablePlatform.climbJumpGrabCooldown <= 0f) {
+                Logger.Log("JungleHelper/ClimbableOneWayPlatform", $"Injecting sideways jumpthru check at {cursor.Index} in IL for {il.Method.Name}");
+                cursor.Emit(OpCodes.Ldarg_0);
+                cursor.Emit(OpCodes.Ldarg_1);
+                cursor.EmitDelegate<Func<Solid, Actor, int, Solid>>((orig, self, moveH) => {
+                    if (orig != null)
+                        return orig;
 
-                        // there is a sideways jump-thru and we are moving in the opposite direction => collision
-                        didCollide = true;
-                    } else if (maxHelpingHandIsHere) {
-                        // check if colliding with a sideways jumpthru
-                        didCollide = CheckCollisionWithSidewaysJumpthruWhileMoving(self, moveDirection, movingLeftToRight);
+                    int moveDirection = Math.Sign(moveH);
+                    bool movingLeftToRight = moveH > 0;
+                    if (checkCollisionWithSidewaysMovingPlatformsWhileMoving(self, moveDirection, movingLeftToRight)) {
+                        return new Solid(Vector2.Zero, 0, 0, false); // what matters is that it is non null.
                     }
-                }
 
-                if (didCollide) {
-                    Vector2 movementCounter = (Vector2) actorMovementCounter.GetValue(self);
-                    movementCounter.X = 0f;
-                    actorMovementCounter.SetValue(self, movementCounter);
-                    onCollide?.Invoke(new CollisionData {
-                        Direction = Vector2.UnitX * moveDirection,
-                        Moved = Vector2.UnitX * moveAmount,
-                        TargetPosition = targetPosition,
-                        Hit = solid,
-                        Pusher = pusher
-                    });
-                    return true;
-                }
-
-                // continue moving
-                moveAmount += moveDirection;
-                moveH -= moveDirection;
-                self.X += moveDirection;
+                    return null;
+                });
             }
-            return false;
+        }
+
+        private static bool checkCollisionWithSidewaysMovingPlatformsWhileMoving(Actor self, int moveDirection, bool movingLeftToRight) {
+            ClimbableOneWayPlatform climbablePlatform = collideFirstOutside(self, self.Position + Vector2.UnitX * moveDirection, !movingLeftToRight);
+            return Input.Grab.Check && self is Player player && player.Stamina >= 20f && climbablePlatform != null && climbablePlatform.climbJumpGrabCooldown <= 0f;
         }
 
         private static bool onPlayerClimbHopBlockedCheck(On.Celeste.Player.orig_ClimbHopBlockedCheck orig, Player self) {
@@ -176,6 +147,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private static void modCollideChecks(ILContext il) {
             ILCursor cursor = new ILCursor(il);
 
+            // create a Vector2 temporary variable
+            VariableDefinition checkAtPositionStore = new VariableDefinition(il.Import(typeof(Vector2)));
+            il.Body.Variables.Add(checkAtPositionStore);
+
             bool isClimb = il.Method.Name.Contains("Climb");
 
             while (cursor.Next != null) {
@@ -185,11 +160,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 if (next.OpCode == OpCodes.Call && (next.Operand as MethodReference)?.FullName == "System.Boolean Monocle.Entity::CollideCheck<Celeste.Solid>(Microsoft.Xna.Framework.Vector2)") {
                     Logger.Log("JungleHelper/ClimbableOneWayPlatform", $"Patching Entity.CollideCheck to include climbable one-ways at {cursor.Index} in IL for {il.Method.Name}");
 
-                    cursor.Remove();
-                    cursor.EmitDelegate<Func<Entity, Vector2, bool>>((self, checkAtPosition) => {
+                    callOrigMethodKeepingEverythingOnStack(cursor, checkAtPositionStore, isSceneCollideCheck: false);
+
+                    cursor.EmitDelegate<Func<bool, Entity, Vector2, bool>>((orig, self, checkAtPosition) => {
                         // we still want to check for solids...
-                        if (self.CollideCheck<Solid>(checkAtPosition))
-                            return true;
+                        if (orig) return true;
 
                         // if we are not checking a side, this certainly has nothing to do with jumpthrus.
                         if (self.Position.X == checkAtPosition.X)
@@ -200,38 +175,38 @@ namespace Celeste.Mod.JungleHelper.Entities {
                         // and we are checking the collision on the left side of the player for example.
                         bool collideOnLeftSideOfPlayer = (self.Position.X > checkAtPosition.X);
                         ClimbableOneWayPlatform oneway = collideFirstOutside(self, checkAtPosition, collideOnLeftSideOfPlayer);
-                        return (oneway != null && self is Player player
-                            && oneway.Bottom >= self.Top + checkAtPosition.Y - self.Position.Y + 3)
-                            || (maxHelpingHandIsHere && EntityIsCollidingWithSidewaysJumpthrus(self, checkAtPosition, isClimb));
+                        return oneway != null && self is Player player
+                            && oneway.Bottom >= self.Top + checkAtPosition.Y - self.Position.Y + 3;
                     });
                 }
 
                 if (next.OpCode == OpCodes.Callvirt && (next.Operand as MethodReference)?.FullName == "System.Boolean Monocle.Scene::CollideCheck<Celeste.Solid>(Microsoft.Xna.Framework.Vector2)") {
                     Logger.Log("JungleHelper/ClimbableOneWayPlatform", $"Patching Scene.CollideCheck to include climbable one-ways at {cursor.Index} in IL for {il.Method.Name}");
 
-                    cursor.Remove();
-                    cursor.EmitDelegate<Func<Scene, Vector2, bool>>((self, vector) => self.CollideCheck<Solid>(vector) || self.CollideCheck<ClimbableOneWayPlatform>(vector)
-                        || (maxHelpingHandIsHere && SceneIsCollidingWithSidewaysJumpthrus(self, vector, isClimb)));
+                    callOrigMethodKeepingEverythingOnStack(cursor, checkAtPositionStore, isSceneCollideCheck: true);
+
+                    cursor.EmitDelegate<Func<bool, Scene, Vector2, bool>>((orig, self, vector) => orig || self.CollideCheck<ClimbableOneWayPlatform>(vector));
                 }
 
                 cursor.Index++;
             }
         }
 
-        private static bool CheckCollisionWithSidewaysJumpthruWhileMoving(Actor self, int moveDirection, bool movingLeftToRight) {
-            return SidewaysJumpThru.CheckCollisionWithSidewaysJumpthruWhileMoving(self, moveDirection, movingLeftToRight);
-        }
+        private static void callOrigMethodKeepingEverythingOnStack(ILCursor cursor, VariableDefinition checkAtPositionStore, bool isSceneCollideCheck) {
+            // store the position in the local variable
+            cursor.Emit(OpCodes.Stloc, checkAtPositionStore);
+            cursor.Emit(OpCodes.Ldloc, checkAtPositionStore);
 
-        private static bool RoomContainsSidewaysJumpThrus(Actor self) {
-            return SidewaysJumpThru.RoomContainsSidewaysJumpThrus(self);
-        }
+            // let vanilla call CollideCheck
+            cursor.Index++;
 
-        private static bool EntityIsCollidingWithSidewaysJumpthrus(Entity self, Vector2 checkAtPosition, bool isClimb) {
-            return SidewaysJumpThru.EntityCollideCheckWithSidewaysJumpthrus(self, checkAtPosition, isClimb, isWallJump: false);
-        }
+            // reload the parameters
+            cursor.Emit(OpCodes.Ldarg_0);
+            if (isSceneCollideCheck) {
+                cursor.Emit(OpCodes.Call, typeof(Entity).GetProperty("Scene").GetGetMethod());
+            }
 
-        private static bool SceneIsCollidingWithSidewaysJumpthrus(Scene self, Vector2 vector, bool isClimb) {
-            return SidewaysJumpThru.SceneCollideCheckWithSidewaysJumpthrus(self, vector, isClimb, isWallJump: false);
+            cursor.Emit(OpCodes.Ldloc, checkAtPositionStore);
         }
 
         private static void modPlayerNormalUpdate(ILContext il) {
