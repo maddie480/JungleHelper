@@ -6,7 +6,7 @@ using System.Collections;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/BreakablePot")]
-    class BreakablePot : Actor {
+    public class BreakablePot : Actor {
         private Image rupee;
         private Sprite sprite;
         private Holdable hold;

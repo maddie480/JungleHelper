@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/InvisibleJumpthruPlatform")]
-    class InvisibleJumpthruPlatform : JumpthruPlatform {
+    public class InvisibleJumpthruPlatform : JumpthruPlatform {
         public static Entity Load(Level level, LevelData levelData, Vector2 offset, EntityData entityData) {
             entityData.Values["texture"] = "JungleHelper/Invisible";
             return new InvisibleJumpthruPlatform(entityData, offset);

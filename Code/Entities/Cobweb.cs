@@ -5,7 +5,7 @@ using System;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/Cobweb")]
-    class Cobweb : Entity {
+    public class Cobweb : Entity {
         private Sprite sprite;
         private Player stuckPlayer;
         private SoundSource sfx;

@@ -9,7 +9,7 @@ using System.Reflection;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/CassetteCustomPreviewMusic")]
-    class CassetteCustomPreviewMusic : Cassette {
+    public class CassetteCustomPreviewMusic : Cassette {
         private static ILHook hookOnCollectRoutine;
 
         public static void Load() {

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace Celeste.Mod.JungleHelper.Entities {
     // functionally identical to an ice wall, except it looks like moss and can be dissolved with a lantern.
     [CustomEntity("JungleHelper/MossyWall")]
-    class MossyWall : Entity {
+    public class MossyWall : Entity {
         public static void Load() {
             On.Celeste.Level.Update += onLevelUpdate;
         }

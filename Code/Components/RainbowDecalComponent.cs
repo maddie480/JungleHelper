@@ -5,7 +5,7 @@ using MonoMod.Cil;
 using System;
 
 namespace Celeste.Mod.JungleHelper.Components {
-    class RainbowDecalComponent : Component {
+    public class RainbowDecalComponent : Component {
         public RainbowDecalComponent() : base(active: false, visible: false) { }
 
         public static void Load() {

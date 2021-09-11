@@ -4,7 +4,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
     // This file contains a list of all vanilla textures for player, player_no_backpack and player_badeline that exist in vanilla.
     // This is used to determine if one of them was reskinned.
     // We only take reskinned frames into account.
-    static class EnforceSkinVanillaSpriteDump {
+    public static class EnforceSkinVanillaSpriteDump {
         public static readonly HashSet<string> VanillaPlayerSprites = new HashSet<string>(new string[] {
             // "Graphics/Atlases/Gameplay/characters/player/bangs00",
             // "Graphics/Atlases/Gameplay/characters/player/bangs01",

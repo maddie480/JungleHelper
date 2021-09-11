@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/AttachTriggerController")]
-    class AttachTriggerController : Entity {
+    public class AttachTriggerController : Entity {
         private string entityFilter = null;
         private string triggerFilter = null;
         private Vector2 entityPosition, triggerPosition;

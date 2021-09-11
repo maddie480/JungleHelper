@@ -6,7 +6,7 @@ using System.Collections;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/Cockatiel")]
-    class Cockatiel : Entity {
+    public class Cockatiel : Entity {
         private Sprite sprite;
 
         public Cockatiel(EntityData data, Vector2 offset) : base(data.Position + offset) {

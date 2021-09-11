@@ -4,7 +4,7 @@ using Monocle;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/CheatCodeController")]
-    static class CheatCodeController {
+    public static class CheatCodeController {
         private class Nothing : Entity {
             public override void Added(Scene scene) {
                 base.Added(scene);

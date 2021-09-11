@@ -6,7 +6,7 @@ using Monocle;
 namespace Celeste.Mod.JungleHelper.Triggers {
     [CustomEntity("JungleHelper/GeckoTutorial", "JungleHelper/GeckoTutorialTrigger")]
     [Tracked]
-    class GeckoTutorialTrigger : Trigger {
+    public class GeckoTutorialTrigger : Trigger {
         public readonly string GeckoId;
         public readonly bool ShowTutorial;
 

@@ -11,7 +11,7 @@ using System.Reflection;
 namespace Celeste.Mod.JungleHelper.Entities {
     [Tracked]
     [TrackedAs(typeof(CassetteBlock))]
-    class SwingCassetteBlock : CassetteBlock {
+    public class SwingCassetteBlock : CassetteBlock {
         private static ILHook loadLevelILHook;
         public static bool IsSwingCassetteBlock = false;
 

@@ -10,7 +10,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
     /// A Crumble Platform, except the bits aren't randomly shuffled around when it respawns.
     /// </summary>
     [CustomEntity("JungleHelper/UnrandomizedCrumblePlatform")]
-    class UnrandomizedCrumblePlatform : CrumblePlatform {
+    public class UnrandomizedCrumblePlatform : CrumblePlatform {
         public static void Load() {
             On.Celeste.CrumblePlatform.TileIn += onCrumblePlatformTileIn;
         }

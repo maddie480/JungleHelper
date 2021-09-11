@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/NodedCrumblePlatform")]
-    class NodedCrumblePlatform : CrumblePlatform {
+    public class NodedCrumblePlatform : CrumblePlatform {
         private List<Image> outline;
         private Coroutine outlineFader;
 

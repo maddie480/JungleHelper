@@ -12,7 +12,7 @@ using Mono.Cecil;
 using System.Collections.Generic;
 
 namespace Celeste.Mod.JungleHelper.Entities {
-    static class EnforceSkinController {
+    public static class EnforceSkinController {
         private const PlayerSpriteMode SpriteModeMadelineNormal = (PlayerSpriteMode) 444480;
         private const PlayerSpriteMode SpriteModeBadelineNormal = (PlayerSpriteMode) 444481;
         private const PlayerSpriteMode SpriteModeMadelineLantern = (PlayerSpriteMode) 444482;

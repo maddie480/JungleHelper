@@ -6,7 +6,7 @@ using System;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/PredatorPlant")]
-    class PredatorPlant : Entity {
+    public class PredatorPlant : Entity {
         private enum Color {
             Pink, Blue, Yellow
         };

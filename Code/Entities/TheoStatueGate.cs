@@ -5,7 +5,7 @@ using System;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/TheoStatueGate")]
-    class TheoStatueGate : TempleGate {
+    public class TheoStatueGate : TempleGate {
         public static void Load() {
             On.Celeste.TempleGate.TheoIsNearby += modTheoIsNearby;
         }

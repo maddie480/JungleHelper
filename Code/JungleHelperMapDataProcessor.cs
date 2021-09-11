@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace Celeste.Mod.JungleHelper {
-    class JungleHelperMapDataProcessor : EverestMapDataProcessor {
+    public class JungleHelperMapDataProcessor : EverestMapDataProcessor {
         private int checkpoint;
 
         public override void Reset() {

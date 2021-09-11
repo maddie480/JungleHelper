@@ -6,7 +6,7 @@ namespace Celeste.Mod.JungleHelper.Components {
     /// Slope collider, with horizontal top and bottom sides.
     /// <i>Those are not the "slopes in Celeste" you are looking for.</i>
     /// </summary>
-    class SlopedColliderWithRectangles : ColliderList {
+    public class SlopedColliderWithRectangles : ColliderList {
 
         private Vector2 topleft, topright, bottomleft, bottomright;
 

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/SpinyPlant")]
-    class SpinyPlant : Entity {
+    public class SpinyPlant : Entity {
         private const int LANTERN_ACTIVATION_RADIUS = 75;
 
         private int lines;

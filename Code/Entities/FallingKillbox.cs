@@ -8,7 +8,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
     /// </summary>
     [CustomEntity("JungleHelper/FallingKillbox")]
     [TrackedAs(typeof(Killbox))]
-    class FallingKillbox : Killbox {
+    public class FallingKillbox : Killbox {
         private readonly float fallingSpeed;
 
         public FallingKillbox(EntityData data, Vector2 offset) : base(data, offset) {

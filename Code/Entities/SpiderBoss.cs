@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/SpiderBoss")]
-    class SpiderBoss : Entity {
+    public class SpiderBoss : Entity {
         private static bool usingWatchtower;
 
         public static void Load() {

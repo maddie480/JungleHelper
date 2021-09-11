@@ -6,7 +6,7 @@ using Monocle;
 namespace Celeste.Mod.JungleHelper.Triggers {
     [CustomEntity("JungleHelper/DropLanternTrigger")]
     [Tracked]
-    class DropLanternTrigger : Trigger {
+    public class DropLanternTrigger : Trigger {
         private readonly bool oneUse;
         private readonly bool destroyLantern;
 

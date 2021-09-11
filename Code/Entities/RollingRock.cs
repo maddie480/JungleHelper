@@ -8,7 +8,7 @@ using System;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/RollingRock")]
-    class RollingRock : Actor {
+    public class RollingRock : Actor {
         public static void Load() {
             IL.Celeste.DashBlock.Removed += onDashBlockRemove;
         }

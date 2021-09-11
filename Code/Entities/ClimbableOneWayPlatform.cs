@@ -13,7 +13,7 @@ using System.Reflection;
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/ClimbableOneWayPlatform")]
     [Tracked]
-    class ClimbableOneWayPlatform : Entity {
+    public class ClimbableOneWayPlatform : Entity {
         private static ILHook hookOnUpdateSprite;
 
         private static FieldInfo actorMovementCounter = typeof(Actor).GetField("movementCounter", BindingFlags.Instance | BindingFlags.NonPublic);

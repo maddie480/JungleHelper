@@ -4,7 +4,7 @@ using Monocle;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/Torch")]
-    class Torch : Entity {
+    public class Torch : Entity {
         private readonly string flag;
         private Sprite sprite;
 

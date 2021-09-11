@@ -12,7 +12,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/TreeDepthController")] // memorialTextController but jungle
     [RegisterStrawberry(tracked: false, blocksCollection: true)]
     [Tracked]
-    class GrablessGoldenBerry : Strawberry {
+    public class GrablessGoldenBerry : Strawberry {
         private static List<ILHook> manualILHooks = new List<ILHook>();
 
         public static void Load() {

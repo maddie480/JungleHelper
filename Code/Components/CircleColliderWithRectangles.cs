@@ -6,7 +6,7 @@ namespace Celeste.Mod.JungleHelper.Components {
     /// <summary>
     /// Circle collider, except using multiple rectangles instead, allowing them to collide with tiles for example.
     /// </summary>
-    class CircleColliderWithRectangles : ColliderList {
+    public class CircleColliderWithRectangles : ColliderList {
         private int radius;
         private float x;
         private float y;

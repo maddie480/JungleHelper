@@ -8,7 +8,7 @@ using System.Linq;
 namespace Celeste.Mod.JungleHelper.Entities {
     // mostly a refill copypaste, also looks like a refill for now, waiting for the sprites.
     [CustomEntity("JungleHelper/RemoteKevinRefill")]
-    class RemoteKevinRefill : Entity {
+    public class RemoteKevinRefill : Entity {
 
         private static ParticleType P_SlideRefillGlow;
         private static ParticleType P_SlideRefillRegen;

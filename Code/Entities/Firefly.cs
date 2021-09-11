@@ -6,7 +6,7 @@ using System;
 namespace Celeste.Mod.JungleHelper.Entities {
     // reskinned moon creature without a tail
     [CustomEntity("JungleHelper/Firefly")]
-    class Firefly : Entity {
+    public class Firefly : Entity {
         private Vector2 start;
         private Vector2 target;
 

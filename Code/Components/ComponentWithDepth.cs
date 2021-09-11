@@ -7,7 +7,7 @@ namespace Celeste.Mod.JungleHelper.Components {
     /// A component with customizable depth. Useful to display a visual component with a depth different from the entity it is attached to.
     /// </summary>
     /// <typeparam name="T">The type of the component</typeparam>
-    class ComponentWithDepth<T> : Component where T : Component {
+    public class ComponentWithDepth<T> : Component where T : Component {
         private class ComponentEntity : Entity {
             public T Component;
             public ComponentEntity(T component) {

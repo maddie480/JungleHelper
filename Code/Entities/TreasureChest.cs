@@ -5,7 +5,7 @@ using System.Collections;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/TreasureChest")]
-    class TreasureChest : Entity {
+    public class TreasureChest : Entity {
         private readonly EntityID id;
         private readonly string spriteName;
 

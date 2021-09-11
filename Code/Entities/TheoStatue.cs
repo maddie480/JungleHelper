@@ -6,7 +6,7 @@ using MonoMod.Utils;
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/TheoStatue")]
     [Tracked]
-    class TheoStatue : TheoCrystal {
+    public class TheoStatue : TheoCrystal {
         private DynData<Holdable> holdData;
 
         public TheoStatue(EntityData data, Vector2 offset) : base(data, offset) {

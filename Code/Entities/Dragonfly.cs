@@ -4,7 +4,7 @@ using Monocle;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/Dragonfly")]
-    class Dragonfly : Entity {
+    public class Dragonfly : Entity {
         public Dragonfly(EntityData data, Vector2 offset) : base(data.Position + offset) {
             Depth = 5000;
 
