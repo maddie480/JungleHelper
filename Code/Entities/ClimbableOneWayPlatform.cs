@@ -288,10 +288,20 @@ namespace Celeste.Mod.JungleHelper.Entities
                 {
                     platform.initialSpeed = self.Speed.X;
                     platform.startTimer();
+                    if(Math.Sign(Input.Aim.Value.X) == (self.Facing == Facings.Right ? 1 : -1)) {
+                        self.Speed.X += platform.bonusSpeed(platform.initialSpeed, platform.grabTimer);
+                    }
                 }
                 if (platform.initialStamina >= 0f)
                 {
                     platform.initialStamina = self.Stamina;
+                }
+
+                if (platform.sameDirBoost && (Input.Jump.Pressed || Input.Jump)) {
+                    if (Math.Abs(self.Speed.X) < 240f && Math.Sign(Input.Aim.Value.X) == (self.Facing == Facings.Right ? 1 : -1)) { 
+                        self.Speed.X += (85f * (1 - Math.Abs(self.Speed.X) / 240f)) * (self.Facing == Facings.Right ? 1 : -1);
+                        self.Speed.Y -= 15f;
+                    }
                 }
             }
 
@@ -562,6 +572,8 @@ namespace Celeste.Mod.JungleHelper.Entities
                 stamStored = Input.GrabCheck && GetPlayer().StateMachine.State == 1 && GetPlayer().CollideCheck(this, GetPlayer().Center + (GetPlayer().Facing == Facings.Right ? 2 : -2) * Vector2.UnitX);
 
             manageTimer(out bool v);
+
+            Console.WriteLine(Input.Jump.BufferTime);
 
 
 
