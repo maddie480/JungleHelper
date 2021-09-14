@@ -6,6 +6,7 @@ using Monocle;
 using MonoMod.Cil;
 using MonoMod.RuntimeDetour;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -142,7 +143,7 @@ namespace Celeste.Mod.JungleHelper.Entities
                 cursor.EmitDelegate<Func<Solid, Actor, int, Solid>>((orig, self, moveH) => {
                     if (orig != null)
                         return orig;
-
+                    
                     int moveDirection = Math.Sign(moveH);
                     bool movingLeftToRight = moveH > 0;
                     if (checkCollisionWithSidewaysMovingPlatformsWhileMoving(self, moveDirection, movingLeftToRight))
@@ -162,6 +163,10 @@ namespace Celeste.Mod.JungleHelper.Entities
             {
                 return Input.Grab.Check && self is Player player && player.Stamina >= 20f && climbablePlatform != null && climbablePlatform.climbJumpGrabCooldown <= 0f;
             }
+
+            //if a custom stamina behavior is present, set the stamina to slightly above red point
+            if (Input.Grab.Check && self is Player && climbablePlatform != null && climbablePlatform.climbJumpGrabCooldown <= 0f)
+                (self as Player).Stamina = Math.Max((self as Player).Stamina, 21f);
             return Input.Grab.Check && self is Player && climbablePlatform != null && climbablePlatform.climbJumpGrabCooldown <= 0f;
         }
 
@@ -283,28 +288,18 @@ namespace Celeste.Mod.JungleHelper.Entities
             ClimbableOneWayPlatform platform = collideFirstOutside(self, self.Position + new Vector2((int)self.Facing * 2, 0), self.Facing == Facings.Left);
             if (platform != null)
             {
-
+                //store initial speed and stamina if needed   
                 if (platform.hasMomentumCarrying)
                 {
                     platform.initialSpeed = self.Speed.X;
                     platform.startTimer();
-                    if(Math.Sign(Input.Aim.Value.X) == (self.Facing == Facings.Right ? 1 : -1)) {
-                        self.Speed.X += platform.bonusSpeed(platform.initialSpeed, platform.grabTimer);
-                    }
                 }
                 if (platform.initialStamina >= 0f)
                 {
+                    platform.stamStored = true;
                     platform.initialStamina = self.Stamina;
-                }
-
-                if (platform.sameDirBoost && (Input.Jump.Pressed || Input.Jump)) {
-                    if (Math.Abs(self.Speed.X) < 240f && Math.Sign(Input.Aim.Value.X) == (self.Facing == Facings.Right ? 1 : -1)) { 
-                        self.Speed.X += (85f * (1 - Math.Abs(self.Speed.X) / 240f)) * (self.Facing == Facings.Right ? 1 : -1);
-                        self.Speed.Y -= 15f;
-                    }
-                }
+                }   
             }
-
             orig.Invoke(self);
         }
 
@@ -314,11 +309,26 @@ namespace Celeste.Mod.JungleHelper.Entities
             ClimbableOneWayPlatform platform = collideFirstOutside(self, self.Position + new Vector2((int)self.Facing * 2, 0), self.Facing == Facings.Left);
             if (platform != null)
             {
+                //checks for momentum jumps and same direction jumps. the latter cannot be activated if the former is active, as the purpose is nullified anyways
+                if((Input.Jump.Pressed || Input.Jump.BufferTime < 0.08f) && (int)Input.Aim.Value.X != 0) {
+                    if (platform.hasMomentumCarrying && platform.grabTimer < platform.decayTime) {
+                        self.Speed.X += platform.bonusSpeed(platform.initialSpeed, platform.grabTimer);
+                        platform.grabTimer = 0f;
+                    }
+                    else if(platform.sameDirBoost) {
+                        if (Math.Abs(self.Speed.X) < 240f && Input.Aim.Value.X / Math.Abs(Input.Aim.Value.X) == (int) self.Facing) {
+                            self.Speed.X += (140f * (1 - Math.Abs(self.Speed.X) / 240f)) * (int)(self.Facing);
+                            
+                        }
+                    }
+                    platform.stamStored = false;
+                }
+
                 //stamina management
                 if (platform.stamBehavior == "regain")
                     self.RefillStamina();
-                else if (platform.initialStamina > 0f && platform.stamStored)
-                    self.Stamina = platform.initialStamina;
+                else if (platform.stamStored)
+                    self.Stamina = Math.Max(platform.initialStamina, 21);
             }
             return orig.Invoke(self);
         }
@@ -336,24 +346,9 @@ namespace Celeste.Mod.JungleHelper.Entities
                 //stamina management
                 if (platform.stamBehavior == "regain")
                     self.RefillStamina();
-                else if (platform.initialStamina > 0f && platform.stamStored)
-                    self.Stamina = platform.initialStamina;
+                else if (platform.stamBehavior == "conserve")
+                    self.Stamina = Math.Max(platform.initialStamina, 21);
 
-                //momentum jumping, similar to a corner boost
-                if (platform.hasMomentumCarrying && Math.Sign(Input.Aim.Value.X) == (self.Facing == Facings.Right ? 1 : -1))
-                {
-                    self.Speed.X += platform.bonusSpeed(platform.initialSpeed, platform.grabTimer);
-                }
-
-                //provides bonus momentum to make jumping from each side the same strength, after momentum jump so they do not stack
-                if (platform.sameDirBoost)
-                {
-                    if (Math.Abs(self.Speed.X) < 240f && Math.Sign(Input.Aim.Value.X) == (self.Facing == Facings.Right ? 1 : -1))
-                    {
-                        self.Speed.X += (85f * (1 - Math.Abs(self.Speed.X) / 240f)) * (self.Facing == Facings.Right ? 1 : -1);
-                        self.Speed.Y -= 15f;
-                    }
-                }
             }
         }
 
@@ -430,7 +425,7 @@ namespace Celeste.Mod.JungleHelper.Entities
 
         private float climbJumpGrabCooldown = -1f;
 
-        #region CustomizationOptions_Jackal
+        #region CustomizationOptions
 
         private bool sameDirBoost;
         public string stamBehavior;
@@ -438,11 +433,12 @@ namespace Celeste.Mod.JungleHelper.Entities
         public bool stamStored = false;
 
 
-        #region CornerBoostVars_Jackal
+        #region MomentumJump
 
+        //used to store data for each climb session
         private bool hasMomentumCarrying = false;
         private float initialSpeed = 0f;
-        private float grabTimer = -1f;
+        private float grabTimer = 0f;
 
         /** must be <=1 and > 0, rate at which stored speed decays*/
         public float curvature;
@@ -454,12 +450,18 @@ namespace Celeste.Mod.JungleHelper.Entities
          time parameter refers to elapsed time since initial speed was set*/
         private float bonusSpeed(float spdX, float time)
         {
-            return (float)(spdX * Math.Pow(decayTime, -2.0) * (decayTime + time) * (decayTime - time) * Math.Pow(curvature, time));
+            if (time > decayTime) {
+                return 0f;
+            }
+            if(time <= 4 * Engine.DeltaTime) {
+                return (spdX * 1.2f);
+            }
+            return (float)((spdX*1.2) * Math.Pow(decayTime, -2.0) * (decayTime + time) * (decayTime - time) * Math.Pow(curvature, time));
         }
 
-        #endregion CornerBoostVars_Jackal
+        #endregion MomentumJump
 
-        #endregion CustomizationOptions_Jackal
+        #endregion CustomizationOptions
 
         public ClimbableOneWayPlatform(Vector2 position, int height, bool allowLeftToRight, string overrideTexture, float animationDelay, int surfaceIndex, string stamBehavior, bool sameDirBoost, float decayTime, float curvature)
             : base(position)
@@ -478,12 +480,13 @@ namespace Celeste.Mod.JungleHelper.Entities
 
             Collider = new Hitbox(5f, height, hitboxOffset, 0);
 
+            //assigns and organizes customization variables
             this.decayTime = Calc.Clamp(decayTime, 0f, int.MaxValue);
-            curvature = Calc.Clamp(curvature, 0f, 1f);
+            this.curvature = Calc.Clamp(curvature, 0f, 1f);
             hasMomentumCarrying = (decayTime != 0 && curvature != 0f);
             this.stamBehavior = stamBehavior.ToLower();
             this.sameDirBoost = sameDirBoost;
-            initialStamina = stamBehavior == "conserve" ? 0f : -1f;
+            initialStamina = this.stamBehavior == "conserve" ? 0f : -1f;
         }
 
         public ClimbableOneWayPlatform(EntityData data, Vector2 offset)
@@ -566,44 +569,26 @@ namespace Celeste.Mod.JungleHelper.Entities
             // deplete the cooldown
             if (climbJumpGrabCooldown >= 0f)
                 climbJumpGrabCooldown -= Engine.DeltaTime;
-
-            // keeps the stamina unstored only if player is not pressing grab, latched to a wall and colliding with a COWP
-            if (stamStored && GetPlayer() != null)
-                stamStored = Input.GrabCheck && GetPlayer().StateMachine.State == 1 && GetPlayer().CollideCheck(this, GetPlayer().Center + (GetPlayer().Facing == Facings.Right ? 2 : -2) * Vector2.UnitX);
-
-            manageTimer(out bool v);
-
-            Console.WriteLine(Input.Jump.BufferTime);
-
+            manageTimer();
 
 
         }
 
         // starts a new timer
-        public void startTimer()
+        private void startTimer()
         {
-            if (hasMomentumCarrying && grabTimer < 0f)
+            if (hasMomentumCarrying)
             {
-                grabTimer = Engine.DeltaTime;
+                grabTimer += Engine.DeltaTime;
             }
         }
 
-        public void manageTimer(out bool valid)
+        private void manageTimer()
         {
             if (grabTimer > 0f)
             {
                 grabTimer += Engine.DeltaTime;
             }
-            valid = grabTimer < decayTime;
-            if (!valid)
-            {
-                grabTimer = 0f;
-            }
-        }
-
-        public static Player GetPlayer()
-        {
-            return (Engine.Scene as Level)?.Tracker?.GetEntity<Player>();
         }
     }
 }
