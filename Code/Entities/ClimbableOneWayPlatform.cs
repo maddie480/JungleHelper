@@ -93,8 +93,8 @@ namespace Celeste.Mod.JungleHelper.Entities
             On.Celeste.SurfaceIndex.GetPlatformByPriority += modSurfaceIndexGetPlatformByPriority;
 
             //customization hooks
-            On.Celeste.Player.ClimbBegin += JackalMomentum_modPlayerClimbBegin;
-            On.Celeste.Player.ClimbUpdate += JackalMomentum_modPlayerClimbUpdate;
+            On.Celeste.Player.ClimbBegin += Customization_modPlayerClimbBegin;
+            On.Celeste.Player.ClimbUpdate += Customization_modPlayerClimbUpdate;
         }
 
         public static void deactivateHooks()
@@ -125,8 +125,8 @@ namespace Celeste.Mod.JungleHelper.Entities
             On.Celeste.SurfaceIndex.GetPlatformByPriority -= modSurfaceIndexGetPlatformByPriority;
 
             //customization hooks
-            On.Celeste.Player.ClimbBegin -= JackalMomentum_modPlayerClimbBegin;
-            On.Celeste.Player.ClimbUpdate -= JackalMomentum_modPlayerClimbUpdate;
+            On.Celeste.Player.ClimbBegin -= Customization_modPlayerClimbBegin;
+            On.Celeste.Player.ClimbUpdate -= Customization_modPlayerClimbUpdate;
         }
 
         private static void addSidewaysJumpthrusInHorizontalMoveMethods(ILContext il)
@@ -283,7 +283,7 @@ namespace Celeste.Mod.JungleHelper.Entities
         }
 
         //grabs the speed and stamina if applicable at the earliest poossible time
-        private static void JackalMomentum_modPlayerClimbBegin(On.Celeste.Player.orig_ClimbBegin orig, Player self)
+        private static void Customization_modPlayerClimbBegin(On.Celeste.Player.orig_ClimbBegin orig, Player self)
         {
             ClimbableOneWayPlatform platform = collideFirstOutside(self, self.Position + new Vector2((int)self.Facing * 2, 0), self.Facing == Facings.Left);
             if (platform != null)
@@ -303,7 +303,7 @@ namespace Celeste.Mod.JungleHelper.Entities
             orig.Invoke(self);
         }
 
-        private static int JackalMomentum_modPlayerClimbUpdate(On.Celeste.Player.orig_ClimbUpdate orig, Player self)
+        private static int Customization_modPlayerClimbUpdate(On.Celeste.Player.orig_ClimbUpdate orig, Player self)
         {
 
             ClimbableOneWayPlatform platform = collideFirstOutside(self, self.Position + new Vector2((int)self.Facing * 2, 0), self.Facing == Facings.Left);
@@ -483,7 +483,7 @@ namespace Celeste.Mod.JungleHelper.Entities
             //assigns and organizes customization variables
             this.decayTime = Calc.Clamp(decayTime, 0f, int.MaxValue);
             this.curvature = Calc.Clamp(curvature, 0f, 1f);
-            hasMomentumCarrying = (decayTime != 0 && curvature != 0f);
+            hasMomentumCarrying = (this.decayTime != 0 && this.curvature != 0f);
             this.stamBehavior = stamBehavior.ToLower();
             this.sameDirBoost = sameDirBoost;
             initialStamina = this.stamBehavior == "conserve" ? 0f : -1f;
