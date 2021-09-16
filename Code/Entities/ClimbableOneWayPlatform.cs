@@ -159,15 +159,16 @@ namespace Celeste.Mod.JungleHelper.Entities
         private static bool checkCollisionWithSidewaysMovingPlatformsWhileMoving(Actor self, int moveDirection, bool movingLeftToRight)
         {
             ClimbableOneWayPlatform climbablePlatform = collideFirstOutside(self, self.Position + Vector2.UnitX * moveDirection, !movingLeftToRight);
-            if (climbablePlatform != null && climbablePlatform.stamBehavior == "none")
+            bool canGOWPClimbJump = Input.Grab.Check && self is Player && climbablePlatform != null && climbablePlatform.climbJumpGrabCooldown <= 0f;
+            if (climbablePlatform != null && climbablePlatform.staminaBehavior == StaminaBehavior.None)
             {
-                return Input.Grab.Check && self is Player player && player.Stamina >= 20f && climbablePlatform != null && climbablePlatform.climbJumpGrabCooldown <= 0f;
+                return canGOWPClimbJump && (self as Player).Stamina >= 20f;
             }
 
             //if a custom stamina behavior is present, set the stamina to slightly above red point
-            if (Input.Grab.Check && self is Player && climbablePlatform != null && climbablePlatform.climbJumpGrabCooldown <= 0f)
+            if (canGOWPClimbJump)
                 (self as Player).Stamina = Math.Max((self as Player).Stamina, 21f);
-            return Input.Grab.Check && self is Player && climbablePlatform != null && climbablePlatform.climbJumpGrabCooldown <= 0f;
+            return canGOWPClimbJump;
         }
 
         private static bool onPlayerClimbHopBlockedCheck(On.Celeste.Player.orig_ClimbHopBlockedCheck orig, Player self)
@@ -294,7 +295,7 @@ namespace Celeste.Mod.JungleHelper.Entities
                     platform.initialSpeed = self.Speed.X;
                     platform.startTimer();
                 }
-                if (platform.initialStamina >= 0f)
+                if (platform.staminaBehavior == StaminaBehavior.Conserve)
                 {
                     platform.stamStored = true;
                     platform.initialStamina = self.Stamina;
@@ -316,7 +317,7 @@ namespace Celeste.Mod.JungleHelper.Entities
                         platform.grabTimer = 0f;
                     }
                     else if(platform.sameDirBoost) {
-                        if (Math.Abs(self.Speed.X) < 240f && Input.Aim.Value.X / Math.Abs(Input.Aim.Value.X) == (int) self.Facing) {
+                        if (Math.Abs(self.Speed.X) < 240f && Input.Aim.Value.X != 0 && Input.Aim.Value.X / Math.Abs(Input.Aim.Value.X) == (int) self.Facing) {
                             self.Speed.X += (140f * (1 - Math.Abs(self.Speed.X) / 240f)) * (int)(self.Facing);
                             
                         }
@@ -325,7 +326,7 @@ namespace Celeste.Mod.JungleHelper.Entities
                 }
 
                 //stamina management
-                if (platform.stamBehavior == "regain")
+                if (platform.staminaBehavior == StaminaBehavior.Regain)
                     self.RefillStamina();
                 else if (platform.stamStored)
                     self.Stamina = Math.Max(platform.initialStamina, 21);
@@ -344,9 +345,9 @@ namespace Celeste.Mod.JungleHelper.Entities
                 platform.climbJumpGrabCooldown = 0.35f;
 
                 //stamina management
-                if (platform.stamBehavior == "regain")
+                if (platform.staminaBehavior == StaminaBehavior.Regain)
                     self.RefillStamina();
-                else if (platform.stamBehavior == "conserve")
+                else if (platform.staminaBehavior == StaminaBehavior.Conserve)
                     self.Stamina = Math.Max(platform.initialStamina, 21);
 
             }
@@ -428,9 +429,14 @@ namespace Celeste.Mod.JungleHelper.Entities
         #region CustomizationOptions
 
         private bool sameDirBoost;
-        public string stamBehavior;
         private float initialStamina = -1f;
         public bool stamStored = false;
+        public StaminaBehavior staminaBehavior = StaminaBehavior.None;
+        public enum StaminaBehavior {
+            None,
+            Conserve,
+            Regain
+        };
 
 
         #region MomentumJump
@@ -463,7 +469,7 @@ namespace Celeste.Mod.JungleHelper.Entities
 
         #endregion CustomizationOptions
 
-        public ClimbableOneWayPlatform(Vector2 position, int height, bool allowLeftToRight, string overrideTexture, float animationDelay, int surfaceIndex, string stamBehavior, bool sameDirBoost, float decayTime, float curvature)
+        public ClimbableOneWayPlatform(Vector2 position, int height, bool allowLeftToRight, string overrideTexture, float animationDelay, int surfaceIndex, StaminaBehavior StaminaBehavior, bool sameDirBoost, float decayTime, float curvature)
             : base(position)
         {
 
@@ -484,13 +490,13 @@ namespace Celeste.Mod.JungleHelper.Entities
             this.decayTime = Calc.Clamp(decayTime, 0f, int.MaxValue);
             this.curvature = Calc.Clamp(curvature, 0f, 1f);
             hasMomentumCarrying = (this.decayTime != 0 && this.curvature != 0f);
-            this.stamBehavior = stamBehavior.ToLower();
+            staminaBehavior = StaminaBehavior;
             this.sameDirBoost = sameDirBoost;
-            initialStamina = this.stamBehavior == "conserve" ? 0f : -1f;
+            initialStamina = staminaBehavior == StaminaBehavior.Conserve ? 0f : -1f;
         }
 
         public ClimbableOneWayPlatform(EntityData data, Vector2 offset)
-            : this(data.Position + offset, data.Height, !data.Bool("left"), data.Attr("texture", "default"), data.Float("animationDelay", 0f), data.Int("surfaceIndex", -1), data.Attr("staminaBehavior", "None"), data.Bool("sameDirectionJumpBoost", false), data.Float("momentumJumpDecayTime", 0f), data.Float("momentumJumpDecayCurvature", 1f)) { }
+            : this(data.Position + offset, data.Height, !data.Bool("left"), data.Attr("texture", "default"), data.Float("animationDelay", 0f), data.Int("surfaceIndex", -1), data.Enum<StaminaBehavior>("staminaBehavior", StaminaBehavior.None), data.Bool("sameDirectionJumpBoost", false), data.Float("momentumJumpDecayTime", 0f), data.Float("momentumJumpDecayCurvature", 1f)) { }
 
         public override void Awake(Scene scene)
         {
@@ -588,6 +594,7 @@ namespace Celeste.Mod.JungleHelper.Entities
             if (grabTimer > 0f)
             {
                 grabTimer += Engine.DeltaTime;
+
             }
         }
     }
