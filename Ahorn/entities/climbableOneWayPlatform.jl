@@ -2,10 +2,11 @@ module JungleHelperClimbableOneWayPlatform
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/ClimbableOneWayPlatform" ClimbableOneWayPlatform(x::Integer, y::Integer, height::Integer=Maple.defaultBlockHeight, 
-    left::Bool=true, texture::String="wood", animationDelay::Number=0.0, surfaceIndex::Int=-1)
+@mapdef Entity "JungleHelper/ClimbableOneWayPlatform" ClimbableOneWayPlatform(x::Integer, y::Integer, height::Integer=Maple.defaultBlockHeight, left::Bool=true, texture::String="wood", animationDelay::Number=0.0, surfaceIndex::Int=-1, staminaBehavior::String="None", sameDirectionJumpBoost::Bool=false, momentumJumpDecayTime::Number=0.0, momentumJumpDecayCurvature::Number=1.0)
 
 textures = ["wood", "dream", "temple", "templeB", "cliffside", "reflection", "core", "moon"]
+staminaBehaviors = ["None", "Conserve", "Regain"]
+
 const placements = Ahorn.PlacementDict(
     "Climbable One-Way Platform (Left) (Jungle Helper)" => Ahorn.EntityPlacement(
         ClimbableOneWayPlatform,
@@ -32,8 +33,11 @@ quads = Tuple{Integer, Integer, Integer, Integer}[
 
 Ahorn.editingOptions(entity::ClimbableOneWayPlatform) = Dict{String, Any}(
     "texture" => textures,
-    "surfaceIndex" => Maple.tileset_sound_ids
+    "surfaceIndex" => Maple.tileset_sound_ids,
+    "staminaBehavior" => staminaBehaviors
 )
+
+
 
 Ahorn.minimumSize(entity::ClimbableOneWayPlatform) = 0, 8
 Ahorn.resizable(entity::ClimbableOneWayPlatform) = false, true
