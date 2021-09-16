@@ -11,59 +11,47 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Celeste.Mod.JungleHelper.Entities
-{
+namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/ClimbableOneWayPlatform")]
     [Tracked]
-    public class ClimbableOneWayPlatform : Entity
-    {
+    public class ClimbableOneWayPlatform : Entity {
         private static ILHook hookOnUpdateSprite;
 
         private static FieldInfo actorMovementCounter = typeof(Actor).GetField("movementCounter", BindingFlags.Instance | BindingFlags.NonPublic);
 
         private static bool hooksActive = false;
 
-        public static void Load()
-        {
+        public static void Load() {
             On.Celeste.LevelLoader.ctor += onLevelLoad;
             On.Celeste.OverworldLoader.ctor += onOverworldLoad;
         }
 
-        public static void Unload()
-        {
+        public static void Unload() {
             On.Celeste.LevelLoader.ctor -= onLevelLoad;
             On.Celeste.OverworldLoader.ctor -= onOverworldLoad;
             deactivateHooks();
         }
 
-        private static void onLevelLoad(On.Celeste.LevelLoader.orig_ctor orig, LevelLoader self, Session session, Vector2? startPosition)
-        {
+        private static void onLevelLoad(On.Celeste.LevelLoader.orig_ctor orig, LevelLoader self, Session session, Vector2? startPosition) {
             orig(self, session, startPosition);
 
-            if (session.MapData?.Levels?.Any(level => level.Entities?.Any(entity => entity.Name == "JungleHelper/ClimbableOneWayPlatform") ?? false) ?? false)
-            {
+            if (session.MapData?.Levels?.Any(level => level.Entities?.Any(entity => entity.Name == "JungleHelper/ClimbableOneWayPlatform") ?? false) ?? false) {
                 activateHooks();
-            }
-            else
-            {
+            } else {
                 deactivateHooks();
             }
         }
 
-        private static void onOverworldLoad(On.Celeste.OverworldLoader.orig_ctor orig, OverworldLoader self, Overworld.StartMode startMode, HiresSnow snow)
-        {
+        private static void onOverworldLoad(On.Celeste.OverworldLoader.orig_ctor orig, OverworldLoader self, Overworld.StartMode startMode, HiresSnow snow) {
             orig(self, startMode, snow);
 
-            if (startMode != (Overworld.StartMode)(-1))
-            { // -1 = in-game overworld from the collab utils
+            if (startMode != (Overworld.StartMode) (-1)) { // -1 = in-game overworld from the collab utils
                 deactivateHooks();
             }
         }
 
-        public static void activateHooks()
-        {
-            if (hooksActive)
-            {
+        public static void activateHooks() {
+            if (hooksActive) {
                 return;
             }
             hooksActive = true;
@@ -92,15 +80,13 @@ namespace Celeste.Mod.JungleHelper.Entities
 
             On.Celeste.SurfaceIndex.GetPlatformByPriority += modSurfaceIndexGetPlatformByPriority;
 
-            //customization hooks
-            On.Celeste.Player.ClimbBegin += Customization_modPlayerClimbBegin;
-            On.Celeste.Player.ClimbUpdate += Customization_modPlayerClimbUpdate;
+            // customization hooks (stamina conservation and speed boosts)
+            On.Celeste.Player.ClimbBegin += modPlayerClimbBegin;
+            On.Celeste.Player.ClimbUpdate += modPlayerClimbUpdate;
         }
 
-        public static void deactivateHooks()
-        {
-            if (!hooksActive)
-            {
+        public static void deactivateHooks() {
+            if (!hooksActive) {
                 return;
             }
             hooksActive = false;
@@ -124,18 +110,15 @@ namespace Celeste.Mod.JungleHelper.Entities
 
             On.Celeste.SurfaceIndex.GetPlatformByPriority -= modSurfaceIndexGetPlatformByPriority;
 
-            //customization hooks
-            On.Celeste.Player.ClimbBegin -= Customization_modPlayerClimbBegin;
-            On.Celeste.Player.ClimbUpdate -= Customization_modPlayerClimbUpdate;
+            On.Celeste.Player.ClimbBegin -= modPlayerClimbBegin;
+            On.Celeste.Player.ClimbUpdate -= modPlayerClimbUpdate;
         }
 
-        private static void addSidewaysJumpthrusInHorizontalMoveMethods(ILContext il)
-        {
+        private static void addSidewaysJumpthrusInHorizontalMoveMethods(ILContext il) {
             ILCursor cursor = new ILCursor(il);
 
             if (cursor.TryGotoNext(MoveType.After, instr => instr.MatchCall<Entity>("CollideFirst"))
-                 && cursor.TryGotoNext(instr => instr.OpCode == OpCodes.Brfalse_S || instr.OpCode == OpCodes.Brtrue_S))
-            {
+                 && cursor.TryGotoNext(instr => instr.OpCode == OpCodes.Brfalse_S || instr.OpCode == OpCodes.Brtrue_S)) {
 
                 Logger.Log("JungleHelper/ClimbableOneWayPlatform", $"Injecting sideways jumpthru check at {cursor.Index} in IL for {il.Method.Name}");
                 cursor.Emit(OpCodes.Ldarg_0);
@@ -143,11 +126,10 @@ namespace Celeste.Mod.JungleHelper.Entities
                 cursor.EmitDelegate<Func<Solid, Actor, int, Solid>>((orig, self, moveH) => {
                     if (orig != null)
                         return orig;
-                    
+
                     int moveDirection = Math.Sign(moveH);
                     bool movingLeftToRight = moveH > 0;
-                    if (checkCollisionWithSidewaysMovingPlatformsWhileMoving(self, moveDirection, movingLeftToRight))
-                    {
+                    if (checkCollisionWithSidewaysMovingPlatformsWhileMoving(self, moveDirection, movingLeftToRight)) {
                         return new Solid(Vector2.Zero, 0, 0, false); // what matters is that it is non null.
                     }
 
@@ -156,33 +138,31 @@ namespace Celeste.Mod.JungleHelper.Entities
             }
         }
 
-        private static bool checkCollisionWithSidewaysMovingPlatformsWhileMoving(Actor self, int moveDirection, bool movingLeftToRight)
-        {
+        private static bool checkCollisionWithSidewaysMovingPlatformsWhileMoving(Actor self, int moveDirection, bool movingLeftToRight) {
             ClimbableOneWayPlatform climbablePlatform = collideFirstOutside(self, self.Position + Vector2.UnitX * moveDirection, !movingLeftToRight);
-            bool canGOWPClimbJump = Input.Grab.Check && self is Player && climbablePlatform != null && climbablePlatform.climbJumpGrabCooldown <= 0f;
-            if (climbablePlatform != null && climbablePlatform.staminaBehavior == StaminaBehavior.None)
-            {
-                return canGOWPClimbJump && (self as Player).Stamina >= 20f;
+            bool canGrabOnClimbableOneWayPlatform = Input.Grab.Check && self is Player && climbablePlatform != null && climbablePlatform.climbJumpGrabCooldown <= 0f;
+            if (climbablePlatform != null && climbablePlatform.staminaBehavior == StaminaBehavior.None) {
+                return canGrabOnClimbableOneWayPlatform && (self as Player).Stamina >= 20f;
             }
 
-            //if a custom stamina behavior is present, set the stamina to slightly above red point
-            if (canGOWPClimbJump)
+            // if a custom stamina behavior is present, set the stamina to slightly above red point
+            if (canGrabOnClimbableOneWayPlatform) {
                 (self as Player).Stamina = Math.Max((self as Player).Stamina, 21f);
-            return canGOWPClimbJump;
+            }
+            return canGrabOnClimbableOneWayPlatform;
         }
 
-        private static bool onPlayerClimbHopBlockedCheck(On.Celeste.Player.orig_ClimbHopBlockedCheck orig, Player self)
-        {
+        private static bool onPlayerClimbHopBlockedCheck(On.Celeste.Player.orig_ClimbHopBlockedCheck orig, Player self) {
             bool vanillaCheck = orig(self);
-            if (vanillaCheck)
+            if (vanillaCheck) {
                 return vanillaCheck;
+            }
 
             // block climb hops on jumpthrus because those look weird
-            return self.CollideCheckOutside<ClimbableOneWayPlatform>(self.Position + Vector2.UnitX * (int)self.Facing);
+            return self.CollideCheckOutside<ClimbableOneWayPlatform>(self.Position + Vector2.UnitX * (int) self.Facing);
         }
 
-        private static void modCollideChecks(ILContext il)
-        {
+        private static void modCollideChecks(ILContext il) {
             ILCursor cursor = new ILCursor(il);
 
             // create a Vector2 temporary variable
@@ -191,20 +171,19 @@ namespace Celeste.Mod.JungleHelper.Entities
 
             bool isClimb = il.Method.Name.Contains("Climb");
 
-            while (cursor.Next != null)
-            {
+            while (cursor.Next != null) {
                 Instruction next = cursor.Next;
 
                 // we want to replace all CollideChecks with solids here.
-                if (next.OpCode == OpCodes.Call && (next.Operand as MethodReference)?.FullName == "System.Boolean Monocle.Entity::CollideCheck<Celeste.Solid>(Microsoft.Xna.Framework.Vector2)")
-                {
+                if (next.OpCode == OpCodes.Call && (next.Operand as MethodReference)?.FullName == "System.Boolean Monocle.Entity::CollideCheck<Celeste.Solid>(Microsoft.Xna.Framework.Vector2)") {
                     Logger.Log("JungleHelper/ClimbableOneWayPlatform", $"Patching Entity.CollideCheck to include climbable one-ways at {cursor.Index} in IL for {il.Method.Name}");
 
                     callOrigMethodKeepingEverythingOnStack(cursor, checkAtPositionStore, isSceneCollideCheck: false);
 
                     cursor.EmitDelegate<Func<bool, Entity, Vector2, bool>>((orig, self, checkAtPosition) => {
                         // we still want to check for solids...
-                        if (orig) return true;
+                        if (orig)
+                            return true;
 
                         // if we are not checking a side, this certainly has nothing to do with jumpthrus.
                         if (self.Position.X == checkAtPosition.X)
@@ -220,8 +199,7 @@ namespace Celeste.Mod.JungleHelper.Entities
                     });
                 }
 
-                if (next.OpCode == OpCodes.Callvirt && (next.Operand as MethodReference)?.FullName == "System.Boolean Monocle.Scene::CollideCheck<Celeste.Solid>(Microsoft.Xna.Framework.Vector2)")
-                {
+                if (next.OpCode == OpCodes.Callvirt && (next.Operand as MethodReference)?.FullName == "System.Boolean Monocle.Scene::CollideCheck<Celeste.Solid>(Microsoft.Xna.Framework.Vector2)") {
                     Logger.Log("JungleHelper/ClimbableOneWayPlatform", $"Patching Scene.CollideCheck to include climbable one-ways at {cursor.Index} in IL for {il.Method.Name}");
 
                     callOrigMethodKeepingEverythingOnStack(cursor, checkAtPositionStore, isSceneCollideCheck: true);
@@ -233,8 +211,7 @@ namespace Celeste.Mod.JungleHelper.Entities
             }
         }
 
-        private static void callOrigMethodKeepingEverythingOnStack(ILCursor cursor, VariableDefinition checkAtPositionStore, bool isSceneCollideCheck)
-        {
+        private static void callOrigMethodKeepingEverythingOnStack(ILCursor cursor, VariableDefinition checkAtPositionStore, bool isSceneCollideCheck) {
             // store the position in the local variable
             cursor.Emit(OpCodes.Stloc, checkAtPositionStore);
             cursor.Emit(OpCodes.Ldloc, checkAtPositionStore);
@@ -244,16 +221,14 @@ namespace Celeste.Mod.JungleHelper.Entities
 
             // reload the parameters
             cursor.Emit(OpCodes.Ldarg_0);
-            if (isSceneCollideCheck)
-            {
+            if (isSceneCollideCheck) {
                 cursor.Emit(OpCodes.Call, typeof(Entity).GetProperty("Scene").GetGetMethod());
             }
 
             cursor.Emit(OpCodes.Ldloc, checkAtPositionStore);
         }
 
-        private static void modPlayerNormalUpdate(ILContext il)
-        {
+        private static void modPlayerNormalUpdate(ILContext il) {
             ILCursor cursor = new ILCursor(il);
 
             // let's jump to if (this.Speed.Y < 0f) => "is the player going up? if so, they can't grab!"
@@ -263,8 +238,7 @@ namespace Celeste.Mod.JungleHelper.Entities
                 instr => instr.MatchLdflda<Player>("Speed"),
                 instr => instr.MatchLdfld<Vector2>("Y"),
                 instr => instr.MatchLdcR4(0f),
-                instr => instr.OpCode == OpCodes.Blt_Un || instr.OpCode == OpCodes.Blt_Un_S))
-            {
+                instr => instr.OpCode == OpCodes.Blt_Un || instr.OpCode == OpCodes.Blt_Un_S)) {
 
                 Instruction afterCheck = cursor.Next;
 
@@ -275,7 +249,7 @@ namespace Celeste.Mod.JungleHelper.Entities
 
                 // inject ourselves to jump over the "Speed.Y < 0f" check, and put this back
                 cursor.EmitDelegate<Func<Player, bool>>(self => {
-                    ClimbableOneWayPlatform platform = collideFirstOutside(self, self.Position + new Vector2((int)self.Facing * 2, 0), self.Facing == Facings.Left);
+                    ClimbableOneWayPlatform platform = collideFirstOutside(self, self.Position + new Vector2((int) self.Facing * 2, 0), self.Facing == Facings.Left);
                     return platform != null && platform.climbJumpGrabCooldown <= 0f;
                 });
                 cursor.Emit(OpCodes.Brtrue, afterCheck);
@@ -283,91 +257,77 @@ namespace Celeste.Mod.JungleHelper.Entities
             }
         }
 
-        //grabs the speed and stamina if applicable at the earliest poossible time
-        private static void Customization_modPlayerClimbBegin(On.Celeste.Player.orig_ClimbBegin orig, Player self)
-        {
-            ClimbableOneWayPlatform platform = collideFirstOutside(self, self.Position + new Vector2((int)self.Facing * 2, 0), self.Facing == Facings.Left);
-            if (platform != null)
-            {
-                //store initial speed and stamina if needed   
-                if (platform.hasMomentumCarrying)
-                {
+        // grabs the speed and stamina if applicable at the earliest possible time
+        private static void modPlayerClimbBegin(On.Celeste.Player.orig_ClimbBegin orig, Player self) {
+            ClimbableOneWayPlatform platform = collideFirstOutside(self, self.Position + new Vector2((int) self.Facing * 2, 0), self.Facing == Facings.Left);
+            if (platform != null) {
+                // store initial speed and stamina if needed   
+                if (platform.hasMomentumCarrying) {
                     platform.initialSpeed = self.Speed.X;
                     platform.startTimer();
                 }
-                if (platform.staminaBehavior == StaminaBehavior.Conserve)
-                {
+                if (platform.staminaBehavior == StaminaBehavior.Conserve) {
                     platform.stamStored = true;
                     platform.initialStamina = self.Stamina;
-                }   
+                }
             }
             orig.Invoke(self);
         }
 
-        private static int Customization_modPlayerClimbUpdate(On.Celeste.Player.orig_ClimbUpdate orig, Player self)
-        {
-
-            ClimbableOneWayPlatform platform = collideFirstOutside(self, self.Position + new Vector2((int)self.Facing * 2, 0), self.Facing == Facings.Left);
-            if (platform != null)
-            {
-                //checks for momentum jumps and same direction jumps. the latter cannot be activated if the former is active, as the purpose is nullified anyways
-                if((Input.Jump.Pressed || Input.Jump.BufferTime < 0.08f) && (int)Input.Aim.Value.X != 0) {
-                    if (platform.hasMomentumCarrying && platform.grabTimer < platform.decayTime) {
+        private static int modPlayerClimbUpdate(On.Celeste.Player.orig_ClimbUpdate orig, Player self) {
+            ClimbableOneWayPlatform platform = collideFirstOutside(self, self.Position + new Vector2((int) self.Facing * 2, 0), self.Facing == Facings.Left);
+            if (platform != null) {
+                // checks for momentum jumps and same direction jumps. the latter cannot be activated if the former is active, as the purpose is nullified anyways
+                if ((Input.Jump.Pressed || Input.Jump.BufferTime < 0.08f) && (int) Input.Aim.Value.X != 0) {
+                    if (platform.hasMomentumCarrying && platform.grabTimer < platform.momentumJumpDecayTime) {
                         self.Speed.X += platform.bonusSpeed(platform.initialSpeed, platform.grabTimer);
                         platform.grabTimer = 0f;
-                    }
-                    else if(platform.sameDirBoost) {
+                    } else if (platform.sameDirBoost) {
                         if (Math.Abs(self.Speed.X) < 240f && Input.Aim.Value.X != 0 && Input.Aim.Value.X / Math.Abs(Input.Aim.Value.X) == (int) self.Facing) {
-                            self.Speed.X += (140f * (1 - Math.Abs(self.Speed.X) / 240f)) * (int)(self.Facing);
-                            
+                            self.Speed.X += (140f * (1 - Math.Abs(self.Speed.X) / 240f)) * (int) self.Facing;
                         }
                     }
                     platform.stamStored = false;
                 }
 
-                //stamina management
-                if (platform.staminaBehavior == StaminaBehavior.Regain)
+                // stamina management
+                if (platform.staminaBehavior == StaminaBehavior.Regain) {
                     self.RefillStamina();
-                else if (platform.stamStored)
+                } else if (platform.stamStored) {
                     self.Stamina = Math.Max(platform.initialStamina, 21);
+                }
             }
             return orig.Invoke(self);
         }
 
-        private static void modPlayerClimbJump(On.Celeste.Player.orig_ClimbJump orig, Player self)
-        {
+        private static void modPlayerClimbJump(On.Celeste.Player.orig_ClimbJump orig, Player self) {
             orig(self);
 
-            ClimbableOneWayPlatform platform = collideFirstOutside(self, self.Position + new Vector2((int)self.Facing * 2, 0), self.Facing == Facings.Left);
-            if (platform != null)
-            {
+            ClimbableOneWayPlatform platform = collideFirstOutside(self, self.Position + new Vector2((int) self.Facing * 2, 0), self.Facing == Facings.Left);
+            if (platform != null) {
                 // trigger the cooldown
                 platform.climbJumpGrabCooldown = 0.35f;
 
-                //stamina management
-                if (platform.staminaBehavior == StaminaBehavior.Regain)
+                // stamina management
+                if (platform.staminaBehavior == StaminaBehavior.Regain) {
                     self.RefillStamina();
-                else if (platform.staminaBehavior == StaminaBehavior.Conserve)
+                } else if (platform.staminaBehavior == StaminaBehavior.Conserve) {
                     self.Stamina = Math.Max(platform.initialStamina, 21);
-
+                }
             }
         }
 
-        private static Platform modSurfaceIndexGetPlatformByPriority(On.Celeste.SurfaceIndex.orig_GetPlatformByPriority orig, List<Entity> platforms)
-        {
+        private static Platform modSurfaceIndexGetPlatformByPriority(On.Celeste.SurfaceIndex.orig_GetPlatformByPriority orig, List<Entity> platforms) {
             // if vanilla already has platforms to get the sound index from, use those.
-            if (platforms.Count != 0)
-            {
+            if (platforms.Count != 0) {
                 return orig(platforms);
             }
 
             // check if we are climbing a climbable one-way platform.
             Player player = Engine.Scene.Tracker.GetEntity<Player>();
-            if (player != null)
-            {
-                ClimbableOneWayPlatform platform = player.CollideFirst<ClimbableOneWayPlatform>(player.Center + Vector2.UnitX * (float)player.Facing);
-                if (platform != null && platform.surfaceIndex != -1)
-                {
+            if (player != null) {
+                ClimbableOneWayPlatform platform = player.CollideFirst<ClimbableOneWayPlatform>(player.Center + Vector2.UnitX * (float) player.Facing);
+                if (platform != null && platform.surfaceIndex != -1) {
                     // yes we are! pass it off as a Platform so that the game can get its surface index later.
                     return new WallSoundIndexHolder(platform.surfaceIndex);
                 }
@@ -378,37 +338,29 @@ namespace Celeste.Mod.JungleHelper.Entities
 
         // this is a dummy Platform that is just here to hold a wall surface sound index, that the game will read.
         // it isn't actually used as a platform!
-        private class WallSoundIndexHolder : Platform
-        {
+        private class WallSoundIndexHolder : Platform {
             private int wallSoundIndex;
 
-            public WallSoundIndexHolder(int wallSoundIndex) : base(Vector2.Zero, false)
-            {
+            public WallSoundIndexHolder(int wallSoundIndex) : base(Vector2.Zero, false) {
                 this.wallSoundIndex = wallSoundIndex;
             }
 
-            public override void MoveHExact(int move)
-            {
+            public override void MoveHExact(int move) {
                 throw new NotImplementedException();
             }
 
-            public override void MoveVExact(int move)
-            {
+            public override void MoveVExact(int move) {
                 throw new NotImplementedException();
             }
 
-            public override int GetWallSoundIndex(Player player, int side)
-            {
+            public override int GetWallSoundIndex(Player player, int side) {
                 return wallSoundIndex;
             }
         }
 
-        private static ClimbableOneWayPlatform collideFirstOutside(Entity e, Vector2 at, bool leftToRight)
-        {
-            foreach (ClimbableOneWayPlatform item in e.Scene.Tracker.GetEntities<ClimbableOneWayPlatform>())
-            {
-                if (item.AllowLeftToRight == leftToRight && !Collide.Check(e, item) && Collide.Check(e, item, at))
-                {
+        private static ClimbableOneWayPlatform collideFirstOutside(Entity e, Vector2 at, bool leftToRight) {
+            foreach (ClimbableOneWayPlatform item in e.Scene.Tracker.GetEntities<ClimbableOneWayPlatform>()) {
+                if (item.AllowLeftToRight == leftToRight && !Collide.Check(e, item) && Collide.Check(e, item, at)) {
                     return item;
                 }
             }
@@ -416,62 +368,48 @@ namespace Celeste.Mod.JungleHelper.Entities
         }
 
         // ======== Begin of entity code ========
-
-        private int lines;
-        private string overrideTexture;
-        private float animationDelay;
-        private int surfaceIndex;
-
-        public bool AllowLeftToRight;
-
-        private float climbJumpGrabCooldown = -1f;
-
-        #region CustomizationOptions
-
-        private bool sameDirBoost;
-        private float initialStamina = -1f;
-        public bool stamStored = false;
-        public StaminaBehavior staminaBehavior = StaminaBehavior.None;
         public enum StaminaBehavior {
             None,
             Conserve,
             Regain
         };
 
+        // options
+        private int lines;
+        private string overrideTexture;
+        private float animationDelay;
+        private int surfaceIndex;
+        public bool AllowLeftToRight;
 
-        #region MomentumJump
-
-        //used to store data for each climb session
+        private bool sameDirBoost;
+        public StaminaBehavior staminaBehavior = StaminaBehavior.None;
         private bool hasMomentumCarrying = false;
+        public float momentumJumpDecayTime;
+        public float momentumJumpDecayCurvature;
+
+        // state keeping
+        private float climbJumpGrabCooldown = -1f;
+
+        private float initialStamina = -1f;
+        public bool stamStored = false;
+
         private float initialSpeed = 0f;
         private float grabTimer = 0f;
 
-        /** must be <=1 and > 0, rate at which stored speed decays*/
-        public float curvature;
-
-        /** time for all speed to decay */
-        public float decayTime;
-
-        /** generates stored speed following the function https://www.desmos.com/calculator/wtsume11vs 
-         time parameter refers to elapsed time since initial speed was set*/
-        private float bonusSpeed(float spdX, float time)
-        {
-            if (time > decayTime) {
+        // generates stored speed following the function https://www.desmos.com/calculator/wtsume11vs 
+        // time parameter refers to elapsed time since initial speed was set
+        private float bonusSpeed(float spdX, float time) {
+            if (time > momentumJumpDecayTime) {
                 return 0f;
             }
-            if(time <= 4 * Engine.DeltaTime) {
+            if (time <= 4 * Engine.DeltaTime) {
                 return (spdX * 1.2f);
             }
-            return (float)((spdX*1.2) * Math.Pow(decayTime, -2.0) * (decayTime + time) * (decayTime - time) * Math.Pow(curvature, time));
+            return (float) ((spdX * 1.2) * Math.Pow(momentumJumpDecayTime, -2.0) * (momentumJumpDecayTime + time) * (momentumJumpDecayTime - time) * Math.Pow(momentumJumpDecayCurvature, time));
         }
 
-        #endregion MomentumJump
-
-        #endregion CustomizationOptions
-
-        public ClimbableOneWayPlatform(Vector2 position, int height, bool allowLeftToRight, string overrideTexture, float animationDelay, int surfaceIndex, StaminaBehavior StaminaBehavior, bool sameDirBoost, float decayTime, float curvature)
-            : base(position)
-        {
+        public ClimbableOneWayPlatform(Vector2 position, int height, bool allowLeftToRight, string overrideTexture, float animationDelay, int surfaceIndex, StaminaBehavior StaminaBehavior, bool sameDirBoost, float momentumJumpDecayTime, float momentumJumpDecayCurvature)
+            : base(position) {
 
             lines = height / 8;
             AllowLeftToRight = allowLeftToRight;
@@ -486,29 +424,27 @@ namespace Celeste.Mod.JungleHelper.Entities
 
             Collider = new Hitbox(5f, height, hitboxOffset, 0);
 
-            //assigns and organizes customization variables
-            this.decayTime = Calc.Clamp(decayTime, 0f, int.MaxValue);
-            this.curvature = Calc.Clamp(curvature, 0f, 1f);
-            hasMomentumCarrying = (this.decayTime != 0 && this.curvature != 0f);
+            // assigns and organizes customization variables
+            this.momentumJumpDecayTime = Calc.Clamp(momentumJumpDecayTime, 0f, int.MaxValue);
+            this.momentumJumpDecayCurvature = Calc.Clamp(momentumJumpDecayCurvature, 0f, 1f);
+            hasMomentumCarrying = (this.momentumJumpDecayTime != 0 && this.momentumJumpDecayCurvature != 0f);
             staminaBehavior = StaminaBehavior;
             this.sameDirBoost = sameDirBoost;
             initialStamina = staminaBehavior == StaminaBehavior.Conserve ? 0f : -1f;
         }
 
         public ClimbableOneWayPlatform(EntityData data, Vector2 offset)
-            : this(data.Position + offset, data.Height, !data.Bool("left"), data.Attr("texture", "default"), data.Float("animationDelay", 0f), data.Int("surfaceIndex", -1), data.Enum<StaminaBehavior>("staminaBehavior", StaminaBehavior.None), data.Bool("sameDirectionJumpBoost", false), data.Float("momentumJumpDecayTime", 0f), data.Float("momentumJumpDecayCurvature", 1f)) { }
+            : this(data.Position + offset, data.Height, !data.Bool("left"), data.Attr("texture", "default"), data.Float("animationDelay", 0f), data.Int("surfaceIndex", -1),
+                  data.Enum("staminaBehavior", StaminaBehavior.None), data.Bool("sameDirectionJumpBoost", false), data.Float("momentumJumpDecayTime", 0f), data.Float("momentumJumpDecayCurvature", 1f)) { }
 
-        public override void Awake(Scene scene)
-        {
-            if (animationDelay > 0f)
-            {
-                for (int i = 0; i < lines; i++)
-                {
+        public override void Awake(Scene scene) {
+            if (animationDelay > 0f) {
+                for (int i = 0; i < lines; i++) {
                     Sprite jumpthruSprite = new Sprite(GFX.Game, "objects/jumpthru/" + overrideTexture);
                     jumpthruSprite.AddLoop("idle", "", animationDelay);
 
                     jumpthruSprite.Y = i * 8;
-                    jumpthruSprite.Rotation = (float)(Math.PI / 2);
+                    jumpthruSprite.Rotation = (float) (Math.PI / 2);
                     if (AllowLeftToRight)
                         jumpthruSprite.X = 8;
                     else
@@ -517,40 +453,31 @@ namespace Celeste.Mod.JungleHelper.Entities
                     jumpthruSprite.Play("idle");
                     Add(jumpthruSprite);
                 }
-            }
-            else
-            {
+            } else {
                 AreaData areaData = AreaData.Get(scene);
                 string jumpthru = areaData.Jumpthru;
-                if (!string.IsNullOrEmpty(overrideTexture) && !overrideTexture.Equals("default"))
-                {
+                if (!string.IsNullOrEmpty(overrideTexture) && !overrideTexture.Equals("default")) {
                     jumpthru = overrideTexture;
                 }
 
                 MTexture mTexture = GFX.Game["objects/jumpthru/" + jumpthru];
                 int num = mTexture.Width / 8;
-                for (int i = 0; i < lines; i++)
-                {
+                for (int i = 0; i < lines; i++) {
                     int xTilePosition;
                     int yTilePosition;
-                    if (i == 0)
-                    {
+                    if (i == 0) {
                         xTilePosition = 0;
                         yTilePosition = ((!CollideCheck<Solid>(Position + new Vector2(0f, -1f))) ? 1 : 0);
-                    }
-                    else if (i == lines - 1)
-                    {
+                    } else if (i == lines - 1) {
                         xTilePosition = num - 1;
                         yTilePosition = ((!CollideCheck<Solid>(Position + new Vector2(0f, 1f))) ? 1 : 0);
-                    }
-                    else
-                    {
+                    } else {
                         xTilePosition = 1 + Calc.Random.Next(num - 2);
                         yTilePosition = Calc.Random.Choose(0, 1);
                     }
                     Image image = new Image(mTexture.GetSubtexture(xTilePosition * 8, yTilePosition * 8, 8, 8));
                     image.Y = i * 8;
-                    image.Rotation = (float)(Math.PI / 2);
+                    image.Rotation = (float) (Math.PI / 2);
 
                     if (AllowLeftToRight)
                         image.X = 8;
@@ -562,39 +489,29 @@ namespace Celeste.Mod.JungleHelper.Entities
             }
 
             ClimbableOneWayPlatform other = CollideFirst<ClimbableOneWayPlatform>();
-            if (other != null)
-            {
+            if (other != null) {
                 climbJumpGrabCooldown = other.climbJumpGrabCooldown;
             }
         }
 
-        public override void Update()
-        {
+        public override void Update() {
             base.Update();
 
             // deplete the cooldown
-            if (climbJumpGrabCooldown >= 0f)
+            if (climbJumpGrabCooldown >= 0f) {
                 climbJumpGrabCooldown -= Engine.DeltaTime;
-            manageTimer();
+            }
 
-
-        }
-
-        // starts a new timer
-        private void startTimer()
-        {
-            if (hasMomentumCarrying)
-            {
+            // increase the grab timer
+            if (grabTimer > 0f) {
                 grabTimer += Engine.DeltaTime;
             }
         }
 
-        private void manageTimer()
-        {
-            if (grabTimer > 0f)
-            {
-                grabTimer += Engine.DeltaTime;
-
+        // starts a new timer
+        private void startTimer() {
+            if (hasMomentumCarrying) {
+                grabTimer = Engine.DeltaTime;
             }
         }
     }
