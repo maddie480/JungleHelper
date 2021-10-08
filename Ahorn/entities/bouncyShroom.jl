@@ -29,6 +29,10 @@ directions = Dict{String, String}(
     "JungleHelper/BouncyShroomRight" => "right",
 )
 
+Ahorn.editingOptions(entity::BouncyShroomUnion) = Dict{String, Any}(
+    "spriteDirectory" => String["JungleHelper/BouncyShroom", "JungleHelper/BouncyShroomOutline"]
+)
+
 function Ahorn.selection(entity::BouncyShroomUnion)
     x, y = Ahorn.position(entity)
 
