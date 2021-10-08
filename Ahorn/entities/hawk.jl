@@ -12,12 +12,24 @@ const placements = Ahorn.PlacementDict(
             "mainSpeed" => 100,
             "slowerSpeed" => 80
         )
-
+    ),
+    "Hawk (Faster) (Jungle Helper)" => Ahorn.EntityPlacement(
+        Hawk,
+        "rectangle",
+        Dict{String, Any}(
+            "mainSpeed" => 220,
+            "slowerSpeed" => 42,
+            "sprite" => "junglehelper_hawk_alt"
+        )
     )
 )
 
 
 sprite = "JungleHelper/hawk/hold03"
+
+Ahorn.editingOptions(entity::Hawk) = Dict{String, Any}(
+    "sprite" => String["", "junglehelper_hawk_alt"]
+)
 
 function Ahorn.selection(entity::Hawk)
     x, y = Ahorn.position(entity)
