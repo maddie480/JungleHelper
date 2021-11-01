@@ -34,7 +34,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
                 cursor.Emit(OpCodes.Ldarg_0);
                 cursor.EmitDelegate<Func<bool, CassetteBlock, bool>>((orig, self) => {
-                    if (self.Scene.Tracker.CountEntities<RemoteKevin>() > 0) {
+                    if (self.Scene != null && self.Scene.Tracker.CountEntities<RemoteKevin>() > 0) {
                         // Collidable isn't reliable to check the state of the block because it could be activated but blocked by the player / a slide block.
                         // so, use Activated instead.
                         return self.Activated;
