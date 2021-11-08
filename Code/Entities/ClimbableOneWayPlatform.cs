@@ -140,7 +140,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private static bool checkCollisionWithSidewaysMovingPlatformsWhileMoving(Actor self, int moveDirection, bool movingLeftToRight) {
             ClimbableOneWayPlatform climbablePlatform = collideFirstOutside(self, self.Position + Vector2.UnitX * moveDirection, !movingLeftToRight);
-            bool canGrabOnClimbableOneWayPlatform = Input.Grab.Check && self is Player && climbablePlatform != null && climbablePlatform.climbJumpGrabCooldown <= 0f;
+            bool canGrabOnClimbableOneWayPlatform = Input.GrabCheck && self is Player && climbablePlatform != null && climbablePlatform.climbJumpGrabCooldown <= 0f;
             if (climbablePlatform != null && climbablePlatform.staminaBehavior == StaminaBehavior.None) {
                 return canGrabOnClimbableOneWayPlatform && (self as Player).Stamina >= 20f;
             }

@@ -113,7 +113,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private void onPlayer(Player player) {
-            if (Input.Grab.Check && (player.DashAttacking || !player.Ducking) && !player.CollideCheck<DropLanternTrigger>() && doesNotHaveAndWontHaveLantern(player)) {
+            if (Input.GrabCheck && (player.DashAttacking || !player.Ducking) && !player.CollideCheck<DropLanternTrigger>() && doesNotHaveAndWontHaveLantern(player)) {
                 // the player grabs the lantern.
                 // on a technical level, Maddy's sprite changes to have her holding the lantern, and the lantern disappears.
                 EnforceSkinController.ChangePlayerSpriteMode(player, hasLantern: true);
@@ -267,7 +267,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 lanternDropTimer -= Engine.DeltaTime;
                 selfData["JungleHelper_LanternDropTimer"] = lanternDropTimer;
 
-                if (Input.Grab.Check && Input.MoveY > 0f && lanternDropTimer <= 0f) {
+                if (Input.GrabCheck && Input.MoveY > 0f && lanternDropTimer <= 0f) {
                     // drop the lantern.
                     DropLantern(self, destroy: false);
                 }
