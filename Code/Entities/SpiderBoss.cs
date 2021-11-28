@@ -102,7 +102,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             Collider = new Hitbox(13f, 13f, -7f, -7f);
             Add(new PlayerCollider(onPlayer));
 
-            Depth = -13500; // in front of exit blocks
+            Depth = -20001; // in front of exit blocks, FG tiles and mossy walls
 
             // set up the state machine.
             StateMachine stateMachine = new StateMachine();
