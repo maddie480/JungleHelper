@@ -467,10 +467,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     int yTilePosition;
                     if (i == 0) {
                         xTilePosition = 0;
-                        yTilePosition = ((!CollideCheck<Solid>(Position + new Vector2(0f, -1f))) ? 1 : 0);
+                        yTilePosition = isSideOpen(new Vector2(0f, -1f)) ? 0 : 1;
                     } else if (i == lines - 1) {
                         xTilePosition = num - 1;
-                        yTilePosition = ((!CollideCheck<Solid>(Position + new Vector2(0f, 1f))) ? 1 : 0);
+                        yTilePosition = isSideOpen(new Vector2(0f, 1f)) ? 0 : 1;
                     } else {
                         xTilePosition = 1 + Calc.Random.Next(num - 2);
                         yTilePosition = Calc.Random.Choose(0, 1);
@@ -492,6 +492,17 @@ namespace Celeste.Mod.JungleHelper.Entities {
             if (other != null) {
                 climbJumpGrabCooldown = other.climbJumpGrabCooldown;
             }
+        }
+
+        private bool isSideOpen(Vector2 move) {
+            List<Entity> collidingNow = CollideAll<Solid>(Position);
+            List<Entity> collidingAfterMove = CollideAll<Solid>(Position + move);
+            foreach (Entity entity in collidingNow) {
+                collidingAfterMove.Remove(entity);
+            }
+
+            // the side is considered open if we collide with a NEW solid after moving.
+            return collidingAfterMove.Count > 0;
         }
 
         public override void Update() {
