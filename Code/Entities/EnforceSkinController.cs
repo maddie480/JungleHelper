@@ -22,6 +22,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private static Hook hookVariantMode;
         private static Hook hookEmoteMod;
+        private static Hook hookSkinModHelper;
 
         private static bool disabledMarioSkin = false;
         private static bool forceMarioSkinDisabled = false;
@@ -69,6 +70,13 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
                 hookEmoteMod = new Hook(playerResetSpriteHook, typeof(EnforceSkinController).GetMethod("hookEmoteModBackpackHook", BindingFlags.NonPublic | BindingFlags.Static));
             }
+
+            if (Everest.Loader.DependencyLoaded(new EverestModuleMetadata { Name = "SkinModHelper", Version = new Version(0, 5, 6) })) {
+                MethodInfo skinModHelperHook = Everest.Modules.Where(module => module.GetType().FullName == "SkinModHelper.Module.SkinModHelperModule")
+                    .First().GetType().GetMethod("CreateModMenuSection");
+
+                hookSkinModHelper = new Hook(skinModHelperHook, typeof(EnforceSkinController).GetMethod("greyOutSkinModHelperToggle", BindingFlags.NonPublic | BindingFlags.Static));
+            }
         }
 
         private static Type findOutVariantModeType() {
@@ -99,6 +107,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             hookEmoteMod?.Dispose();
             hookEmoteMod = null;
+
+            hookSkinModHelper?.Dispose();
+            hookSkinModHelper = null;
         }
 
         private static void hookEmoteModBackpackHook(Action<On.Celeste.Player.orig_Update, Player> orig, On.Celeste.Player.orig_Update origOrig, Player self) {
@@ -385,10 +396,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private static void resetSkinModHelperSkin() {
             Logger.Log(LogLevel.Info, "JungleHelper/EnforceSkinController", "Skin Mod Helper is force-disabled from now");
             disabledSkinModHelperSkin = SkinModHelper.Module.SkinModHelperModule.Settings.SelectedSkinMod;
-            if (disabledSkinModHelperSkin == SkinModHelper.SkinModHelperConfig.DEFAULT_SKIN) {
+            if (disabledSkinModHelperSkin == SkinModHelper.Module.SkinModHelperModule.DEFAULT) {
                 disabledSkinModHelperSkin = null;
             }
-            SkinModHelper.Module.SkinModHelperModule.Settings.SelectedSkinMod = SkinModHelper.SkinModHelperConfig.DEFAULT_SKIN;
+            SkinModHelper.Module.SkinModHelperModule.Settings.SelectedSkinMod = SkinModHelper.Module.SkinModHelperModule.DEFAULT;
             forceSkinModHelperDisabled = true;
         }
 
@@ -412,7 +423,12 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 menu.Items[menu.Items.Count - 1].Disabled = true;
             }
 
-            if (forceSkinModHelperDisabled && self.GetType().FullName == "SkinModHelper.Module.SkinModHelperModule") {
+        }
+
+        private static void greyOutSkinModHelperToggle(Action<EverestModule, TextMenu, bool, EventInstance> orig, EverestModule self, TextMenu menu, bool inGame, EventInstance snapshot) {
+            orig(self, menu, inGame, snapshot);
+
+            if (forceSkinModHelperDisabled) {
                 // disable the Skin Mod Helper toggle.
                 menu.Items[menu.Items.Count - 1].Disabled = true;
             }
