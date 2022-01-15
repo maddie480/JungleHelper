@@ -44,7 +44,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             }
         }
 
-        public RemoteKevin(Vector2 position, float width, float height, bool restrained, CrushBlock.Axes axes, string reskinName, string spriteDirectory, bool infiniteCharges) : base(position, width, height, false) {
+        public RemoteKevin(Vector2 position, float width, float height, bool restrained, CrushBlock.Axes axes, string reskinName, string spriteDirectory, bool infiniteCharges, bool ignoreJumpthrus) : base(position, width, height, false) {
             this.restrained = restrained;
             this.infiniteCharges = infiniteCharges;
             texture = spriteDirectory;
@@ -109,10 +109,12 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             Add(new LightOcclude(0.2f));
             Add(new WaterInteraction(() => crushDir != Vector2.Zero));
+
+            this.ignoreJumpthrus = ignoreJumpthrus;
         }
 
         public RemoteKevin(EntityData data, Vector2 offset) : this(data.Position + offset, data.Width, data.Height, data.Bool("restrained", false), data.Enum("axes", CrushBlock.Axes.Both),
-            data.Attr("spriteXmlName"), data.Attr("spriteDirectory"), data.Bool("infiniteCharges")) { }
+            data.Attr("spriteXmlName"), data.Attr("spriteDirectory"), data.Bool("infiniteCharges"), data.Bool("ignoreJumpthrus")) { }
 
         public override void Added(Scene scene) {
             base.Added(scene);
@@ -417,7 +419,13 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private bool moveHCheck(float amount, bool breakDashBlocks) {
-            if (MoveHCollideSolidsAndBounds(level, amount, breakDashBlocks, null)) {
+            moveResult = null;
+
+            if (MoveHCollideSolidsAndBounds(level, amount, breakDashBlocks, (_, amountMoved, platform) => handleCollideH(amount, amountMoved.Y, platform, breakDashBlocks))) {
+                if (moveResult.HasValue) {
+                    return moveResult.Value;
+                }
+
                 if (amount < 0f && Left <= level.Bounds.Left) {
                     return true;
                 } else if (amount > 0f && Right >= level.Bounds.Right) {
@@ -440,7 +448,13 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private bool moveVCheck(float amount, bool breakDashBlocks) {
-            if (MoveVCollideSolidsAndBounds(level, amount, breakDashBlocks, null)) {
+            moveResult = null;
+
+            if (MoveVCollideSolidsAndBounds(level, amount, breakDashBlocks, (_, amountMoved, platform) => handleCollideV(amount, amountMoved.Y, platform, breakDashBlocks))) {
+                if (moveResult.HasValue) {
+                    return moveResult.Value;
+                }
+
                 if (amount < 0f && Top <= level.Bounds.Top) {
                     return true;
                 } else if (amount > 0f && Bottom >= (level.Bounds.Bottom + 32)) {
@@ -460,6 +474,34 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 }
             }
             return false;
+        }
+
+        private void handleCollideH(float amountAskedFor, float amountMoved, Platform hitPlatform, bool breakDashBlocks) {
+            if (ignoreJumpthrus && hitPlatform.GetType().ToString() == "Celeste.Mod.MaxHelpingHand.Entities.SidewaysJumpThru+FakeCollidingSolid") {
+                amountAskedFor -= amountMoved;
+
+                // move a bit to go through the jumpthru
+                float amountTinyMove = Math.Sign(amountAskedFor) * Math.Min(1, Math.Abs(amountAskedFor));
+                MoveH(amountTinyMove);
+                amountAskedFor -= amountTinyMove;
+
+                // continue the move
+                moveResult = moveHCheck(amountAskedFor, breakDashBlocks);
+            }
+        }
+
+        private void handleCollideV(float amountAskedFor, float amountMoved, Platform hitPlatform, bool breakDashBlocks) {
+            if (ignoreJumpthrus && hitPlatform is JumpThru) {
+                amountAskedFor -= amountMoved;
+
+                // move a bit to go through the jumpthru
+                float amountTinyMove = Math.Sign(amountAskedFor) * Math.Min(1, Math.Abs(amountAskedFor));
+                MoveV(amountTinyMove);
+                amountAskedFor -= amountTinyMove;
+
+                // continue the move
+                moveResult = moveVCheck(amountAskedFor, breakDashBlocks);
+            }
         }
 
         // returns true if the Kevin was refilled, false if it didn't need refilling
@@ -506,6 +548,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private List<Image> activeBottomImages;
 
         private SoundSource currentMoveLoopSfx;
+
+        private bool ignoreJumpthrus = false;
+        private bool? moveResult = null;
     }
 
 }

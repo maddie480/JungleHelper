@@ -32,6 +32,7 @@ placements.entities.JungleHelper/RemoteKevin.tooltips.restrained=If checked, the
 placements.entities.JungleHelper/RemoteKevin.tooltips.spriteXmlName=If you want to reskin the slide block center, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
 placements.entities.JungleHelper/RemoteKevin.tooltips.spriteDirectory=The directory the sprites for the block will be taken from. For example, if the directory is set to MyMap/MySlideBlock, sprites will be read from Mods/yourmod/Graphics/Atlases/Gameplay/MyMap/MySlideBlock.
 placements.entities.JungleHelper/RemoteKevin.tooltips.infiniteCharges=If checked, this slide block will be able to move again without requiring a refill.
+placements.entities.JungleHelper/RemoteKevin.tooltips.ignoreJumpthrus=If checked, this slide block will completely ignore jumpthrus instead of being offset by 1 pixel when it hits them (like vanilla Kevins).
 
 # Unrandomized Crumble Platform
 placements.entities.JungleHelper/UnrandomizedCrumblePlatform.tooltips.texture=What texture to use for the crumble block.
