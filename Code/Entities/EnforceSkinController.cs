@@ -21,7 +21,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private static FieldInfo playerNextSpriteMode = typeof(Player).GetField("nextSpriteMode", BindingFlags.NonPublic | BindingFlags.Instance);
 
         private static Hook hookVariantMode;
-        private static Hook hookEmoteMod;
         private static Hook hookSkinModHelper;
 
         private static bool disabledMarioSkin = false;
@@ -64,13 +63,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         public static void Initialize() {
-            if (Everest.Loader.DependencyLoaded(new EverestModuleMetadata { Name = "EmoteMod", Version = new Version(1, 5, 0) })) {
-                MethodInfo playerResetSpriteHook = Everest.Modules.Where(module => module.GetType().FullName == "Celeste.Mod.EmoteMod.EmoteModMain")
-                    .First().GetType().Assembly.GetType("Celeste.Mod.EmoteMod.BackpackModule").GetMethod("Player_ResetSprite", BindingFlags.Static | BindingFlags.NonPublic);
-
-                hookEmoteMod = new Hook(playerResetSpriteHook, typeof(EnforceSkinController).GetMethod("hookEmoteModBackpackHook", BindingFlags.NonPublic | BindingFlags.Static));
-            }
-
             if (Everest.Loader.DependencyLoaded(new EverestModuleMetadata { Name = "SkinModHelper", Version = new Version(0, 5, 6) })) {
                 MethodInfo skinModHelperHook = Everest.Modules.Where(module => module.GetType().FullName == "SkinModHelper.Module.SkinModHelperModule")
                     .First().GetType().GetMethod("CreateModMenuSection");
@@ -105,21 +97,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
             hookVariantMode?.Dispose();
             hookVariantMode = null;
 
-            hookEmoteMod?.Dispose();
-            hookEmoteMod = null;
-
             hookSkinModHelper?.Dispose();
             hookSkinModHelper = null;
-        }
-
-        private static void hookEmoteModBackpackHook(Action<On.Celeste.Player.orig_Update, Player> orig, On.Celeste.Player.orig_Update origOrig, Player self) {
-            if (HasLantern(self.Sprite.Mode) || HasLantern(((PlayerSpriteMode?) playerNextSpriteMode.GetValue(self)) ?? PlayerSpriteMode.Madeline)) {
-                // we don't want EmoteMod to mess with the player sprite mode, otherwise it will break the lantern entirely. :a:
-                origOrig(self);
-            } else {
-                // don't change anything.
-                orig(origOrig, self);
-            }
         }
 
         private static void onLevelEnter(On.Celeste.LevelEnter.orig_Go orig, Session session, bool fromSaveData) {
