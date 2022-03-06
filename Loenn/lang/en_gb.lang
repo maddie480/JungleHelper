@@ -1,0 +1,75 @@
+mods.JungleHelper.name=Jungle Helper
+
+# Attach Trigger Controller
+entities.JungleHelper/AttachTriggerController.placements.name.default=Attach Trigger Controller
+entities.JungleHelper/AttachTriggerController.attributes.description.triggerFilter=Allows to pick the type of trigger to attach, in case multiple ones intersect with the "T" node.\nUses the C# class name (which *often* matches the entity name).\nLeave empty to match any trigger.
+entities.JungleHelper/AttachTriggerController.attributes.description.entityFilter=Allows to pick the type of entity to attach the trigger(s) to, in case multiple ones intersect with the "E" node.\nUses the C# class name (which *often* matches the entity name).\nLeave empty to match any entity.
+
+# Bouncy Shroom
+entities.JungleHelper/BouncyShroomRight.placements.name.default=Bouncy Shroom (Right)
+entities.JungleHelper/BouncyShroomRight.attributes.name.yeetx=Bounce Speed X
+entities.JungleHelper/BouncyShroomRight.attributes.name.yeety=Bounce Speed Y
+entities.JungleHelper/BouncyShroomRight.attributes.description.yeetx=Determines how much horizontal speed the player will get from the mushroom (for left and right mushrooms only).
+entities.JungleHelper/BouncyShroomRight.attributes.description.yeety=Determines how much vertical speed the player will get from the mushroom.
+entities.JungleHelper/BouncyShroomRight.attributes.description.spriteDirectory=The directory the sprites will be taken from.\nFor example, if the directory is set to MyMap/MyShrooms, sprites will be read from Mods/yourmod/Graphics/Atlases/Gameplay/MyMap/MyShrooms.
+entities.JungleHelper/BouncyShroomLeft.placements.name.default=Bouncy Shroom (Left)
+entities.JungleHelper/BouncyShroomLeft.attributes.name.yeetx=Bounce Speed X
+entities.JungleHelper/BouncyShroomLeft.attributes.name.yeety=Bounce Speed Y
+entities.JungleHelper/BouncyShroomLeft.attributes.description.yeetx=Determines how much horizontal speed the player will get from the mushroom (for left and right mushrooms only).
+entities.JungleHelper/BouncyShroomLeft.attributes.description.yeety=Determines how much vertical speed the player will get from the mushroom.
+entities.JungleHelper/BouncyShroomLeft.attributes.description.spriteDirectory=The directory the sprites will be taken from.\nFor example, if the directory is set to MyMap/MyShrooms, sprites will be read from Mods/yourmod/Graphics/Atlases/Gameplay/MyMap/MyShrooms.
+entities.JungleHelper/BouncyShroomUp.placements.name.default=Bouncy Shroom (Up)
+entities.JungleHelper/BouncyShroomUp.attributes.name.yeetx=Bounce Speed X
+entities.JungleHelper/BouncyShroomUp.attributes.name.yeety=Bounce Speed Y
+entities.JungleHelper/BouncyShroomUp.attributes.description.yeetx=Determines how much horizontal speed the player will get from the mushroom (for left and right mushrooms only).
+entities.JungleHelper/BouncyShroomUp.attributes.description.yeety=Determines how much vertical speed the player will get from the mushroom.
+entities.JungleHelper/BouncyShroomUp.attributes.description.spriteDirectory=The directory the sprites will be taken from.\nFor example, if the directory is set to MyMap/MyShrooms, sprites will be read from Mods/yourmod/Graphics/Atlases/Gameplay/MyMap/MyShrooms.
+
+# Breakable Pot
+entities.JungleHelper/BreakablePot.placements.name.default=Breakable Pot
+entities.JungleHelper/BreakablePot.attributes.description.sprite=If you want to reskin the breakable pot, define a custom sprite in your map's Sprites.xml and put the sprite name in this field.\nYou can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+entities.JungleHelper/BreakablePot.attributes.description.rupeeImage=The path to the sprite of the rupee that comes out of this pot when broken, relative to Graphics/Atlases/Gameplay.
+entities.JungleHelper/BreakablePot.attributes.description.containsKey=Whether the pot contains a key, that can be used to open doors. If unchecked, the pot will contain a rupee instead, which does nothing.
+
+# Cassette (Custom Preview Music)
+entities.JungleHelper/CassetteCustomPreviewMusic.placements.name.cassette=Cassette (Custom Preview Music)
+entities.JungleHelper/CassetteCustomPreviewMusic.attributes.description.musicEvent=The "B-side music preview" to play when the player collected the cassette. Vanilla uses "event:/game/general/cassette_preview".
+entities.JungleHelper/CassetteCustomPreviewMusic.attributes.description.musicParamName=The name of the parameter to apply to the "B-side music preview". The vanilla one is "remix".
+entities.JungleHelper/CassetteCustomPreviewMusic.attributes.description.musicParamValue=The value of the parameter to apply to the "B-side music preview". If you want vanilla B-side music, leave other settings to default and use 1-7 to get chapter 1-7 B-side music, and 9 to play chapter 8 B-side music.
+
+# Cheat Code Controller
+entities.JungleHelper/CheatCodeController.placements.name.controller=Cheat Code Controller
+
+# Climbable One-Way Platform
+entities.JungleHelper/ClimbableOneWayPlatform.placements.name.left=Climbable One-Way Platform (Left)
+entities.JungleHelper/ClimbableOneWayPlatform.placements.name.right=Climbable One-Way Platform (Right)
+entities.JungleHelper/ClimbableOneWayPlatform.attributes.description.left=Whether the solid side of the platform is the left side.
+entities.JungleHelper/ClimbableOneWayPlatform.attributes.description.texture=Changes the appearance of the platform. Should be in the same format as vanilla for static jumpthrus, and a 8x8 image for animated ones.
+entities.JungleHelper/ClimbableOneWayPlatform.attributes.description.animationDelay=The delay in seconds between 2 frames of animation. Leave to 0 for no animation.
+entities.JungleHelper/ClimbableOneWayPlatform.attributes.description.surfaceIndex=Defines which climbing sounds the platform will use.
+entities.JungleHelper/ClimbableOneWayPlatform.attributes.description.staminaBehavior=Determines whether the player will conserve current stamina, regain stamina or exhibit normal behavior.
+entities.JungleHelper/ClimbableOneWayPlatform.attributes.description.sameDirectionJumpBoost=If this is checked and a player jumps across the platform, they will be given extra momentum as if they'd jumped from the other side.
+entities.JungleHelper/ClimbableOneWayPlatform.attributes.description.momentumJumpDecayTime=If a player lands on a platform with momentum and this is non-zero, that momentum will be stored and decay over time, reaching zero at the selected time.\nIf a player jumps within this time, they are granted the respective stored speed. Must be >0 to store speed.
+entities.JungleHelper/ClimbableOneWayPlatform.attributes.description.momentumJumpDecayCurvature=If a player lands on a platform with momentum and this is non-zero, that momentum will be stored and decay over time following the curvature measure.\nClamped bewteen 0 and 1. If closer to 1, speed will decay slower at first and decay faster over time.\nApproaching 0.5 will cause speed to decay linearly, and approaching 0 will decay faster at first and slower over time. Must be >0 to store speed.
+
+# Cobweb
+entities.JungleHelper/Cobweb.placements.name.default=Cobweb
+entities.JungleHelper/Cobweb.attributes.description.sprite=If you want to reskin the cobweb, define a custom sprite in your map's Sprites.xml and put the sprite name in this field.\nYou can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+
+# Cockatiel
+entities.JungleHelper/Cockatiel.placements.name.default=Cockatiel
+entities.JungleHelper/Cockatiel.attributes.description.facingLeft=Whether the cockatiel should face left when spawning. It will turn around to face the player if they get close.
+entities.JungleHelper/Cockatiel.attributes.description.sprite=If you want to reskin the cockatiel, define a custom sprite in your map's Sprites.xml and put the sprite name in this field.\nYou can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+
+# Delayed Auto-Falling Block
+entities.JungleHelper/AutoFallingBlockDelayed.placements.name.falling_block=Delayed Auto-Falling Block
+entities.JungleHelper/AutoFallingBlockDelayed.attributes.description.tiletype=Changes the visual appearance of the wall.
+entities.JungleHelper/AutoFallingBlockDelayed.attributes.description.delay=The delay (in seconds) before the block starts falling.
+entities.JungleHelper/AutoFallingBlockDelayed.attributes.name.ShakeDelay=Shake Time
+entities.JungleHelper/AutoFallingBlockDelayed.attributes.description.ShakeDelay=The time (in seconds) the block spends shaking before falling. This parameter doesn't change the time the block will wait for before falling.
+entities.JungleHelper/AutoFallingBlockDelayed.attributes.description.silent=If checked, the block will not emit sound when shaking and touching the ground.
+
+# Dragonfly
+entities.JungleHelper/Dragonfly.placements.name.default=Dragonfly
+entities.JungleHelper/Dragonfly.attributes.description.sprite=If you want to reskin the dragonfly, define a custom sprite in your map's Sprites.xml and put the sprite name in this field.\nYou can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+entities.JungleHelper/Dragonfly.attributes.description.wingsColor=The hex color to use for the color of the wings.
