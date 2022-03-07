@@ -73,3 +73,58 @@ entities.JungleHelper/AutoFallingBlockDelayed.attributes.description.silent=If c
 entities.JungleHelper/Dragonfly.placements.name.default=Dragonfly
 entities.JungleHelper/Dragonfly.attributes.description.sprite=If you want to reskin the dragonfly, define a custom sprite in your map's Sprites.xml and put the sprite name in this field.\nYou can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
 entities.JungleHelper/Dragonfly.attributes.description.wingsColor=The hex color to use for the color of the wings.
+
+# Enforce Skin Controller
+entities.JungleHelper/EnforceSkinController.placements.name.default=Enforce Skin Controller
+entities.JungleHelper/EnforceSkinController.attributes.description.showPostcard=Whether a warning postcard will be shown when the player's skins are forcibly disabled.
+
+# Falling Killbox
+entities.JungleHelper/FallingKillbox.placements.name.killbox=Falling Killbox
+entities.JungleHelper/FallingKillbox.attributes.description.fallSpeed=The falling speed of the killbox, in pixels per second.
+
+# Firefly
+entities.JungleHelper/Firefly.placements.name.default=Firefly
+entities.JungleHelper/Firefly.attributes.description.number=How many fireflies should spawn in the cluster.
+entities.JungleHelper/Firefly.attributes.description.sprite=If you want to reskin the firefly, define a custom sprite in your map's Sprites.xml and put the sprite name in this field.\nYou can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+
+# Gecko
+entities.JungleHelper/Gecko.placements.name.right=Gecko (Right)
+entities.JungleHelper/Gecko.placements.name.left=Gecko (Left)
+entities.JungleHelper/Gecko.attributes.description.left=Determines if the wall the gecko hangs to is on the left of it.
+entities.JungleHelper/Gecko.attributes.description.geckoId=The unique id of the gecko when used in combination with Gecko Tutorial triggers. Useful for extra control over multiple geckos in one room.
+entities.JungleHelper/Gecko.attributes.description.controls=The controls to display in the bubble, separated by commas. Leave empty if the gecko has no tutorial to display. Each part can be:\n- a path to a texture in the Gui atlas (for example "tinyarrow")\n- a direction: Down, DownRight, Right, UpRight, Up, UpLeft, Left, DownLeft\n- a button: Jump, Dash, Grab, Talk, ESC, Pause, MenuLeft, MenuRight, MenuUp, MenuDown, MenuConfirm, MenuCancel, MenuJournal, QuickRestart\n- a dialog ID, if you prefix it with "dialog:" (for example, "dialog:TUTORIAL_DREAMJUMP")\n- plain text\nTo make multiple pages (like vanilla's wallbounce tutorial), separate them with | (for example "Left,Up|Down,Right").
+entities.JungleHelper/Gecko.attributes.description.info=The speech bubble title. Can either be a dialog ID or a path to a texture in the GUI atlas. Leave empty if the gecko has no tutorial to display.\nTo make multiple pages (like vanilla's wallbounce tutorial), separate them with | (for example "TUTORIAL_JUMP|TUTORIAL_DASH").
+entities.JungleHelper/Gecko.attributes.description.delay=The time (in seconds) the gecko will pause when turning around.
+entities.JungleHelper/Gecko.attributes.description.hostile=Whether the gecko should kill the player when they touch it.
+entities.JungleHelper/Gecko.attributes.description.sprite=If you want to reskin the gecko, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+
+# Grabless Golden Berry
+entities.JungleHelper/TreeDepthController.placements.name.golden=Golden Strawberry (Grabless)
+
+# Green Crystal
+entities.JungleHelper/TheoStatue.placements.name.default=Green Crystal
+entities.JungleHelper/TheoStatue.attributes.description.sprite=If you want to reskin the crystal, define a custom sprite in your map's Sprites.xml and put the sprite name in this field.\nYou can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+
+# Green Crystal Gate
+entities.JungleHelper/TheoStatueGate.placements.name.default=Green Crystal Gate
+entities.JungleHelper/TheoStatueGate.attributes.description.sprite=Determines the visual appearance of the gate.
+
+# Hawk
+entities.JungleHelper/Hawk.placements.name.default=Hawk
+entities.JungleHelper/Hawk.placements.name.faster=Hawk (Faster)
+entities.JungleHelper/Hawk.attributes.name.mainSpeed=Speed with Player
+entities.JungleHelper/Hawk.attributes.name.slowerSpeed=Speed without Player
+entities.JungleHelper/Hawk.attributes.description.mainSpeed=The hawk's horizontal speed when carrying the player.
+entities.JungleHelper/Hawk.attributes.description.slowerSpeed=The hawk's horizontal speed when moving around without the player.
+entities.JungleHelper/Hawk.attributes.description.sprite=If you want to reskin the hawk, define a custom sprite in your map's Sprites.xml and put the sprite name in this field.\nYou can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+
+# Lantern
+entities.JungleHelper/Lantern.placements.name.default=Lantern
+entities.JungleHelper/Lantern.attributes.description.sprite=If you want to reskin the lantern, define a custom sprite in your map's Sprites.xml and put the sprite name in this field.\nYou can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+entities.JungleHelper/Lantern.attributes.description.onlyIfMaddyNotHolding=If checked, the lantern will only spawn if Madeline isn't already holding a lantern when entering the room.
+
+# Mossy Wall
+entities.JungleHelper/MossyWall.placements.name.left=Mossy Wall (Left)
+entities.JungleHelper/MossyWall.placements.name.right=Mossy Wall (Right)
+entities.JungleHelper/MossyWall.attributes.description.left=Whether the entity attaches to the left wall or not.
+entities.JungleHelper/MossyWall.attributes.description.spriteDirectory=The directory the sprites will be taken from.\nFor example, if the directory is set to MyMap/MyMoss, sprites will be read from Mods/yourmod/Graphics/Atlases/Gameplay/MyMap/MyMoss.
