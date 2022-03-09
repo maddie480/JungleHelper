@@ -128,3 +128,48 @@ entities.JungleHelper/MossyWall.placements.name.left=Mossy Wall (Left)
 entities.JungleHelper/MossyWall.placements.name.right=Mossy Wall (Right)
 entities.JungleHelper/MossyWall.attributes.description.left=Whether the entity attaches to the left wall or not.
 entities.JungleHelper/MossyWall.attributes.description.spriteDirectory=The directory the sprites will be taken from.\nFor example, if the directory is set to MyMap/MyMoss, sprites will be read from Mods/yourmod/Graphics/Atlases/Gameplay/MyMap/MyMoss.
+
+# Noded Crumble Platform
+entities.JungleHelper/NodedCrumblePlatform.placements.name.default=Crumble Block (Noded, Default)
+entities.JungleHelper/NodedCrumblePlatform.placements.name.cliffside=Crumble Block (Noded, Cliffside)
+entities.JungleHelper/NodedCrumblePlatform.attributes.description.texture=What texture to use for the crumble block.
+
+# Predator Plant
+entities.JungleHelper/PredatorPlant.placements.name.Pink=Predator Plant (Pink)
+entities.JungleHelper/PredatorPlant.placements.name.Blue=Predator Plant (Blue)
+entities.JungleHelper/PredatorPlant.placements.name.Yellow=Predator Plant (Yellow)
+entities.JungleHelper/PredatorPlant.attributes.description.color=Defines the color of the plant.
+entities.JungleHelper/PredatorPlant.attributes.description.facingRight=Whether this plant should face right or left.
+entities.JungleHelper/PredatorPlant.attributes.description.sprite=If you want to reskin the plant, define a custom sprite in your map's Sprites.xml and put the sprite name in this field.\nYou can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.\nWhen the plant is put on a cassette, "_cassette_inactive" and "_cassette_active" will be added to the end of this animation name.
+
+# Rolling Rock
+entities.JungleHelper/RollingRock.placements.name.default=Rolling Rock
+entities.JungleHelper/RollingRock.attributes.description.cracked=Whether the rock should look cracked.
+entities.JungleHelper/RollingRock.attributes.description.spriteXmlName=If you want to reskin the rolling rock, define a custom sprite in your map's Sprites.xml and put the sprite name in this field.\nYou can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+entities.JungleHelper/RollingRock.attributes.description.debrisSpriteDirectory=The directory the debris sprites will be taken from. For example, if the directory is set to MyMap/MyDebris, sprites will be read from Mods/yourmod/Graphics/Atlases/Gameplay/MyMap/MyDebris.
+entities.JungleHelper/RollingRock.attributes.description.flag=If specified, the rock will only start rolling if this flag is active. Leave empty if you don't want the rock to be triggered by a flag.
+entities.JungleHelper/RollingRock.attributes.description.rollingSpeed=The speed of the rock when it is moving to the right (in px/s).
+entities.JungleHelper/RollingRock.attributes.description.fallingSpeed=The cap speed of the rock when it is falling (in px/s).
+entities.JungleHelper/RollingRock.attributes.description.instantFalling=Whether the rock should start falling immediately after spawning. Otherwise, it will wait for the player to move and to be on the right of the rock.
+
+# Slide Block
+entities.JungleHelper/RemoteKevin.placements.name.restrained=Slide Block (Restrained)
+entities.JungleHelper/RemoteKevin.placements.name.restraintless=Slide Block (Restraintless)
+entities.JungleHelper/RemoteKevin.attributes.description.axes=Determines in which directions the slide block can move.
+entities.JungleHelper/RemoteKevin.attributes.description.restrained=If checked, the slide block will stop after moving a distance matching its width/height.\nIf unchecked, the slide block will move until it hits a wall or the screen boundaries.
+entities.JungleHelper/RemoteKevin.attributes.description.spriteXmlName=If you want to reskin the slide block center, define a custom sprite in your map's Sprites.xml and put the sprite name in this field.\nYou can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+entities.JungleHelper/RemoteKevin.attributes.description.spriteDirectory=The directory the sprites for the block will be taken from. For example, if the directory is set to MyMap/MySlideBlock, sprites will be read from Mods/yourmod/Graphics/Atlases/Gameplay/MyMap/MySlideBlock.
+entities.JungleHelper/RemoteKevin.attributes.description.infiniteCharges=If checked, this slide block will be able to move again without requiring a refill.
+entities.JungleHelper/RemoteKevin.attributes.description.ignoreJumpthrus=If checked, this slide block will completely ignore jumpthrus instead of being offset by 1 pixel when it hits them (like vanilla Kevins).
+
+# Slide Block Refill
+entities.JungleHelper/RemoteKevinRefill.placements.name.default=Slide Block Refill
+entities.JungleHelper/RemoteKevinRefill.attributes.description.oneUse=Whether the refill should respawn after being used.
+entities.JungleHelper/RemoteKevinRefill.attributes.description.sprite=If you want to reskin the refill, define a custom sprite in your map's Sprites.xml and put the sprite name in this field.\nYou can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+entities.JungleHelper/RemoteKevinRefill.attributes.description.flashSprite=If you want to reskin the refill flash animation, define a custom sprite in your map's Sprites.xml and put the sprite name in this field.\nYou can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+
+# Snake
+entities.JungleHelper/Snake.placements.name.left=Snake (Left)
+entities.JungleHelper/Snake.placements.name.right=Snake (Right)
+entities.JungleHelper/Snake.attributes.description.left=Whether the snake should spawn facing left.
+entities.JungleHelper/Snake.attributes.description.sprite=If you want to reskin the snake, define a custom sprite in your map's Sprites.xml and put the sprite name in this field.\nYou can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
