@@ -10,6 +10,7 @@ local textures = {
 crumbleBlock.name = "JungleHelper/NodedCrumblePlatform"
 crumbleBlock.nodeLimits = { 0, -1 }
 crumbleBlock.nodeLineRenderType = "line"
+crumbleBlock.nodeVisibility = "always"
 crumbleBlock.depth = 0
 crumbleBlock.fieldInformation = {
     texture = {
@@ -50,7 +51,6 @@ function crumbleBlock.sprite(room, entity)
 end
 
 function crumbleBlock.nodeSprite(room, entity, node)
-    -- TODO why does Loenn not want to render this?
     return generateSprite(entity, node)
 end
 
