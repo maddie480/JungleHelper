@@ -173,3 +173,45 @@ entities.JungleHelper/Snake.placements.name.left=Snake (Left)
 entities.JungleHelper/Snake.placements.name.right=Snake (Right)
 entities.JungleHelper/Snake.attributes.description.left=Whether the snake should spawn facing left.
 entities.JungleHelper/Snake.attributes.description.sprite=If you want to reskin the snake, define a custom sprite in your map's Sprites.xml and put the sprite name in this field.\nYou can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+
+# Spider Boss
+entities.JungleHelper/SpiderBoss.placements.name.Blue=Spider Boss (Blue)
+entities.JungleHelper/SpiderBoss.placements.name.Purple=Spider Boss (Purple)
+entities.JungleHelper/SpiderBoss.placements.name.Red=Spider Boss (Red)
+entities.JungleHelper/SpiderBoss.attributes.description.color=Defines the color and the difficulty of the spider boss:\n- Blue: speed capped at 50 px/s, respawns after 1 second\n- Purple: speed capped at 100 px/s, respawns immediately\n- Red: no speed cap, a new one respawns as soon as the previous one starts falling
+entities.JungleHelper/SpiderBoss.attributes.description.sprite=If you want to reskin the spider boss, define a custom sprite in your map's Sprites.xml and put the sprite name in this field.\nYou can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+entities.JungleHelper/SpiderBoss.attributes.description.webSprite=If you want to reskin the spider boss's web, define a custom sprite in your map's Sprites.xml and put the sprite name in this field.\nYou can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+entities.JungleHelper/SpiderBoss.attributes.description.flag=If specified, the spider will only appear when this flag is set.
+
+# Spiny Plant
+entities.JungleHelper/SpinyPlant.placements.name.Blue=Spiny Plant (Blue)
+entities.JungleHelper/SpinyPlant.placements.name.Pink=Spiny Plant (Pink)
+entities.JungleHelper/SpinyPlant.placements.name.Yellow=Spiny Plant (Yellow)
+entities.JungleHelper/SpinyPlant.placements.name.Orange=Spiny Plant (Orange)
+entities.JungleHelper/SpinyPlant.attributes.description.color=Defines the color of the plant. Only yellow plants can retract when the player gets close with a lantern.
+entities.JungleHelper/SpinyPlant.attributes.description.sprite=If you want to reskin the plant, define a custom sprite in your map's Sprites.xml and put the sprite name in this field.\nYou can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.\nTo generate the different sections, "_solo", "_top", "_mid" or "_bottom" will be added to the name you specify here.
+
+# Swing Cassette Block
+entities.JungleHelper/SwingCassetteBlock.placements.name.cassette_block_0=Swing Cassette Block (0 - Blue)
+entities.JungleHelper/SwingCassetteBlock.placements.name.cassette_block_1=Swing Cassette Block (1 - Rose)
+entities.JungleHelper/SwingCassetteBlock.placements.name.cassette_block_2=Swing Cassette Block (2 - Bright Sun)
+entities.JungleHelper/SwingCassetteBlock.placements.name.cassette_block_3=Swing Cassette Block (3 - Malachite)
+entities.JungleHelper/SwingCassetteBlock.attributes.description.index=The colour of the cassette block.
+entities.JungleHelper/SwingCassetteBlock.attributes.description.tempo=The tempo of the cassette blocks. The first non 1 tempo cassette block decides the tempo for all cassette blocks in the room.
+
+# Torch
+entities.JungleHelper/Torch.placements.name.default=Torch
+entities.JungleHelper/Torch.attributes.description.flag=The session flag this torch will set when lit.
+entities.JungleHelper/Torch.attributes.description.sprite=If you want to reskin the torch, define a custom sprite in your map's Sprites.xml and put the sprite name in this field.\nYou can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+
+# Treasure Chest
+entities.JungleHelper/TreasureChest.placements.name.default=Treasure Chest
+entities.JungleHelper/TreasureChest.attributes.description.sprite=If you want to reskin the treasure chest, define a custom sprite in your map's Sprites.xml and put the sprite name in this field.\nYou can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
+
+# Zip Moving Platform
+entities.JungleHelper/ZipMovingPlatform.placements.name.default=Zip Moving Platform (Default)
+entities.JungleHelper/ZipMovingPlatform.placements.name.cliffside=Zip Moving Platform (Cliffside)
+entities.JungleHelper/ZipMovingPlatform.placements.name.JungleHelper/jungle=Zip Moving Platform (Jungle)
+entities.JungleHelper/ZipMovingPlatform.placements.name.JungleHelper/night=Zip Moving Platform (Night)
+entities.JungleHelper/ZipMovingPlatform.placements.name.JungleHelper/escape=Zip Moving Platform (Escape)
+entities.JungleHelper/ZipMovingPlatform.attributes.description.texture=What texture to use for the platform.

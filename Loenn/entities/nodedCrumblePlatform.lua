@@ -35,7 +35,7 @@ local ninePatchOptions = {
     border = 0
 }
 
-function generateSprite(entity, position)
+local function generateSprite(entity, position)
     local x, y = position.x, position.y
     local width = math.max(entity.width or 0, 8)
 
