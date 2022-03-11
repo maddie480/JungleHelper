@@ -215,3 +215,31 @@ entities.JungleHelper/ZipMovingPlatform.placements.name.JungleHelper/jungle=Zip 
 entities.JungleHelper/ZipMovingPlatform.placements.name.JungleHelper/night=Zip Moving Platform (Night)
 entities.JungleHelper/ZipMovingPlatform.placements.name.JungleHelper/escape=Zip Moving Platform (Escape)
 entities.JungleHelper/ZipMovingPlatform.attributes.description.texture=What texture to use for the platform.
+
+# Drop Lantern Trigger
+triggers.JungleHelper/DropLanternTrigger.placements.name.default=Drop Lantern
+triggers.JungleHelper/DropLanternTrigger.attributes.description.oneUse=If checked, the trigger will only make the player drop the lantern once. It will reactivate once the player leaves the room or respawns.
+triggers.JungleHelper/DropLanternTrigger.attributes.description.destroyLantern=If checked, the player won't be able to grab the lantern again. Instead, it will fade out and respawn at its starting position.
+
+# Gecko Tutorial Trigger
+triggers.JungleHelper/GeckoTutorialTrigger.placements.name.default=Gecko Tutorial
+triggers.JungleHelper/GeckoTutorialTrigger.attributes.description.geckoId=Which gecko the trigger should affect.
+triggers.JungleHelper/GeckoTutorialTrigger.attributes.description.showTutorial=If ticked, the targeted gecko will show its speech bubble. If unchecked, the gecko will hide its speech bubble.
+
+# UI Image Trigger
+triggers.JungleHelper/UIImageTrigger.placements.name.default=UI Image
+triggers.JungleHelper/UIImageTrigger.attributes.description.ImagePath=The image path, in the Gui atlas. To display the image in Graphics/Atlases/Gui/mycampaignname/mylogo.png, type "mycampaignname/mylogo" in this field.
+triggers.JungleHelper/UIImageTrigger.attributes.description.FadeIn=The time (in seconds) the image takes to fade in.
+triggers.JungleHelper/UIImageTrigger.attributes.description.FadeOut=The time (in seconds) the image takes to fade out.
+triggers.JungleHelper/UIImageTrigger.attributes.description.Flag=If filled out, the image will only show up when this flag is active.
+triggers.JungleHelper/UIImageTrigger.attributes.description.ImageX=The image horizontal position, 0 being the left of the screen. The screen is 1920x1080 pixels.
+triggers.JungleHelper/UIImageTrigger.attributes.description.ImageY=The image vertical position, 0 being the top of the screen. The screen is 1920x1080 pixels.
+
+# UI Text Trigger
+triggers.JungleHelper/UITextTrigger.placements.name.default=UI Text
+triggers.JungleHelper/UITextTrigger.attributes.description.Dialog=The dialog ID of the text to display.
+triggers.JungleHelper/UITextTrigger.attributes.description.FadeIn=The time (in seconds) the text takes to fade in.
+triggers.JungleHelper/UITextTrigger.attributes.description.FadeOut=The time (in seconds) the text takes to fade out.
+triggers.JungleHelper/UITextTrigger.attributes.description.Flag=If filled out, the text will only show up when this flag is active.
+triggers.JungleHelper/UITextTrigger.attributes.description.TextX=The text horizontal position, 0 being the center of the screen. The screen is 1920x1080 pixels.
+triggers.JungleHelper/UITextTrigger.attributes.description.TextY=The text vertical position, 0 being the center of the screen, negative values being higher on the screen. The screen is 1920x1080 pixels.
