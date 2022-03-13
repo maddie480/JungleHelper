@@ -21,9 +21,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private static void onPlayerUpdate(On.Celeste.Player.orig_Update orig, Player self) {
-            bool isBeingFlinged = self.Scene != null && self.Scene.Tracker.GetEntities<Hawk>().Any(hawk => ((Hawk) hawk).state == States.Fling);
+            bool isBeingFlinged = self.Scene != null && self.Scene.Tracker.GetEntities<Hawk>().Any(hawk => ((Hawk) hawk).carryingPlayer);
             Vector2 origSpeed = self.Speed;
 
+            // if the player is being flinged, we are managing their speed ourselves: temporarily make the speed 0 to prevent the player from moving because of their speed.
             if (isBeingFlinged) {
                 self.Speed = Vector2.Zero;
             }
@@ -54,6 +55,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private readonly float speedWithoutPlayer;
         private readonly float initialY;
         private PlayerCollider playerCollider;
+
+        private bool carryingPlayer = false;
 
         public Hawk(EntityData data, Vector2 levelOffset) : base(data.Position + levelOffset) {
             Tag |= Tags.TransitionUpdate;
@@ -167,6 +170,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
             hawkSpeed = 0;
             sprite.Scale.X = 1f;
 
+            carryingPlayer = true;
+
             while (state == States.Fling) {
                 yield return null;
 
@@ -224,6 +229,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     break;
                 }
             }
+
+            carryingPlayer = false;
 
             if (!player.Dead) {
                 // reset dummy settings to default.
