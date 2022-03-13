@@ -1,9 +1,9 @@
 - Name: JungleHelper
-  Version: 1.1.0
+  Version: 1.1.1
   DLL: Code/bin/Debug/JungleHelper.dll
   Dependencies:
     - Name: Everest
-      Version: 1.2879.0
+      Version: 1.3282.0
     - Name: Celeste
       Version: 1.4.0.0
   OptionalDependencies:
