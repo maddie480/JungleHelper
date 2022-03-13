@@ -88,7 +88,7 @@
 		<Anim id="sitDown" path="sitDown" delay="0.1" />
 
 		<Loop id="launch" path="launch" delay="0.06" frames="0-7"/>
-		<Anim id="launzchRecover" path="launchRecover" delay="0.06"/>
+		<Anim id="launchRecover" path="launchRecover" delay="0.06"/>
 
 		<Metadata>
 			<Frames path="idle" hair="0,-2|0,-2|0,-2|0,-2|0,-1|0,-1|0,-1|0,-1|0,-1"/>
@@ -231,7 +231,7 @@
 		<Anim id="sitDown" path="sitDown" delay="0.1" />
 
 		<Loop id="launch" path="launch" delay="0.06" frames="0-7"/>
-		<Anim id="launzchRecover" path="launchRecover" delay="0.06"/>
+		<Anim id="launchRecover" path="launchRecover" delay="0.06"/>
 
 		<Metadata>
 			<Frames path="idle" hair="0,-2|0,-2|0,-2|0,-2|0,-1|0,-1|0,-1|0,-1|0,-1"/>
@@ -374,7 +374,7 @@
 		<Anim id="sitDown" path="sitDown" delay="0.1" />
 
 		<Loop id="launch" path="launch" delay="0.06" frames="0-7"/>
-		<Anim id="launzchRecover" path="launchRecover" delay="0.06"/>
+		<Anim id="launchRecover" path="launchRecover" delay="0.06"/>
 
 		<Metadata>
 			<Frames path="idle" hair="0,-2|0,-2|0,-2|0,-2|0,-1|0,-1|0,-1|0,-1|0,-1"/>
