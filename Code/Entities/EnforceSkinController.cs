@@ -47,7 +47,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
             On.Celeste.LevelLoader.ctor += onLevelLoad;
             On.Celeste.LevelExit.ctor += onLevelExit;
 
-            IL.Celeste.Player.UpdateHair += onPlayerUpdateHair;
+            IL.Celeste.Player.UpdateHair += patchSpriteModeChecks;
+            IL.Celeste.Player.DashUpdate += patchSpriteModeChecks;
+            IL.Celeste.Player.GetTrailColor += patchSpriteModeChecks;
 
             On.Celeste.LevelEnter.Routine += addForceSkinsDisabledPostcard;
             On.Celeste.LevelEnter.BeforeRender += addForceSkinsDisabledPostcardRendering;
@@ -87,7 +89,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
             On.Celeste.LevelLoader.ctor -= onLevelLoad;
             On.Celeste.LevelExit.ctor -= onLevelExit;
 
-            IL.Celeste.Player.UpdateHair -= onPlayerUpdateHair;
+            IL.Celeste.Player.UpdateHair -= patchSpriteModeChecks;
+            IL.Celeste.Player.DashUpdate -= patchSpriteModeChecks;
+            IL.Celeste.Player.GetTrailColor -= patchSpriteModeChecks;
 
             On.Celeste.LevelEnter.Routine -= addForceSkinsDisabledPostcard;
             On.Celeste.LevelEnter.BeforeRender -= addForceSkinsDisabledPostcardRendering;
@@ -234,11 +238,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
             orig(self, mode, session, snow);
         }
 
-        private static void onPlayerUpdateHair(ILContext il) {
+        private static void patchSpriteModeChecks(ILContext il) {
             ILCursor cursor = new ILCursor(il);
 
             while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchCallvirt<PlayerSprite>("get_Mode"))) {
-                Logger.Log("JungleHelper/EnforceSkinController", $"Fixing Madeline hair color with custom sprite modes at {cursor.Index} in IL for Player.UpdateHair");
+                Logger.Log("JungleHelper/EnforceSkinController", $"Fixing Madeline hair color with custom sprite modes at {cursor.Index} in IL for Player.{il.Method.Name}");
 
                 cursor.EmitDelegate<Func<PlayerSpriteMode, PlayerSpriteMode>>(orig => {
                     if (orig == SpriteModeBadelineNormal || orig == SpriteModeBadelineLantern) {
