@@ -6,10 +6,35 @@ using Celeste.Mod.Entities;
 using MonoMod.Utils;
 using Celeste.Mod.JungleHelper.Components;
 using System;
+using System.Linq;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/Hawk")]
+    [Tracked]
     public class Hawk : Entity {
+        public static void Load() {
+            On.Celeste.Player.Update += onPlayerUpdate;
+        }
+
+        public static void Unload() {
+            On.Celeste.Player.Update -= onPlayerUpdate;
+        }
+
+        private static void onPlayerUpdate(On.Celeste.Player.orig_Update orig, Player self) {
+            bool isBeingFlinged = self.Scene != null && self.Scene.Tracker.GetEntities<Hawk>().Any(hawk => ((Hawk) hawk).state == States.Fling);
+            Vector2 origSpeed = self.Speed;
+
+            if (isBeingFlinged) {
+                self.Speed = Vector2.Zero;
+            }
+
+            orig(self);
+
+            if (isBeingFlinged) {
+                self.Speed = origSpeed;
+            }
+        }
+
         private enum States {
             Wait,
             Fling,
@@ -170,9 +195,14 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 player.Sprite.Play("fallSlow_carry");
 
                 // move the player.
+                float oldPlayerPositionY = player.ExactPosition.Y;
                 bool hitSomething = false;
                 player.MoveToX(X, collision => hitSomething = true);
                 player.MoveToY(Y + 16, collision => hitSomething = true);
+                float playerMoveAmountY = player.ExactPosition.Y - oldPlayerPositionY;
+
+                // update their speed. it's not used for moving the player, but still used, for example by spikes.
+                player.Speed = new Vector2(hawkSpeed, playerMoveAmountY / Engine.DeltaTime);
 
                 if (hitSomething) {
                     // player hit something while getting moved! drop them.

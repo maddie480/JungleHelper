@@ -35,6 +35,7 @@ namespace Celeste.Mod.JungleHelper {
             CassetteCustomPreviewMusic.Load();
             RainbowDecalComponent.Load();
             RemoteKevin.Load();
+            Hawk.Load();
 
             // fix this bug ourselves if the user is not on the Everest dev branch, until the fix reaches stable.
             if (!Everest.Loader.DependencyLoaded(new EverestModuleMetadata() { Name = "Everest", Version = new Version(1, 3294, 0) })) {
@@ -62,6 +63,7 @@ namespace Celeste.Mod.JungleHelper {
             CassetteCustomPreviewMusic.Unload();
             RainbowDecalComponent.Unload();
             RemoteKevin.Unload();
+            Hawk.Unload();
 
             cSidesUnlockCrashFix?.Dispose();
             cSidesUnlockCrashFix = null;
