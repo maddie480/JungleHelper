@@ -26,6 +26,10 @@ mossColor = (51, 193, 17, 1) ./ (255, 255, 255, 1)
 Ahorn.minimumSize(entity::MossyWall) = 0, 8
 Ahorn.resizable(entity::MossyWall) = false, true
 
+Ahorn.editingOptions(entity::MossyWall) = Dict{String, Any}(
+    "spriteDirectory" => String["JungleHelper/Moss", "JungleHelper/MossInvis"]
+)
+
 function Ahorn.selection(entity::MossyWall)
     x, y = Ahorn.position(entity)
     height = Int(get(entity.data, "height", 8))

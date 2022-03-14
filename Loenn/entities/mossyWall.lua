@@ -14,6 +14,12 @@ wall.depth = -20000
 wall.canResize = {false, true}
 wall.placements = {}
 
+wall.fieldInformation = {
+    spriteDirectory = {
+        options = { "JungleHelper/Moss", "JungleHelper/MossInvis" }
+    }
+}
+
 wall.placements = {
     {
         name = "left",
