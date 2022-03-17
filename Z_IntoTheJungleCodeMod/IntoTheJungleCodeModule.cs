@@ -97,7 +97,7 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
 
             AreaData chapter5 = AreaData.Get("Into The Jungle/ch5");
             if (chapter5 != null) {
-                if (self.FoundAnyCheckpoints(chapter5.ToKey())) {
+                if (self.FoundAnyCheckpoints(chapter5.ToKey()) || (self.GetAreaStatsFor(chapter5.ToKey())?.Cassette ?? false)) {
                     chapter5.Name = "Into_The_Jungle_ch5";
                 } else {
                     chapter5.Name = "Into_The_Jungle_ch5_unrevealed";
@@ -117,7 +117,7 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
                         // show or hide the name depending on if a checkpoint was found or not.
                         AreaData chapter5 = AreaData.Get("Into The Jungle/ch5");
                         if (chapter5 != null) {
-                            if (self.SaveData.FoundAnyCheckpoints(chapter5.ToKey())) {
+                            if (self.SaveData.FoundAnyCheckpoints(chapter5.ToKey()) || (self.SaveData.GetAreaStatsFor(chapter5.ToKey())?.Cassette ?? false)) {
                                 return "Into_The_Jungle_ch5";
                             } else {
                                 return "Into_The_Jungle_ch5_unrevealed";
