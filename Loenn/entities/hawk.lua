@@ -26,6 +26,12 @@ hawk.fieldInformation = {
     }
 }
 
-hawk.texture = "JungleHelper/hawk/hold03"
+function hawk.texture(room, entity)
+    if entity.sprite == "junglehelper_hawk_alt" then
+        return "JungleHelper/hawkAlt/hold03"
+    end
+
+    return "JungleHelper/hawk/hold03"
+end
 
 return hawk

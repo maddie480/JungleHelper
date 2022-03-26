@@ -24,17 +24,22 @@ const placements = Ahorn.PlacementDict(
     )
 )
 
-
-sprite = "JungleHelper/hawk/hold03"
-
 Ahorn.editingOptions(entity::Hawk) = Dict{String, Any}(
     "sprite" => String["", "junglehelper_hawk_alt"]
 )
 
+function getSprite(entity::Hawk)
+    if entity.sprite == "junglehelper_hawk_alt"
+        return "JungleHelper/hawkAlt/hold03"
+    end
+
+    return "JungleHelper/hawk/hold03"
+end
+
 function Ahorn.selection(entity::Hawk)
     x, y = Ahorn.position(entity)
 
-    res = Ahorn.Rectangle[Ahorn.getSpriteRectangle(sprite, x, y)]
+    res = Ahorn.Rectangle[Ahorn.getSpriteRectangle(getSprite(entity), x, y)]
     return res
 end
 
@@ -44,7 +49,7 @@ end
 
 function Ahorn.renderAbs(ctx::Ahorn.Cairo.CairoContext, entity::Hawk, room::Maple.Room)
     x, y = Ahorn.position(entity)
-    Ahorn.drawSprite(ctx, sprite, x, y)
+    Ahorn.drawSprite(ctx, getSprite(entity), x, y)
 end
 
 end
