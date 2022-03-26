@@ -212,6 +212,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 if (hitSomething) {
                     // player hit something while getting moved! drop them.
                     player.StateMachine.State = 0;
+                    player.Speed = Vector2.Zero;
                     break;
                 }
 
