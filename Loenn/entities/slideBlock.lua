@@ -62,7 +62,7 @@ function kevin.sprite(room, entity)
     local baseDir = entity.restrained and "JungleHelper/SlideBlockGreen" or "JungleHelper/SlideBlockRed"
     local smallFaceTexture = baseDir .. "/small_active_up00"
     local giantFaceTexture = baseDir .. "/big_active_up00"
-	
+
     local frameTextures = {
         none = baseDir .. "/block00",
         horizontal = baseDir .. "/block01",

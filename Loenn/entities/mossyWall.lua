@@ -62,7 +62,7 @@ function wall.sprite(room, entity)
         local sprite = drawableSpriteStruct.fromTexture(texture, entity)
 
         sprite:setJustification(0, 0)
-		sprite:setColor("33C111")
+        sprite:setColor("33C111")
         sprite:addPosition(entity.left and 0 or 8, i * 8 + (entity.left and 0 or 8))
         sprite.rotation = entity.left and 0 or math.pi
 

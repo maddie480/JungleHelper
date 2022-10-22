@@ -23,7 +23,7 @@ end
 bouncyShroomUp.fieldInformation = {
     spriteDirectory = {
         options = { "JungleHelper/BouncyShroom", "JungleHelper/BouncyShroomOutline" }
-	}
+    }
 }
 
 local bouncyShroomLeft = {}
@@ -49,7 +49,7 @@ end
 bouncyShroomLeft.fieldInformation = {
     spriteDirectory = {
         options = { "JungleHelper/BouncyShroom", "JungleHelper/BouncyShroomOutline" }
-	}
+    }
 }
 
 local bouncyShroomRight = {}
@@ -75,7 +75,7 @@ end
 bouncyShroomRight.fieldInformation = {
     spriteDirectory = {
         options = { "JungleHelper/BouncyShroom", "JungleHelper/BouncyShroomOutline" }
-	}
+    }
 }
 
 return { bouncyShroomUp, bouncyShroomLeft, bouncyShroomRight }

@@ -11,7 +11,7 @@ cassette.placements = {
         musicEvent = "event:/game/general/cassette_preview",
         musicParamName = "remix",
         musicParamValue = 1.0
-	}
+    }
 }
 
 return cassette
