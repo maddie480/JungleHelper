@@ -1,4 +1,4 @@
-﻿using Celeste.Mod.JungleHelper.Components;
+using Celeste.Mod.JungleHelper.Components;
 using Celeste.Mod.JungleHelper.Entities;
 using Microsoft.Xna.Framework;
 using Mono.Cecil.Cil;

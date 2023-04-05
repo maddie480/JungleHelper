@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Monocle;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

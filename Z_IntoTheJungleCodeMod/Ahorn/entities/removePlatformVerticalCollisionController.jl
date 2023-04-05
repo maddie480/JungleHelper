@@ -1,4 +1,4 @@
-﻿module IntoTheJungleCodeModRemovePlatformVerticalCollisionController
+module IntoTheJungleCodeModRemovePlatformVerticalCollisionController
 
 using ..Ahorn, Maple
 

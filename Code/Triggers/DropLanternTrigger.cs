@@ -1,4 +1,4 @@
-﻿using Celeste.Mod.Entities;
+using Celeste.Mod.Entities;
 using Celeste.Mod.JungleHelper.Entities;
 using Microsoft.Xna.Framework;
 using Monocle;

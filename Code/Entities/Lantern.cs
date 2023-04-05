@@ -1,4 +1,4 @@
-﻿using Celeste.Mod.Entities;
+using Celeste.Mod.Entities;
 using Celeste.Mod.JungleHelper.Components;
 using Celeste.Mod.JungleHelper.Triggers;
 using Celeste.Mod.MaxHelpingHand.Entities;

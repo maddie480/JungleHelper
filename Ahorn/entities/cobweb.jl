@@ -1,4 +1,4 @@
-﻿module JungleHelperCobweb
+module JungleHelperCobweb
 
 using ..Ahorn, Maple
 

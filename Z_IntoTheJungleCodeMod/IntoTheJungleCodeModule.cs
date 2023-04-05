@@ -1,4 +1,4 @@
-﻿using Celeste.Editor;
+using Celeste.Editor;
 using Microsoft.Xna.Framework;
 using Mono.Cecil.Cil;
 using Monocle;

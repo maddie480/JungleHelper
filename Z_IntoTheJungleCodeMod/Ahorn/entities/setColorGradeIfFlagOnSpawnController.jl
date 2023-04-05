@@ -1,4 +1,4 @@
-﻿module IntoTheJungleCodeModSetColorGradeIfFlagOnSpawnController
+module IntoTheJungleCodeModSetColorGradeIfFlagOnSpawnController
 
 using ..Ahorn, Maple
 

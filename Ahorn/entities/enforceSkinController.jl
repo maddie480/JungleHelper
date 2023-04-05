@@ -1,4 +1,4 @@
-﻿module JungleHelperEnforceSkinController
+module JungleHelperEnforceSkinController
 
 using ..Ahorn, Maple
 

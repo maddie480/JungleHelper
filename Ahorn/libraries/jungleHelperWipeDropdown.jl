@@ -1,4 +1,4 @@
-﻿module JungleHelperWipeDropdown
+module JungleHelperWipeDropdown
 
 using ..Ahorn
 

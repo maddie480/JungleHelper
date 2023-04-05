@@ -1,4 +1,4 @@
-﻿module JungleHelperLantern
+module JungleHelperLantern
 
 using ..Ahorn, Maple
 

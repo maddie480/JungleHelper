@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     // This file contains a list of all vanilla textures for player, player_no_backpack and player_badeline that exist in vanilla.

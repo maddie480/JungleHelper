@@ -1,4 +1,4 @@
-﻿module JungleHelperSpinyPlant
+module JungleHelperSpinyPlant
 
 using ..Ahorn, Maple
 

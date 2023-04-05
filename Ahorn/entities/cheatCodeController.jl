@@ -1,4 +1,4 @@
-﻿module JungleHelperCheatCodeController
+module JungleHelperCheatCodeController
 
 using ..Ahorn, Maple
 

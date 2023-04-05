@@ -1,4 +1,4 @@
-﻿local celesteEnums = require("consts.celeste_enums")
+local celesteEnums = require("consts.celeste_enums")
 
 -- Inject Jungle Helper wipes into the dropdown in map metadata.
 celesteEnums.wipe_names["Arrow [Jungle Helper]"] = "MaxHelpingHand/CustomWipe:JungleHelper/Arrow"
