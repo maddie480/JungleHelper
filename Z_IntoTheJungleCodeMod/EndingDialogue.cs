@@ -93,7 +93,7 @@ namespace Celeste.Mod.IntoTheJungleCodeMod {
                     IntoTheJungleCodeModule.EndingDialogueBlacklist.Add(dialogue);
 
                 } else if (!IntoTheJungleCodeModule.EndingDialogueBlacklist.Contains("JungleEnd_First_Run")) {
-                    // First playthrough on a game file. 
+                    // First playthrough on a game file.
                     dialogue = "JungleEnd_First_Run";
 
                 } else if (redBerryPercent >= 1 && !IntoTheJungleCodeModule.EndingDialogueBlacklist.Contains("JungleEnd_All_Red")) {

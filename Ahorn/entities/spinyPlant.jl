@@ -41,17 +41,17 @@ function Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::SpinyPlant, room::M
 
     height = Int(get(entity.data, "height", 16))
     left = get(entity.data, "left", true)
-    
+
     startX = div(x, 8) + 1
     startY = div(y, 8) + 1
     stopY = startY + div(height, 8) - 1
 
     len = stopY - startY
-    
+
     if len == 1
         topOpen = get(room.fgTiles.data, (startY - 1, startX + 1), false) == '0'
         bottomOpen = get(room.fgTiles.data, (stopY + 1, startX + 1), false) == '0'
-        
+
         if topOpen
             if bottomOpen
                 section = "Solo"
@@ -65,14 +65,14 @@ function Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::SpinyPlant, room::M
                 section = "Mid"
             end
         end
-                
+
         Ahorn.drawImage(ctx, "JungleHelper/SpinyPlant/Spiny$(color)$(section)", section == "Solo" ? 4 : 0, 0)
     else
         for i in 0:2:len
             if i == len
                 i = len - 1
             end
-        
+
             section = "Mid"
             if i == 0
                 if get(room.fgTiles.data, (startY - 1, startX + 1), false) == '0'

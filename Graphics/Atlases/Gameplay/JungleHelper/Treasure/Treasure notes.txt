@@ -14,7 +14,7 @@ Key Interaction:
     This is the Key rotating in the air in front of keyhole:
 4. Then play TreasureKeyB00 thru 09 (1 time)
     TreasureKeyB07 should be 5 frames
-    
+
 
 Treasure Opening:
 TreasureOpen00 thru 07 (1 time)

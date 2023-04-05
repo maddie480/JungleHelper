@@ -9,7 +9,7 @@ for index, name in ipairs({ "ruins", "wood", "wooddark" }) do
             ["type"] = "JungleHelper/" .. name
         }
     })
-    
+
     table.insert(entities.registeredEntities.spikesDown.placements, {
         name = "junglehelper_" .. name,
         data = {
@@ -17,7 +17,7 @@ for index, name in ipairs({ "ruins", "wood", "wooddark" }) do
             ["type"] = "JungleHelper/" .. name
         }
     })
-    
+
     table.insert(entities.registeredEntities.spikesLeft.placements, {
         name = "junglehelper_" .. name,
         data = {
@@ -25,7 +25,7 @@ for index, name in ipairs({ "ruins", "wood", "wooddark" }) do
             ["type"] = "JungleHelper/" .. name
         }
     })
-    
+
     table.insert(entities.registeredEntities.spikesRight.placements, {
         name = "junglehelper_" .. name,
         data = {

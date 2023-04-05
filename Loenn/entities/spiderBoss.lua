@@ -32,7 +32,7 @@ spiderBoss.fieldInformation = {
 }
 
 function spiderBoss.texture(room, entity)
-   return sprites[entity.color] 
+   return sprites[entity.color]
 end
 
 return spiderBoss

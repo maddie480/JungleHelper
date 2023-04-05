@@ -2,46 +2,46 @@
     <decal path="JungleHelper/Jungle0-general/PlantGrass"><!-- //Tall Wide Grass decal -->
         <banner amplitude="4" sliceSize="1" speed="4" sliceSinIncrement="0.05" easeDown="false" offset="1" />
     </decal>
-    
+
     <decal path="JungleHelper/Jungle0-general/PlantGrassShort"><!-- //Short Thin Grass decal -->
         <banner amplitude="2" sliceSize="1" speed="2" sliceSinIncrement="0.05" easeDown="false" offset="1" />
     </decal>
-    
+
     <decal path="JungleHelper/Jungle0-general/PlantFiddlegrass"><!-- //Rohxd pxxdc jcwrpqc decal -->
         <banner amplitude="2.5" sliceSize="1" speed="3" sliceSinIncrement="0.05" easeDown="false" offset="0" />
     </decal>
-    
+
     <decal path="JungleHelper/Jungle0-general/VineSmall"><!-- //2x1 Small Vine decal -->
         <banner amplitude="2" sliceSize="1" speed="1" sliceSinIncrement="0.05" easeDown="true" offset="0" />
     </decal>
-    
+
     <decal path="JungleHelper/Jungle0-general/VineLarge"><!-- //4x2 Large Vine decal -->
         <banner amplitude="2" sliceSize="1" speed="1" sliceSinIncrement="0.05" easeDown="true" offset="0" />
     </decal>
-    
+
     <decal path="JungleHelper/Jungle0-general/VineHang"><!-- //Jurergurfr fgnefner nyvtarq decal -->
         <banner amplitude="3" sliceSize="1" speed="2" sliceSinIncrement="0.05" easeDown="True" offset="0" />
     </decal>
-    
+
     <decal path="JungleHelper/Jungle0-general/VineHangB"><!-- //Fvbjhu mpukh zvmayvvt decal -->
         <banner amplitude="3" sliceSize="1" speed="2" sliceSinIncrement="0.05" easeDown="True" offset="0" />
     </decal>
-    
+
     <decal path="JungleHelper/Jungle0-general/VineHangC"><!-- //Lgudaet mhafkavw FyEchcp.png decal -->
         <banner amplitude="3" sliceSize="1" speed="2" sliceSinIncrement="0.05" easeDown="True" offset="0" />
     </decal>
-    
+
     <decal path="JungleHelper/Jungle3-ruins/VineCHang"><!-- //Green Thin Long decal -->
         <banner amplitude="3" sliceSize="1" speed="2" sliceSinIncrement="0.05" easeDown="True" offset="0" />
     </decal>
-    
+
     <decal path="JungleHelper/Jungle3-ruins/VineCHangB"><!-- //Green Wide Long decal -->
         <banner amplitude="3" sliceSize="1" speed="2" sliceSinIncrement="0.05" easeDown="True" offset="0" />
     </decal>
-    
+
     <decal path="JungleHelper/Jungle3-ruins/VineCHangC"><!-- //Green Wide Short decal -->
         <banner amplitude="3" sliceSize="1" speed="2" sliceSinIncrement="0.05" easeDown="True" offset="0" />
     </decal>
-    
-    
+
+
 </decals>

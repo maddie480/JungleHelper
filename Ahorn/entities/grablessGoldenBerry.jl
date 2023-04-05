@@ -22,7 +22,7 @@ function Ahorn.selection(entity::GrablessGoldenBerry)
     nodes = get(entity.data, "nodes", ())
 
     res = Ahorn.Rectangle[Ahorn.getSpriteRectangle(sprite, x, y)]
-    
+
     for node in nodes
         nx, ny = node
 

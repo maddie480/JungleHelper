@@ -137,12 +137,12 @@
             <Frames path="starMorph" hair="0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0|0,0"/>
         </Metadata>
     </junglehelper_madeline_copy>
-    
+
     <junglehelper_player_badeline_copy path="characters/junglehelper_player_badeline_copy/" start="idle">
         <Anim id="roll" path="roll" frames="0-12" delay="0.05"/>
         <Anim id="rollGetUp" path="roll" frames="12-15" delay=".1" goto="downed"/>
         <Loop id="downed" path="sitDown" delay="0.8" frames="15"/>
-        
+
         <Origin x="16" y="32" />
 
         <Loop id="idle_carry" path="idle_carry" delay="0.1" />
@@ -464,7 +464,7 @@
             <Frames path="push/lanternpush" hair="1,-2|1,-1|1,-1|1,-1|1,-2|1,-2|1,-2|1,-2|1,-1|1,-1|1,-1|1,-1|1,-2|1,-2|1,-2|1,-2"/>
         </Metadata>
     </junglehelper_madeline_lantern>
-    
+
     <junglehelper_badeline_lantern path="JungleHelper/Lantern/Badeline/" copy="junglehelper_player_badeline_copy">
         <Anim id="idle" path="idle/idlelantern" delay="0.1" goto="idle"/>
 

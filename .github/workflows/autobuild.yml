@@ -21,7 +21,7 @@ jobs:
         find "(" -name "*.cs" -or -name "*.lua" -or -name "*.jl" -or -name "*.lang" -or -name "*.xml" -or -name "*.yaml" -or -name "*.yml" -or -name "*.txt" -or -name "*.md" ")" -exec grep -Pl " $" {} \; > matches.txt
         grep "" matches.txt && exit 1 || echo "No trailing space found!"
 
-    - uses: nuget/setup-nuget@v1      
+    - uses: nuget/setup-nuget@v1
       with:
         nuget-version: '5.x'
 
@@ -41,7 +41,7 @@ jobs:
       with:
         name: JungleHelper
         path: Code/bin/Debug/JungleHelper.dll
-        
+
     - name: Restore with NuGet (Into The Jungle Code Mod)
       run: nuget restore Z_IntoTheJungleCodeMod/*.sln
 
@@ -74,7 +74,7 @@ jobs:
             echo "ci skip detected, skipping Discord hook"
             exit
         fi
-        
+
         # Is the commit being build still the latest commit on the branch?
         if ((cd latest-repo && git rev-parse HEAD) | grep $GITHUB_SHA)
         then

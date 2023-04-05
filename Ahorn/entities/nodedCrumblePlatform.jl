@@ -30,7 +30,7 @@ function Ahorn.selection(entity::NodedCrumblePlatform)
     width = Int(get(entity.data, "width", 8))
 
     res = Ahorn.Rectangle[Ahorn.Rectangle(x, y, width, 8)]
-    
+
     for node in nodes
         nx, ny = Int.(node)
 
@@ -51,7 +51,7 @@ end
 function Ahorn.renderSelectedAbs(ctx::Ahorn.Cairo.CairoContext, entity::NodedCrumblePlatform)
     texture = get(entity.data, "texture", "default")
     texture = "objects/crumbleBlock/$texture"
-    
+
     x, y = Ahorn.position(entity)
     px, py = Ahorn.position(entity)
     width = Int(get(entity.data, "width", 8))
@@ -61,7 +61,7 @@ function Ahorn.renderSelectedAbs(ctx::Ahorn.Cairo.CairoContext, entity::NodedCru
         Ahorn.drawArrow(ctx, px + width / 2, py + 4, nx + width / 2, ny + 4, Ahorn.colors.selection_selected_fc, headLength=6)
         px, py = nx, ny
     end
-    
+
     Ahorn.drawArrow(ctx, px + width / 2, py + 4, x + width / 2, y + 4, Ahorn.colors.selection_selected_fc, headLength=6)
 end
 
@@ -72,7 +72,7 @@ function Ahorn.renderAbs(ctx::Ahorn.Cairo.CairoContext, entity::NodedCrumblePlat
     # Values need to be system specific integer
     x = Int(get(entity.data, "x", 0))
     y = Int(get(entity.data, "y", 0))
-    
+
     width = Int(get(entity.data, "width", 8))
 
     renderCrumbleBlock(ctx, x, y, width, texture)

@@ -3,7 +3,7 @@ module JungleHelperFallingKillbox
 using ..Ahorn, Maple
 
 @mapdef Entity "JungleHelper/FallingKillbox" FallingKillbox(x::Integer, y::Integer, width::Integer=Maple.defaultBlockWidth, fallSpeed::Number=100.0)
-    
+
 const placements = Ahorn.PlacementDict(
     "Falling Killbox (Jungle Helper)" => Ahorn.EntityPlacement(
         FallingKillbox,

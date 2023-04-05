@@ -51,7 +51,7 @@ function getCassetteBlockRectangles(room::Maple.Room)
         rectList = get!(rects, index) do
             Ahorn.Rectangle[]
         end
-        
+
         push!(rectList, Ahorn.Rectangle(
             Int(get(e.data, "x", 0)),
             Int(get(e.data, "y", 0)),

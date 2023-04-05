@@ -3,8 +3,8 @@ MovingAggro is for when you don't have the light and the snake is attacking.
 IdleAggro is when you don't have a light but you're not in the area where the snake can get you, (point A).
 Hiss is an overlay animation that can be slightly rare while it's IdleAggro.
 
-Shock is when the snake comes into contact with the light and runs. 
-Plays right before switching into MovingScared. 
+Shock is when the snake comes into contact with the light and runs.
+Plays right before switching into MovingScared.
 (Not entirely sure if this'll work with how Thegur wants the snake to be like, but try it)
 
 MovingScared is for when the snake is running from the light to point B.

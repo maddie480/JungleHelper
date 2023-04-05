@@ -190,7 +190,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                             return false;
 
                         // our entity also collides if this is with a jumpthru and we are colliding with the solid side of it.
-                        // we are in this case if the jumpthru is left to right (the "solid" side of it is the right one) 
+                        // we are in this case if the jumpthru is left to right (the "solid" side of it is the right one)
                         // and we are checking the collision on the left side of the player for example.
                         bool collideOnLeftSideOfPlayer = (self.Position.X > checkAtPosition.X);
                         ClimbableOneWayPlatform oneway = collideFirstOutside(self, checkAtPosition, collideOnLeftSideOfPlayer);
@@ -261,7 +261,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private static void modPlayerClimbBegin(On.Celeste.Player.orig_ClimbBegin orig, Player self) {
             ClimbableOneWayPlatform platform = collideFirstOutside(self, self.Position + new Vector2((int) self.Facing * 2, 0), self.Facing == Facings.Left);
             if (platform != null) {
-                // store initial speed and stamina if needed   
+                // store initial speed and stamina if needed
                 if (platform.hasMomentumCarrying) {
                     platform.initialSpeed = self.Speed.X;
                     platform.startTimer();
@@ -396,7 +396,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private float initialSpeed = 0f;
         private float grabTimer = 0f;
 
-        // generates stored speed following the function https://www.desmos.com/calculator/wtsume11vs 
+        // generates stored speed following the function https://www.desmos.com/calculator/wtsume11vs
         // time parameter refers to elapsed time since initial speed was set
         private float bonusSpeed(float spdX, float time) {
             if (time > momentumJumpDecayTime) {

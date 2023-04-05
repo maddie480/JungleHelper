@@ -35,7 +35,7 @@ const sprite = "JungleHelper/Snake/IdleAggro/snake_idle00"
 function Ahorn.selection(entity::Snake)
     x, y = Ahorn.position(entity)
     nx, ny = Int.(entity.nodes[1])
-    
+
     return Ahorn.Rectangle[Ahorn.Rectangle(x, y + 8, 64, 8), Ahorn.Rectangle(nx, ny + 8, 64, 8)]
 end
 

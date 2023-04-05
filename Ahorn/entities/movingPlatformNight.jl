@@ -9,7 +9,7 @@ const placements = Ahorn.PlacementDict(
         Dict{String, Any}(
           "texture" => "JungleHelper/night"
         ),
-        
+
         function(entity)
             x, y = Int(entity.data["x"]), Int(entity.data["y"])
             width = Int(get(entity.data, "width", 8))

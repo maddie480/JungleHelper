@@ -46,7 +46,7 @@ function Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::MossyWall, room::Ma
 
     height = Int(get(entity.data, "height", 8))
     tileHeight = div(height, 8)
-    
+
     spriteDirectory = get(entity.data, "spriteDirectory", "JungleHelper/Moss")
 
     if left

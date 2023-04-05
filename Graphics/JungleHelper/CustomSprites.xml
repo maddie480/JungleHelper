@@ -47,7 +47,7 @@
         <Anim id="stop_left" path="big_stop_left" delay="0.1" goto="inactive_left"/>
         <Anim id="stop_right" path="big_stop_right" delay="0.1" goto="inactive_right"/>
     </green_slideblock_center_big>
-    
+
     <red_slideblock_center_small path="JungleHelper/SlideBlockRed/" start="active_up">
         <Center/>
         <Anim id="active_up" path="small_active_up" delay="0.2" frames="0,1,0,1*3" goto="active_up,active_up_alt"/>
@@ -119,7 +119,7 @@
 
     <spider_boss_purple path="JungleHelper/SpiderBoss/" start="idle_0">
         <Center/>
-        
+
         <Loop id="idle_0" path="spider_p_" frames="0"/>
         <Loop id="idle_-1" path="spider_p_lturn" frames="0"/>
         <Loop id="idle_-2" path="spider_p_lturn" frames="1"/>
@@ -152,7 +152,7 @@
         <Loop id="fly" path="fly" delay="0.05" frames="0-3,3-0"/>
         <Anim id="throw" path="throw" delay="0.08" frames="0-3" goto="fly"/>
     </hawk>
-  
+
     <gecko_normal path="JungleHelper/gecko/normal/" start="idle">
         <Origin x="12" y="6"/>
         <Loop id="idle" path="idle" delay="0.2" frames="0-1"/>
@@ -161,7 +161,7 @@
         <Loop id="slide" path="walk" frames="0"/>
         <Anim id="hit" path="walk" frames="0" goto="idle"/>
     </gecko_normal>
-   
+
     <gecko_hostile path="JungleHelper/gecko/hostile/" start="idle">
         <Origin x="12" y="6"/>
         <Loop id="idle" path="idle" delay="0.2" frames="0-1"/>
@@ -170,7 +170,7 @@
         <Loop id="slide" path="walk" frames="0"/>
         <Anim id="hit" path="hit" frames="0"/>
     </gecko_hostile>
-  
+
     <predator_plant_pink path="JungleHelper/PredatorPlant/" start="idle">
         <Center/>
         <Anim id="idle" path="Bitey" frames="0*7,1*2" delay="0.1" goto="idle:19,idleAlt:1"/>
@@ -178,7 +178,7 @@
         <Anim id="attack" path="BiteyAtt" frames="0*8,1,1-4,5*9,6,6,7,7,8,8,9,9,10,10" delay="0.05"/>
         <Anim id="knockout" path="BiteyBonk" frames="0-5,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,10-17" delay="0.05"/>
     </predator_plant_pink>
-    
+
     <predator_plant_blue path="JungleHelper/PredatorPlant/Blue/" start="idle">
         <Center/>
         <Anim id="idle" path="BiteyB" frames="0*7,1*2" delay="0.1" goto="idle:19,idleAlt:1"/>
@@ -186,7 +186,7 @@
         <Anim id="attack" path="BiteyBAtt" frames="0*8,1,1-4,5*9,6,6,7,7,8,8,9,9,10,10" delay="0.05"/>
         <Anim id="knockout" path="BiteyBBonk" frames="0-5,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,7,7,8,8,9,9,6,6,10-17" delay="0.05"/>
     </predator_plant_blue>
-    
+
     <predator_plant_yellow path="JungleHelper/PredatorPlant/Yellow/" start="idle">
         <Center/>
         <Anim id="idle" path="BiteyC" frames="0*7,1*2" delay="0.1" goto="idle:19,idleAlt:1"/>
@@ -261,7 +261,7 @@
 
     <lantern path="JungleHelper/Lantern/LanternEntity/" start="idle">
         <Center/>
-        
+
         <Loop id="idle" path="lantern_" delay="0.1"/>
         <Loop id="unlit" path="unlit_"/>
     </lantern>
@@ -352,7 +352,7 @@
 
         <Anim id="animating" path="firefly" delay="0.1" frames="1,2,3*5,4,5" goto="idle_init" />
     </firefly>
-    
+
     <theo_statue path="JungleHelper/TheoStatue/" start="idle">
         <Origin x="32" y="45"/>
         <Anim id="idle" path="idle" frames="0" delay="2" goto="flash" />
