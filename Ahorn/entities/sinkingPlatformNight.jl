@@ -9,7 +9,6 @@ const placements = Ahorn.PlacementDict(
         Dict{String, Any}(
           "texture" => "JungleHelper/night"
         )
-		
     )
 )
 

@@ -2,7 +2,7 @@ module JungleHelperSnake
 
 using ..Ahorn, Maple
 @pardef Snake(x1::Integer, y1::Integer, x2::Integer=x1, y2::Integer=y1+ 16, left::Bool=false, sprite::String="") = Entity("JungleHelper/Snake", x=x1, y=y1, nodes=Tuple{Int, Int}[(x2, y2)], left=left, sprite=sprite)
-    
+
 const placements = Ahorn.PlacementDict(
     "Snake (Jungle Helper)" => Ahorn.EntityPlacement(
         Snake,
@@ -48,13 +48,13 @@ function Ahorn.renderSelectedAbs(ctx::Ahorn.Cairo.CairoContext, entity::Snake)
     else
         Ahorn.drawSprite(ctx, sprite, nx, ny, jx=0, jy=0)
     end
-    
-	Ahorn.drawArrow(ctx, px + 32, py + 12, nx + 32, ny + 12, Ahorn.colors.selection_selected_fc, headLength=6)
+
+    Ahorn.drawArrow(ctx, px + 32, py + 12, nx + 32, ny + 12, Ahorn.colors.selection_selected_fc, headLength=6)
 end
 
 function Ahorn.renderAbs(ctx::Ahorn.Cairo.CairoContext, entity::Snake, room::Maple.Room)
     x, y = Ahorn.position(entity)
-    
+
     if get(entity.data, "left", false)
         Ahorn.drawSprite(ctx, sprite, x + 64, y, sx=-1, jx=0, jy=0)
     else

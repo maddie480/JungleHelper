@@ -33,8 +33,8 @@ Ahorn.selection(entity::SwingCassetteBlock) = Ahorn.getEntityRectangle(entity)
 
 const colors = Dict{Int, Ahorn.colorTupleType}(
     1 => (240, 73, 190, 255) ./ 255,
-	2 => (252, 220, 58, 255) ./ 255,
-	3 => (56, 224, 78, 255) ./ 255,
+    2 => (252, 220, 58, 255) ./ 255,
+    3 => (56, 224, 78, 255) ./ 255,
 )
 
 const defaultColor = (73, 170, 240, 255) ./ 255
@@ -59,7 +59,7 @@ function getCassetteBlockRectangles(room::Maple.Room)
             Int(get(e.data, "height", 8))
         ))
     end
-        
+
     return rects
 end
 

@@ -95,7 +95,7 @@
         <Anim id="stop_left" path="big_stop_left" delay="0.1" goto="inactive_left"/>
         <Anim id="stop_right" path="big_stop_right" delay="0.1" goto="inactive_right"/>
     </red_slideblock_center_big>
-    
+
     <spiderboss_web path="JungleHelper/SpiderBoss/" start="idle">
         <Center/>
         <Loop id="idle" path="WebStrand" frames="0"/>
@@ -258,14 +258,14 @@
         <Loop id="catchIdle" path="catch" frames="4" delay="0.1" />
         <Anim id="break" path="break" frames="0-4" delay="0.1" />
     </cobweb>
-    
+
     <lantern path="JungleHelper/Lantern/LanternEntity/" start="idle">
         <Center/>
         
         <Loop id="idle" path="lantern_" delay="0.1"/>
         <Loop id="unlit" path="unlit_"/>
     </lantern>
-    
+
     <spiny_plant_yellow_top path="JungleHelper/" start="extended">
         <Loop id="extended" path="SpinyPlant/SpinyYellowTop" />
         <Loop id="retracted" path="SpinyRetract/YellowTop/RetractBelow/SpinyYellowTop" frames="6" />
@@ -274,7 +274,7 @@
         <Anim id="extend_below" path="SpinyRetract/YellowTop/ExtendBelow/SpinyYellowTop" delay="0.0625" goto="extended"/>
         <Anim id="extend_above" path="SpinyRetract/YellowTop/ExtendAbove/SpinyYellowTop" delay="0.0625" goto="extended"/>
     </spiny_plant_yellow_top>
-    
+
     <spiny_plant_yellow_mid path="JungleHelper/" start="extended">
         <Loop id="extended" path="SpinyPlant/SpinyYellowMid" />
         <Loop id="retracted" path="SpinyRetract/YellowMid/RetractBelow/SpinyYellowMid" frames="6" />
@@ -283,7 +283,7 @@
         <Anim id="extend_below" path="SpinyRetract/YellowMid/ExtendBelow/SpinyYellowMid" delay="0.0625" goto="extended"/>
         <Anim id="extend_above" path="SpinyRetract/YellowMid/ExtendAbove/SpinyYellowMid" delay="0.0625" goto="extended"/>
     </spiny_plant_yellow_mid>
-    
+
     <spiny_plant_yellow_bottom path="JungleHelper/" start="extended">
         <Loop id="extended" path="SpinyPlant/SpinyYellowBottom" />
         <Loop id="retracted" path="SpinyRetract/YellowBottom/RetractBelow/SpinyYellowBottom" frames="6" />
@@ -292,7 +292,7 @@
         <Anim id="extend_below" path="SpinyRetract/YellowBottom/ExtendBelow/SpinyYellowBottom" delay="0.0625" goto="extended"/>
         <Anim id="extend_above" path="SpinyRetract/YellowBottom/ExtendAbove/SpinyYellowBottom" delay="0.0625" goto="extended"/>
     </spiny_plant_yellow_bottom>
-    
+
     <spiny_plant_yellow_solo path="JungleHelper/" start="extended">
         <Loop id="extended" path="SpinyPlant/SpinyYellowSolo" />
         <Loop id="retracted" path="SpinyRetract/YellowSolo/RetractBelow/SpinyYellowSolo" frames="6" />
@@ -301,7 +301,7 @@
         <Anim id="extend_below" path="SpinyRetract/YellowSolo/ExtendBelow/SpinyYellowSolo" delay="0.0625" goto="extended"/>
         <Anim id="extend_above" path="SpinyRetract/YellowSolo/ExtendAbove/SpinyYellowSolo" delay="0.0625" goto="extended"/>
     </spiny_plant_yellow_solo>
-    
+
     <snek path="JungleHelper/Snake/" start="idle_aggro">
         <Loop id="idle_aggro" path="IdleAggro/snake_idle" delay="0.1"/>
         <Loop id="idle_scared" path="IdleScared/idle_scared" delay="0.1"/>
@@ -390,5 +390,4 @@
         <Loop id="open" path="TreasureOpenIdle" delay="0.1" frames="0-1" />
         <Loop id="collected" path="TreasureCollected" frames="0" />
     </treasure_chest>
-	
 </Sprites>

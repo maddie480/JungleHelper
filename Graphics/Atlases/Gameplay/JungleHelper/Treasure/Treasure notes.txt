@@ -10,11 +10,11 @@ Key Interaction:
 2. The key can disappear when it reaches the Treasure, after playing TreasureIdle11.
 
 3. When the key disappears play
-	-TreasureKeyA00 thru 11 (2 times)
-	This is the Key rotating in the air in front of keyhole:
+    -TreasureKeyA00 thru 11 (2 times)
+    This is the Key rotating in the air in front of keyhole:
 4. Then play TreasureKeyB00 thru 09 (1 time)
-	TreasureKeyB07 should be 5 frames
-	
+    TreasureKeyB07 should be 5 frames
+    
 
 Treasure Opening:
 TreasureOpen00 thru 07 (1 time)

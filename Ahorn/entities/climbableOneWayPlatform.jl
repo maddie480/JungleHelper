@@ -3,7 +3,7 @@ module JungleHelperClimbableOneWayPlatform
 using ..Ahorn, Maple
 
 @mapdef Entity "JungleHelper/ClimbableOneWayPlatform" ClimbableOneWayPlatform(x::Integer, y::Integer, height::Integer=Maple.defaultBlockHeight, left::Bool=true, texture::String="wood", animationDelay::Number=0.0, 
-	surfaceIndex::Int=-1, staminaBehavior::String="None", sameDirectionJumpBoost::Bool=false, momentumJumpDecayTime::Number=0.0, momentumJumpDecayCurvature::Number=1.0)
+    surfaceIndex::Int=-1, staminaBehavior::String="None", sameDirectionJumpBoost::Bool=false, momentumJumpDecayTime::Number=0.0, momentumJumpDecayCurvature::Number=1.0)
 
 textures = ["wood", "dream", "temple", "templeB", "cliffside", "reflection", "core", "moon"]
 staminaBehaviors = ["None", "Conserve", "Regain"]
@@ -60,16 +60,16 @@ function Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::ClimbableOneWayPlat
 
     height = Int(get(entity.data, "height", 8))
     left = get(entity.data, "left", true)
-    
+
     startX = div(x, 8) + 1
     startY = div(y, 8) + 1
     stopY = startY + div(height, 8) - 1
     animated = Number(get(entity.data, "animationDelay", 0)) > 0
-    
+
     Ahorn.Cairo.save(ctx)
-    
+
     Ahorn.rotate(ctx, pi / 2)
-    
+
     if left
         Ahorn.scale(ctx, 1, -1)
     end

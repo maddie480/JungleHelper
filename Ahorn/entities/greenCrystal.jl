@@ -12,14 +12,14 @@ const placements = Ahorn.PlacementDict(
 
 function Ahorn.selection(entity::TheoStatue)
     x, y = Ahorn.position(entity)
-	sprite = get(entity, "directory", "JungleHelper/TheoStatue") * "/idle00"
+    sprite = get(entity, "directory", "JungleHelper/TheoStatue") * "/idle00"
 
     return Ahorn.Rectangle(x - 11, y - 35, 21, 43)
 end
 
 function Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::TheoStatue, room::Maple.Room)
-	sprite = get(entity, "directory", "JungleHelper/TheoStatue") * "/idle00"
-	
+    sprite = get(entity, "directory", "JungleHelper/TheoStatue") * "/idle00"
+
     Ahorn.drawSprite(ctx, sprite, 0, -13)
 end
 
