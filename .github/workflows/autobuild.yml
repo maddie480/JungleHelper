@@ -74,7 +74,7 @@ jobs:
                 --arg zipname "$ZIPNAME" \
                 --arg url "$url" \
                 --arg msg "$msg" \
-                --arg change_embed "[Click here to see changes in this commit](https://github.com/max4805/JungleHelper/commit/$GITHUB_SHA)" \
+                --arg change_embed "[Click here to see changes in this commit](https://github.com/maddie480/JungleHelper/commit/$GITHUB_SHA)" \
                 '{embeds: [{title: "Install \($zipname)", url: "https://0x0ade.ga/twoclick/?\($url)", description: $msg, fields: [{name: "Changes", value: $change_embed}]}]}' \
             )" "$DISCORD_WEBHOOK"
         else

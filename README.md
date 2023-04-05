@@ -58,11 +58,11 @@ Mosaic Crumble Blocks and Invisible Jump Throughs are custom entities, the other
 
 ## Custom Decal Registry Attributes
 
-- `<jungleHelper_rainbow>`: gives a rainbow tint to the decal, like rainbow spinners. Also works with rainbow spinner color controllers from max480's Helping Hand.
+- `<jungleHelper_rainbow>`: gives a rainbow tint to the decal, like rainbow spinners. Also works with rainbow spinner color controllers from Maddie's Helping Hand.
 
 ## Wipes included in the pack
 
-The following wipes are included with the helper, and can be used if you also have [max480's Helping Hand](https://github.com/max4805/MaxHelpingHand):
+The following wipes are included with the helper, and can be used if you also have [Maddie's Helping Hand](https://github.com/maddie480/MaddieHelpingHand):
 - **Arrow** with plant-like edges around it
 - **Dots** that grow to cover the screen
 - **Rocks** that fall off from the top of the screen
