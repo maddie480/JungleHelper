@@ -6,7 +6,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v3
 
     - name: Check for tabs
       run: |
@@ -55,7 +55,7 @@ jobs:
         path: Z_IntoTheJungleCodeMod/bin/Debug/IntoTheJungleCodeMod.dll
 
     - name: git fetch
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         ref: ${{ github.ref }}
         path: latest-repo
