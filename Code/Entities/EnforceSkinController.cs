@@ -286,7 +286,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             bool lookUpAnimTweak = false;
 
             if (customSprite) {
-                switch (requestedMode) {
+                switch (requestedMode < 0 ? (requestedMode + (1 << 31)) : requestedMode) {
                     case SpriteModeMadelineNormal:
                         GFX.SpriteBank.CreateOn(self, "junglehelper_madeline_copy");
                         break;
