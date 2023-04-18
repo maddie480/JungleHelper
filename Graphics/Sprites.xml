@@ -424,143 +424,207 @@
         </Metadata>
     </junglehelper_player_badeline_copy_vanilla>
 
+
+
+
+
     <junglehelper_madeline_lantern path="JungleHelper/Lantern/" copy="junglehelper_madeline_copy">
         <Anim id="idle" path="idle/idlelantern" delay="0.1" goto="idle"/>
+        <Loop id="edge" path="edge/lanternedge" delay="0.25" frames="0-13" />
+        <Loop id="edgeBack" path="edge_back/lanternedge_back" delay="0.25"/>
+
+        <Loop id="duck" path="duck/lanternduck" delay="0.1" frames="0-4"/>
+        <Anim id="lookUp" path="lookUp/lanternLookUp" delay="0.1" frames="2-11" />
+        <Loop id="dash" path="dash/lanterndash" delay="0.09" />
+
+        <Anim id="flip" path="flip/lanternflip" delay="0.04" frames="0-7" goto="runFast"/>
+        <Loop id="skid" path="flip/lanternflip" delay="0.04" frames="8"/>
+
+        <Loop id="runWind" path="run/lanternrun" delay="0.07" frames="0-11" />
+        <Loop id="walk" path="run/lanternrun" delay="0.06" />
+        <Anim id="runSlow" path="run/lanternrun" delay="0.07" goto="runFast" />
+        <Loop id="runFast" path="run/lanternrun" delay="0.05" />
 
         <Loop id="jumpSlow" path="jump/jumplantern" delay="0.1" frames="0,1" />
         <Loop id="jumpFast" path="jump/jumplantern" delay="0.1" frames="0,1" />
         <Anim id="fallSlow" path="jump/jumplantern" delay="0.1" frames="2,3" />
         <Anim id="fallFast" path="jump/jumplantern" delay="0.1" frames="2,3" />
-
-        <Anim id="runSlow" path="run/lanternrun" delay="0.07" goto="runFast" />
-        <Loop id="runFast" path="run/lanternrun" delay="0.05" />
+        <Loop id="push" path="push/lanternpush" delay="0.1" />
 
         <Loop id="wallslide" path="slide/slidelantern" delay="0.1" />
-
         <Loop id="climbup" path="climb/lanternclimb" delay="0.0667" frames="0-5" />
         <Anim id="climbLookBackStart" path="climb/lanternclimb" delay="0.08" frames="6,7,8" goto="climbLookBack" />
         <Loop id="climbLookBack" path="climb/lanternclimb" frames="8" />
-
-        <Loop id="edge" path="edge/lanternedge" delay="0.25" frames="0-13" />
-
         <Loop id="dangling" path="dangling/lanterndangling" delay="0.11" frames="0-9" />
 
-        <Loop id="edgeBack" path="edge_back/lanternedge_back" delay="0.25"/>
-
-        <Anim id="lookUp" path="lookUp/lanternLookUp" delay="0.1" frames="2-11" />
-
-        <Loop id="push" path="push/lanternpush" delay="0.1" />
 
         <Metadata>
             <Frames path="idle/idlelantern" hair="0,-2|0,-2|0,-2|0,-2|0,-1|0,-1|0,-1|0,-1|0,-1"/>
+            <Frames path="edge/lanternedge" hair="-1,-2|-1,-2|-1,-2|-1,-1|-1,-1|-1,-1|-1,-2|0,-2|1,-2|0,-2|0,-1|-1,-1|-1,-1|-1,-2"/>
+            <Frames path="edge_back/lanternedge_back" hair="1,-2:1|1,-2:2|0,-2:2|0,-1:2|-1,-2:2|0,-2:2|1,-2:2|1,-2:2|1,-2:2|1,-2:2|2,-1|2,-1|2,-1|2,-2"/>
+
+            <Frames path="duck/lanternduck" hair="0,3|0,3|0,3|0,3|0,3" />
+            <Frames path="lookUp/lanternLookUp" hair="0,-2|0,-2|0,-2|0,-2|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1"/>
+            <Frames path="dash/lanterndash" hair="2,0|2,0|2,0|2,1"/>
+
+            <Frames path="flip/lanternflip" hair="-1,-1:2|-1,-1:1|0,-1:1|1,-1:0|1,-1:0|1,0:0|2,0:0|2,0:0|2,0:0"/>
             <Frames path="run/lanternrun" hair="1,-2|1,-1|1,-1|1,-1|1,-3|1,-2|1,-1|1,-1|1,-1|1,-1|1,-3|1,-2"/>
+            <Frames path="push/lanternpush" hair="1,-2|1,-1|1,-1|1,-1|1,-2|1,-2|1,-2|1,-2|1,-1|1,-1|1,-1|1,-1|1,-2|1,-2|1,-2|1,-2"/>
             <Frames path="jump/jumplantern" hair="1,-3|1,-3|1,-2|0,-2"/>
+
             <Frames path="slide/slidelantern" hair="0,-2|0,-2|0,-2|0,-2|0,-2"/>
             <Frames path="climb/lanternclimb" hair="0,-2|0,-2|0,-2|0,-2|-1,-2|-1,-2|0,-1|1,-2:1|2,-2:2"/>
-            <Frames path="edge/lanternedge" hair="-1,-2|-1,-2|-1,-2|-1,-1|-1,-1|-1,-1|-1,-2|0,-2|1,-2|0,-2|0,-1|-1,-1|-1,-1|-1,-2"/>
             <Frames path="dangling/lanterndangling" hair="0,-2|0,-2|0,-2|0,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2"/>
-            <Frames path="edge_back/lanternedge_back" hair="1,-2:1|2,-2:2|1,-2:2|1,-1:2|0,-2:2|1,-2:2|2,-2:2|1,-2:2|2,-2:2|2,-2:2|2,-1|2,-1|2,-1|2,-2"/>
-            <Frames path="lookUp/lanternLookUp" hair="0,-2|0,-2|0,-2|0,-2|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1"/>
-            <Frames path="push/lanternpush" hair="1,-2|1,-1|1,-1|1,-1|1,-2|1,-2|1,-2|1,-2|1,-1|1,-1|1,-1|1,-1|1,-2|1,-2|1,-2|1,-2"/>
         </Metadata>
     </junglehelper_madeline_lantern>
 
     <junglehelper_badeline_lantern path="JungleHelper/Lantern/Badeline/" copy="junglehelper_player_badeline_copy">
         <Anim id="idle" path="idle/idlelantern" delay="0.1" goto="idle"/>
+        <Loop id="edge" path="edge/lanternedge" delay="0.25" frames="0-13" />
+        <Loop id="edgeBack" path="edge_back/lanternedge_back" delay="0.25"/>
+
+        <Loop id="duck" path="duck/lanternduck" delay="0.1" frames="0-4"/>
+        <Anim id="lookUp" path="lookUp/lanternLookUp" delay="0.1" frames="2-11" />
+        <Loop id="dash" path="dash/lanterndash" delay="0.09" />
+
+        <Anim id="flip" path="flip/lanternflip" delay="0.04" frames="0-7" goto="runFast"/>
+        <Loop id="skid" path="flip/lanternflip" delay="0.04" frames="8"/>
+
+        <Loop id="runWind" path="run/lanternrun" delay="0.07" frames="0-11" />
+        <Loop id="walk" path="run/lanternrun" delay="0.06" />
+        <Anim id="runSlow" path="run/lanternrun" delay="0.07" goto="runFast" />
+        <Loop id="runFast" path="run/lanternrun" delay="0.05" />
 
         <Loop id="jumpSlow" path="jump/jumplantern" delay="0.1" frames="0,1" />
         <Loop id="jumpFast" path="jump/jumplantern" delay="0.1" frames="0,1" />
         <Anim id="fallSlow" path="jump/jumplantern" delay="0.1" frames="2,3" />
         <Anim id="fallFast" path="jump/jumplantern" delay="0.1" frames="2,3" />
-
-        <Anim id="runSlow" path="run/lanternrun" delay="0.07" goto="runFast" />
-        <Loop id="runFast" path="run/lanternrun" delay="0.05" />
+        <Loop id="push" path="push/lanternpush" delay="0.1" />
 
         <Loop id="wallslide" path="slide/slidelantern" delay="0.1" />
-
         <Loop id="climbup" path="climb/lanternclimb" delay="0.0667" frames="0-5" />
         <Anim id="climbLookBackStart" path="climb/lanternclimb" delay="0.08" frames="6,7,8" goto="climbLookBack" />
         <Loop id="climbLookBack" path="climb/lanternclimb" frames="8" />
+        <Loop id="dangling" path="dangling/lanterndangling" delay="0.11" frames="0-9" />
 
-        <Loop id="edge" path="edge/lanternedge" delay="0.25" frames="0-13" />
 
         <Metadata>
             <Frames path="idle/idlelantern" hair="0,-2|0,-2|0,-2|0,-2|0,-1|0,-1|0,-1|0,-1|0,-1"/>
+            <Frames path="edge/lanternedge" hair="-1,-2|-1,-2|-1,-2|-1,-1|-1,-1|-1,-1|-1,-2|0,-2|1,-2|0,-2|0,-1|-1,-1|-1,-1|-1,-2"/>
+            <Frames path="edge_back/lanternedge_back" hair="1,-2:1|1,-2:2|0,-2:2|0,-1:2|-1,-2:2|0,-2:2|1,-2:2|1,-2:2|1,-2:2|1,-2:2|2,-1|2,-1|2,-1|2,-2"/>
+
+            <Frames path="duck/lanternduck" hair="0,3|0,3|0,3|0,3|0,3" />
+            <Frames path="lookUp/lanternLookUp" hair="0,-2|0,-2|0,-2|0,-2|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1"/>
+            <Frames path="dash/lanterndash" hair="2,0|2,0|2,0|2,1"/>
+
+            <Frames path="flip/lanternflip" hair="-1,-1:2|-1,-1:1|0,-1:1|1,-1:0|1,-1:0|1,0:0|2,0:0|2,0:0|2,0:0"/>
             <Frames path="run/lanternrun" hair="1,-2|1,-1|1,-1|1,-1|1,-3|1,-2|1,-1|1,-1|1,-1|1,-1|1,-3|1,-2"/>
+            <Frames path="push/lanternpush" hair="1,-2|1,-1|1,-1|1,-1|1,-2|1,-2|1,-2|1,-2|1,-1|1,-1|1,-1|1,-1|1,-2|1,-2|1,-2|1,-2"/>
             <Frames path="jump/jumplantern" hair="1,-3|1,-3|1,-2|0,-2"/>
+
             <Frames path="slide/slidelantern" hair="0,-2|0,-2|0,-2|0,-2|0,-2"/>
             <Frames path="climb/lanternclimb" hair="0,-2|0,-2|0,-2|0,-2|-1,-2|-1,-2|0,-1|1,-2:1|2,-2:2"/>
-            <Frames path="edge/lanternedge" hair="-1,-2|-1,-2|-1,-2|-1,-1|-1,-1|-1,-1|-1,-2|0,-2|1,-2|0,-2|0,-1|-1,-1|-1,-1|-1,-2"/>
+            <Frames path="dangling/lanterndangling" hair="0,-2|0,-2|0,-2|0,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2"/>
         </Metadata>
     </junglehelper_badeline_lantern>
 
     <junglehelper_madeline_lantern_no_override path="JungleHelper/Lantern/" copy="player">
         <Anim id="idle" path="idle/idlelantern" delay="0.1" goto="idle"/>
+        <Loop id="edge" path="edge/lanternedge" delay="0.25" frames="0-13" />
+        <Loop id="edgeBack" path="edge_back/lanternedge_back" delay="0.25"/>
+
+        <Loop id="duck" path="duck/lanternduck" delay="0.1" frames="0-4"/>
+        <Anim id="lookUp" path="lookUp/lanternLookUp" delay="0.1" frames="2-11" />
+        <Loop id="dash" path="dash/lanterndash" delay="0.09" />
+
+        <Anim id="flip" path="flip/lanternflip" delay="0.04" frames="0-7" goto="runFast"/>
+        <Loop id="skid" path="flip/lanternflip" delay="0.04" frames="8"/>
+
+        <Loop id="runWind" path="run/lanternrun" delay="0.07" frames="0-11" />
+        <Loop id="walk" path="run/lanternrun" delay="0.06" />
+        <Anim id="runSlow" path="run/lanternrun" delay="0.07" goto="runFast" />
+        <Loop id="runFast" path="run/lanternrun" delay="0.05" />
 
         <Loop id="jumpSlow" path="jump/jumplantern" delay="0.1" frames="0,1" />
         <Loop id="jumpFast" path="jump/jumplantern" delay="0.1" frames="0,1" />
         <Anim id="fallSlow" path="jump/jumplantern" delay="0.1" frames="2,3" />
         <Anim id="fallFast" path="jump/jumplantern" delay="0.1" frames="2,3" />
-
-        <Anim id="runSlow" path="run/lanternrun" delay="0.07" goto="runFast" />
-        <Loop id="runFast" path="run/lanternrun" delay="0.05" />
+        <Loop id="push" path="push/lanternpush" delay="0.1" />
 
         <Loop id="wallslide" path="slide/slidelantern" delay="0.1" />
-
         <Loop id="climbup" path="climb/lanternclimb" delay="0.0667" frames="0-5" />
         <Anim id="climbLookBackStart" path="climb/lanternclimb" delay="0.08" frames="6,7,8" goto="climbLookBack" />
         <Loop id="climbLookBack" path="climb/lanternclimb" frames="8" />
-
-        <Loop id="edge" path="edge/lanternedge" delay="0.25" frames="0-13" />
-
         <Loop id="dangling" path="dangling/lanterndangling" delay="0.11" frames="0-9" />
 
-        <Loop id="edgeBack" path="edge_back/lanternedge_back" delay="0.25"/>
-
-        <Anim id="lookUp" path="lookUp/lanternLookUp" delay="0.1" frames="2-11" />
-
-        <Loop id="push" path="push/lanternpush" delay="0.1" />
 
         <Metadata>
             <Frames path="idle/idlelantern" hair="0,-2|0,-2|0,-2|0,-2|0,-1|0,-1|0,-1|0,-1|0,-1"/>
+            <Frames path="edge/lanternedge" hair="-1,-2|-1,-2|-1,-2|-1,-1|-1,-1|-1,-1|-1,-2|0,-2|1,-2|0,-2|0,-1|-1,-1|-1,-1|-1,-2"/>
+            <Frames path="edge_back/lanternedge_back" hair="1,-2:1|1,-2:2|0,-2:2|0,-1:2|-1,-2:2|0,-2:2|1,-2:2|1,-2:2|1,-2:2|1,-2:2|2,-1|2,-1|2,-1|2,-2"/>
+
+            <Frames path="duck/lanternduck" hair="0,3|0,3|0,3|0,3|0,3" />
+            <Frames path="lookUp/lanternLookUp" hair="0,-2|0,-2|0,-2|0,-2|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1"/>
+            <Frames path="dash/lanterndash" hair="2,0|2,0|2,0|2,1"/>
+
+            <Frames path="flip/lanternflip" hair="-1,-1:2|-1,-1:1|0,-1:1|1,-1:0|1,-1:0|1,0:0|2,0:0|2,0:0|2,0:0"/>
             <Frames path="run/lanternrun" hair="1,-2|1,-1|1,-1|1,-1|1,-3|1,-2|1,-1|1,-1|1,-1|1,-1|1,-3|1,-2"/>
+            <Frames path="push/lanternpush" hair="1,-2|1,-1|1,-1|1,-1|1,-2|1,-2|1,-2|1,-2|1,-1|1,-1|1,-1|1,-1|1,-2|1,-2|1,-2|1,-2"/>
             <Frames path="jump/jumplantern" hair="1,-3|1,-3|1,-2|0,-2"/>
+
             <Frames path="slide/slidelantern" hair="0,-2|0,-2|0,-2|0,-2|0,-2"/>
             <Frames path="climb/lanternclimb" hair="0,-2|0,-2|0,-2|0,-2|-1,-2|-1,-2|0,-1|1,-2:1|2,-2:2"/>
-            <Frames path="edge/lanternedge" hair="-1,-2|-1,-2|-1,-2|-1,-1|-1,-1|-1,-1|-1,-2|0,-2|1,-2|0,-2|0,-1|-1,-1|-1,-1|-1,-2"/>
             <Frames path="dangling/lanterndangling" hair="0,-2|0,-2|0,-2|0,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2"/>
-            <Frames path="edge_back/lanternedge_back" hair="1,-2:1|2,-2:2|1,-2:2|1,-1:2|0,-2:2|1,-2:2|2,-2:2|1,-2:2|2,-2:2|2,-2:2|2,-1|2,-1|2,-1|2,-2"/>
-            <Frames path="lookUp/lanternLookUp" hair="0,-2|0,-2|0,-2|0,-2|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1"/>
-            <Frames path="push/lanternpush" hair="1,-2|1,-1|1,-1|1,-1|1,-2|1,-2|1,-2|1,-2|1,-1|1,-1|1,-1|1,-1|1,-2|1,-2|1,-2|1,-2"/>
         </Metadata>
     </junglehelper_madeline_lantern_no_override>
 
     <junglehelper_badeline_lantern_no_override path="JungleHelper/Lantern/Badeline/" copy="junglehelper_player_badeline_copy_vanilla">
         <Anim id="idle" path="idle/idlelantern" delay="0.1" goto="idle"/>
+        <Loop id="edge" path="edge/lanternedge" delay="0.25" frames="0-13" />
+        <Loop id="edgeBack" path="edge_back/lanternedge_back" delay="0.25"/>
+
+        <Loop id="duck" path="duck/lanternduck" delay="0.1" frames="0-4"/>
+        <Anim id="lookUp" path="lookUp/lanternLookUp" delay="0.1" frames="2-11" />
+        <Loop id="dash" path="dash/lanterndash" delay="0.09" />
+
+        <Anim id="flip" path="flip/lanternflip" delay="0.04" frames="0-7" goto="runFast"/>
+        <Loop id="skid" path="flip/lanternflip" delay="0.04" frames="8"/>
+
+        <Loop id="runWind" path="run/lanternrun" delay="0.07" frames="0-11" />
+        <Loop id="walk" path="run/lanternrun" delay="0.06" />
+        <Anim id="runSlow" path="run/lanternrun" delay="0.07" goto="runFast" />
+        <Loop id="runFast" path="run/lanternrun" delay="0.05" />
 
         <Loop id="jumpSlow" path="jump/jumplantern" delay="0.1" frames="0,1" />
         <Loop id="jumpFast" path="jump/jumplantern" delay="0.1" frames="0,1" />
         <Anim id="fallSlow" path="jump/jumplantern" delay="0.1" frames="2,3" />
         <Anim id="fallFast" path="jump/jumplantern" delay="0.1" frames="2,3" />
-
-        <Anim id="runSlow" path="run/lanternrun" delay="0.07" goto="runFast" />
-        <Loop id="runFast" path="run/lanternrun" delay="0.05" />
+        <Loop id="push" path="push/lanternpush" delay="0.1" />
 
         <Loop id="wallslide" path="slide/slidelantern" delay="0.1" />
-
         <Loop id="climbup" path="climb/lanternclimb" delay="0.0667" frames="0-5" />
         <Anim id="climbLookBackStart" path="climb/lanternclimb" delay="0.08" frames="6,7,8" goto="climbLookBack" />
         <Loop id="climbLookBack" path="climb/lanternclimb" frames="8" />
+        <Loop id="dangling" path="dangling/lanterndangling" delay="0.11" frames="0-9" />
 
-        <Loop id="edge" path="edge/lanternedge" delay="0.25" frames="0-13" />
 
         <Metadata>
             <Frames path="idle/idlelantern" hair="0,-2|0,-2|0,-2|0,-2|0,-1|0,-1|0,-1|0,-1|0,-1"/>
+            <Frames path="edge/lanternedge" hair="-1,-2|-1,-2|-1,-2|-1,-1|-1,-1|-1,-1|-1,-2|0,-2|1,-2|0,-2|0,-1|-1,-1|-1,-1|-1,-2"/>
+            <Frames path="edge_back/lanternedge_back" hair="1,-2:1|1,-2:2|0,-2:2|0,-1:2|-1,-2:2|0,-2:2|1,-2:2|1,-2:2|1,-2:2|1,-2:2|2,-1|2,-1|2,-1|2,-2"/>
+
+            <Frames path="duck/lanternduck" hair="0,3|0,3|0,3|0,3|0,3" />
+            <Frames path="lookUp/lanternLookUp" hair="0,-2|0,-2|0,-2|0,-2|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-2:1"/>
+            <Frames path="dash/lanterndash" hair="2,0|2,0|2,0|2,1"/>
+
+            <Frames path="flip/lanternflip" hair="-1,-1:2|-1,-1:1|0,-1:1|1,-1:0|1,-1:0|1,0:0|2,0:0|2,0:0|2,0:0"/>
             <Frames path="run/lanternrun" hair="1,-2|1,-1|1,-1|1,-1|1,-3|1,-2|1,-1|1,-1|1,-1|1,-1|1,-3|1,-2"/>
+            <Frames path="push/lanternpush" hair="1,-2|1,-1|1,-1|1,-1|1,-2|1,-2|1,-2|1,-2|1,-1|1,-1|1,-1|1,-1|1,-2|1,-2|1,-2|1,-2"/>
             <Frames path="jump/jumplantern" hair="1,-3|1,-3|1,-2|0,-2"/>
+
             <Frames path="slide/slidelantern" hair="0,-2|0,-2|0,-2|0,-2|0,-2"/>
             <Frames path="climb/lanternclimb" hair="0,-2|0,-2|0,-2|0,-2|-1,-2|-1,-2|0,-1|1,-2:1|2,-2:2"/>
-            <Frames path="edge/lanternedge" hair="-1,-2|-1,-2|-1,-2|-1,-1|-1,-1|-1,-1|-1,-2|0,-2|1,-2|0,-2|0,-1|-1,-1|-1,-1|-1,-2"/>
+            <Frames path="dangling/lanterndangling" hair="0,-2|0,-2|0,-2|0,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2"/>
         </Metadata>
     </junglehelper_badeline_lantern_no_override>
 
