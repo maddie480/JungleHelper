@@ -67,6 +67,7 @@ end
 -- add custom variation of jumpthru
 table.insert(entities.registeredEntities.jumpThru.placements, {
     name = "junglehelper_plank",
+    associatedMods = {"JungleHelper"},
     data = {
         width = 8,
         texture = "JungleHelper/Plank"

@@ -4,6 +4,7 @@ local entities = require("entities")
 for index, name in ipairs({ "ruins", "wood", "wooddark" }) do
     table.insert(entities.registeredEntities.spikesUp.placements, {
         name = "junglehelper_" .. name,
+        associatedMods = {"JungleHelper"},
         data = {
             width = 8,
             ["type"] = "JungleHelper/" .. name
@@ -12,6 +13,7 @@ for index, name in ipairs({ "ruins", "wood", "wooddark" }) do
 
     table.insert(entities.registeredEntities.spikesDown.placements, {
         name = "junglehelper_" .. name,
+        associatedMods = {"JungleHelper"},
         data = {
             width = 8,
             ["type"] = "JungleHelper/" .. name
@@ -20,6 +22,7 @@ for index, name in ipairs({ "ruins", "wood", "wooddark" }) do
 
     table.insert(entities.registeredEntities.spikesLeft.placements, {
         name = "junglehelper_" .. name,
+        associatedMods = {"JungleHelper"},
         data = {
             height = 8,
             ["type"] = "JungleHelper/" .. name
@@ -28,6 +31,7 @@ for index, name in ipairs({ "ruins", "wood", "wooddark" }) do
 
     table.insert(entities.registeredEntities.spikesRight.placements, {
         name = "junglehelper_" .. name,
+        associatedMods = {"JungleHelper"},
         data = {
             height = 8,
             ["type"] = "JungleHelper/" .. name

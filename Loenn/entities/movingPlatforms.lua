@@ -4,6 +4,7 @@ local entities = require("entities")
 for index, name in ipairs({ "escape", "jungle", "night" }) do
     table.insert(entities.registeredEntities.movingPlatform.placements, {
         name = "junglehelper_" .. name,
+        associatedMods = {"JungleHelper"},
         data = {
             width = 8,
             texture = "JungleHelper/" .. name

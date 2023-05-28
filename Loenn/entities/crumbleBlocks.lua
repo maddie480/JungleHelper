@@ -49,6 +49,7 @@ end
 for index, name in ipairs({ "mossy", "thin", "dark" }) do
     table.insert(entities.registeredEntities.crumbleBlock.placements, {
         name = "junglehelper_" .. name,
+        associatedMods = {"JungleHelper"},
         data = {
             width = 8,
             texture = "JungleHelper/" .. name

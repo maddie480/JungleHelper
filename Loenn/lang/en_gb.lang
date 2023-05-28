@@ -245,41 +245,41 @@ triggers.JungleHelper/UITextTrigger.attributes.description.TextX=The text horizo
 triggers.JungleHelper/UITextTrigger.attributes.description.TextY=The text vertical position, 0 being the center of the screen, negative values being higher on the screen. The screen is 1920x1080 pixels.
 
 # Crumble Blocks
-entities.crumbleBlock.placements.name.junglehelper_mossy=Crumble Block (Mossy) [Jungle Helper]
-entities.crumbleBlock.placements.name.junglehelper_thin=Crumble Block (Thin) [Jungle Helper]
-entities.crumbleBlock.placements.name.junglehelper_dark=Crumble Block (Dark) [Jungle Helper]
+entities.crumbleBlock.placements.name.junglehelper_mossy=Crumble Block (Mossy)
+entities.crumbleBlock.placements.name.junglehelper_thin=Crumble Block (Thin)
+entities.crumbleBlock.placements.name.junglehelper_dark=Crumble Block (Dark)
 entities.JungleHelper/UnrandomizedCrumblePlatform.placements.name.mosaic=Crumble Block (Mosaic)
 entities.JungleHelper/UnrandomizedCrumblePlatform.attributes.description.texture=What texture to use for the crumble block.
 
 # Jump Throughs
-entities.jumpThru.placements.name.junglehelper_plank=Jump Through (Plank) [Jungle Helper]
+entities.jumpThru.placements.name.junglehelper_plank=Jump Through (Plank)
 entities.JungleHelper/InvisibleJumpthruPlatform.placements.name.jumpthru=Jump Through (Invisible)
 entities.JungleHelper/InvisibleJumpthruPlatform.attributes.description.surfaceIndex=Footstep sound when walking on the platform.
 
 # Moving Platforms
-entities.movingPlatform.placements.name.junglehelper_escape=Platform (Moving, Escape) [Jungle Helper]
-entities.movingPlatform.placements.name.junglehelper_jungle=Platform (Moving, Jungle) [Jungle Helper]
-entities.movingPlatform.placements.name.junglehelper_night=Platform (Moving, Night) [Jungle Helper]
+entities.movingPlatform.placements.name.junglehelper_escape=Platform (Moving, Escape)
+entities.movingPlatform.placements.name.junglehelper_jungle=Platform (Moving, Jungle)
+entities.movingPlatform.placements.name.junglehelper_night=Platform (Moving, Night)
 
 # Sinking Platforms
-entities.sinkingPlatform.placements.name.junglehelper_escape=Platform (Sinking, Escape) [Jungle Helper]
-entities.sinkingPlatform.placements.name.junglehelper_jungle=Platform (Sinking, Jungle) [Jungle Helper]
-entities.sinkingPlatform.placements.name.junglehelper_night=Platform (Sinking, Night) [Jungle Helper]
+entities.sinkingPlatform.placements.name.junglehelper_escape=Platform (Sinking, Escape)
+entities.sinkingPlatform.placements.name.junglehelper_jungle=Platform (Sinking, Jungle)
+entities.sinkingPlatform.placements.name.junglehelper_night=Platform (Sinking, Night)
 
 # Spikes
-entities.spikesUp.placements.name.junglehelper_ruins=Spikes (Up, Ruins) [Jungle Helper]
-entities.spikesDown.placements.name.junglehelper_ruins=Spikes (Down, Ruins) [Jungle Helper]
-entities.spikesLeft.placements.name.junglehelper_ruins=Spikes (Left, Ruins) [Jungle Helper]
-entities.spikesRight.placements.name.junglehelper_ruins=Spikes (Right, Ruins) [Jungle Helper]
-entities.spikesUp.placements.name.junglehelper_wood=Spikes (Up, Wood) [Jungle Helper]
-entities.spikesDown.placements.name.junglehelper_wood=Spikes (Down, Wood) [Jungle Helper]
-entities.spikesLeft.placements.name.junglehelper_wood=Spikes (Left, Wood) [Jungle Helper]
-entities.spikesRight.placements.name.junglehelper_wood=Spikes (Right, Wood) [Jungle Helper]
-entities.spikesUp.placements.name.junglehelper_wooddark=Spikes (Up, Wood Outline) [Jungle Helper]
-entities.spikesDown.placements.name.junglehelper_wooddark=Spikes (Down, Wood Outline) [Jungle Helper]
-entities.spikesLeft.placements.name.junglehelper_wooddark=Spikes (Left, Wood Outline) [Jungle Helper]
-entities.spikesRight.placements.name.junglehelper_wooddark=Spikes (Right, Wood Outline) [Jungle Helper]
+entities.spikesUp.placements.name.junglehelper_ruins=Spikes (Up, Ruins)
+entities.spikesDown.placements.name.junglehelper_ruins=Spikes (Down, Ruins)
+entities.spikesLeft.placements.name.junglehelper_ruins=Spikes (Left, Ruins)
+entities.spikesRight.placements.name.junglehelper_ruins=Spikes (Right, Ruins)
+entities.spikesUp.placements.name.junglehelper_wood=Spikes (Up, Wood)
+entities.spikesDown.placements.name.junglehelper_wood=Spikes (Down, Wood)
+entities.spikesLeft.placements.name.junglehelper_wood=Spikes (Left, Wood)
+entities.spikesRight.placements.name.junglehelper_wood=Spikes (Right, Wood)
+entities.spikesUp.placements.name.junglehelper_wooddark=Spikes (Up, Wood Outline)
+entities.spikesDown.placements.name.junglehelper_wooddark=Spikes (Down, Wood Outline)
+entities.spikesLeft.placements.name.junglehelper_wooddark=Spikes (Left, Wood Outline)
+entities.spikesRight.placements.name.junglehelper_wooddark=Spikes (Right, Wood Outline)
 
 # Switch Gates
-entities.switchGate.placements.name.junglehelper_junglestone=Switch Gate (Stone) [Jungle Helper]
-entities.switchGate.placements.name.junglehelper_wood=Switch Gate (Wood) [Jungle Helper]
+entities.switchGate.placements.name.junglehelper_junglestone=Switch Gate (Stone)
+entities.switchGate.placements.name.junglehelper_wood=Switch Gate (Wood)
