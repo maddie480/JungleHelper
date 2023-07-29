@@ -2,7 +2,8 @@ module JungleHelperMossyWall
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/MossyWall" MossyWall(x::Integer, y::Integer, height::Integer=8, left::Bool=false, spriteDirectory::String="JungleHelper/Moss")
+@mapdef Entity "JungleHelper/MossyWall" MossyWall(x::Integer, y::Integer, height::Integer=8, left::Bool=false,
+    spriteDirectory::String="JungleHelper/Moss", color1::String="7A612D", color2::String="AABF3D", color3::String="33C111")
 
 const placements = Ahorn.PlacementDict(
     "Mossy Wall (Right) (Jungle Helper)" => Ahorn.EntityPlacement(
@@ -20,8 +21,6 @@ const placements = Ahorn.PlacementDict(
         )
     )
 )
-
-mossColor = (51, 193, 17, 1) ./ (255, 255, 255, 1)
 
 Ahorn.minimumSize(entity::MossyWall) = 0, 8
 Ahorn.resizable(entity::MossyWall) = false, true
@@ -48,6 +47,7 @@ function Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::MossyWall, room::Ma
     tileHeight = div(height, 8)
 
     spriteDirectory = get(entity.data, "spriteDirectory", "JungleHelper/Moss")
+    mossColor = Ahorn.argb32ToRGBATuple(parse(Int, get(entity.data, "color3", "33C111"), base=16)) ./ 255
 
     if left
         for i in 2:tileHeight - 1

@@ -43,48 +43,56 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private const int LANTERN_ACTIVATION_RADIUS = 75;
 
         // colors used when player gets close but moss isn't dissolved yet (from closest to furthest, 1 line per pixel).
-        private static readonly Color[] DEFAULT_DISTANCE_BASED_COLORS = {
-            Calc.HexToColor("7A612D") * 0.1f,
-            Calc.HexToColor("7A612D") * 0.2f,
-            Calc.HexToColor("7A612D") * 0.3f,
-            Calc.HexToColor("7A612D") * 0.4f,
-            Calc.HexToColor("7A612D") * 0.5f,
-            Calc.HexToColor("7A612D") * 0.6f,
-            Calc.HexToColor("7A612D") * 0.7f,
-            Calc.HexToColor("7A612D") * 0.8f,
-            Calc.HexToColor("7A612D") * 0.9f,
-            Calc.HexToColor("7A612D"),
-            Color.Lerp(Calc.HexToColor("7A612D"), Calc.HexToColor("AABF3D"), 0.1f),
-            Color.Lerp(Calc.HexToColor("7A612D"), Calc.HexToColor("AABF3D"), 0.2f),
-            Color.Lerp(Calc.HexToColor("7A612D"), Calc.HexToColor("AABF3D"), 0.3f),
-            Color.Lerp(Calc.HexToColor("7A612D"), Calc.HexToColor("AABF3D"), 0.4f),
-            Color.Lerp(Calc.HexToColor("7A612D"), Calc.HexToColor("AABF3D"), 0.5f),
-            Color.Lerp(Calc.HexToColor("7A612D"), Calc.HexToColor("AABF3D"), 0.6f),
-            Color.Lerp(Calc.HexToColor("7A612D"), Calc.HexToColor("AABF3D"), 0.7f),
-            Color.Lerp(Calc.HexToColor("7A612D"), Calc.HexToColor("AABF3D"), 0.8f),
-            Color.Lerp(Calc.HexToColor("7A612D"), Calc.HexToColor("AABF3D"), 0.9f),
-            Calc.HexToColor("AABF3D"),
-            Color.Lerp(Calc.HexToColor("AABF3D"), Calc.HexToColor("33C111"), 0.1f),
-            Color.Lerp(Calc.HexToColor("AABF3D"), Calc.HexToColor("33C111"), 0.2f),
-            Color.Lerp(Calc.HexToColor("AABF3D"), Calc.HexToColor("33C111"), 0.3f),
-            Color.Lerp(Calc.HexToColor("AABF3D"), Calc.HexToColor("33C111"), 0.4f),
-            Color.Lerp(Calc.HexToColor("AABF3D"), Calc.HexToColor("33C111"), 0.5f),
-            Color.Lerp(Calc.HexToColor("AABF3D"), Calc.HexToColor("33C111"), 0.6f),
-            Color.Lerp(Calc.HexToColor("AABF3D"), Calc.HexToColor("33C111"), 0.7f),
-            Color.Lerp(Calc.HexToColor("AABF3D"), Calc.HexToColor("33C111"), 0.8f),
-            Color.Lerp(Calc.HexToColor("AABF3D"), Calc.HexToColor("33C111"), 0.9f),
-            Calc.HexToColor("33C111")
-        };
+        private static Color[] getDistanceBasedColors(string color1, string color2, string color3) {
+            return new Color[] {
+                Calc.HexToColor(color1) * 0.1f,
+                Calc.HexToColor(color1) * 0.2f,
+                Calc.HexToColor(color1) * 0.3f,
+                Calc.HexToColor(color1) * 0.4f,
+                Calc.HexToColor(color1) * 0.5f,
+                Calc.HexToColor(color1) * 0.6f,
+                Calc.HexToColor(color1) * 0.7f,
+                Calc.HexToColor(color1) * 0.8f,
+                Calc.HexToColor(color1) * 0.9f,
+                Calc.HexToColor(color1),
+                Color.Lerp(Calc.HexToColor(color1), Calc.HexToColor(color2), 0.1f),
+                Color.Lerp(Calc.HexToColor(color1), Calc.HexToColor(color2), 0.2f),
+                Color.Lerp(Calc.HexToColor(color1), Calc.HexToColor(color2), 0.3f),
+                Color.Lerp(Calc.HexToColor(color1), Calc.HexToColor(color2), 0.4f),
+                Color.Lerp(Calc.HexToColor(color1), Calc.HexToColor(color2), 0.5f),
+                Color.Lerp(Calc.HexToColor(color1), Calc.HexToColor(color2), 0.6f),
+                Color.Lerp(Calc.HexToColor(color1), Calc.HexToColor(color2), 0.7f),
+                Color.Lerp(Calc.HexToColor(color1), Calc.HexToColor(color2), 0.8f),
+                Color.Lerp(Calc.HexToColor(color1), Calc.HexToColor(color2), 0.9f),
+                Calc.HexToColor(color2),
+                Color.Lerp(Calc.HexToColor(color2), Calc.HexToColor(color3), 0.1f),
+                Color.Lerp(Calc.HexToColor(color2), Calc.HexToColor(color3), 0.2f),
+                Color.Lerp(Calc.HexToColor(color2), Calc.HexToColor(color3), 0.3f),
+                Color.Lerp(Calc.HexToColor(color2), Calc.HexToColor(color3), 0.4f),
+                Color.Lerp(Calc.HexToColor(color2), Calc.HexToColor(color3), 0.5f),
+                Color.Lerp(Calc.HexToColor(color2), Calc.HexToColor(color3), 0.6f),
+                Color.Lerp(Calc.HexToColor(color2), Calc.HexToColor(color3), 0.7f),
+                Color.Lerp(Calc.HexToColor(color2), Calc.HexToColor(color3), 0.8f),
+                Color.Lerp(Calc.HexToColor(color2), Calc.HexToColor(color3), 0.9f),
+                Calc.HexToColor(color3)
+            };
+        }
 
         private List<Image> mossParts = new List<Image>();
         private List<Hitbox> hitboxes = new List<Hitbox>();
 
         private Vector2 topCenter;
         private Vector2 shake;
-        private Color[] distanceColors = DEFAULT_DISTANCE_BASED_COLORS;
+        private Color[] distanceColors;
 
         public MossyWall(EntityData data, Vector2 offset) : base(data.Position + offset) {
             bool left = data.Bool("left");
+
+            distanceColors = getDistanceBasedColors(
+                data.Attr("color1", "7A612D"),
+                data.Attr("color2", "AABF3D"),
+                data.Attr("color3", "33C111")
+            );
 
             Depth = -20000; // FG tiles have depth -10000
 

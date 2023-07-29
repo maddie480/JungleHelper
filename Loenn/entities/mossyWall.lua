@@ -17,6 +17,15 @@ wall.placements = {}
 wall.fieldInformation = {
     spriteDirectory = {
         options = { "JungleHelper/Moss", "JungleHelper/MossInvis" }
+    },
+    color1 = {
+        fieldType = "color"
+    },
+    color2 = {
+        fieldType = "color"
+    },
+    color3 = {
+        fieldType = "color"
     }
 }
 
@@ -26,7 +35,10 @@ wall.placements = {
         data = {
             height = 8,
             left = true,
-            spriteDirectory = "JungleHelper/Moss"
+            spriteDirectory = "JungleHelper/Moss",
+            color1 = "7A612D",
+            color2 = "AABF3D",
+            color3 = "33C111"
         },
     },
     {
@@ -34,7 +46,10 @@ wall.placements = {
         data = {
             height = 8,
             left = false,
-            spriteDirectory = "JungleHelper/Moss"
+            spriteDirectory = "JungleHelper/Moss",
+            color1 = "7A612D",
+            color2 = "AABF3D",
+            color3 = "33C111"
         },
     }
 }
@@ -62,7 +77,7 @@ function wall.sprite(room, entity)
         local sprite = drawableSpriteStruct.fromTexture(texture, entity)
 
         sprite:setJustification(0, 0)
-        sprite:setColor("33C111")
+        sprite:setColor(entity.color3 or "33C111")
         sprite:addPosition(entity.left and 0 or 8, i * 8 + (entity.left and 0 or 8))
         sprite.rotation = entity.left and 0 or math.pi
 

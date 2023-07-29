@@ -40,6 +40,12 @@ placements.entities.JungleHelper/UnrandomizedCrumblePlatform.tooltips.texture=Wh
 # Mossy Wall
 placements.entities.JungleHelper/MossyWall.tooltips.left=Whether the entity attaches to the left wall or not.
 placements.entities.JungleHelper/MossyWall.tooltips.spriteDirectory=The directory the sprites will be taken from. For example, if the directory is set to MyMap/MyMoss, sprites will be read from Mods/yourmod/Graphics/Atlases/Gameplay/MyMap/MyMoss.
+placements.entities.JungleHelper/MossyWall.tooltips.color1=The moss color when a lantern is less than 85 pixels away from it. The opacity of the moss decreases as the lantern gets closer than 10 pixels.\nHas no effect when the moss is attached to a cassette block.
+placements.entities.JungleHelper/MossyWall.tooltips.color2=The moss color when a lantern is 95 pixels away from it. The color fades to "Lantern Near" if the lantern gets closer, and to "Lantern Far" if it gets farther.\nHas no effect when the moss is attached to a cassette block.
+placements.entities.JungleHelper/MossyWall.tooltips.color3=The moss color when a lantern is more than 105 pixels from it. Also used when there is no lantern in the scene at all.\nHas no effect when the moss is attached to a cassette block.
+placements.entities.JungleHelper/MossyWall.names.color1=Color (Lantern Near)
+placements.entities.JungleHelper/MossyWall.names.color2=Color (Lantern Intermediate)
+placements.entities.JungleHelper/MossyWall.names.color3=Color (Lantern Far)
 
 # Predator Plant
 placements.entities.JungleHelper/PredatorPlant.tooltips.color=Defines the color of the plant.

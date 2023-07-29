@@ -128,6 +128,12 @@ entities.JungleHelper/MossyWall.placements.name.left=Mossy Wall (Left)
 entities.JungleHelper/MossyWall.placements.name.right=Mossy Wall (Right)
 entities.JungleHelper/MossyWall.attributes.description.left=Whether the entity attaches to the left wall or not.
 entities.JungleHelper/MossyWall.attributes.description.spriteDirectory=The directory the sprites will be taken from.\nFor example, if the directory is set to MyMap/MyMoss, sprites will be read from Mods/yourmod/Graphics/Atlases/Gameplay/MyMap/MyMoss.
+entities.JungleHelper/MossyWall.attributes.description.color1=The moss color when a lantern is less than 85 pixels away from it. The opacity of the moss decreases as the lantern gets closer than 10 pixels.\nHas no effect when the moss is attached to a cassette block.
+entities.JungleHelper/MossyWall.attributes.description.color2=The moss color when a lantern is 95 pixels away from it. The color fades to "Lantern Near" if the lantern gets closer, and to "Lantern Far" if it gets farther.\nHas no effect when the moss is attached to a cassette block.
+entities.JungleHelper/MossyWall.attributes.description.color3=The moss color when a lantern is more than 105 pixels from it. Also used when there is no lantern in the scene at all.\nHas no effect when the moss is attached to a cassette block.
+entities.JungleHelper/MossyWall.attributes.name.color1=Color (Lantern Near)
+entities.JungleHelper/MossyWall.attributes.name.color2=Color (Lantern Intermediate)
+entities.JungleHelper/MossyWall.attributes.name.color3=Color (Lantern Far)
 
 # Noded Crumble Platform
 entities.JungleHelper/NodedCrumblePlatform.placements.name.default=Crumble Block (Noded, Default)
