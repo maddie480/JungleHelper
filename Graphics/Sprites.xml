@@ -49,7 +49,7 @@
         </Metadata>
     </junglehelper_madeline_lantern>
 
-    <junglehelper_badeline_lantern path="JungleHelper/Lantern/Badeline/" copy="player_no_backpack">
+    <junglehelper_badeline_lantern path="JungleHelper/Lantern/Badeline/" copy="player">
         <Anim id="idle" path="idle/idlelantern" delay="0.1" goto="idle"/>
         <Loop id="edge" path="edge/lanternedge" delay="0.25" frames="0-13" />
         <Loop id="edgeBack" path="edge_back/lanternedge_back" delay="0.25"/>

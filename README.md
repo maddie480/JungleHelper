@@ -71,17 +71,17 @@ The following wipes are included with the helper, and can be used if you also ha
 
 ## The Lantern and Skin Mods
 
-Since the Lantern works by changing the player sprites to ones that have Maddy carry the lantern, it is incompatible with skin mods unless those provide sprites for it.
+Since the Lantern works by changing the player sprites to ones that have Maddy carry the lantern, skin mods have to provide sprites for the lantern, otherwise Maddy will "turn back to vanilla" whenever she carries a lantern.
 
-If you have a skin mod installed and enter a map with a lantern, the skin will be disabled and a postcard will be displayed:
+If you have an unsupported skin mod installed and enter a map with a lantern, a postcard will be displayed to warn you about this:
 > You have a skin mod installed which is not compatible with this campaign.
-> It will be re-enabled once you play something else.
+> It is recommended to disable it until playing another map.
 
-If, for consistency's sake, you want to enforce that skin change in your whole campaign, you can place an **Enforce Skin Controller** in maps that don't have a lantern to force the skin change.
+If, for consistency's sake, you want this postcard to show up in your whole campaign, you can place a **Skin Warning Controller** in maps that don't have a lantern.
 
-**If you are a skin maker** and your skin works by overriding vanilla sprites, you can prevent that from happening by making sprites of your character with the lantern:
-- copy textures inside `Graphics/Atlases/Gameplay/JungleHelper/Lantern` and edit them (you don't need the `LanternEntity` folder or `Overlay.png`)
-- add Jungle Helper as an optional dependency, to be sure your mod reskins Jungle Helper and not the opposite:
+**If you are a skin maker** and you made lantern sprites, you can prevent this postcard from showing up:
+- if your skin works by overwriting vanilla sprites, overwrite Jungle Helper's lantern sprites as well to prevent the postcard. Make sure you add Jungle Helper as an optional dependency of your mod as well:
+
 ```yaml
 - Name: MySkin
   Version: 1.0.0
@@ -90,5 +90,6 @@ If, for consistency's sake, you want to enforce that skin change in your whole c
       Version: 1.0.0
 ```
 
-- if you want to add more animations than what Jungle Helper provides, you can do so by adding frames that match vanilla names in `Graphics/Atlases/Gameplay/JungleHelper/Lantern` and `Graphics/Atlases/Gameplay/JungleHelper/Lantern/Badeline`.
-- if you want to change frame counts, animation speeds or anything that involves Sprites.xml editing, copy-paste `junglehelper_madeline_lantern_no_override` or `junglehelper_badeline_lantern_no_override` into your skin's Graphics/Sprites.xml, then tweak it as needed. _For Badeline, you need to copy-paste `junglehelper_player_badeline_copy_vanilla` as well, to ensure the game doesn't crash without Jungle Helper installed._
+- if your skin works with Sprites.xml, make sure to define the `junglehelper_madeline_lantern` and `junglehelper_badeline_lantern` sprites in addition to `player` / `player_no_backpack` / `player_badeline`.
+
+If you tried following these steps and the postcard still shows up, reach out to Maddie (maddie480 on Discord)!
