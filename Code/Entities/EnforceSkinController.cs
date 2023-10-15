@@ -7,54 +7,41 @@ using Microsoft.Xna.Framework;
 using System.Linq;
 using MonoMod.Cil;
 using System.Collections;
-using FMOD.Studio;
 using Mono.Cecil;
 using System.Collections.Generic;
+using System.Xml;
+using Mono.Cecil.Cil;
+using YamlDotNet.Core;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     public static class EnforceSkinController {
-        private const PlayerSpriteMode SpriteModeMadelineNormal = (PlayerSpriteMode) 444480;
-        private const PlayerSpriteMode SpriteModeBadelineNormal = (PlayerSpriteMode) 444481;
         private const PlayerSpriteMode SpriteModeMadelineLantern = (PlayerSpriteMode) 444482;
         private const PlayerSpriteMode SpriteModeBadelineLantern = (PlayerSpriteMode) 444483;
 
-        private static FieldInfo playerNextSpriteMode = typeof(Player).GetField("nextSpriteMode", BindingFlags.NonPublic | BindingFlags.Instance);
-
         private static Hook hookVariantMode;
-        private static Hook hookSkinModHelper;
 
-        private static bool disabledMarioSkin = false;
-        private static bool forceMarioSkinDisabled = false;
+        private static bool showSkinWarningPostcard = false;
+        private static Postcard skinWarningPostcard;
 
-        private static bool disabledBananaSkin = false;
-        private static bool forceBananaSkinDisabled = false;
-
-        private static bool disabledKaydenSkin = false;
-        private static bool forceKaydenSkinDisabled = false;
-
-        private static string disabledSkinModHelperSkin = null;
-        private static bool forceSkinModHelperDisabled = false;
-
-        private static bool skinsDisabled = false;
-
-        private static bool showForceSkinsDisabledPostcard = false;
-        private static Postcard forceSkinsDisabledPostcard;
+        private static string actualSpriteId = null;
+        private static HashSet<string> overwrittenSpriteBanks = new HashSet<string>();
+        private static bool isSpriteBankOverwritingSkinActive = false;
 
         public static void Load() {
             On.Celeste.PlayerSprite.ctor += onPlayerSpriteConstructor;
 
             On.Celeste.LevelEnter.Go += onLevelEnter;
             On.Celeste.LevelLoader.ctor += onLevelLoad;
-            On.Celeste.LevelExit.ctor += onLevelExit;
 
             IL.Celeste.Player.UpdateHair += patchSpriteModeChecks;
             IL.Celeste.Player.DashUpdate += patchSpriteModeChecks;
             IL.Celeste.Player.GetTrailColor += patchSpriteModeChecks;
 
-            On.Celeste.LevelEnter.Routine += addForceSkinsDisabledPostcard;
-            On.Celeste.LevelEnter.BeforeRender += addForceSkinsDisabledPostcardRendering;
+            On.Celeste.LevelEnter.Routine += addSkinWarningPostcard;
+            On.Celeste.LevelEnter.BeforeRender += addSkinWarningPostcardRendering;
 
-            On.Celeste.Mod.EverestModule.CreateModMenuSection += greyOutCodeModSkinToggles;
+            IL.Monocle.SpriteBank.GetSpriteBankExcludingVanillaCopyPastes += detectSpriteBankOverwrites;
+            On.Celeste.GameLoader._GetNextScene += commitSpriteBankOverwrites;
 
             // the method called when changing the "Other Self" variant is a method defined inside Level.VariantMode(). patching it requires a bit of _fun_
             hookVariantMode = new Hook(findOutVariantModeType().GetMethod("<VariantMode>b__9", BindingFlags.NonPublic | BindingFlags.Instance),
@@ -62,14 +49,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             // don't print out a warning about enforce skin controller "failing to load" since it acts with a hook looking for it.
             ((HashSet<string>) typeof(Level).GetField("_LoadStrings", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null)).Add("JungleHelper/EnforceSkinController");
-        }
 
-        public static void Initialize() {
-            if (Everest.Loader.DependencyLoaded(new EverestModuleMetadata { Name = "SkinModHelper", Version = new Version(0, 5, 6) })) {
-                MethodInfo skinModHelperHook = Everest.Modules.Where(module => module.GetType().FullName == "SkinModHelper.Module.SkinModHelperModule")
-                    .First().GetType().GetMethod("CreateModMenuSection");
-
-                hookSkinModHelper = new Hook(skinModHelperHook, typeof(EnforceSkinController).GetMethod("greyOutSkinModHelperToggle", BindingFlags.NonPublic | BindingFlags.Static));
+            using (new DetourContext { Before = { "*" } }) {
+                On.Monocle.SpriteBank.CreateOn += onSpriteBankCreateOn;
             }
         }
 
@@ -87,54 +69,39 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             On.Celeste.LevelEnter.Go -= onLevelEnter;
             On.Celeste.LevelLoader.ctor -= onLevelLoad;
-            On.Celeste.LevelExit.ctor -= onLevelExit;
 
             IL.Celeste.Player.UpdateHair -= patchSpriteModeChecks;
             IL.Celeste.Player.DashUpdate -= patchSpriteModeChecks;
             IL.Celeste.Player.GetTrailColor -= patchSpriteModeChecks;
 
-            On.Celeste.LevelEnter.Routine -= addForceSkinsDisabledPostcard;
-            On.Celeste.LevelEnter.BeforeRender -= addForceSkinsDisabledPostcardRendering;
+            On.Celeste.LevelEnter.Routine -= addSkinWarningPostcard;
+            On.Celeste.LevelEnter.BeforeRender -= addSkinWarningPostcardRendering;
 
-            On.Celeste.Mod.EverestModule.CreateModMenuSection -= greyOutCodeModSkinToggles;
+            IL.Monocle.SpriteBank.GetSpriteBankExcludingVanillaCopyPastes -= detectSpriteBankOverwrites;
+            On.Celeste.GameLoader._GetNextScene -= commitSpriteBankOverwrites;
 
             hookVariantMode?.Dispose();
             hookVariantMode = null;
 
-            hookSkinModHelper?.Dispose();
-            hookSkinModHelper = null;
+            On.Monocle.SpriteBank.CreateOn -= onSpriteBankCreateOn;
         }
 
         private static void onLevelEnter(On.Celeste.LevelEnter.orig_Go orig, Session session, bool fromSaveData) {
-            checkForSkinReset(session);
+            checkForSkins(session);
 
             orig(session, fromSaveData);
         }
 
         private static void onLevelLoad(On.Celeste.LevelLoader.orig_ctor orig, LevelLoader self, Session session, Vector2? startPosition) {
-            if (skinsDisabled && Engine.Scene is Level) {
-                reenableSkins();
-            }
-
-            if (!skinsDisabled) {
-                checkForSkinReset(session);
-            }
-
             orig(self, session, startPosition);
 
             // we want Madeline's sprite to load its metadata (that is, her hair positions on her frames of animation).
-            PlayerSprite.CreateFramesMetadata("junglehelper_madeline_copy");
-            PlayerSprite.CreateFramesMetadata("junglehelper_player_badeline_copy");
-            PlayerSprite.CreateFramesMetadata("junglehelper_player_badeline_copy_vanilla");
             PlayerSprite.CreateFramesMetadata("junglehelper_madeline_lantern");
             PlayerSprite.CreateFramesMetadata("junglehelper_badeline_lantern");
-            PlayerSprite.CreateFramesMetadata("junglehelper_madeline_lantern_no_override");
-            PlayerSprite.CreateFramesMetadata("junglehelper_badeline_lantern_no_override");
         }
 
-        private static void checkForSkinReset(Session session) {
-            if (!skinsDisabled && !forceMarioSkinDisabled && !forceBananaSkinDisabled && !forceKaydenSkinDisabled && !forceSkinModHelperDisabled
-                && AreaData.Areas.Count > session.Area.ID && AreaData.Areas[session.Area.ID].Mode.Length > (int) session.Area.Mode
+        private static void checkForSkins(Session session) {
+            if (AreaData.Areas.Count > session.Area.ID && AreaData.Areas[session.Area.ID].Mode.Length > (int) session.Area.Mode
                 && AreaData.Areas[session.Area.ID].Mode[(int) session.Area.Mode] != null) {
 
                 // look for the first Enforce Skin Controller we can find.
@@ -149,93 +116,104 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
                 // check if there is a controller, or a lantern.
                 if (controllerData != null || session.MapData.Levels.Exists(levelData => levelData.Entities.Exists(entityData => entityData.Name == "JungleHelper/Lantern"))) {
-                    bool isThereASkin = Everest.Content.Map.Keys.Any(asset => EnforceSkinVanillaSpriteDump.VanillaPlayerSprites.Contains(asset));
-                    bool isLanternReskinned = Everest.Content.Map.Keys.Any(asset => asset.StartsWith("Graphics/Atlases/Gameplay/JungleHelper/Lantern/")
-                        && Everest.Content.Map[asset].Source?.Mod != null
-                        && Everest.Content.Map[asset].Source.Mod.Name != "JungleHelper");
-
-                    if (isThereASkin && !isLanternReskinned) {
-                        Logger.Log(LogLevel.Info, "JungleHelper/EnforceSkinController", "Skins are disabled from now");
-                        skinsDisabled = true;
+                    if (isSpriteBankOverwritingSkinActive) {
+                        showSkinWarningPostcard = true;
+                        return;
                     }
 
-                    if (Everest.Loader.DependencyLoaded(new EverestModuleMetadata { Name = "MarioSkin", Version = new Version(1, 0) })) {
-                        resetMarioSkin();
+                    // is there a skin that overwrites Maddy's sprites, but does not overwrite lantern sprites?
+                    bool isThereATextureOverwritingSkin = Everest.Content.Map.Keys.Any(asset => {
+                        bool result = EnforceSkinVanillaSpriteDump.VanillaPlayerSprites.Contains(asset);
+                        if (result) {
+                            Logger.Log("JungleHelper/EnforceSkinController", $"Vanilla texture {asset} has been detected to be overwritten!");
+                        }
+                        return result;
+                    });
+                    bool isLanternOverwrittenAsWell = Everest.Content.Map.Keys.Any(asset => {
+                        bool result = asset.StartsWith("Graphics/Atlases/Gameplay/JungleHelper/Lantern/")
+                            && Everest.Content.Map[asset].Source?.Mod != null
+                            && Everest.Content.Map[asset].Source.Mod.Name != "JungleHelper";
+
+                        if (result) {
+                            Logger.Log("JungleHelper/EnforceSkinController", $"Lantern texture {asset} has been detected to be overwritten.");
+                        }
+                        return result;
+                    });
+
+                    if (isThereATextureOverwritingSkin && !isLanternOverwrittenAsWell) {
+                        showSkinWarningPostcard = true;
+                        return;
                     }
 
-                    if (Everest.Loader.DependencyLoaded(new EverestModuleMetadata { Name = "ProBananaSkin", Version = new Version(1, 0) })) {
-                        resetBananaSkin();
-                    }
+                    // is there a skin that redefines player or player_no_backpack, but not junglehelper_madeline_lantern or junglehelper_badeline_lantern?
+                    bool isMaddyXMLOverwritten = getActualAppliedSpriteXML(PlayerSpriteMode.Madeline) != "player"
+                        || getActualAppliedSpriteXML(PlayerSpriteMode.MadelineNoBackpack) != "player_no_backpack"
+                        || getActualAppliedSpriteXML(PlayerSpriteMode.MadelineAsBadeline) != "player_badeline";
+                    bool isMaddyLanternXMLOverwritten = getActualAppliedSpriteXML(SpriteModeMadelineLantern) != "junglehelper_madeline_lantern"
+                        || getActualAppliedSpriteXML(SpriteModeBadelineLantern) != "junglehelper_badeline_lantern";
 
-                    if (Everest.Loader.DependencyLoaded(new EverestModuleMetadata { Name = "KaydenFoxSkin", Version = new Version(1, 0) })) {
-                        resetKaydenSkin();
-                    }
-
-                    if (Everest.Loader.DependencyLoaded(new EverestModuleMetadata { Name = "SkinModHelper", Version = new Version(0, 5) })) {
-                        resetSkinModHelperSkin();
-                    }
-
-                    if (skinsDisabled || disabledMarioSkin || disabledBananaSkin || disabledKaydenSkin || disabledSkinModHelperSkin != null) {
-                        showForceSkinsDisabledPostcard = controllerData == null || controllerData.Bool("showPostcard", true);
+                    if (isMaddyXMLOverwritten && !isMaddyLanternXMLOverwritten) {
+                        showSkinWarningPostcard = true;
                     }
                 }
             }
         }
 
-        private static IEnumerator addForceSkinsDisabledPostcard(On.Celeste.LevelEnter.orig_Routine orig, LevelEnter self) {
-            if (showForceSkinsDisabledPostcard) {
-                showForceSkinsDisabledPostcard = false;
+        private static void detectSpriteBankOverwrites(ILContext il) {
+            ILCursor cursor = new ILCursor(il);
+            if (cursor.TryGotoNext(instr => instr.MatchLdstr("Sprite \""))
+                && cursor.TryGotoNext(MoveType.After, instr => instr.MatchCallvirt<XmlNode>("get_Name"))) {
 
-                // let's show a postcard to let the player know skins have been force disabled.
-                self.Add(forceSkinsDisabledPostcard = new Postcard(Dialog.Get("JUNGLEHELPER_POSTCARD_SKINSFORCEDISABLED"),
+                Logger.Log("JungleHelper/EnforceSkinController", $"Injecting check for overwritten sprites at {cursor.Index} in IL for SpriteBank.GetSpriteBankExcludingVanillaCopyPastes");
+                cursor.Emit(OpCodes.Dup);
+                cursor.EmitDelegate<Action<string>>(s => overwrittenSpriteBanks.Add(s));
+            }
+        }
+
+        private static Scene commitSpriteBankOverwrites(On.Celeste.GameLoader.orig__GetNextScene orig, Overworld.StartMode startMode, HiresSnow snow) {
+            bool hasMaddySprites = overwrittenSpriteBanks.Contains("player") || overwrittenSpriteBanks.Contains("player_no_backpack") || overwrittenSpriteBanks.Contains("player_badeline");
+            bool hasLanternSprites = overwrittenSpriteBanks.Contains("junglehelper_madeline_lantern") || overwrittenSpriteBanks.Contains("junglehelper_badeline_lantern");
+
+            if (hasMaddySprites && !hasLanternSprites) {
+                Logger.Log("JungleHelper/EnforceSkinController", $"Overwritten sprite banks {string.Join(", ", overwrittenSpriteBanks)} contain Madeline sprites but no lantern sprites!");
+                isSpriteBankOverwritingSkinActive = true;
+            }
+
+            return orig(startMode, snow);
+        }
+
+        private static Sprite onSpriteBankCreateOn(On.Monocle.SpriteBank.orig_CreateOn orig, SpriteBank self, Sprite sprite, string id) {
+            // this is just a hook as close to the vanilla method as possible, to check if any other mod changed the sprite ID along the way.
+            actualSpriteId = id;
+            return orig(self, sprite, id);
+        }
+
+        private static string getActualAppliedSpriteXML(PlayerSpriteMode mode) {
+            new PlayerSprite(mode);
+            Logger.Log("JungleHelper/EnforceSkinController", $"Actual sprite applied when applying sprite mode {mode} is {actualSpriteId}");
+            return actualSpriteId;
+        }
+
+        private static IEnumerator addSkinWarningPostcard(On.Celeste.LevelEnter.orig_Routine orig, LevelEnter self) {
+            if (showSkinWarningPostcard) {
+                showSkinWarningPostcard = false;
+
+                // let's show a postcard to let the player know they should disable their skins.
+                self.Add(skinWarningPostcard = new Postcard(Dialog.Get("JUNGLEHELPER_POSTCARD_SKINWARNING"),
                     "event:/ui/main/postcard_csides_in", "event:/ui/main/postcard_csides_out"));
-                yield return forceSkinsDisabledPostcard.DisplayRoutine();
-                forceSkinsDisabledPostcard = null;
+                yield return skinWarningPostcard.DisplayRoutine();
+                skinWarningPostcard = null;
             }
 
             // just go on with vanilla behavior (other postcards, B-side intro, etc)
             yield return new SwapImmediately(orig(self));
         }
 
-        private static void addForceSkinsDisabledPostcardRendering(On.Celeste.LevelEnter.orig_BeforeRender orig, LevelEnter self) {
+        private static void addSkinWarningPostcardRendering(On.Celeste.LevelEnter.orig_BeforeRender orig, LevelEnter self) {
             orig(self);
 
-            if (forceSkinsDisabledPostcard != null)
-                forceSkinsDisabledPostcard.BeforeRender();
-        }
-
-        private static void reenableSkins() {
-            if (skinsDisabled) {
-                Logger.Log(LogLevel.Info, "JungleHelper/EnforceSkinController", "Skins are not disabled anymore");
-                skinsDisabled = false;
-            }
-
-            if (forceMarioSkinDisabled) {
-                restoreMarioSkin();
-            }
-
-            if (forceBananaSkinDisabled) {
-                restoreBananaSkin();
-            }
-
-            if (disabledKaydenSkin) {
-                restoreKaydenSkin();
-            }
-
-            if (disabledSkinModHelperSkin != null) {
-                restoreSkinModHelperSkin();
-            }
-
-            forceMarioSkinDisabled = false;
-            forceBananaSkinDisabled = false;
-            forceKaydenSkinDisabled = false;
-            forceSkinModHelperDisabled = false;
-        }
-
-        private static void onLevelExit(On.Celeste.LevelExit.orig_ctor orig, LevelExit self, LevelExit.Mode mode, Session session, HiresSnow snow) {
-            reenableSkins();
-
-            orig(self, mode, session, snow);
+            if (skinWarningPostcard != null)
+                skinWarningPostcard.BeforeRender();
         }
 
         private static void patchSpriteModeChecks(ILContext il) {
@@ -245,7 +223,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 Logger.Log("JungleHelper/EnforceSkinController", $"Fixing Madeline hair color with custom sprite modes at {cursor.Index} in IL for Player.{il.Method.Name}");
 
                 cursor.EmitDelegate<Func<PlayerSpriteMode, PlayerSpriteMode>>(orig => {
-                    if (orig == SpriteModeBadelineNormal || orig == SpriteModeBadelineLantern) {
+                    if (orig == SpriteModeBadelineLantern) {
                         // this is a Badeline sprite mode; trick the game into thinking we're using the vanilla MadelineAsBadeline sprite mode.
                         return PlayerSpriteMode.MadelineAsBadeline;
                     }
@@ -260,21 +238,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private static void onPlayerSpriteConstructor(On.Celeste.PlayerSprite.orig_ctor orig, PlayerSprite self, PlayerSpriteMode mode) {
             PlayerSpriteMode requestedMode = mode;
-            if (skinsDisabled) {
-                // if the given mode is a default sprite mode, use Jungle Helper's own copy of it to disable any skin.
-                switch (requestedMode) {
-                    case PlayerSpriteMode.Madeline:
-                    case PlayerSpriteMode.MadelineNoBackpack:
-                        requestedMode = SpriteModeMadelineNormal;
-                        break;
-                    case PlayerSpriteMode.MadelineAsBadeline:
-                        requestedMode = SpriteModeBadelineNormal;
-                        break;
-                }
-            }
-
-            bool customSprite = (requestedMode == SpriteModeMadelineNormal || requestedMode == SpriteModeBadelineNormal ||
-                requestedMode == SpriteModeMadelineLantern || requestedMode == SpriteModeBadelineLantern);
+            bool customSprite = requestedMode == SpriteModeMadelineLantern || requestedMode == SpriteModeBadelineLantern;
 
             if (customSprite) {
                 // build regular Madeline with backpack as a reference.
@@ -287,18 +251,12 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             if (customSprite) {
                 switch (requestedMode < 0 ? (requestedMode + (1 << 31)) : requestedMode) {
-                    case SpriteModeMadelineNormal:
-                        GFX.SpriteBank.CreateOn(self, "junglehelper_madeline_copy");
-                        break;
-                    case SpriteModeBadelineNormal:
-                        GFX.SpriteBank.CreateOn(self, "junglehelper_player_badeline_copy");
-                        break;
                     case SpriteModeMadelineLantern:
-                        GFX.SpriteBank.CreateOn(self, skinsDisabled ? "junglehelper_madeline_lantern" : "junglehelper_madeline_lantern_no_override");
+                        GFX.SpriteBank.CreateOn(self, "junglehelper_madeline_lantern");
                         lookUpAnimTweak = true;
                         break;
                     case SpriteModeBadelineLantern:
-                        GFX.SpriteBank.CreateOn(self, skinsDisabled ? "junglehelper_badeline_lantern" : "junglehelper_badeline_lantern_no_override");
+                        GFX.SpriteBank.CreateOn(self, "junglehelper_badeline_lantern");
                         break;
                 }
 
@@ -329,91 +287,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
             if (hasLantern) {
                 // give the lantern back to the player! Messing with the Other Self variant shouldn't make them lose the lantern.
                 ChangePlayerSpriteMode(player, hasLantern: true);
-            }
-        }
-
-        // Skin code mod stuff
-
-        private static void resetMarioSkin() {
-            Logger.Log(LogLevel.Info, "JungleHelper/EnforceSkinController", "Mario skin is force-disabled from now");
-            disabledMarioSkin = MarioSkin.MarioSkin.Settings.SkinEnabled;
-            MarioSkin.MarioSkin.Settings.SkinEnabled = false;
-            forceMarioSkinDisabled = true;
-        }
-
-        private static void restoreMarioSkin() {
-            Logger.Log(LogLevel.Info, "JungleHelper/EnforceSkinController", $"Mario skin can be enabled again, restoring its old status {disabledMarioSkin}");
-
-            MarioSkin.MarioSkin.Settings.SkinEnabled = disabledMarioSkin;
-            disabledMarioSkin = false;
-        }
-
-        private static void resetBananaSkin() {
-            Logger.Log(LogLevel.Info, "JungleHelper/EnforceSkinController", "Banana skin is force-disabled from now");
-            disabledBananaSkin = ProBananaSkin.ProBananaSkinModule.Settings.Enabled;
-            ProBananaSkin.ProBananaSkinModule.Settings.Enabled = false;
-            forceBananaSkinDisabled = true;
-        }
-
-        private static void restoreBananaSkin() {
-            Logger.Log(LogLevel.Info, "JungleHelper/EnforceSkinController", $"Banana skin can be enabled again, restoring its old status {disabledBananaSkin}");
-
-            ProBananaSkin.ProBananaSkinModule.Settings.Enabled = disabledBananaSkin;
-            disabledBananaSkin = false;
-        }
-
-        private static void resetKaydenSkin() {
-            Logger.Log(LogLevel.Info, "JungleHelper/EnforceSkinController", "Kayden skin is force-disabled from now");
-            disabledKaydenSkin = KaydenSpriteMod.KaydenSpriteModule.Settings.Enabled;
-            KaydenSpriteMod.KaydenSpriteModule.Settings.Enabled = false;
-            forceKaydenSkinDisabled = true;
-        }
-
-        private static void restoreKaydenSkin() {
-            Logger.Log(LogLevel.Info, "JungleHelper/EnforceSkinController", $"Restoring old status of Kayden skin {disabledKaydenSkin}");
-
-            KaydenSpriteMod.KaydenSpriteModule.Settings.Enabled = disabledKaydenSkin;
-            disabledKaydenSkin = false;
-        }
-
-        private static void resetSkinModHelperSkin() {
-            Logger.Log(LogLevel.Info, "JungleHelper/EnforceSkinController", "Skin Mod Helper is force-disabled from now");
-            disabledSkinModHelperSkin = SkinModHelper.Module.SkinModHelperModule.Settings.SelectedSkinMod;
-            if (disabledSkinModHelperSkin == SkinModHelper.Module.SkinModHelperModule.DEFAULT) {
-                disabledSkinModHelperSkin = null;
-            }
-            SkinModHelper.Module.SkinModHelperModule.Settings.SelectedSkinMod = SkinModHelper.Module.SkinModHelperModule.DEFAULT;
-            forceSkinModHelperDisabled = true;
-        }
-
-        private static void restoreSkinModHelperSkin() {
-            Logger.Log(LogLevel.Info, "JungleHelper/EnforceSkinController", $"Restoring old status of Skin Mod Helper: {disabledSkinModHelperSkin}");
-
-            SkinModHelper.Module.SkinModHelperModule.Settings.SelectedSkinMod = disabledSkinModHelperSkin;
-            disabledSkinModHelperSkin = null;
-        }
-
-        private static void greyOutCodeModSkinToggles(On.Celeste.Mod.EverestModule.orig_CreateModMenuSection orig, EverestModule self, TextMenu menu, bool inGame, EventInstance snapshot) {
-            orig(self, menu, inGame, snapshot);
-
-            if (forceMarioSkinDisabled && self.GetType().FullName == "Celeste.Mod.MarioSkin.MarioSkin") {
-                // disable the Mario Skin toggle.
-                menu.Items[menu.Items.Count - 1].Disabled = true;
-            }
-
-            if (forceBananaSkinDisabled && self.GetType().FullName == "Celeste.Mod.ProBananaSkin.ProBananaSkinModule") {
-                // disable the Banana Skin toggle.
-                menu.Items[menu.Items.Count - 1].Disabled = true;
-            }
-
-        }
-
-        private static void greyOutSkinModHelperToggle(Action<EverestModule, TextMenu, bool, EventInstance> orig, EverestModule self, TextMenu menu, bool inGame, EventInstance snapshot) {
-            orig(self, menu, inGame, snapshot);
-
-            if (forceSkinModHelperDisabled) {
-                // disable the Skin Mod Helper toggle.
-                menu.Items[menu.Items.Count - 1].Disabled = true;
             }
         }
 

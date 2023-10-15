@@ -2,10 +2,10 @@ module JungleHelperEnforceSkinController
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/EnforceSkinController" EnforceSkinController(x::Integer, y::Integer, showPostcard::Bool=true)
+@mapdef Entity "JungleHelper/EnforceSkinController" EnforceSkinController(x::Integer, y::Integer)
 
 const placements = Ahorn.PlacementDict(
-    "Enforce Skin Controller (Jungle Helper)" => Ahorn.EntityPlacement(
+    "Skin Warning Controller (Jungle Helper)" => Ahorn.EntityPlacement(
         EnforceSkinController
     )
 )

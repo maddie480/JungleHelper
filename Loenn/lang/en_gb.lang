@@ -75,8 +75,7 @@ entities.JungleHelper/Dragonfly.attributes.description.sprite=If you want to res
 entities.JungleHelper/Dragonfly.attributes.description.wingsColor=The hex color to use for the color of the wings.
 
 # Enforce Skin Controller
-entities.JungleHelper/EnforceSkinController.placements.name.default=Enforce Skin Controller
-entities.JungleHelper/EnforceSkinController.attributes.description.showPostcard=Whether a warning postcard will be shown when the player's skins are forcibly disabled.
+entities.JungleHelper/EnforceSkinController.placements.name.default=Skin Warning Controller
 
 # Falling Killbox
 entities.JungleHelper/FallingKillbox.placements.name.killbox=Falling Killbox

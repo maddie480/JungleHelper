@@ -141,9 +141,6 @@ placements.triggers.JungleHelper/UIImageTrigger.tooltips.ImageY=The image vertic
 placements.entities.JungleHelper/Snake.tooltips.left=Whether the snake should spawn facing left.
 placements.entities.JungleHelper/Snake.tooltips.sprite=If you want to reskin the snake, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
 
-# Enforce Skin Controller
-placements.entities.JungleHelper/EnforceSkinController.tooltips.showPostcard=Whether a warning postcard will be shown when the player's skins are forcibly disabled.
-
 # Delayed Auto-Falling Block
 placements.entities.JungleHelper/AutoFallingBlockDelayed.tooltips.tiletype=Changes the visual appearance of the wall.
 placements.entities.JungleHelper/AutoFallingBlockDelayed.tooltips.delay=The delay (in seconds) before the block starts falling.

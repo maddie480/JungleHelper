@@ -43,12 +43,6 @@ namespace Celeste.Mod.JungleHelper {
             }
         }
 
-        public override void Initialize() {
-            base.Initialize();
-
-            EnforceSkinController.Initialize();
-        }
-
         public override void Unload() {
             ClimbableOneWayPlatform.Unload();
             TheoStatueGate.Unload();
