@@ -14,12 +14,16 @@ namespace Celeste.Mod.JungleHelper.Entities {
     [Tracked]
     public class Lantern : Actor {
         private static Hook hookCanDash;
+        private static Hook hookOnLevelReload;
 
         public static void Load() {
             On.Celeste.Player.NormalUpdate += onPlayerNormalUpdate;
             On.Celeste.Player.SwimUpdate += onPlayerSwimUpdate;
             On.Celeste.Player.OnTransition += onPlayerTransition;
-            On.Celeste.Mod.AssetReloadHelper.ReloadLevel += onLevelReload;
+
+            hookOnLevelReload = new Hook(
+                typeof(AssetReloadHelper).GetMethod("ReloadLevel", new Type[0]),
+                typeof(Lantern).GetMethod("onLevelReload", BindingFlags.NonPublic | BindingFlags.Static));
 
             hookCanDash = new Hook(typeof(Player).GetMethod("get_CanDash"), typeof(Lantern).GetMethod("playerCanDash", BindingFlags.NonPublic | BindingFlags.Static));
         }
@@ -28,7 +32,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
             On.Celeste.Player.NormalUpdate -= onPlayerNormalUpdate;
             On.Celeste.Player.SwimUpdate -= onPlayerSwimUpdate;
             On.Celeste.Player.OnTransition -= onPlayerTransition;
-            On.Celeste.Mod.AssetReloadHelper.ReloadLevel -= onLevelReload;
+
+            hookOnLevelReload?.Dispose();
+            hookOnLevelReload = null;
 
             hookCanDash?.Dispose();
             hookCanDash = null;
@@ -326,7 +332,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             new DynData<Player>(self)["JungleHelper_LanternDoRespawn"] = false;
         }
 
-        private static void onLevelReload(On.Celeste.Mod.AssetReloadHelper.orig_ReloadLevel orig) {
+        private static void onLevelReload(Action orig) {
             // check if we are in a level, or if we are going to return to a level after a reload.
             Level level = Engine.Scene as Level;
             if (level == null && Engine.Scene is AssetReloadHelper) {
