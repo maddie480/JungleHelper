@@ -37,7 +37,7 @@ jobs:
       run: msbuild *.sln "/p:Configuration=Debug"
 
     - name: Upload artifact (Jungle Helper)
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: JungleHelper
         path: Code/bin/Debug/JungleHelper.dll
@@ -49,7 +49,7 @@ jobs:
       run: msbuild Z_IntoTheJungleCodeMod/*.sln "/p:Configuration=Debug"
 
     - name: Upload artifact (Into The Jungle Code Mod)
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: IntoTheJungleCodeMod
         path: Z_IntoTheJungleCodeMod/bin/Debug/IntoTheJungleCodeMod.dll
