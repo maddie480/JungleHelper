@@ -1,5 +1,7 @@
 # Noded Crumble Platform
 placements.entities.JungleHelper/NodedCrumblePlatform.tooltips.texture=What texture to use for the crumble block.
+placements.entities.JungleHelper/NodedCrumblePlatform.tooltips.betweenWaitTime=The amount of time the crumble block waits for (after being activated) before starting to move.
+placements.entities.JungleHelper/NodedCrumblePlatform.tooltips.betweenMoveTime=The amount of time the crumble block takes to move to its next node after the waiting period ends.
 
 # Theo Statue
 placements.entities.JungleHelper/TheoStatue.tooltips.sprite=If you want to reskin the crystal, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
