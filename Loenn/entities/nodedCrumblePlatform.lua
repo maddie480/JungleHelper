@@ -17,14 +17,17 @@ crumbleBlock.fieldInformation = {
         options = textures,
     }
 }
-crumbleBlock.placements = {}
+crumbleBlock.placements = {
+}
 
 for _, texture in ipairs(textures) do
     table.insert(crumbleBlock.placements, {
         name = texture,
         data = {
             width = 8,
-            texture = texture
+            texture = texture,
+            betweenWaitTime = 1,
+            betweenMoveTime = 1
         }
     })
 end

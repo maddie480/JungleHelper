@@ -15,6 +15,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private VirtualRenderTarget ghostVersion;
 
         private readonly Vector2[] allPositions;
+        private readonly float betweenWaitTime;
+        private readonly float betweenMoveTime;
 
         public static Entity Load(Level level, LevelData levelData, Vector2 offset, EntityData entityData) {
             NodedCrumblePlatform platform = new NodedCrumblePlatform(entityData, offset);
@@ -28,6 +30,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
             for (int i = 0; i < data.Nodes.Length; i++) {
                 allPositions[i + 1] = data.Nodes[i] + offset;
             }
+            betweenWaitTime = data.Float("betweenWaitTime", 1f);
+            betweenMoveTime = data.Float("betweenMoveTime", 1f);
+
 
             Add(new Coroutine(moveBetweenNodesRoutine()));
         }
@@ -56,8 +61,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
                 outlineFader.Replace(blinkRoutine());
 
-                // the move will last 2 seconds, start to move after 1 second.
-                yield return 1f;
+                // the move will last the wait time + the move time, start to move after the wait time elapses
+                yield return betweenWaitTime;
 
                 // move the crumble block now: get the start position and the next position.
                 float progress = 0f;
@@ -67,7 +72,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 Vector2 nextPosition = allPositions[currentNode];
 
                 // ease the crumble block to its next position.
-                while (progress < 1f) {
+                while (progress < betweenMoveTime) {
                     Position = Vector2.Lerp(startPosition, nextPosition, Ease.CubeOut(progress));
 
                     progress += Engine.DeltaTime;
