@@ -13,7 +13,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             SurfaceSoundIndex = 5;
             Add(new LightOcclude(0.2f));
             Add(new Coroutine(ZipUp(), true));
-            //Add(shaker = new Shaker(false));
+            Add(shaker = new Shaker(false));
 
         }
 
@@ -43,14 +43,14 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         public override void Render() {
-            textures[0].Draw(Position);
+            textures[0].Draw(Position + base.Shake);
             int xPosition = 8;
             while (xPosition < Width - 8f) {
-                textures[1].Draw(Position + new Vector2(xPosition, 0f));
+                textures[1].Draw(Position + new Vector2(xPosition, 0f) + base.Shake);
                 xPosition += 8;
             }
-            textures[3].Draw(Position + new Vector2(base.Width - 8f, 0f));
-            textures[2].Draw(Position + new Vector2(base.Width / 2f - 4f, 0f));
+            textures[3].Draw(Position + new Vector2(base.Width - 8f, 0f) + base.Shake);
+            textures[2].Draw(Position + new Vector2(base.Width / 2f - 4f, 0f) + base.Shake);
         }
 
         public override void OnStaticMoverTrigger(StaticMover sm) {
@@ -63,10 +63,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     yield return null;
                 }
                 if (waitTimer > 0) {
-                    yield return waitTimer;
                     StartShaking(waitTimer);
-                    //shaker.ShakeFor(waitTimer, false);
+                    shaker.ShakeFor(waitTimer, false);
+                    yield return waitTimer;
                 }
+                shaking = false;
                 sfx.Play("event:/junglehelper/sfx/Zip_platform", null, 0f);
                 float at = 0f;
                 while (at < 1f) {
@@ -153,7 +154,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private bool noReturn;
 
-        //private Shaker shaker;
+        private bool shaking = false;
+
+        private Shaker shaker;
 
         private MTexture[] textures;
 
