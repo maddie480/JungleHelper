@@ -18,6 +18,7 @@ movingPlatform.fieldInformation = {
     texture = {
         options = textureOptions
     }
+
 }
 movingPlatform.placements = {}
 
@@ -26,7 +27,9 @@ for i, texture in ipairs(textures) do
         name = texture,
         data = {
             width = 8,
-            texture = texture
+            texture = texture,
+            waitTimer = 0,
+            noReturn = false
         }
     }
 end

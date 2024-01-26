@@ -2,7 +2,7 @@ module JungleHelperZipMovingPlatform
 
 using ..Ahorn, Maple
 
-@pardef MovingZipPlatform(x1::Integer, y1::Integer, x2::Integer=x1 + 16, y2::Integer=y1, width::Integer=32, texture::String="default") = Entity("JungleHelper/ZipMovingPlatform", x=x1, y=y1, nodes=Tuple{Int, Int}[(x2, y2)], width=width, texture=texture)
+@pardef MovingZipPlatform(x1::Integer, y1::Integer, x2::Integer=x1 + 16, y2::Integer=y1, width::Integer=32, texture::String="default", waitTimer::Number=0, noReturn::Boolean=false) = Entity("JungleHelper/ZipMovingPlatform", x=x1, y=y1, nodes=Tuple{Int, Int}[(x2, y2)], width=width, texture=texture)
 
 const placements = Ahorn.PlacementDict()
 
@@ -11,7 +11,9 @@ for texture in Maple.wood_platform_textures
         MovingZipPlatform,
         "rectangle",
         Dict{String, Any}(
-          "texture" => texture
+          "texture" => texture,
+          "waitTimer" => 0,
+          "noReturn" => false
         ),
         function(entity)
             x, y = Int(entity.data["x"]), Int(entity.data["y"])
@@ -27,6 +29,8 @@ placements["Platform (Zip, Jungle) (JungleHelper)"] = Ahorn.EntityPlacement(
     "rectangle",
     Dict{String, Any}(
         "texture" => "JungleHelper/jungle"
+        "waitTimer" => 0,
+        "noReturn" => false
     ),
     function(entity)
         x, y = Int(entity.data["x"]), Int(entity.data["y"])
@@ -40,7 +44,9 @@ placements["Platform (Zip, Night) (JungleHelper)"] = Ahorn.EntityPlacement(
     MovingZipPlatform,
     "rectangle",
     Dict{String, Any}(
-        "texture" => "JungleHelper/night"
+        "texture" => "JungleHelper/night",
+        "waitTimer" => 0,
+        "noReturn" => false
     ),
     function(entity)
         x, y = Int(entity.data["x"]), Int(entity.data["y"])
@@ -55,6 +61,8 @@ placements["Platform (Zip, Escape) (JungleHelper)"] = Ahorn.EntityPlacement(
     "rectangle",
     Dict{String, Any}(
         "texture" => "JungleHelper/escape"
+        "waitTimer" => 0,
+        "noReturn" => false
     ),
     function(entity)
         x, y = Int(entity.data["x"]), Int(entity.data["y"])
