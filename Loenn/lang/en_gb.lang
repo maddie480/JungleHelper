@@ -138,6 +138,8 @@ entities.JungleHelper/MossyWall.attributes.name.color3=Color (Lantern Far)
 entities.JungleHelper/NodedCrumblePlatform.placements.name.default=Crumble Block (Noded, Default)
 entities.JungleHelper/NodedCrumblePlatform.placements.name.cliffside=Crumble Block (Noded, Cliffside)
 entities.JungleHelper/NodedCrumblePlatform.attributes.description.texture=What texture to use for the crumble block.
+entities.JungleHelper/NodedCrumblePlatform.attributes.description.betweenWaitTime=The amount of time the crumble block waits for (after being activated) before starting to move.
+entities.JungleHelper/NodedCrumblePlatform.attributes.description.betweenMoveTime=The amount of time the crumble block takes to move to its next node after the waiting period ends.
 
 # Predator Plant
 entities.JungleHelper/PredatorPlant.placements.name.Pink=Predator Plant (Pink)
