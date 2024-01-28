@@ -12,7 +12,7 @@ const placements = Ahorn.PlacementDict(
         Dict{String, Any}(
             "texture" => texture,
             "betweenWaitTime" => 1.0,
-            "betweenMoveTime" => 1.0	
+            "betweenMoveTime" => 1.0
         )
     ) for texture in Maple.crumble_block_textures
 )
