@@ -13,7 +13,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
             SurfaceSoundIndex = 5;
             Add(new LightOcclude(0.2f));
             Add(new Coroutine(ZipUp(), true));
-            Add(shaker = new Shaker(false));
 
         }
 
@@ -62,12 +61,12 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 while (!HasPlayerRider()) {
                     yield return null;
                 }
+                // If the platform is going to wait any time before it starts falling down, shake the platform to indicate it's about to fall
                 if (waitTimer > 0) {
                     StartShaking(waitTimer);
-                    shaker.ShakeFor(waitTimer, false);
                     yield return waitTimer;
                 }
-                shaking = false;
+
                 sfx.Play("event:/junglehelper/sfx/Zip_platform", null, 0f);
                 float at = 0f;
                 while (at < 1f) {
@@ -90,9 +89,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     StartShaking(0.1f);
                     yield return 0.5f;
                 } else {
-                    while (true) {
-                        yield return null;
-                    }
+                    yield break;
                 }
             }
         }
@@ -153,10 +150,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private float waitTimer;
 
         private bool noReturn;
-
-        private bool shaking = false;
-
-        private Shaker shaker;
 
         private MTexture[] textures;
 
