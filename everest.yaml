@@ -1,5 +1,5 @@
 - Name: JungleHelper
-  Version: 1.2.2
+  Version: 1.2.3
   DLL: Code/bin/Debug/JungleHelper.dll
   Dependencies:
     - Name: Everest
