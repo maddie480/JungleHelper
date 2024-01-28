@@ -13,10 +13,13 @@ namespace Celeste.Mod.JungleHelper.Entities {
             SurfaceSoundIndex = 5;
             Add(new LightOcclude(0.2f));
             Add(new Coroutine(ZipUp(), true));
+
         }
 
         public ZipMovingPlatform(EntityData data, Vector2 offset) : this(data.Position + offset, data.Width, data.Nodes[0] + offset) {
             TextureName = data.Attr("texture", "default");
+            waitTimer = data.Float("waitTimer", 0f);
+            noReturn = data.Bool("noReturn", false);
         }
 
         public override void Added(Scene scene) {
@@ -39,14 +42,14 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         public override void Render() {
-            textures[0].Draw(Position);
+            textures[0].Draw(Position + base.Shake);
             int xPosition = 8;
             while (xPosition < Width - 8f) {
-                textures[1].Draw(Position + new Vector2(xPosition, 0f));
+                textures[1].Draw(Position + new Vector2(xPosition, 0f) + base.Shake);
                 xPosition += 8;
             }
-            textures[3].Draw(Position + new Vector2(base.Width - 8f, 0f));
-            textures[2].Draw(Position + new Vector2(base.Width / 2f - 4f, 0f));
+            textures[3].Draw(Position + new Vector2(base.Width - 8f, 0f) + base.Shake);
+            textures[2].Draw(Position + new Vector2(base.Width / 2f - 4f, 0f) + base.Shake);
         }
 
         public override void OnStaticMoverTrigger(StaticMover sm) {
@@ -58,6 +61,12 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 while (!HasPlayerRider()) {
                     yield return null;
                 }
+                // If the platform is going to wait any time before it starts falling down, shake the platform to indicate it's about to fall
+                if (waitTimer > 0) {
+                    StartShaking(waitTimer);
+                    yield return waitTimer;
+                }
+
                 sfx.Play("event:/junglehelper/sfx/Zip_platform", null, 0f);
                 float at = 0f;
                 while (at < 1f) {
@@ -68,16 +77,20 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     MoveTo(to);
                 }
                 StartShaking(0.2f);
-                at = 0f;
-                while (at < 1f) {
-                    yield return null;
-                    at = Calc.Approach(at, 1f, 0.5f * Engine.DeltaTime);
-                    percent = 1f - Ease.SineIn(at);
-                    Vector2 to = Vector2.Lerp(end, start, Ease.SineIn(at));
-                    MoveTo(to);
+                if (!noReturn) {
+                    at = 0f;
+                    while (at < 1f) {
+                        yield return null;
+                        at = Calc.Approach(at, 1f, 0.5f * Engine.DeltaTime);
+                        percent = 1f - Ease.SineIn(at);
+                        Vector2 to = Vector2.Lerp(end, start, Ease.SineIn(at));
+                        MoveTo(to);
+                    }
+                    StartShaking(0.1f);
+                    yield return 0.5f;
+                } else {
+                    yield break;
                 }
-                StartShaking(0.1f);
-                yield return 0.5f;
             }
         }
 
@@ -133,6 +146,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private float addY;
 
         private float sinkTimer;
+
+        private float waitTimer;
+
+        private bool noReturn;
 
         private MTexture[] textures;
 

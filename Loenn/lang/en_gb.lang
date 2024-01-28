@@ -222,6 +222,8 @@ entities.JungleHelper/ZipMovingPlatform.placements.name.JungleHelper/jungle=Zip 
 entities.JungleHelper/ZipMovingPlatform.placements.name.JungleHelper/night=Zip Moving Platform (Night)
 entities.JungleHelper/ZipMovingPlatform.placements.name.JungleHelper/escape=Zip Moving Platform (Escape)
 entities.JungleHelper/ZipMovingPlatform.attributes.description.texture=What texture to use for the platform.
+entities.JungleHelper/ZipMovingPlatform.attributes.description.waitTimer=How long the platform will wait before starting to move.
+entities.JungleHelper/ZipMovingPlatform.attributes.description.noReturn=Whether the platform will return to its original position after being activated.
 
 # Drop Lantern Trigger
 triggers.JungleHelper/DropLanternTrigger.placements.name.default=Drop Lantern
