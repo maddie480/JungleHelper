@@ -237,7 +237,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private static void onPlayerSpriteConstructor(On.Celeste.PlayerSprite.orig_ctor orig, PlayerSprite self, PlayerSpriteMode mode) {
-            PlayerSpriteMode requestedMode = mode;
+            PlayerSpriteMode requestedMode = mode < 0 ? (mode + (1 << 31)) : mode;
             bool customSprite = requestedMode == SpriteModeMadelineLantern || requestedMode == SpriteModeBadelineLantern;
 
             if (customSprite) {
@@ -250,7 +250,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             bool lookUpAnimTweak = false;
 
             if (customSprite) {
-                switch (requestedMode < 0 ? (requestedMode + (1 << 31)) : requestedMode) {
+                switch (requestedMode) {
                     case SpriteModeMadelineLantern:
                         GFX.SpriteBank.CreateOn(self, "junglehelper_madeline_lantern");
                         lookUpAnimTweak = true;
