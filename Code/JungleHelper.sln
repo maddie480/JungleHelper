@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29326.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JungleHelper", "Code\JungleHelper.csproj", "{8F1A039D-37BD-4286-83C0-C30B747B9CEB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JungleHelper", "JungleHelper.csproj", "{8F1A039D-37BD-4286-83C0-C30B747B9CEB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E1ED8AC6-0B6A-4EC2-92B6-F534830916FD}"
 	ProjectSection(SolutionItems) = preProject

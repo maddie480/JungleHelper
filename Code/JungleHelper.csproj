@@ -1,35 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8F1A039D-37BD-4286-83C0-C30B747B9CEB}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Celeste.Mod.JungleHelper</RootNamespace>
+    <TargetFramework>net452</TargetFramework>
     <AssemblyName>JungleHelper</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
+    <RootNamespace>Celeste.Mod.JungleHelper</RootNamespace>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="MonoMod.RuntimeDetour" Version="22.1.4.3" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="NLua" Version="1.4.25" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="YamlDotNet" Version="8.1.2" PrivateAssets="all" ExcludeAssets="runtime" />
+  </ItemGroup>
   <ItemGroup>
     <Reference Include="Celeste">
       <HintPath>..\lib-stripped\Celeste.exe</HintPath>
@@ -47,88 +28,9 @@
       <HintPath>..\lib-stripped\MMHOOK_Celeste.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Mono.Cecil, Version=0.11.3.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.11.3\lib\net40\Mono.Cecil.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Mono.Cecil.Mdb, Version=0.11.3.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.11.3\lib\net40\Mono.Cecil.Mdb.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Mono.Cecil.Pdb, Version=0.11.3.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.11.3\lib\net40\Mono.Cecil.Pdb.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Mono.Cecil.Rocks, Version=0.11.3.0, Culture=neutral, PublicKeyToken=50cebf1cceb9d05e, processorArchitecture=MSIL">
-      <HintPath>..\packages\Mono.Cecil.0.11.3\lib\net40\Mono.Cecil.Rocks.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="MonoMod.RuntimeDetour, Version=21.4.29.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoMod.RuntimeDetour.21.4.29.1\lib\net40\MonoMod.RuntimeDetour.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoMod.Utils, Version=21.4.29.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MonoMod.Utils.21.4.29.1\lib\net40\MonoMod.Utils.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="YamlDotNet, Version=8.0.0.0, Culture=neutral, PublicKeyToken=ec19458f3c15af5e, processorArchitecture=MSIL">
-      <HintPath>..\packages\YamlDotNet.8.1.2\lib\net45\YamlDotNet.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Components\ComponentWithDepth.cs" />
-    <Compile Include="Components\RainbowDecalComponent.cs" />
-    <Compile Include="Entities\AttachTriggerController.cs" />
-    <Compile Include="Entities\AutoFallingBlockDelay.cs" />
-    <Compile Include="Entities\BouncyShroom.cs" />
-    <Compile Include="Entities\BreakablePot.cs" />
-    <Compile Include="Entities\CassetteCustomPreviewMusic.cs" />
-    <Compile Include="Entities\CheatCodeController.cs" />
-    <Compile Include="Entities\Cockatiel.cs" />
-    <Compile Include="Entities\Dragonfly.cs" />
-    <Compile Include="Entities\EnforceSkinController.cs" />
-    <Compile Include="Entities\EnforceSkinVanillaSpriteDump.cs" />
-    <Compile Include="Entities\FallingKillbox.cs" />
-    <Compile Include="Entities\Firefly.cs" />
-    <Compile Include="Entities\GrablessGoldenBerry.cs" />
-    <Compile Include="Entities\Lantern.cs" />
-    <Compile Include="Entities\Snake.cs" />
-    <Compile Include="Entities\SwingCassetteBlock.cs" />
-    <Compile Include="Entities\Torch.cs" />
-    <Compile Include="Entities\TreasureChest.cs" />
-    <Compile Include="JungleHelperMapDataProcessor.cs" />
-    <Compile Include="JungleHelperSession.cs" />
-    <Compile Include="Triggers\DropLanternTrigger.cs" />
-    <Compile Include="Triggers\UITextTrigger.cs" />
-    <Compile Include="Triggers\GeckoTutorialTrigger.cs" />
-    <Compile Include="Entities\RemoteKevinRefill.cs" />
-    <Compile Include="Components\SlopedColliderWithRectangles.cs" />
-    <Compile Include="Components\CircleColliderWithRectangles.cs" />
-    <Compile Include="Entities\ClimbableOneWayPlatform.cs" />
-    <Compile Include="Entities\Gecko.cs" />
-    <Compile Include="Entities\Hawk.cs" />
-    <Compile Include="Entities\Cobweb.cs" />
-    <Compile Include="JungleHelperModule.cs" />
-    <Compile Include="Entities\InvisibleJumpthruPlatform.cs" />
-    <Compile Include="Entities\MossyWall.cs" />
-    <Compile Include="Entities\ZipMovingPlatform.cs" />
-    <Compile Include="Entities\NodedCrumblePlatform.cs" />
-    <Compile Include="Entities\PredatorPlant.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Entities\RemoteKevin.cs" />
-    <Compile Include="Entities\RollingRock.cs" />
-    <Compile Include="Entities\SpiderBoss.cs" />
-    <Compile Include="Entities\SpinyPlant.cs" />
-    <Compile Include="Entities\TheoStatue.cs" />
-    <Compile Include="Entities\TheoStatueGate.cs" />
-    <Compile Include="Entities\UnrandomizedCrumblePlatform.cs" />
-    <Compile Include="Triggers\UIImageTrigger.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
