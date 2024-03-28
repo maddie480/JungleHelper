@@ -111,6 +111,8 @@ placements.entities.JungleHelper/RollingRock.tooltips.instantFalling=Whether the
 
 # Zip Moving Platforms
 placements.entities.JungleHelper/ZipMovingPlatform.tooltips.texture=What texture to use for the platform.
+placements.entities.JungleHelper/ZipMovingPlatform.tooltips.waitTimer=How long the platform will wait before starting to move.
+placements.entities.JungleHelper/ZipMovingPlatform.tooltips.noReturn=Whether the platform will return to its original position after being activated.
 
 # Invisible Jumpthru
 placements.entities.JungleHelper/InvisibleJumpthruPlatform.tooltips.surfaceIndex=Footstep sound when walking on the platform.

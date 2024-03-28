@@ -2,7 +2,7 @@ module JungleHelperNodedCrumblePlatform
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/NodedCrumblePlatform" NodedCrumblePlatform(x::Integer, y::Integer, width::Integer=Maple.defaultBlockWidth, texture::String="default", betweenWaitTime::Number="1.0", betweenMoveTime::Number="1.0",
+@mapdef Entity "JungleHelper/NodedCrumblePlatform" NodedCrumblePlatform(x::Integer, y::Integer, width::Integer=Maple.defaultBlockWidth, texture::String="default", betweenWaitTime::Number=1.0, betweenMoveTime::Number=1.0,
     nodes::Array{Tuple{Integer, Integer}, 1}=Tuple{Integer, Integer}[])
 
 const placements = Ahorn.PlacementDict(
