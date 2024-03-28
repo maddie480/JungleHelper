@@ -4,6 +4,8 @@ using ..Ahorn, Maple
 
 @mapdef Entity "JungleHelper/ClimbableOneWayPlatform" ClimbableOneWayPlatform(x::Integer, y::Integer, height::Integer=Maple.defaultBlockHeight, left::Bool=true, texture::String="wood", animationDelay::Number=0.0,
     surfaceIndex::Int=-1, staminaBehavior::String="None", sameDirectionJumpBoost::Bool=false, momentumJumpDecayTime::Number=0.0, momentumJumpDecayCurvature::Number=1.0)
+@mapdef Entity "JungleHelper/AttachedClimbableOneWayPlatform" AttachedClimbableOneWayPlatform(x::Integer, y::Integer, height::Integer=Maple.defaultBlockHeight, left::Bool=true, texture::String="wood", animationDelay::Number=0.0,
+    surfaceIndex::Int=-1, staminaBehavior::String="None", sameDirectionJumpBoost::Bool=false, momentumJumpDecayTime::Number=0.0, momentumJumpDecayCurvature::Number=1.0)
 
 textures = ["wood", "dream", "temple", "templeB", "cliffside", "reflection", "core", "moon"]
 staminaBehaviors = ["None", "Conserve", "Regain"]
@@ -24,7 +26,23 @@ const placements = Ahorn.PlacementDict(
             "texture" => "wood",
             "left" => false
         )
-    )
+    ),
+    "Climbable One-Way Platform (Attached, Left) (Jungle Helper)" => Ahorn.EntityPlacement(
+        AttachedClimbableOneWayPlatform,
+        "rectangle",
+        Dict{String, Any}(
+            "texture" => "wood",
+            "left" => true
+        )
+    ),
+    "Climbable One-Way Platform (Attached, Right) (Jungle Helper)" => Ahorn.EntityPlacement(
+        AttachedClimbableOneWayPlatform,
+        "rectangle",
+        Dict{String, Any}(
+            "texture" => "wood",
+            "left" => false
+        )
+    ),
 )
 
 quads = Tuple{Integer, Integer, Integer, Integer}[
@@ -32,7 +50,9 @@ quads = Tuple{Integer, Integer, Integer, Integer}[
     (0, 8, 8, 5) (8, 8, 8, 5) (16, 8, 8, 5)
 ]
 
-Ahorn.editingOptions(entity::ClimbableOneWayPlatform) = Dict{String, Any}(
+platformUnion = Union{ClimbableOneWayPlatform, AttachedClimbableOneWayPlatform}
+
+Ahorn.editingOptions(entity::platformUnion) = Dict{String, Any}(
     "texture" => textures,
     "surfaceIndex" => Maple.tileset_sound_ids,
     "staminaBehavior" => staminaBehaviors
@@ -40,17 +60,17 @@ Ahorn.editingOptions(entity::ClimbableOneWayPlatform) = Dict{String, Any}(
 
 
 
-Ahorn.minimumSize(entity::ClimbableOneWayPlatform) = 0, 8
-Ahorn.resizable(entity::ClimbableOneWayPlatform) = false, true
+Ahorn.minimumSize(entity::platformUnion) = 0, 8
+Ahorn.resizable(entity::platformUnion) = false, true
 
-function Ahorn.selection(entity::ClimbableOneWayPlatform)
+function Ahorn.selection(entity::platformUnion)
     x, y = Ahorn.position(entity)
     height = Int(get(entity.data, "height", 8))
 
     return Ahorn.Rectangle(x, y, 8, height)
 end
 
-function Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::ClimbableOneWayPlatform, room::Maple.Room)
+function Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::platformUnion, room::Maple.Room)
     texture = get(entity.data, "texture", "wood")
     texture = texture == "default" ? "wood" : texture
 

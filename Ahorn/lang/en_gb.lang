@@ -19,6 +19,16 @@ placements.entities.JungleHelper/ClimbableOneWayPlatform.tooltips.sameDirectionJ
 placements.entities.JungleHelper/ClimbableOneWayPlatform.tooltips.momentumJumpDecayTime=If a player lands on a platform with momentum and this is non-zero, that momentum will be stored and decay over time, reaching zero at the selected time. If a player jumps within this time, they are granted the respective stored speed. Must be >0 to store speed.
 placements.entities.JungleHelper/ClimbableOneWayPlatform.tooltips.momentumJumpDecayCurvature=If a player lands on a platform with momentum and this is non-zero, that momentum will be stored and decay over time following the curvature measure. Clamped bewteen 0 and 1. If closer to 1, speed will decay slower at first and decay faster over time. Approaching 0.5 will cause speed to decay linearly, and approaching 0 will decay faster at first and slower over time. Must be >0 to store speed.
 
+# Attachment Climbable One-Way Platform
+placements.entities.JungleHelper/AttachedClimbableOneWayPlatform.tooltips.left=Whether the solid side of the platform is the left side.
+placements.entities.JungleHelper/AttachedClimbableOneWayPlatform.tooltips.texture=Changes the appearance of the platform. Should be in the same format as vanilla for static jumpthrus, and a 8x8 image for animated ones.
+placements.entities.JungleHelper/AttachedClimbableOneWayPlatform.tooltips.animationDelay=The delay in seconds between 2 frames of animation. Leave to 0 for no animation.
+placements.entities.JungleHelper/AttachedClimbableOneWayPlatform.tooltips.surfaceIndex=Defines which climbing sounds the platform will use.
+placements.entities.JungleHelper/AttachedClimbableOneWayPlatform.tooltips.staminaBehavior=Determines whether the player will conserve current stamina, regain stamina or exhibit normal behavior.
+placements.entities.JungleHelper/AttachedClimbableOneWayPlatform.tooltips.sameDirectionJumpBoost=If this is checked and a player jumps across the platform, they will be given extra momentum as if they'd jumped from the other side.
+placements.entities.JungleHelper/AttachedClimbableOneWayPlatform.tooltips.momentumJumpDecayTime=If a player lands on a platform with momentum and this is non-zero, that momentum will be stored and decay over time, reaching zero at the selected time. If a player jumps within this time, they are granted the respective stored speed. Must be >0 to store speed.
+placements.entities.JungleHelper/AttachedClimbableOneWayPlatform.tooltips.momentumJumpDecayCurvature=If a player lands on a platform with momentum and this is non-zero, that momentum will be stored and decay over time following the curvature measure. Clamped bewteen 0 and 1. If closer to 1, speed will decay slower at first and decay faster over time. Approaching 0.5 will cause speed to decay linearly, and approaching 0 will decay faster at first and slower over time. Must be >0 to store speed.
+
 # Gecko Tutorial Trigger
 placements.triggers.JungleHelper/GeckoTutorialTrigger.tooltips.geckoId=Which gecko the trigger should affect.
 placements.triggers.JungleHelper/GeckoTutorialTrigger.tooltips.showTutorial=If ticked, the targeted gecko will show its speech bubble. If unchecked, the gecko will hide its speech bubble.
