@@ -35,7 +35,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private static void onLevelLoad(On.Celeste.LevelLoader.orig_ctor orig, LevelLoader self, Session session, Vector2? startPosition) {
             orig(self, session, startPosition);
 
-            if (session.MapData?.Levels?.Any(level => level.Entities?.Any(entity => 
+            if (session.MapData?.Levels?.Any(level => level.Entities?.Any(entity =>
                 entity.Name == "JungleHelper/ClimbableOneWayPlatform" || entity.Name == "JungleHelper/AttachedClimbableOneWayPlatform") ?? false) ?? false) {
 
                 activateHooks();
