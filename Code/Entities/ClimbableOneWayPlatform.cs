@@ -67,6 +67,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             On.Celeste.Player.ClimbHopBlockedCheck += onPlayerClimbHopBlockedCheck;
 
             // mod collide checks to include climbable one-way platforms, so that the player behaves with them like with walls.
+            IL.Celeste.Player.WallJumpCheck += modCollideChecks; // allow player to walljump off them, if pressing Grab
             IL.Celeste.Player.ClimbCheck += modCollideChecks; // allow player to climb on them
             IL.Celeste.Player.ClimbBegin += modCollideChecks; // if not applied, the player will clip through jumpthrus if trying to climb on them
             IL.Celeste.Player.ClimbUpdate += modCollideChecks; // when climbing, jumpthrus are handled like walls
@@ -172,6 +173,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             il.Body.Variables.Add(checkAtPositionStore);
 
             bool isClimb = il.Method.Name.Contains("Climb");
+            bool isWallJump = il.Method.Name.Contains("WallJump");
 
             while (cursor.Next != null) {
                 Instruction next = cursor.Next;
@@ -189,6 +191,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
                         // if we are not checking a side, this certainly has nothing to do with jumpthrus.
                         if (self.Position.X == checkAtPosition.X)
+                            return false;
+
+                        // wall jumps are only allowed while pressing Grab.
+                        if (isWallJump && !Input.GrabCheck)
                             return false;
 
                         // our entity also collides if this is with a jumpthru and we are colliding with the solid side of it.
