@@ -1,7 +1,7 @@
 using Microsoft.Xna.Framework;
 using Monocle;
 using Celeste.Mod.Entities;
-
+using System;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [Tracked(false)]
@@ -37,11 +37,14 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private float yeetSpeedCalcY;
         private Sprite bouncyShroomSprite;
 
-        public BouncyShroom(Vector2 position, Directions direction, int yeetx, int yeety, string spriteDirectory)
+        private int? dashCount;
+
+        public BouncyShroom(Vector2 position, Directions direction, int yeetx, int yeety, string spriteDirectory, int? dashCount)
             : base(position) {
 
             Depth = -1;
             Direction = direction;
+            this.dashCount = dashCount;
 
             // making the bounce particles
             particlePosAdjust = new Vector2(0, 1);
@@ -111,7 +114,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         public BouncyShroom(EntityData data, Vector2 offset, Directions dir)
-            : this(data.Position + offset, dir, data.Int("yeetx", 200), data.Int("yeety", -290), data.Attr("spriteDirectory", "JungleHelper/BouncyShroom")) {
+            : this(data.Position + offset, dir, data.Int("yeetx", 200), data.Int("yeety", -290), data.Attr("spriteDirectory", "JungleHelper/BouncyShroom"),
+                   !string.IsNullOrEmpty(data.Attr("dashCount")) ? int.Parse(data.Attr("dashCount")) : null) {
         }
 
         public override void Added(Scene scene) {
@@ -178,18 +182,26 @@ namespace Celeste.Mod.JungleHelper.Entities {
         public override void Update() {
             base.Update();
 
-            if (collidedWithIt == true) {
-                if (!CollideCheck<Player>()) {
-                    if (dashedIntoIt == true) {
-                        SceneAs<Level>().Tracker.GetEntity<Player>().StateMachine.State = 0;
-                        dashedIntoIt = false;
-                    }
-                    if (!SceneAs<Level>().Tracker.GetEntity<Player>().Inventory.NoRefills) {
-                        SceneAs<Level>().Tracker.GetEntity<Player>().RefillDash();
-                    }
-                    SceneAs<Level>().Tracker.GetEntity<Player>().RefillStamina();
-                    collidedWithIt = false;
+            if (collidedWithIt == true && !CollideCheck<Player>()) {
+                Player player = SceneAs<Level>().Tracker.GetEntity<Player>();
+
+                // remove the player's dash state
+                if (dashedIntoIt == true) {
+                    player.StateMachine.State = 0;
+                    dashedIntoIt = false;
                 }
+
+                // refill dashes, the usual way or using the "Dash Count" option
+                if (dashCount.HasValue) {
+                    player.Dashes = Math.Max(player.Dashes, dashCount.Value);
+                } else if (!player.Inventory.NoRefills) {
+                    player.RefillDash();
+                }
+
+                // refill stamina
+                player.RefillStamina();
+
+                collidedWithIt = false;
             }
         }
     }

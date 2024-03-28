@@ -67,19 +67,25 @@ placements.entities.JungleHelper/PredatorPlant.tooltips.sprite=If you want to re
 # Bouncy Shroom
 placements.entities.JungleHelper/BouncyShroomRight.names.yeetx=Bounce Speed X
 placements.entities.JungleHelper/BouncyShroomRight.names.yeety=Bounce Speed Y
+placements.entities.JungleHelper/BouncyShroomRight.names.dashCount=Refill Dash Count
 placements.entities.JungleHelper/BouncyShroomRight.tooltips.yeetx=Determines how much horizontal speed the player will get from the mushroom (for left and right mushrooms only).
 placements.entities.JungleHelper/BouncyShroomRight.tooltips.yeety=Determines how much vertical speed the player will get from the mushroom.
 placements.entities.JungleHelper/BouncyShroomRight.tooltips.spriteDirectory=The directory the sprites will be taken from. For example, if the directory is set to MyMap/MyShrooms, sprites will be read from Mods/yourmod/Graphics/Atlases/Gameplay/MyMap/MyShrooms.
+placements.entities.JungleHelper/BouncyShroomRight.tooltips.dashCount=If the player has fewer dashes than the amount written here, bouncing on the mushroom will set their dash count to this amount.\nIf you leave this field empty, the player will get the amount of dashes they have in their inventory, unless "No Refills" is active.
 placements.entities.JungleHelper/BouncyShroomLeft.names.yeetx=Bounce Speed X
 placements.entities.JungleHelper/BouncyShroomLeft.names.yeety=Bounce Speed Y
+placements.entities.JungleHelper/BouncyShroomLeft.names.dashCount=Refill Dash Count
 placements.entities.JungleHelper/BouncyShroomLeft.tooltips.yeetx=Determines how much horizontal speed the player will get from the mushroom (for left and right mushrooms only).
 placements.entities.JungleHelper/BouncyShroomLeft.tooltips.yeety=Determines how much vertical speed the player will get from the mushroom.
 placements.entities.JungleHelper/BouncyShroomLeft.tooltips.spriteDirectory=The directory the sprites will be taken from. For example, if the directory is set to MyMap/MyShrooms, sprites will be read from Mods/yourmod/Graphics/Atlases/Gameplay/MyMap/MyShrooms.
+placements.entities.JungleHelper/BouncyShroomLeft.tooltips.dashCount=If the player has fewer dashes than the amount written here, bouncing on the mushroom will set their dash count to this amount.\nIf you leave this field empty, the player will get the amount of dashes they have in their inventory, unless "No Refills" is active.
 placements.entities.JungleHelper/BouncyShroomUp.names.yeetx=Bounce Speed X
 placements.entities.JungleHelper/BouncyShroomUp.names.yeety=Bounce Speed Y
+placements.entities.JungleHelper/BouncyShroomUp.names.dashCount=Refill Dash Count
 placements.entities.JungleHelper/BouncyShroomUp.tooltips.yeetx=Determines how much horizontal speed the player will get from the mushroom (for left and right mushrooms only).
 placements.entities.JungleHelper/BouncyShroomUp.tooltips.yeety=Determines how much vertical speed the player will get from the mushroom.
 placements.entities.JungleHelper/BouncyShroomUp.tooltips.spriteDirectory=The directory the sprites will be taken from. For example, if the directory is set to MyMap/MyShrooms, sprites will be read from Mods/yourmod/Graphics/Atlases/Gameplay/MyMap/MyShrooms.
+placements.entities.JungleHelper/BouncyShroomUp.tooltips.dashCount=If the player has fewer dashes than the amount written here, bouncing on the mushroom will set their dash count to this amount.\nIf you leave this field empty, the player will get the amount of dashes they have in their inventory, unless "No Refills" is active.
 
 # Gecko
 placements.entities.JungleHelper/Gecko.tooltips.left=Determines if the wall the gecko hangs to is on the left of it.
