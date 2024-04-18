@@ -5,7 +5,7 @@ using ..Ahorn, Maple
 @mapdef Entity "JungleHelper/ClimbableOneWayPlatform" ClimbableOneWayPlatform(x::Integer, y::Integer, height::Integer=Maple.defaultBlockHeight, left::Bool=true, texture::String="wood", animationDelay::Number=0.0,
     surfaceIndex::Int=-1, staminaBehavior::String="None", sameDirectionJumpBoost::Bool=false, momentumJumpDecayTime::Number=0.0, momentumJumpDecayCurvature::Number=1.0)
 @mapdef Entity "JungleHelper/AttachedClimbableOneWayPlatform" AttachedClimbableOneWayPlatform(x::Integer, y::Integer, height::Integer=Maple.defaultBlockHeight, left::Bool=true, texture::String="wood", animationDelay::Number=0.0,
-    surfaceIndex::Int=-1, staminaBehavior::String="None", sameDirectionJumpBoost::Bool=false, momentumJumpDecayTime::Number=0.0, momentumJumpDecayCurvature::Number=1.0)
+    surfaceIndex::Int=-1, staminaBehavior::String="None", sameDirectionJumpBoost::Bool=false, momentumJumpDecayTime::Number=0.0, momentumJumpDecayCurvature::Number=1.0, triggerBlocks::Bool=false)
 
 textures = ["wood", "dream", "temple", "templeB", "cliffside", "reflection", "core", "moon"]
 staminaBehaviors = ["None", "Conserve", "Regain"]

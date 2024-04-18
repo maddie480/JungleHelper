@@ -18,16 +18,27 @@ namespace Celeste.Mod.JungleHelper.Entities {
         // this variable is private, static, and never modified: so we only need reflection once to get it!
         private static readonly HashSet<Actor> solidRiders = (HashSet<Actor>) typeof(Solid).GetField("riders", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
 
+        public static new void Load() {
+            On.Celeste.Player.IsRiding_Solid += modIsRidingSolid;
+        }
+
+        public static new void Unload() {
+            On.Celeste.Player.IsRiding_Solid -= modIsRidingSolid;
+        }
+
         // solid used internally to push/squash/carry the player around
         private Solid playerInteractingSolid;
 
         public readonly new bool Left;
+        private readonly bool triggerBlocks;
 
         public DashCollision OnDashCollide;
         private Vector2 shakeOffset = Vector2.Zero;
+        private StaticMover staticMover;
 
         public AttachedClimbableOneWayPlatform(EntityData data, Vector2 offset) : base(data, offset) {
             Left = data.Bool("left");
+            triggerBlocks = data.Bool("triggerBlocks");
 
             // this solid will be made solid only when moving the player with the platform, so that the player gets squished and can climb the platform properly.
             playerInteractingSolid = new Solid(Position, Width, Height, safe: false);
@@ -38,7 +49,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             }
 
             // create the StaticMover that will make this jumpthru attached.
-            StaticMover staticMover = new StaticMoverWithLiftSpeed() {
+            staticMover = new StaticMoverWithLiftSpeed() {
                 SolidChecker = solid => solid.CollideRect(new Rectangle((int) X, (int) Y - 1, (int) Width, (int) Height + 2)),
                 OnMove = move => SidewaysJumpthruOnMove(this, playerInteractingSolid, Left, move),
                 OnShake = onShake,
@@ -57,6 +68,29 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             // add the hidden solid to the scene as well.
             scene.Add(playerInteractingSolid);
+        }
+
+        private static bool modIsRidingSolid(On.Celeste.Player.orig_IsRiding_Solid orig, Player self, Solid solid) {
+            // if vanilla says we're riding, then... we're riding.
+            if (orig(self, solid)) return true;
+
+            // player isn't riding solid, but check whether the player is climbing on any of the jumpthrus attached to this solid.
+            // we need to check that they're actually climbing first!
+            if (self.StateMachine.State != Player.StClimb) return false;
+
+            foreach (AttachedClimbableOneWayPlatform platform in solid.Scene.Tracker.GetEntities<AttachedClimbableOneWayPlatform>()) {
+                // check whether that platform should trigger the solid we're interested in
+                if (!platform.triggerBlocks || platform.staticMover.Platform != solid) continue;
+
+                platform.playerInteractingSolid.Collidable = true;
+                bool result = self.CollideCheck(platform.playerInteractingSolid, self.Position + Vector2.UnitX * (float) self.Facing);
+                platform.playerInteractingSolid.Collidable = false;
+
+                if (result) return true;
+            }
+
+            // the player isn't riding any platform
+            return false;
         }
 
         public override void Render() {
