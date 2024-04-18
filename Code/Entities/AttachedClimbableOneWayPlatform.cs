@@ -112,10 +112,13 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             bool playerHasToMove = false;
 
-            if (platform.CollideCheckOutside<Player>(platform.Position + move) && (Math.Sign(move.X) == (left ? -1 : 1))) {
+            if (Input.GrabCheck && (int) (platform.Scene.Tracker.GetEntity<Player>()?.Facing ?? 0) == (left ? 1 : -1)
+                && platform.CollideCheckOutside<Player>(platform.Position + move) && (Math.Sign(move.X) == (left ? -1 : 1))) {
+
                 // the platform is pushing the player horizontally, so we should have the solid push the player.
                 playerHasToMove = true;
             }
+
             if (GetPlayerClimbing(platform, left) != null) {
                 // player is climbing the platform, so the solid should carry the player with the platform
                 playerHasToMove = true;
