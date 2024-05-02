@@ -100,6 +100,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             On.Celeste.Player.ClimbHopBlockedCheck -= onPlayerClimbHopBlockedCheck;
 
+            IL.Celeste.Player.WallJumpCheck -= modCollideChecks;
             IL.Celeste.Player.ClimbCheck -= modCollideChecks;
             IL.Celeste.Player.ClimbBegin -= modCollideChecks;
             IL.Celeste.Player.ClimbUpdate -= modCollideChecks;
@@ -203,7 +204,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
                         bool collideOnLeftSideOfPlayer = (self.Position.X > checkAtPosition.X);
                         ClimbableOneWayPlatform oneway = collideFirstOutside(self, checkAtPosition, collideOnLeftSideOfPlayer);
                         return oneway != null && self is Player player
-                            && oneway.Bottom >= self.Top + checkAtPosition.Y - self.Position.Y + 3;
+                            && oneway.Bottom >= self.Top + checkAtPosition.Y - self.Position.Y + 3
+                            && (!isWallJump || oneway.allowWallJumping);
                     });
                 }
 
@@ -388,6 +390,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private float animationDelay;
         private int surfaceIndex;
         public bool AllowLeftToRight;
+        private bool allowWallJumping;
 
         private bool sameDirBoost;
         public StaminaBehavior staminaBehavior = StaminaBehavior.None;
@@ -416,7 +419,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
             return (float) ((spdX * 1.2) * Math.Pow(momentumJumpDecayTime, -2.0) * (momentumJumpDecayTime + time) * (momentumJumpDecayTime - time) * Math.Pow(momentumJumpDecayCurvature, time));
         }
 
-        public ClimbableOneWayPlatform(Vector2 position, int height, bool allowLeftToRight, string overrideTexture, float animationDelay, int surfaceIndex, StaminaBehavior StaminaBehavior, bool sameDirBoost, float momentumJumpDecayTime, float momentumJumpDecayCurvature)
+        public ClimbableOneWayPlatform(Vector2 position, int height, bool allowLeftToRight, string overrideTexture, float animationDelay, int surfaceIndex, StaminaBehavior StaminaBehavior,
+                bool sameDirBoost, float momentumJumpDecayTime, float momentumJumpDecayCurvature, bool allowWallJumping)
             : base(position) {
 
             lines = height / 8;
@@ -425,6 +429,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             this.overrideTexture = overrideTexture;
             this.animationDelay = animationDelay;
             this.surfaceIndex = surfaceIndex;
+            this.allowWallJumping = allowWallJumping;
 
             float hitboxOffset = 0f;
             if (AllowLeftToRight)
@@ -443,7 +448,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         public ClimbableOneWayPlatform(EntityData data, Vector2 offset)
             : this(data.Position + offset, data.Height, !data.Bool("left"), data.Attr("texture", "default"), data.Float("animationDelay", 0f), data.Int("surfaceIndex", -1),
-                  data.Enum("staminaBehavior", StaminaBehavior.None), data.Bool("sameDirectionJumpBoost", false), data.Float("momentumJumpDecayTime", 0f), data.Float("momentumJumpDecayCurvature", 1f)) { }
+                  data.Enum("staminaBehavior", StaminaBehavior.None), data.Bool("sameDirectionJumpBoost", false), data.Float("momentumJumpDecayTime", 0f), data.Float("momentumJumpDecayCurvature", 1f),
+                  data.Bool("allowWallJumping", true)) { }
 
         public override void Awake(Scene scene) {
             if (animationDelay > 0f) {

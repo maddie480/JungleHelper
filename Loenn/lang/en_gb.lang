@@ -57,6 +57,7 @@ entities.JungleHelper/ClimbableOneWayPlatform.attributes.description.staminaBeha
 entities.JungleHelper/ClimbableOneWayPlatform.attributes.description.sameDirectionJumpBoost=If this is checked and a player jumps across the platform, they will be given extra momentum as if they'd jumped from the other side.
 entities.JungleHelper/ClimbableOneWayPlatform.attributes.description.momentumJumpDecayTime=If a player lands on a platform with momentum and this is non-zero, that momentum will be stored and decay over time, reaching zero at the selected time.\nIf a player jumps within this time, they are granted the respective stored speed. Must be >0 to store speed.
 entities.JungleHelper/ClimbableOneWayPlatform.attributes.description.momentumJumpDecayCurvature=If a player lands on a platform with momentum and this is non-zero, that momentum will be stored and decay over time following the curvature measure.\nClamped bewteen 0 and 1. If closer to 1, speed will decay slower at first and decay faster over time.\nApproaching 0.5 will cause speed to decay linearly, and approaching 0 will decay faster at first and slower over time. Must be >0 to store speed.
+entities.JungleHelper/ClimbableOneWayPlatform.attributes.description.allowWallJumping=Whether the player should be able to walljump on the platform if they are holding Grab and it is combined with a Mossy Wall.
 
 # Attached Climbable One-Way Platform
 entities.JungleHelper/AttachedClimbableOneWayPlatform.placements.name.left=Climbable One-Way Platform (Attached, Left)
@@ -70,6 +71,7 @@ entities.JungleHelper/AttachedClimbableOneWayPlatform.attributes.description.sam
 entities.JungleHelper/AttachedClimbableOneWayPlatform.attributes.description.momentumJumpDecayTime=If a player lands on a platform with momentum and this is non-zero, that momentum will be stored and decay over time, reaching zero at the selected time.\nIf a player jumps within this time, they are granted the respective stored speed. Must be >0 to store speed.
 entities.JungleHelper/AttachedClimbableOneWayPlatform.attributes.description.momentumJumpDecayCurvature=If a player lands on a platform with momentum and this is non-zero, that momentum will be stored and decay over time following the curvature measure.\nClamped bewteen 0 and 1. If closer to 1, speed will decay slower at first and decay faster over time.\nApproaching 0.5 will cause speed to decay linearly, and approaching 0 will decay faster at first and slower over time. Must be >0 to store speed.
 entities.JungleHelper/AttachedClimbableOneWayPlatform.attributes.description.triggerBlocks=Whether the platform should trigger the blocks it's attached to when climbed on (for example, making zip movers move).
+entities.JungleHelper/AttachedClimbableOneWayPlatform.attributes.description.allowWallJumping=Whether the player should be able to walljump on the platform if they are holding Grab and it is combined with a Mossy Wall.
 
 # Cobweb
 entities.JungleHelper/Cobweb.placements.name.default=Cobweb

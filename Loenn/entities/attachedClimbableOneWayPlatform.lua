@@ -27,7 +27,8 @@ jumpthru.placements = {
             sameDirectionJumpBoost = false,
             momentumJumpDecayTime = 0.0,
             momentumJumpDecayCurvature = 1.0,
-            triggerBlocks = false
+            triggerBlocks = false,
+            allowWallJumping = true
         },
     },
     {
@@ -42,7 +43,8 @@ jumpthru.placements = {
             sameDirectionJumpBoost = false,
             momentumJumpDecayTime = 0.0,
             momentumJumpDecayCurvature = 1.0,
-            triggerBlocks = false
+            triggerBlocks = false,
+            allowWallJumping = true
         },
     }
 }

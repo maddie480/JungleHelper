@@ -26,7 +26,8 @@ jumpthru.placements = {
             staminaBehavior = "None",
             sameDirectionJumpBoost = false,
             momentumJumpDecayTime = 0.0,
-            momentumJumpDecayCurvature = 1.0
+            momentumJumpDecayCurvature = 1.0,
+            allowWallJumping = true
         },
     },
     {
@@ -40,7 +41,8 @@ jumpthru.placements = {
             staminaBehavior = "None",
             sameDirectionJumpBoost = false,
             momentumJumpDecayTime = 0.0,
-            momentumJumpDecayCurvature = 1.0
+            momentumJumpDecayCurvature = 1.0,
+            allowWallJumping = true
         },
     }
 }
