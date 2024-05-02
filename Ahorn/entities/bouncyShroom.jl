@@ -2,9 +2,12 @@ module JungleHelperBouncyShroom
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/BouncyShroomUp" BouncyShroomUp(x::Integer, y::Integer, yeetx::Integer = 200, yeety::Integer = -290, spriteDirectory::String="JungleHelper/BouncyShroom", dashCount::String="")
-@mapdef Entity "JungleHelper/BouncyShroomLeft" BouncyShroomLeft(x::Integer, y::Integer, yeetx::Integer = 200, yeety::Integer = -290, spriteDirectory::String="JungleHelper/BouncyShroom", dashCount::String="")
-@mapdef Entity "JungleHelper/BouncyShroomRight" BouncyShroomRight(x::Integer, y::Integer, yeetx::Integer = 200, yeety::Integer = -290, spriteDirectory::String="JungleHelper/BouncyShroom", dashCount::String="")
+@mapdef Entity "JungleHelper/BouncyShroomUp" BouncyShroomUp(x::Integer, y::Integer, yeetx::Integer=200, yeety::Integer=-290,
+    spriteDirectory::String="JungleHelper/BouncyShroom", dashCount::String="", triggerBlocks::Bool=false)
+@mapdef Entity "JungleHelper/BouncyShroomLeft" BouncyShroomLeft(x::Integer, y::Integer, yeetx::Integer=200, yeety::Integer=-290,
+    spriteDirectory::String="JungleHelper/BouncyShroom", dashCount::String="", triggerBlocks::Bool=false)
+@mapdef Entity "JungleHelper/BouncyShroomRight" BouncyShroomRight(x::Integer, y::Integer, yeetx::Integer=200, yeety::Integer=-290,
+    spriteDirectory::String="JungleHelper/BouncyShroom", dashCount::String="", triggerBlocks::Bool=false)
 
 const placements = Ahorn.PlacementDict()
 

@@ -10,7 +10,8 @@ bouncyShroomUp.placements = {
             yeetx = 200,
             yeety = -290,
             spriteDirectory = "JungleHelper/BouncyShroom",
-            dashCount = ""
+            dashCount = "",
+            triggerBlocks = false
         }
     }
 }
@@ -37,7 +38,8 @@ bouncyShroomLeft.placements = {
             yeetx = 200,
             yeety = -290,
             spriteDirectory = "JungleHelper/BouncyShroom",
-            dashCount = ""
+            dashCount = "",
+            triggerBlocks = false
         }
     }
 }
@@ -64,7 +66,8 @@ bouncyShroomRight.placements = {
             yeetx = 200,
             yeety = -290,
             spriteDirectory = "JungleHelper/BouncyShroom",
-            dashCount = ""
+            dashCount = "",
+            triggerBlocks = false
         }
     }
 }

@@ -14,6 +14,7 @@ entities.JungleHelper/BouncyShroomRight.attributes.description.yeetx=Determines 
 entities.JungleHelper/BouncyShroomRight.attributes.description.yeety=Determines how much vertical speed the player will get from the mushroom.
 entities.JungleHelper/BouncyShroomRight.attributes.description.spriteDirectory=The directory the sprites will be taken from.\nFor example, if the directory is set to MyMap/MyShrooms, sprites will be read from Mods/yourmod/Graphics/Atlases/Gameplay/MyMap/MyShrooms.
 entities.JungleHelper/BouncyShroomRight.attributes.description.dashCount=If the player has fewer dashes than the amount written here, bouncing on the mushroom will set their dash count to this amount.\nIf you leave this field empty, the player will get the amount of dashes they have in their inventory, unless "No Refills" is active.
+entities.JungleHelper/BouncyShroomRight.attributes.description.triggerBlocks=Whether bouncing on the shroom will trigger the platform it's attached to (move block, falling block, etc).
 entities.JungleHelper/BouncyShroomLeft.placements.name.default=Bouncy Shroom (Left)
 entities.JungleHelper/BouncyShroomLeft.attributes.name.yeetx=Bounce Speed X
 entities.JungleHelper/BouncyShroomLeft.attributes.name.yeety=Bounce Speed Y
@@ -22,6 +23,7 @@ entities.JungleHelper/BouncyShroomLeft.attributes.description.yeetx=Determines h
 entities.JungleHelper/BouncyShroomLeft.attributes.description.yeety=Determines how much vertical speed the player will get from the mushroom.
 entities.JungleHelper/BouncyShroomLeft.attributes.description.spriteDirectory=The directory the sprites will be taken from.\nFor example, if the directory is set to MyMap/MyShrooms, sprites will be read from Mods/yourmod/Graphics/Atlases/Gameplay/MyMap/MyShrooms.
 entities.JungleHelper/BouncyShroomLeft.attributes.description.dashCount=If the player has fewer dashes than the amount written here, bouncing on the mushroom will set their dash count to this amount.\nIf you leave this field empty, the player will get the amount of dashes they have in their inventory, unless "No Refills" is active.
+entities.JungleHelper/BouncyShroomLeft.attributes.description.triggerBlocks=Whether bouncing on the shroom will trigger the platform it's attached to (move block, falling block, etc).
 entities.JungleHelper/BouncyShroomUp.placements.name.default=Bouncy Shroom (Up)
 entities.JungleHelper/BouncyShroomUp.attributes.name.yeetx=Bounce Speed X
 entities.JungleHelper/BouncyShroomUp.attributes.name.yeety=Bounce Speed Y
@@ -30,6 +32,7 @@ entities.JungleHelper/BouncyShroomUp.attributes.description.yeetx=Determines how
 entities.JungleHelper/BouncyShroomUp.attributes.description.yeety=Determines how much vertical speed the player will get from the mushroom.
 entities.JungleHelper/BouncyShroomUp.attributes.description.spriteDirectory=The directory the sprites will be taken from.\nFor example, if the directory is set to MyMap/MyShrooms, sprites will be read from Mods/yourmod/Graphics/Atlases/Gameplay/MyMap/MyShrooms.
 entities.JungleHelper/BouncyShroomUp.attributes.description.dashCount=If the player has fewer dashes than the amount written here, bouncing on the mushroom will set their dash count to this amount.\nIf you leave this field empty, the player will get the amount of dashes they have in their inventory, unless "No Refills" is active.
+entities.JungleHelper/BouncyShroomUp.attributes.description.triggerBlocks=Whether bouncing on the shroom will trigger the platform it's attached to (move block, falling block, etc).
 
 # Breakable Pot
 entities.JungleHelper/BreakablePot.placements.name.default=Breakable Pot

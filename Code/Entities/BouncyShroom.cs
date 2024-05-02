@@ -36,15 +36,18 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private float yeetSpeedCalcX;
         private float yeetSpeedCalcY;
         private Sprite bouncyShroomSprite;
+        private StaticMover staticMover;
+        private bool triggerBlocks;
 
         private int? dashCount;
 
-        public BouncyShroom(Vector2 position, Directions direction, int yeetx, int yeety, string spriteDirectory, int? dashCount)
+        public BouncyShroom(Vector2 position, Directions direction, int yeetx, int yeety, string spriteDirectory, int? dashCount, bool triggerBlocks)
             : base(position) {
 
             Depth = -1;
             Direction = direction;
             this.dashCount = dashCount;
+            this.triggerBlocks = triggerBlocks;
 
             // making the bounce particles
             particlePosAdjust = new Vector2(0, 1);
@@ -65,7 +68,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
                     yeetSpeedCalcY = yeety;
 
-                    Add(new StaticMover() {
+                    Add(staticMover = new StaticMover() {
                         OnShake = OnShake,
                         SolidChecker = s => s.CollideRect(new Rectangle((int) Position.X - 10, (int) Position.Y + 8, 12, 1)),
                         JumpThruChecker = jt => jt.CollideRect(new Rectangle((int) (Position.X - 10), (int) Position.Y + 8, 12, 1))
@@ -84,7 +87,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     yeetSpeedCalcY = yeety;
                     yeetSpeedCalcX = yeetx;
 
-                    Add(new StaticMover() {
+                    Add(staticMover = new StaticMover() {
                         OnShake = OnShake,
                         SolidChecker = s => s.CollideRect(new Rectangle((int) Position.X - 16, (int) Position.Y + 8, 16, 1)),
                         JumpThruChecker = jt => jt.CollideRect(new Rectangle((int) (Position.X - 16), (int) Position.Y + 8, 16, 1))
@@ -102,7 +105,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
                     yeetSpeedCalcY = yeety;
                     yeetSpeedCalcX = -yeetx;
-                    Add(new StaticMover() {
+                    Add(staticMover = new StaticMover() {
                         OnShake = OnShake,
                         SolidChecker = s => s.CollideRect(new Rectangle((int) Position.X - 8, (int) Position.Y + 8, 16, 1)),
                         JumpThruChecker = jt => jt.CollideRect(new Rectangle((int) (Position.X - 8), (int) Position.Y + 8, 16, 1))
@@ -115,7 +118,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         public BouncyShroom(EntityData data, Vector2 offset, Directions dir)
             : this(data.Position + offset, dir, data.Int("yeetx", 200), data.Int("yeety", -290), data.Attr("spriteDirectory", "JungleHelper/BouncyShroom"),
-                   !string.IsNullOrEmpty(data.Attr("dashCount")) ? int.Parse(data.Attr("dashCount")) : null) {
+                   !string.IsNullOrEmpty(data.Attr("dashCount")) ? int.Parse(data.Attr("dashCount")) : null, data.Bool("triggerBlocks", false)) {
         }
 
         public override void Added(Scene scene) {
@@ -200,6 +203,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
                 // refill stamina
                 player.RefillStamina();
+
+                if (triggerBlocks) {
+                    staticMover.TriggerPlatform();
+                }
 
                 collidedWithIt = false;
             }
