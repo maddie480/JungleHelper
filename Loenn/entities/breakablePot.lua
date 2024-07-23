@@ -14,6 +14,7 @@ breakablePot.placements = {
     }
 }
 
+breakablePot.justification = { 0, 0 }
 breakablePot.offset = { 12, 21 }
 breakablePot.texture = "JungleHelper/Breakable Pot/breakpotidle"
 

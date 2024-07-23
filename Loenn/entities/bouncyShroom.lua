@@ -16,8 +16,9 @@ bouncyShroomUp.placements = {
     }
 }
 bouncyShroomUp.offset = { 20, 20 }
+bouncyShroomUp.justification = { 0, 0 }
 function bouncyShroomUp.texture(room, entity)
-    return entity.spriteDirectory .. "/mushroom00"
+    return (entity.spriteDirectory or "JungleHelper/BouncyShroom") .. "/mushroom00"
 end
 function bouncyShroomUp.selection(room, entity)
     return utils.rectangle(entity.x - 16, entity.y - 16, 24, 24)
@@ -44,8 +45,9 @@ bouncyShroomLeft.placements = {
     }
 }
 bouncyShroomLeft.offset = { 20, 20 }
+bouncyShroomLeft.justification = { 0, 0 }
 function bouncyShroomLeft.texture(room, entity)
-    return entity.spriteDirectory .. "/mushroom_ld_00"
+    return (entity.spriteDirectory or "JungleHelper/BouncyShroom") .. "/mushroom_ld_00"
 end
 function bouncyShroomLeft.selection(room, entity)
     return utils.rectangle(entity.x - 16, entity.y - 16, 24, 24)
@@ -72,8 +74,9 @@ bouncyShroomRight.placements = {
     }
 }
 bouncyShroomRight.offset = { 20, 20 }
+bouncyShroomRight.justification = { 0, 0 }
 function bouncyShroomRight.texture(room, entity)
-    return entity.spriteDirectory .. "/mushroom_rd_00"
+    return (entity.spriteDirectory or "JungleHelper/BouncyShroom") .. "/mushroom_rd_00"
 end
 function bouncyShroomRight.selection(room, entity)
     return utils.rectangle(entity.x - 16, entity.y - 16, 24, 24)
