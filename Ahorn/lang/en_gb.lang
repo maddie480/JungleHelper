@@ -192,6 +192,7 @@ placements.entities.JungleHelper/Cobweb.tooltips.sprite=If you want to reskin th
 # Lantern
 placements.entities.JungleHelper/Lantern.tooltips.sprite=If you want to reskin the lantern, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
 placements.entities.JungleHelper/Lantern.tooltips.onlyIfMaddyNotHolding=If checked, the lantern will only spawn if Madeline isn't already holding a lantern when entering the room.
+placements.entities.JungleHelper/Lantern.tooltips.lightSprite=What sprite to use for the lantern's light, relative to the Gameplay folder.
 
 # Breakable Pot
 placements.entities.JungleHelper/BreakablePot.tooltips.sprite=If you want to reskin the breakable pot, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
