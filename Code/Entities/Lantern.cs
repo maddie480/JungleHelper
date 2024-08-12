@@ -58,6 +58,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private ComponentWithDepth<Image> lanternOverlay;
 
         private readonly string reskinName;
+        private readonly string lightPath;
         private readonly bool onlyIfMaddyNotHolding;
 
         // registers the player's position when the lantern was dropped (if it was dropped),
@@ -72,6 +73,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             startingPosition = Position;
 
             reskinName = data.Attr("sprite");
+            lightPath = data.Attr("lightSprite", defaultValue: "JungleHelper/Lantern/Overlay");
             onlyIfMaddyNotHolding = data.Bool("onlyIfMaddyNotHolding", defaultValue: false);
 
             Add(new PlayerCollider(onPlayer));
@@ -83,7 +85,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 };
             }
 
-            Image overlay = new Image(GFX.Game["JungleHelper/Lantern/Overlay"]);
+            Image overlay = new Image(GFX.Game[lightPath]);
             overlay.Position = new Vector2((int) (Center - Position).X, (int) (Center - Position).Y);
             overlay.CenterOrigin();
             Add(lanternOverlay = new ComponentWithDepth<Image>(overlay) { Depth = 1500 });
@@ -129,6 +131,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 playerData["JungleHelper_LanternStartingPosition"] = startingPosition;
                 playerData["JungleHelper_LanternDoRespawn"] = doRespawn;
                 playerData["JungleHelper_LanternReskinName"] = reskinName;
+                playerData["JungleHelper_LanternLightPath"] = lightPath;
                 playerData["JungleHelper_LanternDropTimer"] = 0.25f;
 
                 // detach the glow from the lantern and attach it to the player.
@@ -301,9 +304,14 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 reskinName = playerData.Get<string>("JungleHelper_LanternReskinName");
             }
 
+            string lightPath = "";
+            if (playerData.Data.ContainsKey("JungleHelper_LanternLightPath")) {
+                lightPath = playerData.Get<string>("JungleHelper_LanternLightPath");
+            }
+
             Lantern lantern = new Lantern(new EntityData {
                 Position = new Vector2((int) player.Center.X, (int) player.Center.Y - 5f),
-                Values = new System.Collections.Generic.Dictionary<string, object>() { { "sprite", reskinName } }
+                Values = new System.Collections.Generic.Dictionary<string, object>() { { "sprite", reskinName },{ "lightSprite", lightPath} }
             }, Vector2.Zero);
 
             lantern.regrabDelay = 0.25f;
@@ -350,7 +358,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             orig();
         }
-
 
         public static float GetClosestLanternDistanceTo(Vector2 position, Scene scene, out Vector2 objectPosition) {
             float distance = float.MaxValue;
