@@ -145,6 +145,7 @@ entities.JungleHelper/Hawk.attributes.description.sprite=If you want to reskin t
 entities.JungleHelper/Lantern.placements.name.default=Lantern
 entities.JungleHelper/Lantern.attributes.description.sprite=If you want to reskin the lantern, define a custom sprite in your map's Sprites.xml and put the sprite name in this field.\nYou can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
 entities.JungleHelper/Lantern.attributes.description.onlyIfMaddyNotHolding=If checked, the lantern will only spawn if Madeline isn't already holding a lantern when entering the room.
+entities.JungleHelper/Lantern.attributes.description.lightSprite=What sprite to use for the lantern's light, relative to the Gameplay folder.
 
 # Mossy Wall
 entities.JungleHelper/MossyWall.placements.name.left=Mossy Wall (Left)
