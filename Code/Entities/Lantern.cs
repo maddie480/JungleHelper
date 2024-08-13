@@ -311,7 +311,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             Lantern lantern = new Lantern(new EntityData {
                 Position = new Vector2((int) player.Center.X, (int) player.Center.Y - 5f),
-                Values = new System.Collections.Generic.Dictionary<string, object>() { { "sprite", reskinName },{ "lightSprite", lightPath} }
+                Values = new System.Collections.Generic.Dictionary<string, object>() { { "sprite", reskinName }, { "lightSprite", lightPath } }
             }, Vector2.Zero);
 
             lantern.regrabDelay = 0.25f;
