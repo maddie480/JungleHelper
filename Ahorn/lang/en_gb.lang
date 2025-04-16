@@ -46,6 +46,8 @@ placements.entities.JungleHelper/RemoteKevin.tooltips.axes=Determines in which d
 placements.entities.JungleHelper/RemoteKevin.tooltips.restrained=If checked, the slide block will stop after moving a distance matching its width/height.\nIf unchecked, the slide block will move until it hits a wall or the screen boundaries.
 placements.entities.JungleHelper/RemoteKevin.tooltips.spriteXmlName=If you want to reskin the slide block center, define a custom sprite in your map's Sprites.xml and put the sprite name in this field. You can find the original sprite definition in Jungle Helper's zip, in Graphics/JungleHelper/CustomSprites.xml.
 placements.entities.JungleHelper/RemoteKevin.tooltips.spriteDirectory=The directory the sprites for the block will be taken from. For example, if the directory is set to MyMap/MySlideBlock, sprites will be read from Mods/yourmod/Graphics/Atlases/Gameplay/MyMap/MySlideBlock.
+placements.entities.JungleHelper/RemoteKevin.tooltips.fillColor=The color to use for the inside of this slide block.
+placements.entities.JungleHelper/RemoteKevin.tooltips.loopSfx=The FMOD event to use for the slide block's moving sound. The event must be set up in the same way as the original.
 placements.entities.JungleHelper/RemoteKevin.tooltips.infiniteCharges=If checked, this slide block will be able to move again without requiring a refill.
 placements.entities.JungleHelper/RemoteKevin.tooltips.ignoreJumpthrus=If checked, this slide block will completely ignore jumpthrus instead of being offset by 1 pixel when it hits them (like vanilla Kevins).
 

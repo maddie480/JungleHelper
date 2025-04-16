@@ -2,7 +2,7 @@ module JungleHelperRemoteKevins
 
 using ..Ahorn, Maple
 
-@mapdef Entity "JungleHelper/RemoteKevin" RemoteKevin(x::Integer, y::Integer, restrained::Bool=false, axes::String="both", spriteXmlName::String="", spriteDirectory::String="", infiniteCharges::Bool=false, ignoreJumpthrus::Bool=false)
+@mapdef Entity "JungleHelper/RemoteKevin" RemoteKevin(x::Integer, y::Integer, restrained::Bool=false, axes::String="both", spriteXmlName::String="", spriteDirectory::String="", infiniteCharges::Bool=false, ignoreJumpthrus::Bool=false, fillColor::String="8A9C60", loopSfx::String="event:/junglehelper/sfx/Slide_block")
 
 const placements = Ahorn.PlacementDict(
     "Slide Block (Restraintless) (Jungle Helper)" => Ahorn.EntityPlacement(
@@ -32,13 +32,13 @@ Ahorn.editingOptions(entity::RemoteKevin) = Dict{String, Any}(
     "axes" => Maple.kevin_axes
 )
 
-kevinColor = (138, 156, 96) ./ 255
 Ahorn.minimumSize(entity::RemoteKevin) = 24, 24
 Ahorn.resizable(entity::RemoteKevin) = true, true
 
 Ahorn.selection(entity::RemoteKevin) = Ahorn.getEntityRectangle(entity)
 
 function Ahorn.render(ctx::Ahorn.Cairo.CairoContext, entity::RemoteKevin, room::Maple.Room)
+    kevinColor = Ahorn.argb32ToRGBATuple(parse(Int, get(entity.data, "fillColor", "8A9C60"), base=16))[1:3] ./ 255
     restrainedTex = (get(entity.data, "restrained", false) ? "JungleHelper/SlideBlockGreen" : "JungleHelper/SlideBlockRed")
     frame = string(restrainedTex, "/", frameImage[lowercase(get(entity.data, "axes", "both"))])
 
