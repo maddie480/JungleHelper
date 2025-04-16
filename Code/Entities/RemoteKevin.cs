@@ -44,14 +44,14 @@ namespace Celeste.Mod.JungleHelper.Entities {
             }
         }
 
-        public RemoteKevin(Vector2 position, float width, float height, bool restrained, CrushBlock.Axes axes, string reskinName, string spriteDirectory, bool infiniteCharges, bool ignoreJumpthrus) : base(position, width, height, false) {
+        public RemoteKevin(Vector2 position, float width, float height, bool restrained, CrushBlock.Axes axes, string reskinName, string spriteDirectory, Color fillColor, string loopSfx, bool infiniteCharges, bool ignoreJumpthrus) : base(position, width, height, false) {
             this.restrained = restrained;
             this.infiniteCharges = infiniteCharges;
             texture = spriteDirectory;
             if (string.IsNullOrEmpty(texture)) {
                 texture = restrained ? "JungleHelper/SlideBlockGreen" : "JungleHelper/SlideBlockRed";
             }
-            fill = Calc.HexToColor("8A9C60");
+            fill = fillColor;
 
             bool giant = Width >= 48f && Height >= 48f;
 
@@ -111,10 +111,13 @@ namespace Celeste.Mod.JungleHelper.Entities {
             Add(new WaterInteraction(() => crushDir != Vector2.Zero));
 
             this.ignoreJumpthrus = ignoreJumpthrus;
+
+            this.loopSfx = loopSfx;
         }
 
         public RemoteKevin(EntityData data, Vector2 offset) : this(data.Position + offset, data.Width, data.Height, data.Bool("restrained", false), data.Enum("axes", CrushBlock.Axes.Both),
-            data.Attr("spriteXmlName"), data.Attr("spriteDirectory"), data.Bool("infiniteCharges"), data.Bool("ignoreJumpthrus")) { }
+            data.Attr("spriteXmlName"), data.Attr("spriteDirectory"), data.HexColor("fillColor", Calc.HexToColor("8A9C60")), data.Attr("loopSfx", "event:/junglehelper/sfx/Slide_block"),
+            data.Bool("infiniteCharges"), data.Bool("ignoreJumpthrus")) { }
 
         public override void Added(Scene scene) {
             base.Added(scene);
@@ -242,7 +245,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             }
             Add(currentMoveLoopSfx = new SoundSource());
             currentMoveLoopSfx.Position = new Vector2(Width, Height) / 2f;
-            currentMoveLoopSfx.Play("event:/junglehelper/sfx/Slide_block", null, 0f);
+            currentMoveLoopSfx.Play(loopSfx, null, 0f);
 
             crushDir = direction;
 
@@ -547,6 +550,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private List<Image> activeLeftImages;
         private List<Image> activeBottomImages;
 
+        private string loopSfx;
         private SoundSource currentMoveLoopSfx;
 
         private bool ignoreJumpthrus = false;

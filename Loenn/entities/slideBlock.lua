@@ -1,6 +1,7 @@
 local drawableNinePatch = require("structs.drawable_nine_patch")
 local drawableRectangle = require("structs.drawable_rectangle")
 local drawableSprite = require("structs.drawable_sprite")
+local utils = require("utils")
 
 local kevin = {}
 
@@ -18,6 +19,13 @@ kevin.fieldInformation = {
     axes = {
         options = axesOptions,
         editable = false
+    },
+    fillColor = {
+        fieldType = "color",
+        default = "8A9C60"
+    },
+    loopSfx = {
+        default = "event:/junglehelper/sfx/Slide_block"
     }
 }
 
@@ -31,6 +39,8 @@ kevin.placements = {
             axes = "both",
             spriteXmlName = "",
             spriteDirectory = "",
+            fillColor = "8A9C60",
+            loopSfx = "event:/junglehelper/sfx/Slide_block",
             infiniteCharges = false,
             ignoreJumpthrus = false
         }
@@ -44,6 +54,8 @@ kevin.placements = {
             axes = "both",
             spriteXmlName = "",
             spriteDirectory = "",
+            fillColor = "8A9C60",
+            loopSfx = "event:/junglehelper/sfx/Slide_block",
             infiniteCharges = false,
             ignoreJumpthrus = false
         }
@@ -58,7 +70,7 @@ local ninePatchOptions = {
 
 
 function kevin.sprite(room, entity)
-    local kevinColor = {138 / 255, 156 / 255, 96 / 255}
+    local kevinColor = utils.getColor(entity.fillColor or {138 / 255, 156 / 255, 96 / 255})
     local baseDir = entity.restrained and "JungleHelper/SlideBlockGreen" or "JungleHelper/SlideBlockRed"
     local smallFaceTexture = baseDir .. "/small_active_up00"
     local giantFaceTexture = baseDir .. "/big_active_up00"
