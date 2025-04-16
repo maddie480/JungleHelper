@@ -21,20 +21,14 @@ jobs:
         find "(" -name "*.cs" -or -name "*.lua" -or -name "*.jl" -or -name "*.lang" -or -name "*.xml" -or -name "*.yaml" -or -name "*.yml" -or -name "*.txt" -or -name "*.md" ")" -exec grep -Pl " $" {} \; > matches.txt
         grep "" matches.txt && exit 1 || echo "No trailing space found!"
 
-    - uses: nuget/setup-nuget@v2
-      with:
-        nuget-version: '5.x'
-
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 2.2.108
 
     - name: Restore with NuGet (Jungle Helper)
-      run: nuget restore Code/*.sln
+      run: dotnet restore Code/JungleHelper.sln
 
-    - name: Build using Mono (Jungle Helper)
-      run: msbuild Code/*.sln "/p:Configuration=Release"
+    - name: Build using .NET Core (Jungle Helper)
+      run: dotnet build Code/JungleHelper.sln --configuration Release --no-restore
 
     - name: Upload artifact (Jungle Helper)
       uses: actions/upload-artifact@v4
@@ -43,10 +37,10 @@ jobs:
         path: Code/bin/Release/net452/JungleHelper.dll
 
     - name: Restore with NuGet (Into The Jungle Code Mod)
-      run: nuget restore Z_IntoTheJungleCodeMod/*.sln
+      run: dotnet restore Z_IntoTheJungleCodeMod/IntoTheJungleCodeMod.sln
 
-    - name: Build using Mono (Into The Jungle Code Mod)
-      run: msbuild Z_IntoTheJungleCodeMod/*.sln "/p:Configuration=Release"
+    - name: Build using .NET Core (Into The Jungle Code Mod)
+      run: dotnet build Z_IntoTheJungleCodeMod/IntoTheJungleCodeMod.sln --configuration Release --no-restore
 
     - name: Upload artifact (Into The Jungle Code Mod)
       uses: actions/upload-artifact@v4
