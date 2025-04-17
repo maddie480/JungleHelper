@@ -78,8 +78,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
             };
         }
 
-        private List<Image> mossParts = new List<Image>();
-        private List<Hitbox> hitboxes = new List<Hitbox>();
+        private readonly Image[] mossParts;
+        private readonly Collider[] hitboxes;
+        private readonly bool[] hitboxToggles;
 
         private Vector2 topCenter;
         private Vector2 shake;
@@ -108,6 +109,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
             });
             Add(new ClimbBlocker(edge: false));
 
+            List<Image> mossParts = new List<Image>();
+            List<Collider> hitboxes = new List<Collider>();
+            List<bool> hitboxToggles = new List<bool>();
+
             for (int i = 0; i < data.Height; i += 8) {
                 string id = (i == 0) ? "moss_top" : (i + 16 <= Height ? "moss_mid" + Calc.Random.Next(1, 3) : "moss_bottom");
                 Image sprite = new Image(GFX.Game[data.Attr("spriteDirectory", "JungleHelper/Moss") + "/" + id]);
@@ -124,9 +129,14 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     hitbox = new Hitbox(2f, 8f, -2f, i);
                 }
                 hitboxes.Add(hitbox);
+                hitboxToggles.Add(true);
             }
 
-            Collider = new ColliderList(hitboxes.ToArray());
+            this.mossParts = mossParts.ToArray();
+            this.hitboxes = hitboxes.ToArray();
+            this.hitboxToggles = hitboxToggles.ToArray();
+
+            Collider = new ColliderList(this.hitboxes);
             topCenter = TopCenter;
         }
 
@@ -186,12 +196,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private void updateLanternFade() {
-            List<Hitbox> enabledHitboxes = new List<Hitbox>();
+            bool shouldUpdate = false;
 
-            for (int i = 0; i < mossParts.Count; i++) {
+            for (int i = 0; i < mossParts.Length; i++) {
                 Image mossPart = mossParts[i];
-                Hitbox hitbox = hitboxes[i];
-
+                bool shouldBeCollidable = false;
                 float distance = Lantern.GetClosestLanternDistanceTo(topCenter + mossPart.Position, Scene, out _);
 
                 if (distance < LANTERN_ACTIVATION_RADIUS) {
@@ -204,13 +213,13 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
                     // if moss is more than 50% visible, it should be collidable.
                     if (Math.Floor(distance - LANTERN_ACTIVATION_RADIUS) >= 5) {
-                        enabledHitboxes.Add(hitbox);
+                        shouldBeCollidable = true;
                     }
                 } else {
                     // moss is green (player is too far or not here), make it collidable.
                     mossPart.Visible = true;
                     mossPart.Color = distanceColors[distanceColors.Length - 1];
-                    enabledHitboxes.Add(hitbox);
+                    shouldBeCollidable = true;
                 }
 
                 if (!Collidable) {
@@ -219,6 +228,20 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     mossPart.Color.G /= 4;
                     mossPart.Color.B /= 4;
                 }
+
+                if (shouldBeCollidable != hitboxToggles[i]) {
+                    // that hitbox needs to be toggled!
+                    hitboxToggles[i] = shouldBeCollidable;
+                    shouldUpdate = true;
+                }
+            }
+
+            // skip the collider rebuilding if nothing changed, this is just going to waste the GC's time
+            if (!shouldUpdate) return;
+
+            List<Collider> enabledHitboxes = new List<Collider>();
+            for (int i = 0; i < mossParts.Length; i++) {
+                if (hitboxToggles[i]) enabledHitboxes.Add(hitboxes[i]);
             }
 
             if (enabledHitboxes.Count == 0) {

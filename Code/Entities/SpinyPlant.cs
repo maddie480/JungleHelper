@@ -14,8 +14,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private string spriteName;
 
         private Vector2 topCenter;
-        private List<Sprite> plantParts;
-        private List<Hitbox> hitboxes;
+        private Sprite[] plantParts;
+        private Collider[] hitboxes;
+        private bool[] hitboxToggles;
 
         public SpinyPlant(EntityData data, Vector2 offset) : base(data.Position + offset) {
             lines = data.Height / 8;
@@ -46,8 +47,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         public override void Awake(Scene scene) {
-            plantParts = new List<Sprite>();
-            hitboxes = new List<Hitbox>();
+            List<Sprite> plantParts = new List<Sprite>();
+            List<Collider> hitboxes = new List<Collider>();
+            List<bool> hitboxToggles = new List<bool>();
 
             if (lines == 2) {
                 Collider = new Hitbox(8f, 1f, 8, -1);
@@ -74,6 +76,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 image.X = section == "Solo" ? 4 : 0;
                 Add(image);
                 hitboxes.Add(generateHitbox(section, image));
+                hitboxToggles.Add(true);
                 if (image is Sprite sprite) {
                     plantParts.Add(sprite);
                 }
@@ -104,13 +107,18 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     image.Y = i * 8;
                     Add(image);
                     hitboxes.Add(generateHitbox(section, image));
+                    hitboxToggles.Add(true);
                     if (image is Sprite sprite) {
                         plantParts.Add(sprite);
                     }
                 }
             }
 
-            Collider = new ColliderList(hitboxes.ToArray());
+            this.plantParts = plantParts.ToArray();
+            this.hitboxes = hitboxes.ToArray();
+            this.hitboxToggles = hitboxToggles.ToArray();
+
+            Collider = new ColliderList(this.hitboxes);
             topCenter = TopCenter;
 
             updateLanternRetract(animate: false);
@@ -147,17 +155,16 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private void updateLanternRetract(bool animate) {
-            if (plantParts.Count == 0) {
+            if (plantParts.Length == 0) {
                 // this plant doesn't support retracting/expanding, so skip over everything.
                 return;
             }
 
-            List<Hitbox> activeHitboxes = new List<Hitbox>();
+            bool shouldUpdate = false;
 
-            for (int i = 0; i < plantParts.Count; i++) {
+            for (int i = 0; i < plantParts.Length; i++) {
                 Sprite plantPart = plantParts[i];
-                Hitbox hitbox = hitboxes[i];
-
+                bool shouldBeCollidable = false;
                 float distance = Lantern.GetClosestLanternDistanceTo(topCenter + plantPart.Position, Scene, out Vector2 objectPosition);
 
                 if (distance < LANTERN_ACTIVATION_RADIUS) {
@@ -186,15 +193,28 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
                     if (plantPart.CurrentAnimationID == "extended") {
                         // plant is extended, so it hurts the player.
-                        activeHitboxes.Add(hitbox);
+                        shouldBeCollidable = true;
                     }
+                }
+
+                if (shouldBeCollidable != hitboxToggles[i]) {
+                    hitboxToggles[i] = shouldBeCollidable;
+                    shouldUpdate = true;
                 }
             }
 
-            if (activeHitboxes.Count == 0) {
+            // skip the collider rebuilding if nothing changed, this is just going to waste the GC's time
+            if (!shouldUpdate) return;
+
+            List<Collider> enabledHitboxes = new List<Collider>();
+            for (int i = 0; i < plantParts.Length; i++) {
+                if (hitboxToggles[i]) enabledHitboxes.Add(hitboxes[i]);
+            }
+
+            if (enabledHitboxes.Count == 0) {
                 Collider = null;
             } else {
-                Collider = new ColliderList(activeHitboxes.ToArray());
+                Collider = new ColliderList(enabledHitboxes.ToArray());
             }
         }
     }
