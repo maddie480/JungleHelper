@@ -308,14 +308,15 @@ namespace Celeste.Mod.JungleHelper.Entities {
             }
         }
 
-        private static void onPlayerConstructor(On.Celeste.Player.orig_ctor orig, Vector2 pos, PlayerSpriteMode mode) {
-            orig(pos, mode);
-            
+        private static void onPlayerConstructor(On.Celeste.Player.orig_ctor orig, Player self, Vector2 pos, PlayerSpriteMode mode) {
+            orig(self, pos, mode);
+
             // don't play the idleABC if hasLantern.
-            self.OnLastFrame += anim => {
-                if (HasLantern && sprite.LastAnimationID.StartsWith("idle")) {
-                    sprite.Play("idle");
+            self.Sprite.OnLastFrame += anim => {
+                if (HasLantern(self.Sprite.Mode) && self.Sprite.LastAnimationID.StartsWith("idle") && self.Sprite.LastAnimationID != "idle_carry") {
+                    self.Sprite.Play("idle");
                 }
             };
+        }
     }
 }
