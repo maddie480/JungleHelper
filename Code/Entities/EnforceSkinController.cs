@@ -11,7 +11,6 @@ using Mono.Cecil;
 using System.Collections.Generic;
 using System.Xml;
 using Mono.Cecil.Cil;
-using YamlDotNet.Core;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     public static class EnforceSkinController {
@@ -250,7 +249,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             orig(self, mode);
 
             bool lookUpAnimTweak = false;
-            
+
             if (customSprite) {
                 switch (requestedMode) {
                     case SpriteModeMadelineLantern:
@@ -311,7 +310,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private static void onPlayerConstructor(On.Celeste.Player.orig_ctor orig, Player self, Vector2 pos, PlayerSpriteMode mode) {
             orig(self, pos, mode);
 
-            // don't play the idleABC if hasLantern.
+            // cancel out the idle animations that are forced by vanilla's Sprite.OnLastFrame.
             self.Sprite.OnLastFrame += anim => {
                 if (HasLantern(self.Sprite.Mode) && self.Sprite.LastAnimationID.StartsWith("idle") && self.Sprite.LastAnimationID != "idle_carry") {
                     self.Sprite.Play("idle");
