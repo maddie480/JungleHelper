@@ -29,6 +29,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         public static void Load() {
             On.Celeste.PlayerSprite.ctor += onPlayerSpriteConstructor;
+            On.Celeste.Player.ctor += onPlayerConstructor;
 
             On.Celeste.LevelEnter.Go += onLevelEnter;
             On.Celeste.LevelLoader.ctor += onLevelLoad;
@@ -66,6 +67,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         public static void Unload() {
             On.Celeste.PlayerSprite.ctor -= onPlayerSpriteConstructor;
+            On.Celeste.Player.ctor -= onPlayerConstructor;
 
             On.Celeste.LevelEnter.Go -= onLevelEnter;
             On.Celeste.LevelLoader.ctor -= onLevelLoad;
@@ -248,7 +250,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             orig(self, mode);
 
             bool lookUpAnimTweak = false;
-
+            
             if (customSprite) {
                 switch (requestedMode) {
                     case SpriteModeMadelineLantern:
@@ -257,6 +259,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                         break;
                     case SpriteModeBadelineLantern:
                         GFX.SpriteBank.CreateOn(self, "junglehelper_badeline_lantern");
+                        lookUpAnimTweak = true;
                         break;
                 }
 
@@ -303,6 +306,17 @@ namespace Celeste.Mod.JungleHelper.Entities {
             } else {
                 player.ResetSprite(spriteMode);
             }
+        }
+
+        private static void onPlayerConstructor(On.Celeste.Player.orig_ctor orig, Player self, Vector2 pos, PlayerSpriteMode mode) {
+            orig(self, pos, mode);
+
+            // don't play the idleABC if hasLantern.
+            self.Sprite.OnLastFrame += anim => {
+                if (HasLantern(self.Sprite.Mode) && self.Sprite.LastAnimationID.StartsWith("idle") && self.Sprite.LastAnimationID != "idle_carry") {
+                    self.Sprite.Play("idle");
+                }
+            };
         }
     }
 }
