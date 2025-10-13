@@ -188,6 +188,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
             if (collidedWithIt == true && !CollideCheck<Player>()) {
                 Player player = SceneAs<Level>().Tracker.GetEntity<Player>();
 
+                // stop right there if the player is dead
+                if (player == null) return;
+
                 // remove the player's dash state
                 if (dashedIntoIt == true) {
                     player.StateMachine.State = 0;
