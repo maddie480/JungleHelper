@@ -31,7 +31,7 @@ jobs:
       run: dotnet build Code/JungleHelper.sln --configuration Release --no-restore
 
     - name: Upload artifact (Jungle Helper)
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: JungleHelper
         path: Code/bin/Release/net452/JungleHelper.dll
@@ -43,7 +43,7 @@ jobs:
       run: dotnet build Z_IntoTheJungleCodeMod/IntoTheJungleCodeMod.sln --configuration Release --no-restore
 
     - name: Upload artifact (Into The Jungle Code Mod)
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: IntoTheJungleCodeMod
         path: Z_IntoTheJungleCodeMod/bin/Release/net452/IntoTheJungleCodeMod.dll
