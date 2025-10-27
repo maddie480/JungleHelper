@@ -115,8 +115,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     }
                 }
 
-                // check if there is a controller, or a lantern.
-                if (controllerData != null || session.MapData.Levels.Exists(levelData => levelData.Entities.Exists(entityData => entityData.Name == "JungleHelper/Lantern"))) {
+                // check if a controller was found in the level.
+                if (controllerData != null) {
                     if (isSpriteBankOverwritingSkinActive) {
                         showSkinWarningPostcard = true;
                         return;
