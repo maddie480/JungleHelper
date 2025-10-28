@@ -76,15 +76,29 @@ jobs:
             ZIPNAME=$ZIPNAME-${GITHUB_SHA:0:8}.zip
             PING=" <@&716285608322138132>"
             zip -qq -r $ZIPNAME everest.yaml Code/bin/Release/net452/JungleHelper.* Ahorn Graphics Audio Dialog Loenn MaxHelpingHandWipes DecalRegistry.xml
-            url=$(curl -H 'Content-Type: multipart/form-data' -X POST -F "file=@$ZIPNAME" -F "content=$PING **New Jungle Helper update!**" "$DISCORD_WEBHOOK" | grep -Po 'cdn.discordapp.com\/.*?\.zip' | tr -d '\n')
+            url=$(curl -H 'Content-Type: multipart/form-data' -X POST -F "file=@$ZIPNAME" -F "content=$PING **New Jungle Helper update!**" "$DISCORD_WEBHOOK" | jq -r '.attachments[0].url')
             curl -H 'Content-Type: multipart/form-data' -X POST -F "file=@Z_IntoTheJungleCodeMod/bin/Release/net452/IntoTheJungleCodeMod.dll" "$DISCORD_WEBHOOK"
             curl -H 'Content-Type: application/json' -X POST -d "$(jq -n \
                 --arg zipname "$ZIPNAME" \
                 --arg url "$url" \
                 --arg msg "$msg" \
                 --arg change_embed "[Click here to see changes in this commit](https://github.com/maddie480/JungleHelper/commit/$GITHUB_SHA)" \
-                '{embeds: [{title: "Install \($zipname)", url: "https://0x0ade.ga/twoclick/?\($url)", description: $msg, fields: [{name: "Changes", value: $change_embed}]}]}' \
+                '{embeds: [{title: "Install \($zipname)", url: "https://0x0a.de/twoclick/?\($url)", description: $msg, fields: [{name: "Changes", value: $change_embed}]}]}' \
             )" "$DISCORD_WEBHOOK"
+            echo "$url" > zip.url
         else
             echo "current commit $GITHUB_SHA is not the latest commit on branch, skipping"
+        fi
+
+    - name: TAS Check
+      if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/gh-actions'
+      env:
+        GITHUB_SHA: ${{ github.sha }}
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      run: |
+        if [ -e "zip.url" ]; then
+          COMMIT_REF="[\`JungleHelper@${GITHUB_SHA:0:8}\`](<https://github.com/maddie480/JungleHelper/commit/${GITHUB_SHA}>)"
+          docker run --rm max480/everest:tas-check JungleHelper "`cat zip.url`" \
+              && curl -H 'Content-Type: application/json' -d "{\"content\": \":white_check_mark: TAS Check for ${COMMIT_REF} successful.\"}" "$DISCORD_WEBHOOK" \
+              || (curl -H 'Content-Type: application/json' -d "{\"content\": \":x: TAS Check for ${COMMIT_REF} failed!\"}" "$DISCORD_WEBHOOK" && exit 1)
         fi
