@@ -1,6 +1,6 @@
 - Name: JungleHelper
   Version: 1.4.0
-  DLL: Code/bin/ExtendedVariantMode.dll
+  DLL: Code/bin/JungleHelper.dll
   Dependencies:
     - Name: Everest
       Version: 1.5986.0
