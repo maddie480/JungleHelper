@@ -24,29 +24,17 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v5
 
-    - name: Restore with NuGet (Jungle Helper)
+    - name: Restore with NuGet
       run: dotnet restore Code/JungleHelper.sln
 
-    - name: Build using .NET Core (Jungle Helper)
+    - name: Build using .NET Core
       run: dotnet build Code/JungleHelper.sln --configuration Release --no-restore
 
-    - name: Upload artifact (Jungle Helper)
+    - name: Upload artifact
       uses: actions/upload-artifact@v5
       with:
         name: JungleHelper
-        path: Code/bin/Release/net452/JungleHelper.dll
-
-    - name: Restore with NuGet (Into The Jungle Code Mod)
-      run: dotnet restore Z_IntoTheJungleCodeMod/IntoTheJungleCodeMod.sln
-
-    - name: Build using .NET Core (Into The Jungle Code Mod)
-      run: dotnet build Z_IntoTheJungleCodeMod/IntoTheJungleCodeMod.sln --configuration Release --no-restore
-
-    - name: Upload artifact (Into The Jungle Code Mod)
-      uses: actions/upload-artifact@v5
-      with:
-        name: IntoTheJungleCodeMod
-        path: Z_IntoTheJungleCodeMod/bin/Release/net452/IntoTheJungleCodeMod.dll
+        path: Code/bin/JungleHelper.dll
 
     - name: git fetch
       uses: actions/checkout@v6
@@ -77,7 +65,6 @@ jobs:
             PING=" <@&716285608322138132>"
             zip -qq -r $ZIPNAME everest.yaml Code/bin/JungleHelper.* Ahorn Graphics Audio Dialog Loenn MaxHelpingHandWipes DecalRegistry.xml
             url=$(curl -H 'Content-Type: multipart/form-data' -X POST -F "file=@$ZIPNAME" -F "content=$PING **New Jungle Helper update!**" "$DISCORD_WEBHOOK" | jq -r '.attachments[0].url')
-            curl -H 'Content-Type: multipart/form-data' -X POST -F "file=@Z_IntoTheJungleCodeMod/bin/Release/net452/IntoTheJungleCodeMod.dll" "$DISCORD_WEBHOOK"
             curl -H 'Content-Type: application/json' -X POST -d "$(jq -n \
                 --arg zipname "$ZIPNAME" \
                 --arg url "$url" \
