@@ -29,13 +29,15 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 Logger.Log("JungleHelper/RollingRock", $"Modifying freeze at {cursor.Index} in IL for DashBlock.Remove");
 
                 cursor.Emit(OpCodes.Ldarg_0);
-                cursor.EmitDelegate<Func<float, DashBlock, float>>((orig, self) => {
-                    if (self.Get<NoFreezeComponent>() != null) {
-                        return 0f; // no freeze!
-                    }
-                    return orig;
-                });
+                cursor.EmitDelegate<Func<float, DashBlock, float>>(disableFreeze);
             }
+        }
+
+        private static float disableFreeze(float orig, DashBlock self) {
+            if (self.Get<NoFreezeComponent>() != null) {
+                return 0f; // no freeze!
+            }
+            return orig;
         }
 
         // configuration constants
@@ -109,7 +111,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             }
         }
 
-        protected override void OnSquish(CollisionData data) {
+        public override void OnSquish(CollisionData data) {
             // just being safe: we don't want the boulder to disappear when it gets squished, because this is just silly
         }
 

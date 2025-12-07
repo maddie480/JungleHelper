@@ -50,7 +50,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             // don't print out a warning about enforce skin controller "failing to load" since it acts with a hook looking for it.
             ((HashSet<string>) typeof(Level).GetField("_LoadStrings", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null)).Add("JungleHelper/EnforceSkinController");
 
-            using (new DetourContext { Before = { "*" } }) {
+            using (new DetourConfigContext(new DetourConfig("JungleHelper_BeforeAll").WithPriority(int.MinValue)).Use()) {
                 On.Monocle.SpriteBank.CreateOn += onSpriteBankCreateOn;
             }
         }
@@ -167,8 +167,12 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
                 Logger.Log("JungleHelper/EnforceSkinController", $"Injecting check for overwritten sprites at {cursor.Index} in IL for SpriteBank.GetSpriteBankExcludingVanillaCopyPastes");
                 cursor.Emit(OpCodes.Dup);
-                cursor.EmitDelegate<Action<string>>(s => overwrittenSpriteBanks.Add(s));
+                cursor.EmitDelegate<Action<string>>(addOverwrittenSpriteBank);
             }
+        }
+
+        private static void addOverwrittenSpriteBank(string s) {
+            overwrittenSpriteBanks.Add(s);
         }
 
         private static Scene commitSpriteBankOverwrites(On.Celeste.GameLoader.orig__GetNextScene orig, Overworld.StartMode startMode, HiresSnow snow) {
@@ -223,14 +227,16 @@ namespace Celeste.Mod.JungleHelper.Entities {
             while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchCallvirt<PlayerSprite>("get_Mode"))) {
                 Logger.Log("JungleHelper/EnforceSkinController", $"Fixing Madeline hair color with custom sprite modes at {cursor.Index} in IL for Player.{il.Method.Name}");
 
-                cursor.EmitDelegate<Func<PlayerSpriteMode, PlayerSpriteMode>>(orig => {
-                    if (orig == SpriteModeBadelineLantern) {
-                        // this is a Badeline sprite mode; trick the game into thinking we're using the vanilla MadelineAsBadeline sprite mode.
-                        return PlayerSpriteMode.MadelineAsBadeline;
-                    }
-                    return orig;
-                });
+                cursor.EmitDelegate<Func<PlayerSpriteMode, PlayerSpriteMode>>(masqueradeAsBadeline);
             }
+        }
+
+        private static PlayerSpriteMode masqueradeAsBadeline(PlayerSpriteMode orig) {
+            if (orig == SpriteModeBadelineLantern) {
+                // this is a Badeline sprite mode; trick the game into thinking we're using the vanilla MadelineAsBadeline sprite mode.
+                return PlayerSpriteMode.MadelineAsBadeline;
+            }
+            return orig;
         }
 
         public static bool HasLantern(PlayerSpriteMode mode) {

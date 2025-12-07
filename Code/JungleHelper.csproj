@@ -1,36 +1,43 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
-    <AssemblyName>JungleHelper</AssemblyName>
-    <RootNamespace>Celeste.Mod.JungleHelper</RootNamespace>
-    <LangVersion>preview</LangVersion>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="MonoMod.RuntimeDetour" Version="22.1.4.3" PrivateAssets="all" ExcludeAssets="runtime" />
-    <PackageReference Include="NLua" Version="1.4.25" PrivateAssets="all" ExcludeAssets="runtime" />
-    <PackageReference Include="YamlDotNet" Version="8.1.2" PrivateAssets="all" ExcludeAssets="runtime" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Celeste">
-      <HintPath>..\lib-stripped\Celeste.exe</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="FNA">
-      <HintPath>..\lib-stripped\FNA.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="MaxHelpingHand">
-      <HintPath>..\lib-stripped\MaxHelpingHand.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="MMHOOK_Celeste">
-      <HintPath>..\lib-stripped\MMHOOK_Celeste.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <AssemblyName>JungleHelper</AssemblyName>
+        <RootNamespace>Celeste.Mod.JungleHelper</RootNamespace>
+        <LangVersion>preview</LangVersion>
+        <CelestePrefix Condition="'$(CelestePrefix)' == '' And Exists('..\..\..\Celeste.dll')">..\..</CelestePrefix>
+        <CelestePrefix Condition="'$(CelestePrefix)' == ''">..\lib-stripped</CelestePrefix>
+    </PropertyGroup>
+
+    <!--Disable "Copy Local" for all references-->
+    <ItemDefinitionGroup>
+        <PackageReference PrivateAssets="all" ExcludeAssets="runtime" />
+        <Reference Private="false" />
+    </ItemDefinitionGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MonoMod.RuntimeDetour" Version="25.3.1.0" PrivateAssets="all" ExcludeAssets="runtime" />
+        <PackageReference Include="MonoMod.Patcher" Version="25.0.0-prerelease.2" />
+        <PackageReference Include="CelesteAnalyzer" Version="*" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="CelesteMod.Publicizer" Version="*" CelesteAssembly="$(CelestePrefix)\Celeste.dll" />
+        <Reference Include="$(CelestePrefix)\MMHOOK_Celeste.dll" Private="false" />
+        <Reference Include="$(CelestePrefix)\FNA.dll" Private="false" />
+
+        <Reference Include="..\lib-stripped\MaxHelpingHand.dll" Private="false" />
+
+        <PackageReference Include="YamlDotNet" Version="16.0.0.0" />
+        <PackageReference Include="Mono.Cecil" Version="0.11.6.0" />
+    </ItemGroup>
+
+    <Target Name="CopyFiles" AfterTargets="Build" Inputs="$(OutputPath)\$(AssemblyName).dll;$(OutputPath)\$(AssemblyName).pdb" Outputs="bin\$(AssemblyName).dll;bin\$(AssemblyName).pdb">
+        <Copy SourceFiles="$(OutputPath)\$(AssemblyName).dll" DestinationFolder="bin" />
+        <Copy SourceFiles="$(OutputPath)\$(AssemblyName).pdb" DestinationFolder="bin" />
+    </Target>
+
+    <PropertyGroup>
+        <PathMap>$(MSBuildProjectDirectory)=JungleHelper/</PathMap>
+    </PropertyGroup>
 </Project>

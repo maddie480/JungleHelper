@@ -1,8 +1,8 @@
 - Name: JungleHelper
-  Version: 1.3.9
-  DLL: Code/bin/Release/net452/JungleHelper.dll
+  Version: 1.4.0
+  DLL: Code/bin/ExtendedVariantMode.dll
   Dependencies:
     - Name: Everest
-      Version: 1.3282.0
+      Version: 1.5986.0
     - Name: Celeste
       Version: 1.4.0.0

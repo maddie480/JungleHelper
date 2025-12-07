@@ -53,8 +53,12 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 Logger.Log("JungleHelper/GrablessGoldenBerry", $"Injecting code after UpdateLevelStartDashes call at {cursor.Index} in IL for {il.Method.FullName}");
 
                 // when UpdateLevelStartDashes is called, "commit" the grabless berry state
-                cursor.EmitDelegate<Action>(() => JungleHelperModule.Session.GrablessBerryFlewAway = JungleHelperModule.Session.GrablessBerryWillFlyAway);
+                cursor.EmitDelegate<Action>(registerGrabHappened);
             }
+        }
+
+        private static void registerGrabHappened() {
+            JungleHelperModule.Session.GrablessBerryFlewAway = JungleHelperModule.Session.GrablessBerryWillFlyAway;
         }
 
         private static void onLevelReload(On.Celeste.Level.orig_Reload orig, Level self) {

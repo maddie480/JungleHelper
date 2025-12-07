@@ -15,7 +15,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private int originalY;
         private float delay = 2;
-        private float shakeTimer;
         private bool silent = false;
 
         private bool manuallyTriggered = false;

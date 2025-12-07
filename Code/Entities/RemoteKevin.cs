@@ -33,15 +33,17 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 Logger.Log("JungleHelper/RemoteKevin", $"Patching cassette block ascending bug at {cursor.Index} in IL for CassetteBlock.WillToggle");
 
                 cursor.Emit(OpCodes.Ldarg_0);
-                cursor.EmitDelegate<Func<bool, CassetteBlock, bool>>((orig, self) => {
-                    if (self.Scene != null && self.Scene.Tracker.CountEntities<RemoteKevin>() > 0) {
-                        // Collidable isn't reliable to check the state of the block because it could be activated but blocked by the player / a slide block.
-                        // so, use Activated instead.
-                        return self.Activated;
-                    }
-                    return orig;
-                });
+                cursor.EmitDelegate<Func<bool, CassetteBlock, bool>>(fixCassetteAscendingBug);
             }
+        }
+
+        private static bool fixCassetteAscendingBug(bool orig, CassetteBlock self) {
+            if (self.Scene != null && self.Scene.Tracker.CountEntities<RemoteKevin>() > 0) {
+                // Collidable isn't reliable to check the state of the block because it could be activated but blocked by the player / a slide block.
+                // so, use Activated instead.
+                return self.Activated;
+            }
+            return orig;
         }
 
         public RemoteKevin(Vector2 position, float width, float height, bool restrained, CrushBlock.Axes axes, string reskinName, string spriteDirectory, Color fillColor, string loopSfx, bool infiniteCharges, bool ignoreJumpthrus) : base(position, width, height, false) {

@@ -11,8 +11,6 @@ namespace Celeste.Mod.JungleHelper {
     public class JungleHelperModule : EverestModule {
         public static JungleHelperModule Instance;
 
-        private static ILHook cSidesUnlockCrashFix = null;
-
         public override Type SessionType => typeof(JungleHelperSession);
         public static JungleHelperSession Session => (JungleHelperSession) Instance._Session;
 
@@ -37,11 +35,6 @@ namespace Celeste.Mod.JungleHelper {
             RainbowDecalComponent.Load();
             RemoteKevin.Load();
             Hawk.Load();
-
-            // fix this bug ourselves if the user is not on the Everest dev branch, until the fix reaches stable.
-            if (!Everest.Loader.DependencyLoaded(new EverestModuleMetadata() { Name = "Everest", Version = new Version(1, 3294, 0) })) {
-                cSidesUnlockCrashFix = new ILHook(typeof(LevelSetStats).GetMethod("get_MaxAreaMode"), fixCSidesUnlockCrash);
-            }
         }
 
         public override void Unload() {
@@ -60,25 +53,6 @@ namespace Celeste.Mod.JungleHelper {
             RainbowDecalComponent.Unload();
             RemoteKevin.Unload();
             Hawk.Unload();
-
-            cSidesUnlockCrashFix?.Dispose();
-            cSidesUnlockCrashFix = null;
-        }
-
-        private void fixCSidesUnlockCrash(ILContext il) {
-            ILCursor cursor = new ILCursor(il);
-
-            if (cursor.TryGotoNext(MoveType.After, instr => instr.OpCode == OpCodes.Ldloc_S && ((VariableReference) instr.Operand).Index == 5)) {
-                Logger.Log("JungleHelper/JungleHelperModule", $"Fixing crash upon unlocking C-sides at {cursor.Index} in IL for LevelSetStats.get_MaxAreaMode");
-
-                cursor.RemoveRange(3);
-                cursor.EmitDelegate<Func<ModeProperties, int>>(modeProperties => {
-                    if (modeProperties == null) { // this null check is the fix.
-                        return 0;
-                    }
-                    return (int) modeProperties.MapData.Area.Mode;
-                });
-            }
         }
 
         public override void LoadContent(bool firstLoad) {

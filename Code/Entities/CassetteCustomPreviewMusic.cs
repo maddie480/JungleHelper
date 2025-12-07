@@ -24,17 +24,17 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private static void modCollectRoutine(ILContext il) {
             ILCursor cursor = new ILCursor(il);
 
-            modCassetteParam(cursor, cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdstr("event:/game/general/cassette_preview")),
-                custom => custom.musicEvent, "music event");
+            modCassetteParam<string>(cursor, cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdstr("event:/game/general/cassette_preview")),
+                replaceWithMusicEvent, "music event");
 
-            modCassetteParam(cursor, cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdstr("remix")),
-                custom => custom.musicParamName, "music param name");
+            modCassetteParam<string>(cursor, cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdstr("remix")),
+                replaceWithMusicParamName, "music param name");
 
-            modCassetteParam(cursor, cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdfld<AreaKey>("ID"), instr => instr.MatchConvR4()),
-                custom => custom.musicParamValue, "music param value");
+            modCassetteParam<float>(cursor, cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdfld<AreaKey>("ID"), instr => instr.MatchConvR4()),
+                replaceWithMusicParamValue, "music param value");
         }
 
-        private static void modCassetteParam<T>(ILCursor cursor, bool tryGotoNextResult, Func<CassetteCustomPreviewMusic, T> paramGetter, string log) {
+        private static void modCassetteParam<T>(ILCursor cursor, bool tryGotoNextResult, Func<T, Cassette, T> hook, string log) {
             if (!tryGotoNextResult) {
                 // no match found: don't do anything
                 return;
@@ -47,12 +47,28 @@ namespace Celeste.Mod.JungleHelper.Entities {
             Logger.Log("JungleHelper/CassetteCustomPreviewMusic", $"Changing cassette {log} at {cursor.Index} in Cassette.CollectRoutine");
             cursor.Emit(OpCodes.Ldarg_0);
             cursor.Emit(OpCodes.Ldfld, thisInCoroutine);
-            cursor.EmitDelegate<Func<T, Cassette, T>>((orig, self) => {
-                if (self is CassetteCustomPreviewMusic custom) {
-                    return paramGetter(custom);
-                }
-                return orig;
-            });
+            cursor.EmitDelegate<Func<T, Cassette, T>>(hook);
+        }
+
+        private static string replaceWithMusicEvent(string orig, Cassette self) {
+            if (self is CassetteCustomPreviewMusic custom) {
+                return custom.musicEvent;
+            }
+            return orig;
+        }
+
+        private static string replaceWithMusicParamName(string orig, Cassette self) {
+            if (self is CassetteCustomPreviewMusic custom) {
+                return custom.musicParamName;
+            }
+            return orig;
+        }
+
+        private static float replaceWithMusicParamValue(float orig, Cassette self) {
+            if (self is CassetteCustomPreviewMusic custom) {
+                return custom.musicParamValue;
+            }
+            return orig;
         }
 
         private readonly string musicEvent;

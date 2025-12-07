@@ -1,4 +1,5 @@
 using Celeste.Mod.Entities;
+using Celeste.Mod.Helpers;
 using Microsoft.Xna.Framework;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
@@ -122,24 +123,26 @@ namespace Celeste.Mod.JungleHelper.Entities {
             ILCursor cursor = new ILCursor(il);
 
             if (cursor.TryGotoNext(MoveType.After, instr => instr.MatchCall<Entity>("CollideFirst"))
-                 && cursor.TryGotoNext(instr => instr.OpCode == OpCodes.Brfalse_S || instr.OpCode == OpCodes.Brtrue_S)) {
+                && cursor.TryGotoNext(instr => instr.OpCode == OpCodes.Brfalse_S || instr.OpCode == OpCodes.Brtrue_S)) {
 
                 Logger.Log("JungleHelper/ClimbableOneWayPlatform", $"Injecting sideways jumpthru check at {cursor.Index} in IL for {il.Method.Name}");
                 cursor.Emit(OpCodes.Ldarg_0);
                 cursor.Emit(OpCodes.Ldarg_1);
-                cursor.EmitDelegate<Func<Solid, Actor, int, Solid>>((orig, self, moveH) => {
-                    if (orig != null)
-                        return orig;
-
-                    int moveDirection = Math.Sign(moveH);
-                    bool movingLeftToRight = moveH > 0;
-                    if (checkCollisionWithSidewaysMovingPlatformsWhileMoving(self, moveDirection, movingLeftToRight)) {
-                        return new Solid(Vector2.Zero, 0, 0, false); // what matters is that it is non null.
-                    }
-
-                    return null;
-                });
+                cursor.EmitDelegate<Func<Solid, Actor, int, Solid>>(hookHorizontalMoveMethods);
             }
+        }
+
+        private static Solid hookHorizontalMoveMethods(Solid orig, Actor self, int moveH) {
+            if (orig != null)
+                return orig;
+
+            int moveDirection = Math.Sign(moveH);
+            bool movingLeftToRight = moveH > 0;
+            if (checkCollisionWithSidewaysMovingPlatformsWhileMoving(self, moveDirection, movingLeftToRight)) {
+                return new Solid(Vector2.Zero, 0, 0, false); // what matters is that it is non null.
+            }
+
+            return null;
         }
 
         private static bool checkCollisionWithSidewaysMovingPlatformsWhileMoving(Actor self, int moveDirection, bool movingLeftToRight) {
@@ -185,28 +188,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
                     callOrigMethodKeepingEverythingOnStack(cursor, checkAtPositionStore, isSceneCollideCheck: false);
 
-                    cursor.EmitDelegate<Func<bool, Entity, Vector2, bool>>((orig, self, checkAtPosition) => {
-                        // we still want to check for solids...
-                        if (orig)
-                            return true;
-
-                        // if we are not checking a side, this certainly has nothing to do with jumpthrus.
-                        if (self.Position.X == checkAtPosition.X)
-                            return false;
-
-                        // wall jumps are only allowed while pressing Grab.
-                        if (isWallJump && !Input.GrabCheck)
-                            return false;
-
-                        // our entity also collides if this is with a jumpthru and we are colliding with the solid side of it.
-                        // we are in this case if the jumpthru is left to right (the "solid" side of it is the right one)
-                        // and we are checking the collision on the left side of the player for example.
-                        bool collideOnLeftSideOfPlayer = (self.Position.X > checkAtPosition.X);
-                        ClimbableOneWayPlatform oneway = collideFirstOutside(self, checkAtPosition, collideOnLeftSideOfPlayer);
-                        return oneway != null && self is Player player
-                            && oneway.Bottom >= self.Top + checkAtPosition.Y - self.Position.Y + 3
-                            && (!isWallJump || oneway.allowWallJumping);
-                    });
+                    cursor.EmitDelegate<Func<bool, Entity, Vector2, bool>>(isWallJump ? patchCollideCheckYesWallJump : patchCollideCheckNotWallJump);
                 }
 
                 if (next.OpCode == OpCodes.Callvirt && (next.Operand as MethodReference)?.FullName == "System.Boolean Monocle.Scene::CollideCheck<Celeste.Solid>(Microsoft.Xna.Framework.Vector2)") {
@@ -214,11 +196,45 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
                     callOrigMethodKeepingEverythingOnStack(cursor, checkAtPositionStore, isSceneCollideCheck: true);
 
-                    cursor.EmitDelegate<Func<bool, Scene, Vector2, bool>>((orig, self, vector) => orig || self.CollideCheck<ClimbableOneWayPlatform>(vector));
+                    cursor.EmitDelegate<Func<bool, Scene, Vector2, bool>>(sceneCollideCheckPatch);
                 }
 
                 cursor.Index++;
             }
+        }
+
+        private static bool patchCollideCheckNotWallJump(bool orig, Entity self, Vector2 checkAtPosition) {
+            return patchCollideCheck(orig, self, checkAtPosition, false);
+        }
+        private static bool patchCollideCheckYesWallJump(bool orig, Entity self, Vector2 checkAtPosition) {
+            return patchCollideCheck(orig, self, checkAtPosition, true);
+        }
+
+        private static bool patchCollideCheck(bool orig, Entity self, Vector2 checkAtPosition, bool isWallJump) {
+            // we still want to check for solids...
+            if (orig)
+                return true;
+
+            // if we are not checking a side, this certainly has nothing to do with jumpthrus.
+            if (self.Position.X == checkAtPosition.X)
+                return false;
+
+            // wall jumps are only allowed while pressing Grab.
+            if (isWallJump && !Input.GrabCheck)
+                return false;
+
+            // our entity also collides if this is with a jumpthru and we are colliding with the solid side of it.
+            // we are in this case if the jumpthru is left to right (the "solid" side of it is the right one)
+            // and we are checking the collision on the left side of the player for example.
+            bool collideOnLeftSideOfPlayer = (self.Position.X > checkAtPosition.X);
+            ClimbableOneWayPlatform oneway = collideFirstOutside(self, checkAtPosition, collideOnLeftSideOfPlayer);
+            return oneway != null && self is Player player
+                && oneway.Bottom >= self.Top + checkAtPosition.Y - self.Position.Y + 3
+                && (!isWallJump || oneway.allowWallJumping);
+        }
+
+        private static bool sceneCollideCheckPatch(bool orig, Scene self, Vector2 vector) {
+            return orig || self.CollideCheck<ClimbableOneWayPlatform>(vector);
         }
 
         private static void callOrigMethodKeepingEverythingOnStack(ILCursor cursor, VariableDefinition checkAtPositionStore, bool isSceneCollideCheck) {
@@ -243,7 +259,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
             // let's jump to if (this.Speed.Y < 0f) => "is the player going up? if so, they can't grab!"
             if (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdsfld(typeof(Input), "Grab")) &&
-                cursor.TryGotoNext(MoveType.After,
+                cursor.TryGotoNextBestFit(MoveType.After,
                 instr => instr.MatchLdarg(0), // this
                 instr => instr.MatchLdflda<Player>("Speed"),
                 instr => instr.MatchLdfld<Vector2>("Y"),
@@ -258,13 +274,15 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 Logger.Log("JungleHelper/ClimbableOneWayPlatform", $"Injecting code to be able to grab climbable one-ways when going up at {cursor.Index} in IL code for Player.NormalUpdate");
 
                 // inject ourselves to jump over the "Speed.Y < 0f" check, and put this back
-                cursor.EmitDelegate<Func<Player, bool>>(self => {
-                    ClimbableOneWayPlatform platform = collideFirstOutside(self, self.Position + new Vector2((int) self.Facing * 2, 0), self.Facing == Facings.Left);
-                    return platform != null && platform.climbJumpGrabCooldown <= 0f;
-                });
+                cursor.EmitDelegate<Func<Player, bool>>(patchGrabWhileMovingUp);
                 cursor.Emit(OpCodes.Brtrue, afterCheck);
                 cursor.Emit(OpCodes.Ldarg_0);
             }
+        }
+
+        private static bool patchGrabWhileMovingUp(Player self) {
+            ClimbableOneWayPlatform platform = collideFirstOutside(self, self.Position + new Vector2((int) self.Facing * 2, 0), self.Facing == Facings.Left);
+            return platform != null && platform.climbJumpGrabCooldown <= 0f;
         }
 
         // grabs the speed and stamina if applicable at the earliest possible time
@@ -281,7 +299,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     platform.initialStamina = self.Stamina;
                 }
             }
-            orig.Invoke(self);
+            orig(self);
         }
 
         private static int modPlayerClimbUpdate(On.Celeste.Player.orig_ClimbUpdate orig, Player self) {
@@ -307,7 +325,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     self.Stamina = Math.Max(platform.initialStamina, 21);
                 }
             }
-            return orig.Invoke(self);
+            return orig(self);
         }
 
         private static void modPlayerClimbJump(On.Celeste.Player.orig_ClimbJump orig, Player self) {
