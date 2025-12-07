@@ -7,23 +7,14 @@ namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/TheoStatue")]
     [Tracked]
     public class TheoStatue : TheoCrystal {
-        private DynData<Holdable> holdData;
-
         public TheoStatue(EntityData data, Vector2 offset) : base(data, offset) {
-            // a Theo statue is a Theo crystal...
-            DynData<TheoCrystal> self = new DynData<TheoCrystal>(this);
-
-            // with a different sprite...
-            Remove(self.Get<Sprite>("sprite"));
-            Sprite sprite = JungleHelperModule.CreateReskinnableSprite(data, "theo_statue");
-            self["sprite"] = sprite;
+            // a Theo statue is a Theo crystal with a different sprite...
+            Remove(sprite);
+            sprite = JungleHelperModule.CreateReskinnableSprite(data, "theo_statue");
             Add(sprite);
 
-            // a different hitbox...
+            // with a different hitbox...
             Collider = new Hitbox(9f, 43f, -5f, -35f);
-
-            // ... that cannot be held
-            holdData = new DynData<Holdable>(Hold);
 
             // also fix issues related to transitioning.
             Tag = 0;
@@ -33,7 +24,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             base.Update();
 
             // this is not grabbable.
-            holdData["cannotHoldTimer"] = 1f;
+            Hold.cannotHoldTimer = 1f;
         }
     }
 }

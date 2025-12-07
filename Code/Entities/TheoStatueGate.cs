@@ -16,10 +16,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private static bool modTheoIsNearby(On.Celeste.TempleGate.orig_TheoIsNearby orig, TempleGate self) {
             if (self is TheoStatueGate) {
-                DynData<TempleGate> selfData = new DynData<TempleGate>(self);
                 TheoCrystal entity = self.Scene.Tracker.GetEntity<TheoStatue>();
                 return entity == null || entity.X > self.X + 10f ||
-                    Vector2.DistanceSquared(selfData.Get<Vector2>("holdingCheckFrom"), entity.Center) < (selfData.Get<bool>("open") ? 6400f : 4096f);
+                    Vector2.DistanceSquared(self.holdingCheckFrom, entity.Center) < (self.open ? 6400f : 4096f);
             }
 
             return orig(self);

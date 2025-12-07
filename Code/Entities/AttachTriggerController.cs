@@ -27,7 +27,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                     foreach (Trigger trigger in scene.CollideAll<Trigger>(new Rectangle((int) triggerPosition.X, (int) triggerPosition.Y, 8, 8))) {
                         if (string.IsNullOrEmpty(triggerFilter) || trigger.GetType().Name.ToLowerInvariant().Contains(triggerFilter.ToLowerInvariant())) {
                             // attach this entity to this trigger through a StaticMover.
-                            List<StaticMover> staticMovers = new DynData<Platform>(platform).Get<List<StaticMover>>("staticMovers");
+                            List<StaticMover> staticMovers = platform.staticMovers;
 
                             StaticMover triggerMover = new StaticMover();
                             trigger.Add(triggerMover);

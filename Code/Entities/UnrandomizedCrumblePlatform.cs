@@ -22,7 +22,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private static IEnumerator onCrumblePlatformTileIn(On.Celeste.CrumblePlatform.orig_TileIn orig, CrumblePlatform self, int index, Image img, float delay) {
             if (self is UnrandomizedCrumblePlatform) {
                 // we are respawning an image at position index: instead of respawning images[fallOrder[index]], respawn images[index].
-                img = new DynData<CrumblePlatform>(self).Get<List<Image>>("images")[index];
+                img = self.images[index];
             }
 
             return orig(self, index, img, delay);

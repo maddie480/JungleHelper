@@ -268,7 +268,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                         break;
                 }
 
-                new DynData<PlayerSprite>(self)["Mode"] = requestedMode;
+                self.Mode = requestedMode;
 
                 // replay the "idle" sprite to make it apply immediately.
                 self.Play("idle", restart: true);

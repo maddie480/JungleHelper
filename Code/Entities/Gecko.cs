@@ -64,7 +64,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                         Level = AreaData.Areas[0].Mode[0].MapData.Levels[0], // I just want some random level data to dodge NREs please
                         ID = -1
                     }, Vector2.Zero);
-                    guis[i] = new DynData<CustomBirdTutorial>(caw).Get<BirdTutorialGui>("gui");
+                    guis[i] = caw.gui;
                     guis[i].Entity = this;
                     guis[i].Position = new Vector2(left ? -4f : 4f, -20f);
                 }

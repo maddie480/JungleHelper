@@ -249,11 +249,10 @@ namespace Celeste.Mod.JungleHelper.Entities {
         }
 
         private void playerLaunch(Player player) {
-            DynData<Player> playerData = new DynData<Player>(player);
             player.StateMachine.State = 0;
-            playerData.Set("forceMoveX", 1);
-            playerData.Set("forceMoveXTimer", 0.2f);
-            playerData.Set("launched", true);
+            player.forceMoveX = 1;
+            player.forceMoveXTimer = 0.2f;
+            player.launched = true;
         }
 
         private IEnumerator moveRoutine() {

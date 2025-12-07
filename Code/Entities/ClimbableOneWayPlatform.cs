@@ -17,9 +17,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
     [Tracked]
     public class ClimbableOneWayPlatform : Entity {
         private static ILHook hookOnUpdateSprite;
-
-        private static FieldInfo actorMovementCounter = typeof(Actor).GetField("movementCounter", BindingFlags.Instance | BindingFlags.NonPublic);
-
         private static bool hooksActive = false;
 
         public static void Load() {

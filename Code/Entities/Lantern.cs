@@ -20,6 +20,8 @@ namespace Celeste.Mod.JungleHelper.Entities {
             On.Celeste.Player.NormalUpdate += onPlayerNormalUpdate;
             On.Celeste.Player.SwimUpdate += onPlayerSwimUpdate;
             On.Celeste.Player.OnTransition += onPlayerTransition;
+            On.Celeste.Player.Removed += onPlayerRemoved;
+            On.Celeste.Player.SceneEnd += onPlayerSceneEnd;
 
             hookOnLevelReload = new Hook(
                 typeof(AssetReloadHelper).GetMethod("ReloadLevel", new Type[0]),
@@ -32,12 +34,37 @@ namespace Celeste.Mod.JungleHelper.Entities {
             On.Celeste.Player.NormalUpdate -= onPlayerNormalUpdate;
             On.Celeste.Player.SwimUpdate -= onPlayerSwimUpdate;
             On.Celeste.Player.OnTransition -= onPlayerTransition;
+            On.Celeste.Player.Removed -= onPlayerRemoved;
+            On.Celeste.Player.SceneEnd -= onPlayerSceneEnd;
 
             hookOnLevelReload?.Dispose();
             hookOnLevelReload = null;
 
             hookCanDash?.Dispose();
             hookCanDash = null;
+        }
+
+        private static Vector2? playerInfoStartingPosition;
+        private static bool playerInfoDoRespawn;
+        private static string playerInfoReskinName;
+        private static string playerInfoLightPath;
+        private static float playerInfoDropTimer;
+
+        private static void resetStaticPlayerInfo() {
+            playerInfoStartingPosition = null;
+            playerInfoDoRespawn = false;
+            playerInfoReskinName = null;
+            playerInfoLightPath = null;
+            playerInfoDropTimer = 0f;
+        }
+
+        private static void onPlayerRemoved(On.Celeste.Player.orig_Removed orig, Player self, Scene scene) {
+            orig(self, scene);
+            resetStaticPlayerInfo();
+        }
+        private static void onPlayerSceneEnd(On.Celeste.Player.orig_SceneEnd orig, Player self, Scene scene) {
+            orig(self, scene);
+            resetStaticPlayerInfo();
         }
 
         private delegate bool orig_CanDash(Player self);
@@ -127,12 +154,11 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 EnforceSkinController.ChangePlayerSpriteMode(player, hasLantern: true);
                 RemoveSelf();
 
-                DynData<Player> playerData = new DynData<Player>(player);
-                playerData["JungleHelper_LanternStartingPosition"] = startingPosition;
-                playerData["JungleHelper_LanternDoRespawn"] = doRespawn;
-                playerData["JungleHelper_LanternReskinName"] = reskinName;
-                playerData["JungleHelper_LanternLightPath"] = lightPath;
-                playerData["JungleHelper_LanternDropTimer"] = 0.25f;
+                playerInfoStartingPosition = startingPosition;
+                playerInfoDoRespawn = doRespawn;
+                playerInfoReskinName = reskinName;
+                playerInfoLightPath = lightPath;
+                playerInfoDropTimer = 0.25f;
 
                 // detach the glow from the lantern and attach it to the player.
                 player.Add(lanternOverlay);
@@ -145,7 +171,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             bool result = !EnforceSkinController.HasLantern(player.Sprite.Mode);
             if (result) {
                 // check if the player will have the lantern on the next frame.
-                PlayerSpriteMode? nextMode = new DynData<Player>(player).Get<PlayerSpriteMode?>("nextSpriteMode");
+                PlayerSpriteMode? nextMode = player.nextSpriteMode;
                 if (nextMode != null) {
                     result = !EnforceSkinController.HasLantern(nextMode ?? default);
                 }
@@ -270,11 +296,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private static int onPlayerNormalUpdate(On.Celeste.Player.orig_NormalUpdate orig, Player self) {
             if (EnforceSkinController.HasLantern(self.Sprite.Mode)) {
-                DynData<Player> selfData = new DynData<Player>(self);
-
-                float lanternDropTimer = selfData.Get<float>("JungleHelper_LanternDropTimer");
+                float lanternDropTimer = playerInfoDropTimer;
                 lanternDropTimer -= Engine.DeltaTime;
-                selfData["JungleHelper_LanternDropTimer"] = lanternDropTimer;
+                playerInfoDropTimer = lanternDropTimer;
 
                 if (Input.GrabCheck && Input.MoveY > 0f && lanternDropTimer <= 0f) {
                     // drop the lantern.
@@ -298,15 +322,14 @@ namespace Celeste.Mod.JungleHelper.Entities {
             // technically, this means "Madeline's sprite returns to normal, and we spawn a Lantern entity".
             EnforceSkinController.ChangePlayerSpriteMode(player, hasLantern: false);
 
-            DynData<Player> playerData = new DynData<Player>(player);
             string reskinName = "";
-            if (playerData.Data.ContainsKey("JungleHelper_LanternReskinName")) {
-                reskinName = playerData.Get<string>("JungleHelper_LanternReskinName");
+            if (playerInfoReskinName != null) {
+                reskinName = playerInfoReskinName;
             }
 
             string lightPath = "";
-            if (playerData.Data.ContainsKey("JungleHelper_LanternLightPath")) {
-                lightPath = playerData.Get<string>("JungleHelper_LanternLightPath");
+            if (playerInfoLightPath != null) {
+                lightPath = playerInfoLightPath;
             }
 
             Lantern lantern = new Lantern(new EntityData {
@@ -317,9 +340,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
             lantern.regrabDelay = 0.25f;
             lantern.Collidable = false;
 
-            if (playerData.Data.ContainsKey("JungleHelper_LanternStartingPosition")) {
-                lantern.startingPosition = playerData.Get<Vector2>("JungleHelper_LanternStartingPosition");
-                lantern.doRespawn = playerData.Get<bool>("JungleHelper_LanternDoRespawn");
+            if (playerInfoStartingPosition != null) {
+                lantern.startingPosition = playerInfoStartingPosition.Value;
+                lantern.doRespawn = playerInfoDoRespawn;
             }
             if (destroy) {
                 lantern.sprite.Play("unlit");
@@ -337,7 +360,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             orig(self);
 
             // if the player is holding a lantern, it shouldn't respawn, since it is from another screen.
-            new DynData<Player>(self)["JungleHelper_LanternDoRespawn"] = false;
+            playerInfoDoRespawn = false;
         }
 
         private static void onLevelReload(Action orig) {

@@ -37,10 +37,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
         public override void Added(Scene scene) {
             base.Added(scene);
 
-            DynData<CrumblePlatform> self = new DynData<CrumblePlatform>(this);
-            outline = self.Get<List<Image>>("outline");
-            outlineFader = self.Get<Coroutine>("outlineFader");
-
             // place a "ghost" platform at every position the platform can take.
             foreach (Vector2 position in allPositions) {
                 scene.Add(new GhostPlatform(this, position));

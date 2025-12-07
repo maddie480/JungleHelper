@@ -54,8 +54,8 @@ namespace Celeste.Mod.JungleHelper.Components {
             scene.Add(componentEntity);
 
             // ensure it's not about to be removed with a quality reflection hack
-            new DynData<EntityList>(scene.Entities).Get<List<Entity>>("toRemove").Remove(componentEntity);
-            new DynData<EntityList>(scene.Entities).Get<HashSet<Entity>>("removing").Remove(componentEntity);
+            scene.Entities.toRemove.Remove(componentEntity);
+            scene.Entities.removing.Remove(componentEntity);
 
             // run Update() once so that the position is correct
             Update();
