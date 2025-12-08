@@ -7,11 +7,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/Gecko")]
     [Tracked]
     public class Gecko : Entity {
+        // doing birdTutorial.gui works, but it actually doesn't, because it retrieves it from BirdNPC, not from CustomBirdTutorial!
+        // as usual, stuff from Everest entities is NOT publicized.
+        private static readonly FieldInfo birdTutorialGuiField = typeof(CustomBirdTutorial).GetField("gui", BindingFlags.NonPublic | BindingFlags.Instance);
+
         private Sprite sprite;
         private Vector2 startPosition;
 
@@ -64,7 +69,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                         Level = AreaData.Areas[0].Mode[0].MapData.Levels[0], // I just want some random level data to dodge NREs please
                         ID = -1
                     }, Vector2.Zero);
-                    guis[i] = caw.gui;
+                    guis[i] = (BirdTutorialGui) birdTutorialGuiField.GetValue(caw);
                     guis[i].Entity = this;
                     guis[i].Position = new Vector2(left ? -4f : 4f, -20f);
                 }
