@@ -27,7 +27,7 @@ namespace Celeste.Mod.JungleHelper.Components {
 
         private static void rainbowifyDecal(ILContext il) {
             ILCursor cursor = new ILCursor(il);
-            while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchCall<Color>("get_White"))) {
+            while (cursor.TryGotoNext(MoveType.After, instr => instr.MatchLdfld<Decal>("Color"))) {
                 Logger.Log("JungleHelper/RainbowDecalComponent", $"Injecting call to make decal rainbow at {cursor.Index} in IL for DecalImage.Render");
                 cursor.Emit(OpCodes.Ldarg_0);
                 cursor.EmitDelegate<Func<Color, Component, Color>>(makeDecalRainbow);
