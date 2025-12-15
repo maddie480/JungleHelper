@@ -31,7 +31,7 @@ jobs:
       run: dotnet build Code/JungleHelper.sln --configuration Release --no-restore
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v5
+      uses: actions/upload-artifact@v6
       with:
         name: JungleHelper
         path: Code/bin/JungleHelper.dll
