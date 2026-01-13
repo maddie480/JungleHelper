@@ -11,6 +11,7 @@ using Mono.Cecil;
 using System.Collections.Generic;
 using System.Xml;
 using Mono.Cecil.Cil;
+using System.Runtime.CompilerServices;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     public static class EnforceSkinController {
@@ -239,6 +240,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             return orig;
         }
 
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static bool HasLantern(PlayerSpriteMode mode) {
             return mode == SpriteModeMadelineLantern || mode == SpriteModeBadelineLantern;
         }
