@@ -251,6 +251,10 @@ entities.JungleHelper/ZipMovingPlatform.placements.name.JungleHelper/escape=Zip 
 entities.JungleHelper/ZipMovingPlatform.attributes.description.texture=What texture to use for the platform.
 entities.JungleHelper/ZipMovingPlatform.attributes.description.waitTimer=How long the platform will wait before starting to move.
 entities.JungleHelper/ZipMovingPlatform.attributes.description.noReturn=Whether the platform will return to its original position after being activated.
+entities.JungleHelper/ZipMovingPlatform.attributes.description.movementMode=Determines how the platform moves between two points.\nNormal: if activated, it will move to end and move back automatically\nDisabledOnReachEnd: Whether the platform will freeze on reaching the end(same as deprecated option `noReturn`).\nStopOnReachEnd: Whether the platform will just stop on reaching the end and can be activated again.
+entities.JungleHelper/ZipMovingPlatform.attributes.description.lineEdgeColor=Adjust line's edge color.
+entities.JungleHelper/ZipMovingPlatform.attributes.description.lineInnerColor=Adjust line's inner color.
+entities.JungleHelper/ZipMovingPlatform.attributes.description.cooldownTimer=How long you can reactivate the platform after you reach the endpoint.
 
 # Drop Lantern Trigger
 triggers.JungleHelper/DropLanternTrigger.placements.name.default=Drop Lantern
