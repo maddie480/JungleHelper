@@ -17,6 +17,20 @@ movingPlatform.nodeLimits = {1, 1}
 movingPlatform.fieldInformation = {
     texture = {
         options = textureOptions
+    },
+    movementMode = {
+        options = {
+            "Normal",
+            "DisabledOnReachEnd",
+            "StopOnReachEnd"
+        },
+        editable = false
+    },
+    lineEdgeColor = {
+        fieldType = "color"
+    },
+    lineInnerColor = {
+        fieldType = "color"
     }
 
 }
@@ -29,7 +43,10 @@ for i, texture in ipairs(textures) do
             width = 8,
             texture = texture,
             waitTimer = 0,
-            noReturn = false
+            cooldownTimer = 0.5,
+            movementMode = "Normal",
+            lineEdgeColor = "2a1923",
+            lineInnerColor = "160b12"
         }
     }
 end

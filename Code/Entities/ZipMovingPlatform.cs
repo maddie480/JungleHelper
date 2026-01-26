@@ -13,13 +13,18 @@ namespace Celeste.Mod.JungleHelper.Entities {
             SurfaceSoundIndex = 5;
             Add(new LightOcclude(0.2f));
             Add(new Coroutine(ZipUp(), true));
-
         }
 
         public ZipMovingPlatform(EntityData data, Vector2 offset) : this(data.Position + offset, data.Width, data.Nodes[0] + offset) {
             TextureName = data.Attr("texture", "default");
             waitTimer = data.Float("waitTimer", 0f);
-            noReturn = data.Bool("noReturn", false);
+            cooldownTimer = data.Float("cooldownTimer", 0.5f);
+            movementMode = data.Enum<MovementModes>("movementMode");
+            // old version
+            if (data.Has("noReturn"))
+                movementMode = data.Bool("noReturn") ? MovementModes.DisabledOnReachEnd : MovementModes.Normal;
+            lineEdgeColor = data.HexColor("lineEdgeColor", Calc.HexToColor("2a1923"));
+            lineInnerColor = data.HexColor("lineInnerColor", Calc.HexToColor("160b12"));
         }
 
         public override void Added(Scene scene) {
@@ -35,8 +40,9 @@ namespace Celeste.Mod.JungleHelper.Entities {
             for (int i = 0; i < textures.Length; i++) {
                 textures[i] = mtexture.GetSubtexture(i * 8, 0, 8, 8, null);
             }
+
             Vector2 value = new Vector2(Width, Height + 4f) / 2f;
-            scene.Add(new MovingPlatformLine(start + value, end + value));
+            scene.Add(new MovingPlatformLine(start + value, end + value, lineInnerColor, lineEdgeColor));
 
             areaData.WoodPlatform = woodPlatform;
         }
@@ -48,6 +54,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
                 textures[1].Draw(Position + new Vector2(xPosition, 0f) + base.Shake);
                 xPosition += 8;
             }
+
             textures[3].Draw(Position + new Vector2(base.Width - 8f, 0f) + base.Shake);
             textures[2].Draw(Position + new Vector2(base.Width / 2f - 4f, 0f) + base.Shake);
         }
@@ -56,41 +63,53 @@ namespace Celeste.Mod.JungleHelper.Entities {
             sinkTimer = 0.4f;
         }
 
+        private IEnumerator MoveTo(Vector2 from, Vector2 to, float moveSpeed, bool playSfx, float shakeDuration) {
+            if (playSfx)
+                sfx.Play("event:/junglehelper/sfx/Zip_platform", null, 0f);
+            float at = 0f;
+            while (at < 1f) {
+                yield return null;
+                at = Calc.Approach(at, 1f, moveSpeed * Engine.DeltaTime);
+                percent = Ease.SineIn(at);
+                Vector2 lerpedPosition = Vector2.Lerp(from, to, percent);
+                MoveTo(lerpedPosition);
+            }
+
+            StartShaking(shakeDuration);
+        }
+
         private IEnumerator ZipUp() {
             while (true) {
-                while (!HasPlayerRider()) {
-                    yield return null;
+                yield return new SwapImmediately(WaitForStartMoving());
+                yield return new SwapImmediately(MoveTo(start, end, 2f, true, 0.2f));
+                switch (movementMode)
+                {
+                    case MovementModes.DisabledOnReachEnd:
+                        yield break;
+                    case MovementModes.StopOnReachEnd:
+                        hasCooldown = true;
+                        yield return new SwapImmediately(WaitForStartMoving());
+                        yield return new SwapImmediately(MoveTo(end, start, 2f, true, 0.2f));
+                        break;
+                    case MovementModes.Normal:
+                        yield return new SwapImmediately(MoveTo(end, start, 0.5f, false, 0.1f));
+                        yield return cooldownTimer;
+                        break;
                 }
-                // If the platform is going to wait any time before it starts falling down, shake the platform to indicate it's about to fall
-                if (waitTimer > 0) {
-                    StartShaking(waitTimer);
-                    yield return waitTimer;
-                }
+            }
+        }
 
-                sfx.Play("event:/junglehelper/sfx/Zip_platform", null, 0f);
-                float at = 0f;
-                while (at < 1f) {
-                    yield return null;
-                    at = Calc.Approach(at, 1f, 2f * Engine.DeltaTime);
-                    percent = Ease.SineIn(at);
-                    Vector2 to = Vector2.Lerp(start, end, percent);
-                    MoveTo(to);
-                }
-                StartShaking(0.2f);
-                if (!noReturn) {
-                    at = 0f;
-                    while (at < 1f) {
-                        yield return null;
-                        at = Calc.Approach(at, 1f, 0.5f * Engine.DeltaTime);
-                        percent = 1f - Ease.SineIn(at);
-                        Vector2 to = Vector2.Lerp(end, start, Ease.SineIn(at));
-                        MoveTo(to);
-                    }
-                    StartShaking(0.1f);
-                    yield return 0.5f;
-                } else {
-                    yield break;
-                }
+        private IEnumerator WaitForStartMoving() {
+            if (hasCooldown && cooldownTimer > 0)
+                yield return cooldownTimer;
+            while (!HasPlayerRider()) {
+                yield return null;
+            }
+
+            // If the platform is going to wait any time before it starts falling down, shake the platform to indicate it's about to fall
+            if (waitTimer > 0) {
+                StartShaking(waitTimer);
+                yield return waitTimer;
             }
         }
 
@@ -135,6 +154,14 @@ namespace Celeste.Mod.JungleHelper.Entities {
             }
         }
 
+        public enum MovementModes {
+            Normal,
+            DisabledOnReachEnd,
+            StopOnReachEnd,
+        }
+
+        private MovementModes movementMode;
+
         private Vector2 start;
 
         private string TextureName;
@@ -149,12 +176,43 @@ namespace Celeste.Mod.JungleHelper.Entities {
 
         private float waitTimer;
 
-        private bool noReturn;
+        private float cooldownTimer;
+
+        private bool hasCooldown;
+
+        private Color lineEdgeColor;
+
+        private Color lineInnerColor;
 
         private MTexture[] textures;
 
         private SoundSource sfx;
 
         public string OverrideTexture;
+
+        public class MovingPlatformLine : Entity {
+            private Color lineEdgeColor;
+
+            private Color lineInnerColor;
+
+            private Vector2 end;
+
+            public MovingPlatformLine(Vector2 position, Vector2 end, Color innerColor, Color edgeColor) {
+                Position = position;
+                Depth = 9001;
+                this.end = end;
+                lineInnerColor = innerColor;
+                lineEdgeColor = edgeColor;
+            }
+
+            public override void Render() {
+                Vector2 vector = (end - Position).SafeNormalize();
+                Vector2 vector2 = new Vector2(-vector.Y, vector.X);
+                Draw.Line(Position - vector - vector2, end + vector - vector2, lineEdgeColor);
+                Draw.Line(Position - vector, end + vector, lineEdgeColor);
+                Draw.Line(Position - vector + vector2, end + vector + vector2, lineEdgeColor);
+                Draw.Line(Position, end, lineInnerColor);
+            }
+        }
     }
 }
