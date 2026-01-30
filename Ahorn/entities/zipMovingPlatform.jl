@@ -3,8 +3,8 @@ module JungleHelperZipMovingPlatform
 using ..Ahorn, Maple
 
 @pardef MovingZipPlatform(x1::Integer, y1::Integer, x2::Integer=x1 + 16, y2::Integer=y1, width::Integer=32, texture::String="default",
-    waitTimer::Number=0, cooldownTimer::Number=0.5, movementMode::String="Normal", lineEdgeColor::String="2a1923", lineInnerColor::String="160b12")
-    = Entity("JungleHelper/ZipMovingPlatform", x=x1, y=y1, nodes=Tuple{Int, Int}[(x2, y2)], width=width, texture=texture,
+    waitTimer::Number=0, cooldownTimer::Number=0.5, movementMode::String="Normal", lineEdgeColor::String="2a1923", lineInnerColor::String="160b12") =
+    Entity("JungleHelper/ZipMovingPlatform", x=x1, y=y1, nodes=Tuple{Int, Int}[(x2, y2)], width=width, texture=texture,
     waitTimer=waitTimer, cooldownTimer=cooldownTimer, movementMode=movementMode, lineEdgeColor=lineEdgeColor, lineInnerColor=lineInnerColor)
 
 const placements = Ahorn.PlacementDict()
