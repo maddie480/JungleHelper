@@ -127,6 +127,10 @@ placements.entities.JungleHelper/RollingRock.tooltips.instantFalling=Whether the
 placements.entities.JungleHelper/ZipMovingPlatform.tooltips.texture=What texture to use for the platform.
 placements.entities.JungleHelper/ZipMovingPlatform.tooltips.waitTimer=How long the platform will wait before starting to move.
 placements.entities.JungleHelper/ZipMovingPlatform.tooltips.noReturn=Whether the platform will return to its original position after being activated.
+placements.entities.JungleHelper/ZipMovingPlatform.tooltips.movementMode=Determines how the platform moves between two points.\nNormal: moves from point A to point B, then back to point A, similarly to a Zip Mover.\nDisabledOnReachEnd: Moves from point A to point B, then stays there forever.\nStopOnReachEnd: Moves to the other point when activated, then waits to be activated again, similarly to a "No Return" Zip Mover.
+placements.entities.JungleHelper/ZipMovingPlatform.tooltips.lineEdgeColor=Adjusts the color of the platform path's edge.
+placements.entities.JungleHelper/ZipMovingPlatform.tooltips.lineInnerColor=Adjusts the color of the platform path's inside.
+placements.entities.JungleHelper/ZipMovingPlatform.tooltips.cooldownTimer=The time (in seconds) the player will have to wait before being able to activate the platform again.
 
 # Invisible Jumpthru
 placements.entities.JungleHelper/InvisibleJumpthruPlatform.tooltips.surfaceIndex=Footstep sound when walking on the platform.

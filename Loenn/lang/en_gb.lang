@@ -251,10 +251,10 @@ entities.JungleHelper/ZipMovingPlatform.placements.name.JungleHelper/escape=Zip 
 entities.JungleHelper/ZipMovingPlatform.attributes.description.texture=What texture to use for the platform.
 entities.JungleHelper/ZipMovingPlatform.attributes.description.waitTimer=How long the platform will wait before starting to move.
 entities.JungleHelper/ZipMovingPlatform.attributes.description.noReturn=Whether the platform will return to its original position after being activated.
-entities.JungleHelper/ZipMovingPlatform.attributes.description.movementMode=Determines how the platform moves between two points.\nNormal: if activated, it will move to end and move back automatically\nDisabledOnReachEnd: Whether the platform will freeze on reaching the end(same as deprecated option `noReturn`).\nStopOnReachEnd: Whether the platform will just stop on reaching the end and can be activated again.
-entities.JungleHelper/ZipMovingPlatform.attributes.description.lineEdgeColor=Adjust line's edge color.
-entities.JungleHelper/ZipMovingPlatform.attributes.description.lineInnerColor=Adjust line's inner color.
-entities.JungleHelper/ZipMovingPlatform.attributes.description.cooldownTimer=How long you can reactivate the platform after you reach the endpoint.
+entities.JungleHelper/ZipMovingPlatform.attributes.description.movementMode=Determines how the platform moves between two points.\nNormal: moves from point A to point B, then back to point A, similarly to a Zip Mover.\nDisabledOnReachEnd: Moves from point A to point B, then stays there forever.\nStopOnReachEnd: Moves to the other point when activated, then waits to be activated again, similarly to a "No Return" Zip Mover.
+entities.JungleHelper/ZipMovingPlatform.attributes.description.lineEdgeColor=Adjusts the color of the platform path's edge.
+entities.JungleHelper/ZipMovingPlatform.attributes.description.lineInnerColor=Adjusts the color of the platform path's inside.
+entities.JungleHelper/ZipMovingPlatform.attributes.description.cooldownTimer=The time (in seconds) the player will have to wait before being able to activate the platform again.
 
 # Drop Lantern Trigger
 triggers.JungleHelper/DropLanternTrigger.placements.name.default=Drop Lantern

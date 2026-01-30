@@ -82,31 +82,28 @@ namespace Celeste.Mod.JungleHelper.Entities {
             while (true) {
                 yield return new SwapImmediately(WaitForStartMoving());
                 yield return new SwapImmediately(MoveTo(start, end, 2f, true, 0.2f));
-                switch (movementMode)
-                {
+                switch (movementMode) {
                     case MovementModes.DisabledOnReachEnd:
                         yield break;
                     case MovementModes.StopOnReachEnd:
-                        hasCooldown = true;
+                        yield return cooldownTimer;
                         yield return new SwapImmediately(WaitForStartMoving());
                         yield return new SwapImmediately(MoveTo(end, start, 2f, true, 0.2f));
                         break;
                     case MovementModes.Normal:
                         yield return new SwapImmediately(MoveTo(end, start, 0.5f, false, 0.1f));
-                        yield return cooldownTimer;
                         break;
                 }
+                yield return cooldownTimer;
             }
         }
 
         private IEnumerator WaitForStartMoving() {
-            if (hasCooldown && cooldownTimer > 0)
-                yield return cooldownTimer;
             while (!HasPlayerRider()) {
                 yield return null;
             }
 
-            // If the platform is going to wait any time before it starts falling down, shake the platform to indicate it's about to fall
+            // If the platform is going to wait any time before it starts moving, shake the platform to indicate it's about to move
             if (waitTimer > 0) {
                 StartShaking(waitTimer);
                 yield return waitTimer;
@@ -177,8 +174,6 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private float waitTimer;
 
         private float cooldownTimer;
-
-        private bool hasCooldown;
 
         private Color lineEdgeColor;
 
