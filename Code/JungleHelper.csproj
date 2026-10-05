@@ -5,7 +5,7 @@
         <AssemblyName>JungleHelper</AssemblyName>
         <RootNamespace>Celeste.Mod.JungleHelper</RootNamespace>
         <LangVersion>preview</LangVersion>
-        <CelestePrefix Condition="'$(CelestePrefix)' == '' And Exists('..\..\..\Celeste.dll')">..\..</CelestePrefix>
+        <CelestePrefix Condition="'$(CelestePrefix)' == '' And Exists('..\..\..\Celeste.dll')">..\..\..</CelestePrefix>
         <CelestePrefix Condition="'$(CelestePrefix)' == ''">..\lib-stripped</CelestePrefix>
     </PropertyGroup>
 
