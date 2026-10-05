@@ -11,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Celeste.Mod.JungleHelper.Entities {
     [CustomEntity("JungleHelper/ClimbableOneWayPlatform")]
@@ -18,6 +19,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
     public class ClimbableOneWayPlatform : Entity {
         private static ILHook hookOnUpdateSprite;
         private static bool hooksActive = false;
+        private static Solid solidSentinel;
 
         public static void Load() {
             On.Celeste.LevelLoader.ctor += onLevelLoad;
@@ -119,14 +121,26 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private static void addSidewaysJumpthrusInHorizontalMoveMethods(ILContext il) {
             ILCursor cursor = new ILCursor(il);
 
-            if (cursor.TryGotoNext(MoveType.After, instr => instr.MatchCall<Entity>("CollideFirst"))
-                && cursor.TryGotoNext(instr => instr.OpCode == OpCodes.Brfalse_S || instr.OpCode == OpCodes.Brtrue_S)) {
+            // jump to the solid null check, before the branch
+            int solidVariable = -1;
+            if (cursor.TryGotoNextBestFit(MoveType.After,
+                instr => instr.MatchCall<Entity>("CollideFirst"),
+                instr => instr.MatchStloc(out solidVariable),
+                // there could be other mods inserting stuff in-between, like FemtoHelper's SlashRefills
+                instr => instr.MatchLdloc(solidVariable),
+                MatchBrAny)) {
 
+                cursor.GotoPrev(MatchBrAny);
                 Logger.Log("JungleHelper/ClimbableOneWayPlatform", $"Injecting sideways jumpthru check at {cursor.Index} in IL for {il.Method.Name}");
-                cursor.Emit(OpCodes.Ldarg_0);
-                cursor.Emit(OpCodes.Ldarg_1);
+                cursor.EmitLdarg0();
+                cursor.EmitLdarg1();
                 cursor.EmitDelegate<Func<Solid, Actor, int, Solid>>(hookHorizontalMoveMethods);
             }
+
+            return;
+
+            static bool MatchBrAny(Instruction instr)
+                => instr.MatchBrfalse(out _) || instr.MatchBrtrue(out _);
         }
 
         private static Solid hookHorizontalMoveMethods(Solid orig, Actor self, int moveH) {
@@ -136,7 +150,7 @@ namespace Celeste.Mod.JungleHelper.Entities {
             int moveDirection = Math.Sign(moveH);
             bool movingLeftToRight = moveH > 0;
             if (checkCollisionWithSidewaysMovingPlatformsWhileMoving(self, moveDirection, movingLeftToRight)) {
-                return new Solid(Vector2.Zero, 0, 0, false); // what matters is that it is non null.
+                return solidSentinel ??= new Solid(Vector2.Zero, 0, 0, false); // what matters is that it is non-null.
             }
 
             return null;
