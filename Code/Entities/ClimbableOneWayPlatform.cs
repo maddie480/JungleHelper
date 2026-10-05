@@ -119,14 +119,26 @@ namespace Celeste.Mod.JungleHelper.Entities {
         private static void addSidewaysJumpthrusInHorizontalMoveMethods(ILContext il) {
             ILCursor cursor = new ILCursor(il);
 
-            if (cursor.TryGotoNext(MoveType.After, instr => instr.MatchCall<Entity>("CollideFirst"))
-                && cursor.TryGotoNext(instr => instr.OpCode == OpCodes.Brfalse_S || instr.OpCode == OpCodes.Brtrue_S)) {
+            // jump to the solid null check, before the branch
+            int solidVariable = -1;
+            if (cursor.TryGotoNextBestFit(MoveType.After,
+                instr => instr.MatchCall<Entity>("CollideFirst"),
+                instr => instr.MatchStloc(out solidVariable),
+                // there could be other mods inserting stuff in-between, like FemtoHelper's SlashRefills
+                instr => instr.MatchLdloc(solidVariable),
+                MatchBrAny)) {
 
+                cursor.GotoPrev(MatchBrAny);
                 Logger.Log("JungleHelper/ClimbableOneWayPlatform", $"Injecting sideways jumpthru check at {cursor.Index} in IL for {il.Method.Name}");
-                cursor.Emit(OpCodes.Ldarg_0);
-                cursor.Emit(OpCodes.Ldarg_1);
+                cursor.EmitLdarg0();
+                cursor.EmitLdarg1();
                 cursor.EmitDelegate<Func<Solid, Actor, int, Solid>>(hookHorizontalMoveMethods);
             }
+
+            return;
+
+            static bool MatchBrAny(Instruction instr)
+                => instr.MatchBrfalse(out _) || instr.MatchBrtrue(out _);
         }
 
         private static Solid hookHorizontalMoveMethods(Solid orig, Actor self, int moveH) {
